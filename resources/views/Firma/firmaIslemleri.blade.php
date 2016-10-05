@@ -53,8 +53,11 @@ tr:nth-child(even) {
                      <li class=""><a href="{{ url('firmaProfili/'.$firma->id)}}">Firma Profili</a></li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             <li><a href="#">İlanlarım</a></li>
-                             <li><a href="{{ url('firmaIlanOlustur/'.$firma->id) }}">İlan Oluştur</a></li>
+                             <li><a href="{{ url('ilanlarim/'.$firma->id) }}">İlanlarım</a></li>
+
+                             <li><a href="{{ URL::to('ilanEkle', array($firma->id,'0'), false) }}">İlan Oluştur</a></li>
+                            
+                             
                          </ul>
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
