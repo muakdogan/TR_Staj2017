@@ -130,10 +130,9 @@
             }
 
             button {
-              background-color: #6BBE92;
-              width: 302px;
+              background-color: #1e90ff;
+              border-radius: 15px; 
               border: 0;
-              padding: 10px 0;
               margin: 5px 0;
               text-align: center;
               color: #fff;
@@ -383,7 +382,8 @@
                                  $("#ilan"+key).append(data[key].ilanadi);
                                  $("#adi"+key).append(data[key].adi);
                                  $("#il"+key).append(data[key].iladi);
-                                 $("#il"+key).append("<hr />");
+                                 $("#il"+key).append("<a href=ilanTeklifVer/"+data[key].firma_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />");
+                                 
                                 }
                                
                                

@@ -70,7 +70,7 @@
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="{{ url('ilanlarim/'.$firma->id) }}">İlanlarım</a></li>
-                             <li><a href="{{ URL::to('ilanEkle', array($firma->id,'0'), false)}} ">İlan Oluştur</a></li>
+                             <li><a href="{{ url('firmaIlanOlustur/'.$firma->id) }}">İlan Oluştur</a></li>
                          </ul>
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
@@ -84,7 +84,7 @@
                  </ul>
              </div>
          </nav>
-       <h2>İlanlarım</h2>
+       <h2>İlan Oluştur</h2>
     </div>
     <div class="container">
          <div class="panel-group" id="accordion">
@@ -126,8 +126,8 @@
 
                                      <?php
                                      $firmaAdres = $firma->adresler()->first();
-                                     if (!$firma->ilanlar)
-                                         $firma->ilanlar = new App\Ilan();
+                                     if (!$ilan)
+                                         $ilan = new App\Ilan();
 
                                      if (!$firmaAdres) {
                                          $firmaAdres = new Adres();
@@ -141,7 +141,7 @@
                                  <tr>
                                      <td>İlan Sektor:</td>
                                       @foreach($sektorler as $ilanSektor)<?php
-                                   if($ilanSektor->id == $ilan->firma_sektor){
+                                   if($ilanSektor->id == $firma->ilanlar->firma_sektor){
                                        ?>
                                           <td>{{$ilanSektor->adi}}</td>
                                           <?php
@@ -225,7 +225,7 @@
                                      <div class="modal-body">
                                          
                                          
-                                         {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileriUpdate/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                         {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
                                           
                                            <div class="form-group">
                                              <label for="inputEmail3" class="col-sm-3 control-label">Firma Adı Göster</label>
@@ -389,7 +389,7 @@
 
 
 
-                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/ilanBilgileriUpdate/'.$firma->id.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'btn btn-danger')) !!}
                                          {!! Form::close() !!}
                                      </div>
                                      <div class="modal-footer">                                                            
@@ -454,7 +454,7 @@
                                          <h4 class="modal-title" id="myModalLabel">Fiyatlandırma Bilgileri</h4>
                                      </div>
                                      <div class="modal-body">
-                                         {!! Form::open(array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileriUpdate/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                         {!! Form::open(array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                          <div class="form-group">
                                              <label for="inputEmail3" class="col-sm-3 control-label">KDV</label>
@@ -484,7 +484,7 @@
                                                  </select>
                                              </div>
                                          </div>
-                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileriUpdate/'.$firma->id.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                          {!! Form::close() !!}
                                      </div>
                                      <div class="modal-footer">                                                            
@@ -553,7 +553,7 @@
 
                                      <td> <button name="open-modal-mal"  value="{{$ilan_mal->id}}" class="btn btn-primary btn-xs open-modal-mal" >Düzenle</button></td>
                                      <td>
-                                                {{ Form::open(array('url'=>'firmaIlanOlustur/mal/'.$ilan_mal->id,'method' => 'DELETE', 'files'=>true)) }}
+                                                {{ Form::open(array('url'=>'mal/'.$ilan_mal->id,'method' => 'DELETE', 'files'=>true)) }}
                                                 <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                              {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
                                             {{ Form::close() }}
@@ -570,7 +570,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -621,7 +621,7 @@
                                                      </div>
                                                      <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'btn btn-danger')) !!}
+                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'btn btn-danger')) !!}
                                                          {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -643,7 +643,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -693,7 +693,7 @@
                                                          </div>
                                                      </div>
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiMal/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -757,7 +757,7 @@
 
                                      <td> <button name="open-modal-hizmet"  value="{{$ilan_hizmet->id}}" class="btn btn-primary btn-xs open-modal-hizmet" >Düzenle</button></td>
                                      <td>
-                                         {{ Form::open(array('url'=>'firmaIlanOlustur/hizmet/'.$ilan_hizmet->id,'method' => 'DELETE', 'files'=>true)) }}
+                                         {{ Form::open(array('url'=>'hizmet/'.$ilan_hizmet->id,'method' => 'DELETE', 'files'=>true)) }}
                              <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                  {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
                                  {{ Form::close() }}
@@ -774,7 +774,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -825,7 +825,7 @@
                                                      </div>
                                                      <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'btn btn-danger')) !!}
+                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'btn btn-danger')) !!}
                                                          {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -847,7 +847,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -897,7 +897,7 @@
                                                          </div>
                                                      </div>
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiHizmet/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -934,7 +934,7 @@
                                      <th></th>
                                      <th></th>
                                  </tr>
-                                 @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
+                                 @foreach($firma->ilanlar->ilan_goturu_bedeller as $ilan_goturu_bedel)
                                  <tr>
                                      <td>
                                          {{$ilan_goturu_bedel->sira}}
@@ -949,7 +949,7 @@
 
                                      <td> <button name="open-modal-goturu-bedel"  value="{{$ilan_goturu_bedel->id}}" class="btn btn-primary btn-xs open-modal-goturu-bedel" >Düzenle</button></td>
                                      <td>
-                                         {{ Form::open(array('url'=>'firmaIlanOlustur/goturu/'.$ilan_goturu_bedel->id,'method' => 'DELETE', 'files'=>true)) }}
+                                         {{ Form::open(array('url'=>'goturu/'.$ilan_goturu_bedel->id,'method' => 'DELETE', 'files'=>true)) }}
                              <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                  {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
                                  {{ Form::close() }}
@@ -965,7 +965,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -990,7 +990,7 @@
                                                      <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
 
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'btn btn-danger')) !!}
+                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'btn btn-danger')) !!}
                                                          {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -1012,7 +1012,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$firma->ilanlar->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -1036,7 +1036,7 @@
                                                      </div>
 
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$firma->ilanlar->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -1092,7 +1092,7 @@
 
                                      <td> <button name="open-modal-yapim-isi"  value="{{$ilan_yapim_isi->id}}" class="btn btn-primary btn-xs open-modal-yapim-isi" >Düzenle</button></td>
                                      <td>
-                                         {{ Form::open(array('url'=>'firmaIlanOlustur/yapim/'.$ilan_yapim_isi->id,'method' => 'DELETE', 'files'=>true)) }}
+                                         {{ Form::open(array('url'=>'yapim/'.$ilan_yapim_isi->id,'method' => 'DELETE', 'files'=>true)) }}
                              <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                  {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
                                  {{ Form::close() }}
@@ -1109,7 +1109,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -1143,7 +1143,7 @@
                                                      </div>
                                                      <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'btn btn-danger')) !!}
+                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'btn btn-danger')) !!}
                                                          {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -1165,7 +1165,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$firma->ilanlar->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -1198,7 +1198,7 @@
                                                          </div>
                                                      </div>
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$firma->ilanlar->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -1323,4 +1323,3 @@ $( document ).ready(function() {
 </body>
 </html>
 @endsection
-

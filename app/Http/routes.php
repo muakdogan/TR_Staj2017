@@ -38,7 +38,7 @@ use Illuminate\Http\Request;
          $iller = App\Il::all();
           $sektorler= App\Sektor::all();
           $odeme_turleri=  App\OdemeTuru::all();
-            $querys = Ilan::paginate(5);
+          $querys = Ilan::paginate(5);
             //$query->orwhere('id',12)->get();
 
 
@@ -103,8 +103,8 @@ use Illuminate\Http\Request;
         if($odeme != NULL){
             $querys->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
-        $result=$querys->get();  
-        return Response::json($result);
+        $querys=$querys->get();  
+        return Response::json($querys);
 
     });
     Route::get('/il',function(){
@@ -196,7 +196,18 @@ use Illuminate\Http\Request;
         return redirect('/firmalist');
     });
 
-
+   Route::get('ilanlarim/{id}' ,function ($id) {
+        $firma = Firma::find($id);
+        return view('Firma.ilan.ilanlarim')->with('firma', $firma);
+        
+    });
+     Route::get('ilanTeklifVer/{id}' ,function ($id) {
+        $firma = Firma::find($id);
+        $birimler=  \App\Birim::all();
+        return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('birimler',$birimler);
+        
+    });
+    
     //firma profil route...
     Route::post('firmaProfili/uploadImage/{id}', 'FirmaController@uploadImage');
     Route::post('firmaProfili/deleteImage/{id}', 'FirmaController@deleteImage');
@@ -228,23 +239,52 @@ use Illuminate\Http\Request;
     });
 
     //firma ilan route...
-    Route::get('/firmaIlanOlustur/{id}', 'FirmaIlanController@showFirmaIlan');
+    Route::get('/firmaIlanOlustur/{id}/{ilanid}', 'FirmaIlanController@showFirmaIlan');
+    Route::get('/ilanEkle/{id}/{ilan_id}', 'FirmaIlanController@showFirmaIlanEkle');
+    
+    
+    
     Route::post('firmaIlanOlustur/firmaBilgilerim/{id}', 'FirmaIlanController@firmaBilgilerimAdd');
+    
     Route::post('firmaIlanOlustur/ilanBilgileri/{id}', 'FirmaIlanController@ilanAdd');
-    Route::post('firmaIlanOlustur/fiyatlandırmaBilgileri/{id}', 'FirmaIlanController@fiyatlandırmaBilgileriAdd');
+    Route::post('firmaIlanOlustur/ilanBilgileriUpdate/{id}/{ilan_id}', 'FirmaIlanController@ilanUpdate');
+    
+    Route::post('firmaIlanOlustur/fiyatlandırmaBilgileri/{id}/{ilan_id}', 'FirmaIlanController@fiyatlandırmaBilgileriAdd');
+    Route::post('firmaIlanOlustur/fiyatlandırmaBilgileriUpdate/{id}/{ilanid}', 'FirmaIlanController@fiyatlandırmaBilgileriUpdate');
+    
+    
+    Route::post('kalemlerListesiMal/{id}', 'FirmaIlanController@kalemlerListesiMalEkle');
+    Route::post('kalemlerListesiHizmet/{id}', 'FirmaIlanController@kalemlerListesiHizmetEkle');
+    Route::post('kalemlerListesiGoturu/{id}', 'FirmaIlanController@kalemlerListesiGoturuEkle');
+    Route::post('kalemlerListesiYapim/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiEkle');
+    
+    Route::post('kalemlerListesiMalUpdate/{id}', 'FirmaIlanController@kalemlerListesiMalUpdateEkle');
+    Route::post('kalemlerListesiHizmetUpdate/{id}', 'FirmaIlanController@kalemlerListesiHizmetUpdateEkle');
+    Route::post('kalemlerListesiGoturuUpdate/{id}', 'FirmaIlanController@kalemlerListesiGoturuUpdatEkle');
+    Route::post('kalemlerListesiYapimİsiUpdate/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiUpdateEkle');
+    
+    Route::delete('mal/{id}', 'FirmaIlanController@deleteMalEkle');
+    Route::delete('hizmet/{id}', 'FirmaIlanController@deleteHizmetEkle');
+    Route::delete('goturu/{id}', 'FirmaIlanController@deleteGoturuEkle');
+    Route::delete('yapim/{id}', 'FirmaIlanController@deleteYapimEkle');
+    
+    
     Route::post('firmaIlanOlustur/firmateknik/{id}', 'FirmaIlanController@firmaTeknik');
     Route::post('firmaIlanOlustur/kalemlerListesiMal/{id}', 'FirmaIlanController@kalemlerListesiMal');
     Route::post('firmaIlanOlustur/kalemlerListesiHizmet/{id}', 'FirmaIlanController@kalemlerListesiHizmet');
     Route::post('firmaIlanOlustur/kalemlerListesiGoturu/{id}', 'FirmaIlanController@kalemlerListesiGoturu');
     Route::post('firmaIlanOlustur/kalemlerListesiYapim/{id}', 'FirmaIlanController@kalemlerListesiYapimİsi');
+    
     Route::post('firmaIlanOlustur/kalemlerListesiMalUpdate/{id}', 'FirmaIlanController@kalemlerListesiMalUpdate');
     Route::post('firmaIlanOlustur/kalemlerListesiHizmetUpdate/{id}', 'FirmaIlanController@kalemlerListesiHizmetUpdate');
     Route::post('firmaIlanOlustur/kalemlerListesiGoturuUpdate/{id}', 'FirmaIlanController@kalemlerListesiGoturuUpdate');
     Route::post('firmaIlanOlustur/kalemlerListesiYapimİsiUpdate/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiUpdate');
+    
     Route::delete('firmaIlanOlustur/mal/{id}', 'FirmaIlanController@deleteMal');
     Route::delete('firmaIlanOlustur/hizmet/{id}', 'FirmaIlanController@deleteHizmet');
     Route::delete('firmaIlanOlustur/goturu/{id}', 'FirmaIlanController@deleteGoturu');
     Route::delete('firmaIlanOlustur/yapim/{id}', 'FirmaIlanController@deleteYapim');
+    
     Route::get('/firmaMal/{ilan_mal_id?}',function($ilan_mal_id){
             $mal=  App\IlanMal::find($ilan_mal_id);
             return Response::json($mal);

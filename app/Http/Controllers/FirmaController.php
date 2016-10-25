@@ -363,10 +363,6 @@ class FirmaController extends Controller
     }
      
      
-     
-     
-     
-     
     //eski fonksiyonlar...suan kullanılmıyorlar
     public function firma(Request $request){
         $firma = new Firma();
