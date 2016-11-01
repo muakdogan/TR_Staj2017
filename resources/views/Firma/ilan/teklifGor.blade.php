@@ -1,9 +1,9 @@
 
-@extends('layouts.app')
+@extends('layouts.app2')
 <br>
  <br>
  @section('content')
-  
+ <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
  <style>
 table {
     font-family: arial, sans-serif;
@@ -66,19 +66,80 @@ tr:nth-child(even) {
                  </ul>
              </div>
          </nav>
-         <div class="col-sm-12">                     
-            <h3>Teklif Listesi</h3>
-              <hr>
-              
-              
-              
-              <a href="#"><button style="float:right" type="button" class="btn btn-info">Teklif Gönder</button></a>
-              
-              
-              <br>
-              <br>                                     
-             <hr>                               
-        </div>    
+         <div class="panel-header">
+             <h2>Teklif Gor</h2>
+         </div>
+         
+         <div class="panel-body">
+             <table class="table table-bordered" id="myTable">
+                 <thead>
+                    <th>Sıra</th>
+                    <th>Firma Adı</th>
+                    <th>Kalem</th>
+                    <th>Toplam Fiyat</th>
+                    <th>Para Birimi</th>
+                 </thead>
+                 <tbody>
+                     <?php $i=1;
+                     ?>
+                     @foreach($ilan->ilan_mallar as $ilanmal)
+                        <?php  $mal_teklifler = $ilanmal->mal_teklifler()->orderBy('fiyat','asc')->get();
+                        ?>
+                        @foreach($mal_teklifler as $malTeklif)
+                            <?php  $kullanici = DB::table('firma_kullanicilar')
+                                    ->where('firma_kullanicilar.id',$malTeklif->firma_kullanicilar_id)
+                                    ->join('kullanicilar', 'firma_kullanicilar.kullanici_id', '=', 'kullanicilar.id')
+                                    ->first();
+                           ?>
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td>{{$kullanici->adi}}</td>
+                                <td>{{$ilanmal->marka}} {{$ilanmal->model}}</td>
+                                <td>{{$malTeklif->fiyat}}</td>
+                                <td>{{$malTeklif->para_birimleri->adi}}</td>
+                            </tr>
+                        @endforeach
+                     @endforeach
+                 </tbody>
+             </table>
+         </div>
     </div>
-
 @endsection
+<script src="{{asset('js/jquery.js')}}"></script>
+<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+
+
+
+<script>
+$(document).ready(function(){
+    
+    var table =$('#myTable').dataTable({
+       "language": {
+            "sDecimal":        ",",
+            "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+            "sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+            "sInfoEmpty":      "Kayıt yok",
+            "sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+            "sInfoPostFix":    "",
+            "sInfoThousands":  ".",
+            "sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+            "sLoadingRecords": "Yükleniyor...",
+            "sProcessing":     "İşleniyor...",
+            "sSearch":         "Ara:",
+            "sZeroRecords":    "Eşleşen kayıt bulunamadı",
+            "oPaginate": {
+                "sFirst":    "İlk",
+                "sLast":     "Son",
+                "sNext":     "Sonraki",
+                "sPrevious": "Önceki"
+            },
+            "oAria": {
+                "sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+                "sSortDescending": ": azalan sütun soralamasını aktifleştir"
+            }
+        }
+    });
+    
+});
+</script>
+<script src="http://cdn.datatables.net/plug-ins/1.10.12/sorting/turkish-string.js"></script>

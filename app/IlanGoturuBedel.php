@@ -13,4 +13,8 @@ class IlanGoturuBedel extends Model
     {
         return $this->belongsTo('App\Ilan', 'ilan_id', 'id');
     }
+    public function goturu_bedel_teklifler()
+    {
+        return $this->hasMany('App\GoturuBedelTeklif', 'ilan_goturu_bedeller_id', 'id');
+    }
 }
