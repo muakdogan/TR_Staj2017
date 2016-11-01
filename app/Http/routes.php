@@ -36,21 +36,38 @@ use Illuminate\Http\Request;
     }]);
     Route::get('/ilanAra', function (Request $request) {
          $iller = App\Il::all();
+         $firma=  Firma::all();
           $sektorler= App\Sektor::all();
           $odeme_turleri=  App\OdemeTuru::all();
           $querys = Ilan::paginate(5);
-            //$query->orwhere('id',12)->get();
-
-
-        return view('Firma.ilan.ilanAra')->with('iller', $iller)->with('sektorler',$sektorler)->with('querys',$querys)->with('odeme_turleri',$odeme_turleri);
+           
+        return view('Firma.ilan.ilanAra')->with('iller', $iller)->with('sektorler',$sektorler)->with('querys',$querys)->with('odeme_turleri',$odeme_turleri)->with('firma',$firma);
     });
+    
+     Route::get('/kullaniciFirma',function () {
+         
+               $kullanici_id=Input::get('kullanici_id');
+                $kullaniciFirma=  \App\Kullanici::find($kullanici_id);
+               
+                
+                 $querys = DB::table('firma_kullanicilar')
+                ->where( 'firma_kullanicilar.kullanici_id', '=',  $kullanici_id)
+               ->join('firmalar', 'firma_kullanicilar.firma_id', '=', 'firmalar.id')
+                ->select('firmalar.adi');
+               
+                 $querys=$querys->get();
+               return Response::json($querys);
+     });
+   
+    
     Route::get('/ilanAraFiltre',function () {
        $querys = DB::table('ilanlar')
                 ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 
-                ->select('ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi');  
+                ->select('ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
+       
          $il_id = Input::get('il');
          $bas_tar = Input::get('bas_tar');
          $bit_tar = Input::get('bit_tar');   
@@ -77,7 +94,6 @@ use Illuminate\Http\Request;
                 
             }
         }
-         
         if($il_id != NULL)
             {
              $querys->whereIn('adresler.il_id',$il_id);
@@ -103,10 +119,13 @@ use Illuminate\Http\Request;
         if($odeme != NULL){
             $querys->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
-        $querys=$querys->get();  
+        $querys=$querys->get();
+  
         return Response::json($querys);
 
     });
+    
+    
     Route::get('/il',function(){
         $il_id = Input::get('data');
         $il = \App\Il::find($il_id);
@@ -148,8 +167,7 @@ use Illuminate\Http\Request;
 
     });
 
-
-    Route::post('/form', function (Request $request) {
+   Route::post('/form', function (Request $request) {
 
             $firma= new Firma();
 
@@ -195,16 +213,21 @@ use Illuminate\Http\Request;
 
         return redirect('/firmalist');
     });
-
    Route::get('ilanlarim/{id}' ,function ($id) {
         $firma = Firma::find($id);
         return view('Firma.ilan.ilanlarim')->with('firma', $firma);
         
     });
-     Route::get('ilanTeklifVer/{id}' ,function ($id) {
+   Route::get('ilanTeklifVer/{id}'  ,function ($id) {
         $firma = Firma::find($id);
         $birimler=  \App\Birim::all();
-        return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('birimler',$birimler);
+       
+  
+        
+         return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('birimler',$birimler);
+           
+
+       
         
     });
     

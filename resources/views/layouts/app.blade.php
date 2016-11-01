@@ -19,7 +19,7 @@
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+      
     <style>
         .yazi{
             font-family:"Times New Roman";
@@ -73,7 +73,7 @@
                                     ?>
                                     @foreach($kullanici->firmalar as $kullanicifirma)
                                         <ul style="list-style-type:square">
-                                        <li  ><a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
+                                        <li ><a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
                                         </ul>
                                     @endforeach
                                    

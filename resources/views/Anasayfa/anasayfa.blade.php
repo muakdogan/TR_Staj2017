@@ -31,13 +31,16 @@
            }
    </style>
      <div class="container">
-
-        <hr>
+        
+        
+         <hr>
         <header class="jumbotron hero-spacer">
             <h3>İlan Bul!</h3>
             <input type="text" name="search" placeholder="Search.."><input type="button"  value="ARA">
         </header>
         <hr>
+      
+       
     </div>
   
 @endsection

@@ -291,45 +291,40 @@
 
 
                         </div>
-                         <?php $i=0;?>
                         <div class="col-sm-9" id="auto_load_div">
                               
-                           @if (Auth::guest())
-                        
-                           
-                           @else
-                             <?php 
-                            
-                            
-                            $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
-                            
-                            
-                            ?>
-                           @endif
+                              <?php
+                                                       
+                                                             
+                                                         $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                                          if (!$kullanici)
+                                                                $kullanici = new App\Kullanici ();
+                                                          
+                                                         $i=0;
+                                                         $sayi=$kullanici->firmalar->count();
+                                                          
+                             ?>
                                <h3>İlanlar</h3>
                                                   <hr>
-                                                @foreach($querys as $query)
+                                                  @foreach($querys as $query)
                                                   
                                                      <p id="ilan{{$i}}"></p>
                                                      <p id="adi{{$i}}"></p>
                                                      <p id="il{{$i}}"></p>
-                                                     
-                                                      @if(Auth::guest())
-                                                      <button id='btn-add-fiyatlandırmaBilgileri' name='btn-add-fiyatlandırmaBilgileri' style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />
-                                                      @else
-                                                        @if($kullanici->firmalar->count()==1)
-                                                         
-                                                           <p id="deneme2{{$i}}"></p>
-
-                                                        @elseif($kullanici->firmalar->count()>1)
+                                                    
+                                                     @if($kullanici->firmalar->count()>1)
+                                                        @foreach($kullanici->firmalar as $kullanicifirma)
+                                                        <p id="deneme2{{$i}}"></p>
+                                                      @endforeach
+                                                      
+                                                      @elseif($kullanici->firmalar->count()==1)
                                                         
                                                          <button id='btn-add-fiyatlandırmaBilgileri' name='btn-add-fiyatlandırmaBilgileri' style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />
                                                         
-                                                        @endif
                                                       @endif
                                                     
                                                     <?php $i++;?>
-                                                @endforeach
+                                                  @endforeach
                                                {{$querys->links()}}
                                                
                        </div>
@@ -400,7 +395,6 @@
                                                                                      <a class="btn btn-link" href="{{ url('/password/reset') }}">Şifreyi mi Unuttun?</a>
                                                                                  </div>
                                                                              </div>
-                                                                             
                                                                          </form>
                                                                      </div>
                                                                  </div>
@@ -425,67 +419,33 @@
                                                      </div>
                                                      <div class="modal-body">
                                                          <p>{{ Auth::user()->name }}</p>
-                                                         
-                                                             <?php $i=0;$k=0;?>
-                                                       
+
+                                                         @foreach($kullanici->firmalar as $kullanicifirma)
                                                         
                                                                 @foreach($querys as $query)
-                                                                    
-                                                                    <p id="deneme1{{$i}}"></p>  
-                                                                   
-                                                                  <?php $i++;?>   
+                                                                
+                                                                   <p id="deneme1{{$i}}"></p>
+
                                                                 @endforeach
-                                                                @foreach($querys as $query)
-                                                                    
-                                                                     
-                                                                    <p id="deneme3{{$k}}"></p> 
-                                                                  <?php $k++;?>   
-                                                                @endforeach
-                                                        
-                                                        
-                                                        
+                                                          
+                                                         @endforeach
+                                                         <?php $i++;?>  
                                                          <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
                                                      </div>
                                                      <div class="modal-footer">                                                            
                                                      </div>
                                                  </div>
                                              </div>
-                                         </div>
+                                                </div>
                                                 
                                          @endif
-                               
+                                         
+           
+
+                        
                          <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
           
             <script type="text/javascript">
-                    function func(){
-                             var kullanici;
-                                @if(Auth::guest())
-                                    kullanici=0;
-                                @else
-                                    kullanici={{Auth::user()->kullanici_id}};
-                                @endif
-
-                                $.ajax({
-                                  type:"GET",
-                                  url: "kullaniciFirma",
-                                  data:{kullanici_id:kullanici
-                                       },
-                                  cache: false,
-                                  success: function(data){
-                                     console.log(data);
-                                       for(var key=0; key <Object.keys(data).length;key++)
-                                    {
-                                         $("#deneme3"+key).append(data[key].adi);
-
-                                    }
-                                 }
-
-
-                               });
-                    }
-                
-                
-                
                       function auto_load(){
                             var il_id=$('#il_id').val();
                             var basTar=$('#baslangic_tarihi').val();
@@ -537,9 +497,6 @@
                             if (selected4.length > 0) {
                                 selectedSozlesme = selected4.val();
                             }
-                            
-                            
-                       
                            
                             $.ajax({
                               type:"GET",
@@ -559,13 +516,7 @@
                                  $("#il"+key).empty();
                                  $("#hr"+key).hide();
                                 }
-                                
-                                @if(Auth::guest())
-                                
-                                @else
-                                
                                  var say ={{$kullanici->firmalar->count()}}
-                                @endif
                                 
                                 for(var key=0; key <Object.keys(data).length;key++)
                                 {
@@ -573,19 +524,17 @@
                                  $("#ilan"+key).append(data[key].ilanadi);
                                  $("#adi"+key).append(data[key].adi);
                                  $("#il"+key).append(data[key].iladi);
-                                   
-                                    @if(Auth::guest())
-                                    
-                                    @else
-                                        if(say==1){
+                                
+                                
+                                    if(say>1){
                                         $("#deneme2"+key).append("<a href=ilanTeklifVer/"+data[key].firma_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />");  
-                                           }
-                                       if(say>1){
-
-                                          $("#deneme1"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+">tıkla</a></li></ul>");
-                                           
-                                         }
-                                    @endif
+                                    }
+                                    if(say==1){
+                                 
+                                        $("#deneme1"+key).append("<ul style='list-style-type:square'><li ><a  href=ilanTeklifVer/"+data[key].firma_id+">{{$kullanicifirma->adi}}</button></li></ul>");
+                                      
+                                     }
+                                    
                                 }
                                 
                                
@@ -789,7 +738,6 @@
                 });
                 $('document').ready(function(){
                     auto_load();
-                    func();
                 });
                 
    

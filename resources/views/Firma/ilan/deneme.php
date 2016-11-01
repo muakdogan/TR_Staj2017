@@ -42,3 +42,40 @@
         </div>
     
     </nav>
+
+        $userdata = array(
+        'email'     => Input::get('email'),
+        'password'  => Input::get('password')
+      );
+
+    
+    if (Auth::attempt($userdata)) {
+        
+         return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('birimler',$birimler);
+           
+
+    } else {     
+   
+     return Redirect::tol('login');
+
+    }
+<a  href=ilanTeklifVer/"+data[key].firma_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />
+
+ <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >LOGIN</button>
+ 
+    <li><a href="{{url('ilanTeklifVer/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
+    
+     <ul style="list-style-type:square">
+             <li ><a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
+        </ul>
+    
+    
+    
+     protected function authenticated($request, $user)
+    {
+        if($user->role === 'admin') {
+            return redirect()->intended('/admin_path_here');
+        }
+
+        return redirect()->intended('/path_for_normal_user');
+    }
