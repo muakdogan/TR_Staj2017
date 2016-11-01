@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Validator;
+use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -28,7 +29,13 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+            //auth/login?redirectTo='Firma.ilan.ilanAra';
+    
+           
+            protected $redirectTo = '/';
+            
+            
+            
 
     /**
      * Create a new authentication controller instance.

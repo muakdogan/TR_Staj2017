@@ -394,6 +394,7 @@ tr:nth-child(even) {
   
 });
 }
+
  for(var key=0; key < {{$i}};key++)
   {
 $('#fiyat'+key).on('change', function() {
@@ -403,7 +404,7 @@ $('#fiyat'+key).on('change', function() {
     var result;
     var name=$(this).attr('name');
     
-  $('.select').on('change', function() {
+  $('#kdv'+key).on('change', function() {
      
        
         var kdv2=parseInt(this.value);

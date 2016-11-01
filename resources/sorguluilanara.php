@@ -426,23 +426,15 @@
                                                      <div class="modal-body">
                                                          <p>{{ Auth::user()->name }}</p>
                                                          
-                                                             <?php $i=0;$k=0;?>
+                                                             <?php $j=0; $k=0; ?>
+                                                   
+                                                        @foreach($querys as $query)
                                                        
-                                                        
-                                                                @foreach($querys as $query)
-                                                                    
-                                                                    <p id="deneme1{{$i}}"></p>  
-                                                                   
-                                                                  <?php $i++;?>   
-                                                                @endforeach
-                                                                @foreach($querys as $query)
-                                                                    
-                                                                     
-                                                                    <p id="deneme3{{$k}}"></p> 
-                                                                  <?php $k++;?>   
-                                                                @endforeach
-                                                        
-                                                        
+                                                                 <p id="deneme1{{$j}}"></p><p id="deneme3{{$j}}"></p>  
+                                                             
+                                                            
+                                                        @endforeach
+                                                        <?php $j++;?> 
                                                         
                                                          <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
                                                      </div>
@@ -475,7 +467,7 @@
                                      console.log(data);
                                        for(var key=0; key <Object.keys(data).length;key++)
                                     {
-                                         $("#deneme3"+key).append(data[key].adi);
+                                         $("#deneme1"+key).append(data[key].adi);
 
                                     }
                                  }
@@ -582,7 +574,7 @@
                                            }
                                        if(say>1){
 
-                                          $("#deneme1"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+">tıkla</a></li></ul>");
+                                            $("#deneme3"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+">Seçiniz</button></li></ul>");
                                            
                                          }
                                     @endif
