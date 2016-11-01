@@ -17,5 +17,9 @@ class IlanMal extends Model
     {
         return $this->belongsTo('App\Ilan', 'ilan_id', 'id');
     }
+    public function mal_teklifler()
+    {
+        return $this->hasMany('App\MalTeklif', 'ilan_mal_id', 'id');
+    }
     
 }

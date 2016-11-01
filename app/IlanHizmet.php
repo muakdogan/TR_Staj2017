@@ -25,4 +25,8 @@ class IlanHizmet extends Model
     {
         return $this->belongsTo('App\Birim', 'miktar_birim_id', 'id');
     }
+    public function hizmet_teklifler()
+    {
+        return $this->hasMany('App\HizmetTeklif', 'ilan_hizmetler_id', 'id');
+    }
 }

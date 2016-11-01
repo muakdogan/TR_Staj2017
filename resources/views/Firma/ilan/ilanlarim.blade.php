@@ -76,7 +76,7 @@ tr:nth-child(even) {
               <p>{{$ilan->kapanma_tarihi}}</p>
                <a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Düzenle</button></a>
                
-               <button style="float:right" type="button" class="btn btn-info">Teklif Gör</button>
+               <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Teklif Gör</button></a>
                 <br>
                <hr>
                @endforeach

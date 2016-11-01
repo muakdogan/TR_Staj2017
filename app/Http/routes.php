@@ -306,7 +306,13 @@ use Illuminate\Http\Request;
 
     });
 
-
+//////////////////////////////////////teklifGor//////////////////////
+  Route::get('teklifGor/{id}/{ilanid}' ,function ($id,$ilanid) {
+        $firma = Firma::find($id);
+        $ilan = Ilan::find($ilanid);
+        return view('Firma.ilan.teklifGor')->with('firma', $firma)->with('ilan',$ilan);
+        
+    }); 
 
 
 

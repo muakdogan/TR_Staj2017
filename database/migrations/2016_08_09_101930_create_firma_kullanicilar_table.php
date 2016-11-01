@@ -18,7 +18,7 @@ class CreateFirmaKullanicilarTable extends Migration
             $table->integer('firma_id')->unsigned();
             $table->foreign('firma_id')->references('id')->on('firmalar')->onDelete('cascade');
             $table->integer('kullanici_id')->unsigned();
-            $table->foreign('kullanici_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('kullanici_id')->references('id')->on('kullanicilar')->onDelete('cascade');
             $table->integer('rol_id')->unsigned();
             $table->foreign('rol_id')->references('id')->on('roller')->onDelete('cascade');
         });
