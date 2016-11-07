@@ -476,8 +476,7 @@
                                  $.ajax({
                               type:"GET",
                               url: "ilanAraFiltre",
-                              data:{
-                                   },
+                              data:{},
                                cache: false,
                                success: function(data){
                                console.log(data);
