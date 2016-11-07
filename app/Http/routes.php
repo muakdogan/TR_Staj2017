@@ -30,6 +30,15 @@ use Illuminate\Http\Request;
         $sektorler= App\Sektor::all();
         return view('Firma.firmaKayit')->with('iller', $iller)->with('sektorler',$sektorler);
     });
+    
+     Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
+        $kullanici=  App\Kullanici::all();
+         $kullanici_id=  App\Kullanici::find($id);
+        $iller = App\Il::all();
+        $sektorler= App\Sektor::all();
+        return view('Firma.yeniFirmaKaydet')->with('iller', $iller)->with('sektorler',$sektorler)->with('kullanici',$kullanici)->with('kullanici_id',$kullanici_id);
+    });
+    
     Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
         $firma=  Firma::find($id);
         return view('Firma.firmaIslemleri')->with('firma',$firma);
@@ -211,8 +220,38 @@ use Illuminate\Http\Request;
 
         $firma->kullanicilar()->attach($kullanici);
 
-        return redirect('/firmalist');
+        return redirect('/');
     });
+    
+     Route::post('/yeniFirma/{id}', function (Request $request,$id) {
+         
+            $kullanici= App\Kullanici::find($id);
+            
+            $firma= new Firma();
+            $firma->adi=$request->adi;
+            $firma->save();
+
+            $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
+            $iletisim->telefon = $request->telefon;
+            $firma->iletisim_bilgileri()->save($iletisim);    
+
+            $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
+            $adres->il_id = $request->il_id;
+            $adres->ilce_id = $request->ilce_id;
+            $adres->semt_id = $request->semt_id;
+            $adres->adres = $request->adres;
+            $tur = 1;
+            $adres->tur_id = $tur;
+            $firma->adresler()->save($adres);
+
+            $firma->sektorler()->attach($request->sektor_id);
+
+            $kullanici->firmalar()->attach($firma);
+
+        return redirect('firmaIslemleri/'.$firma->id); 
+    });
+    
+    
    Route::get('ilanlarim/{id}' ,function ($id) {
         $firma = Firma::find($id);
         return view('Firma.ilan.ilanlarim')->with('firma', $firma);

@@ -3,7 +3,7 @@
 <br>
  <br>
  @section('content')
-  
+ 
  <style>
 table {
     font-family: arial, sans-serif;
@@ -86,6 +86,7 @@ tr:nth-child(even) {
                                               $firma->ilanlar = new App\Ilan();
                                           if (!$firma->ilanlar->ilan_mallar)
                                               $firma->ilanlar->ilan_mallar = new App\IlanMal();
+                                        $i=0;  
                                           ?>
                                       <tr>
                                           <th>Sıra:</th>
@@ -101,9 +102,7 @@ tr:nth-child(even) {
                                           <th>Toplam:</th>
 
                                       </tr>
-                                    </thead>
-                                    <tbody>
-                                       <?php $i=0;?>  
+                                       
                                       @foreach($firma->ilanlar->ilan_mallar as $ilan_mal)
                                       <tr id="{{$ilan_mal->id}}tr">
                                           <td>
@@ -181,6 +180,7 @@ tr:nth-child(even) {
                                               $firma->ilanlar = new App\Ilan();
                                           if (!$firma->ilanlar->ilan_hizmetler)
                                               $firma->ilanlar->ilan_hizmetler = new App\IlanHizmet();
+                                   
                                           ?>
                                       <tr>
                                           <th>Sıra:</th>
@@ -216,7 +216,7 @@ tr:nth-child(even) {
                                               {{$ilan_hizmet->miktar_birimler->adi}}
                                           </td>
                                            <td>
-                                              <select class="form-control select" name="kdv" id="kdv" required>
+                                              <select class="form-control select kdv{{$i}}" name="kdv" id="kdv{{$i}}" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
@@ -233,6 +233,7 @@ tr:nth-child(even) {
                                           </td>
                                          <input type="hidden" name="ilan_hizmet_id"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}"> 
                                       </tr>
+                                      <?php $i++;?>
                                       @endforeach
                                       <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                           <td>
@@ -261,6 +262,7 @@ tr:nth-child(even) {
                                               $firma->ilanlar = new App\Ilan();
                                           if (!$firma->ilanlar->ilan_goturu_bedeller)
                                               $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
+                                     
                                           ?>
                                       <tr>
                                           <th>Sıra:</th>
@@ -284,7 +286,7 @@ tr:nth-child(even) {
                                               {{$ilan_goturu_bedel->miktar_turu}}
                                           </td>
                                            <td>
-                                              <select class="form-control select" name="kdv" id="kdv" required>
+                                              <select class="form-control select kdv{{$i}}" name="kdv" id="kdv{{$i}}" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
@@ -301,6 +303,7 @@ tr:nth-child(even) {
                                           </td>
                                         <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
                                       </tr>
+                                      <?php $i++;?>
                                       @endforeach 
                                       <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                           <td>
@@ -329,6 +332,7 @@ tr:nth-child(even) {
                                               $firma->ilanlar = new App\Ilan();
                                           if (!$firma->ilanlar->ilan_yapim_isleri)
                                               $firma->ilanlar->ilan_yapim_isleri = new App\IlanYapimIsi();
+                                        
                                           ?>
                                       <tr>
                                           <th>Sıra:</th>
@@ -356,7 +360,7 @@ tr:nth-child(even) {
                                               {{$ilan_yapim_isi->birimler->adi}}
                                           </td>
                                            <td>
-                                              <select class="form-control select " name="kdv" id="kdv" required>
+                                              <select class="form-control select kdv{{$i}} " name="kdv" id="kdv" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
@@ -375,6 +379,7 @@ tr:nth-child(even) {
                                           
                                           <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}"> 
                                       </tr>
+                                      <?php $i++;?>
                                       @endforeach
                                       <tr>
                                           <td colspan="11">
@@ -399,56 +404,46 @@ tr:nth-child(even) {
         </div>    
     </div>
 <script>
-    var toplamFiyat =0;
-    var kdv,fiyat;
-    var kdvArray = new Array();
-    var fiyatArray = new Array();
-    var idArray = new Array();
-  for(var key=0; key < {{$i}};key++)
-  {
-    $('#kdv'+key).on('change', function() {
+        var fiyat;
+     var temp=0;
+      var count=0;
 
-     kdv=parseInt(this.value);
-     kdvArray.push(kdv);
-    var result;
-        $('.fiyat').on('change', function() {
-       
-          fiyat=parseInt(this.value);
-          fiyatArray.push(fiyat);
-          result=fiyat+(fiyat*kdv)/100;
-          toplamFiyat += result;
-          var name=$(this).attr('name');
-          idArray.push(name);
-          $("#"+name).text(result);
-          //$()).text(result);
-          $("#toplamFiyatLabel").text("Toplam Fiyat:");
-          $("#toplamFiyat").text(toplamFiyat);
-
-        });
-  
-    });
-}
-
- for(var key=0; key < {{$i}};key++)
-  {
-    $('#fiyat'+key).on('change', function() {
-        var fiyat=parseInt(this.value);
+      
+ $('.kdv').on('change', function() {
+                
+        var kdv=parseFloat(this.value);
         var result;
-        var name=$(this).attr('name');
+        
+               if($(this).parent().next().children().val() !== '')
+               {
+                   var miktar = parseFloat($(this).parent().prev().prev().text());
+                   fiyat=parseFloat($(this).parent().next().children().val()); 
+                        result=(fiyat+(fiyat*kdv)/100)*miktar;
+                        var name=$(this).attr('name');
+                        $("#"+name).text(result);
+                }
+                
 
-            $('#kdv'+key).on('change', function() {
+       });
+ 
+ $('.fiyat').on('change', function() {
+                
+        var fiyat=parseFloat(this.value);
+        var result;
+        
+               if($(this).parent().prev().children().val() !== '')
+               {
+                   var miktar = parseFloat($(this).parent().prev().prev().prev().text());
+                   kdv=parseFloat($(this).parent().prev().children().val());
+                        result=(fiyat+(fiyat*kdv)/100)*miktar;
+                        var name=$(this).attr('name');
+                        $("#"+name).text(result);
+                }
+                
 
+       });
+ 
 
-                  var kdv2=parseInt(this.value);
-
-                  result=fiyat+(fiyat*kdv2)/100;
-
-                  $("#"+name).text(result);
-
-            });
-
-    });
-  }
 
 var firma_id = '{{$firma->id}}';
 var ilan_id = '{{$ilan->id}}';

@@ -10,6 +10,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
@@ -1012,7 +1013,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$firma->ilanlar->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -1036,7 +1037,7 @@
                                                      </div>
 
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$firma->ilanlar->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -1165,7 +1166,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$firma->ilanlar->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
@@ -1198,7 +1199,7 @@
                                                          </div>
                                                      </div>
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$firma->ilanlar->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -1215,11 +1216,11 @@
          </div>
     </div>
 
-<script>
-    
+<script >
+
 var ilan_turu;
 var sozlesme_turu;
-
+var ezgi="ö";
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
         
@@ -1282,9 +1283,14 @@ $('#sozlesme_turu').on('change', function (e) {
 
 $( document ).ready(function() {
 
-    var ilan_turu='{{$firma->ilanlar->ilan_turu}}';
-    var sozlesme_turu='{{$firma->ilanlar->sozlesme_turu}}';
- 
+    var ilan_turu="{{$ilan->ilan_turu}}";
+    var sozlesme_turu="{{$ilan->sozlesme_turu}}";
+    
+    if(sozlesme_turu!="Birim Fiyatlı")
+    {
+        sozlesme_turu="Götürü Bedel";
+    
+    }
     
             if(ilan_turu=="") 
              {
@@ -1308,6 +1314,7 @@ $( document ).ready(function() {
                 }
              else if(sozlesme_turu=="Götürü Bedel")
                 {
+                    
                    $('#hizmet').hide()
                    $('#mal').hide()
                    $('#yapim').hide();
@@ -1318,7 +1325,14 @@ $( document ).ready(function() {
                    $('#goturu').hide()
                    $('#mal').hide()
                 }
+                 //alert(ilan_turu);
+                // alert(sozlesme_turu);
+                //alert(ezgi);
+        
+    
+               
 });
+
 </script>
 </body>
 </html>
