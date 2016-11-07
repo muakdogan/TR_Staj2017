@@ -23,4 +23,8 @@ class HizmetTeklif extends Model
     {
         return $this->belongsTo('App\ParaBirimi', 'para_birimleri_id', 'id');
     }
+     public function teklifler()
+    {
+        return $this->belongsTo('App\Teklif', 'teklif_id', 'id');
+    }
 }

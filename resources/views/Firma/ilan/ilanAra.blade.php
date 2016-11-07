@@ -586,10 +586,19 @@
                                  $("#adi"+key).append(data[key].adi);
                                  $("#il"+key).append(data[key].iladi);
                                 
-                                     
+                                 @if(Auth::guest())    
                                  $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>");  
                                     
-                                 
+                                    @else
+                                        if(say==1){
+                                        $("#deneme2"+key).append("<a href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />");  
+                                           }
+                                       if(say>1){
+
+                                          $("#deneme1"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+">tıkla</a></li></ul>");
+                                           
+                                         }
+                                    @endif
                                 }
                                 
                               } 
