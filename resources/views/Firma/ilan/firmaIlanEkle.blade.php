@@ -8,7 +8,7 @@
 @section('content')
 <!DOCTYPE html>
 <html>
-    <head>
+ <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -141,7 +141,7 @@
                                  <tr>
                                      <td>İlan Sektor:</td>
                                       @foreach($sektorler as $ilanSektor)<?php
-                                   if($ilanSektor->id == $firma->ilanlar->firma_sektor){
+                                   if($ilanSektor->id == $ilan->firma_sektor){
                                        ?>
                                           <td>{{$ilanSektor->adi}}</td>
                                           <?php
@@ -934,7 +934,7 @@
                                      <th></th>
                                      <th></th>
                                  </tr>
-                                 @foreach($firma->ilanlar->ilan_goturu_bedeller as $ilan_goturu_bedel)
+                                 @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
                                  <tr>
                                      <td>
                                          {{$ilan_goturu_bedel->sira}}
@@ -1074,7 +1074,7 @@
                                      <th></th>
                                      <th></th>
                                  </tr>
-                                 @foreach($firma->ilanlar->ilan_yapim_isleri as $ilan_yapim_isi)
+                                 @foreach($ilan->ilan_yapim_isleri as $ilan_yapim_isi)
                                  <tr>
                                      <td>
                                          {{$ilan_yapim_isi->sira}}
@@ -1215,7 +1215,7 @@
          </div>
     </div>
 
-<script>
+<script charset="utf-8">
     
 var ilan_turu;
 var sozlesme_turu;
@@ -1282,8 +1282,8 @@ $('#sozlesme_turu').on('change', function (e) {
 
 $( document ).ready(function() {
 
-    var ilan_turu='{{$firma->ilanlar->ilan_turu}}';
-    var sozlesme_turu='{{$firma->ilanlar->sozlesme_turu}}';
+    var ilan_turu='{{$ilan->ilan_turu}}';
+    var sozlesme_turu='{{$ilan->sozlesme_turu}}';
  
     
             if(ilan_turu=="") 
