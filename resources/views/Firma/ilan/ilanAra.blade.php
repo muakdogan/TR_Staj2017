@@ -314,19 +314,10 @@
                                                      <p id="adi{{$i}}"></p>
                                                      <p id="il{{$i}}"></p>
                                                      
-                                                      @if(Auth::guest())
-                                                      <button id='btn-add-fiyatlandırmaBilgileri' name='btn-add-fiyatlandırmaBilgileri' style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />
-                                                      @else
-                                                        @if($kullanici->firmalar->count()==1)
-                                                         
-                                                           <p id="deneme2{{$i}}"></p>
+                                                     
+                                                     <p id="deneme2{{$i}}"></p>
 
-                                                        @elseif($kullanici->firmalar->count()>1)
-                                                        
-                                                         <button id='btn-add-fiyatlandırmaBilgileri' name='btn-add-fiyatlandırmaBilgileri' style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />
-                                                        
-                                                        @endif
-                                                      @endif
+                                                       
                                                     
                                                     <?php $i++;?>
                                                 @endforeach
@@ -407,7 +398,6 @@
                                                              </div>
                                                          </div>
 
-                                                         <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
                                                      </div>
                                                      <div class="modal-footer">                                                            
                                                      </div>
@@ -415,6 +405,7 @@
                                              </div>
                                          </div>
                                          @else
+                                          <?php $j=0;$k=0;?>
                                             
                                                 <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                  <div class="modal-dialog">
@@ -424,65 +415,88 @@
                                                          <h4 class="modal-title" id="myModalLabel">Lütfen Şirket Seçiniz!</h4>
                                                      </div>
                                                      <div class="modal-body">
-                                                         <p>{{ Auth::user()->name }}</p>
+                                                          
+                                                         <p style="font-weight:bold;text-align: center;font-size:x-large">{{ Auth::user()->name }}  </p>
+                                                         <hr>
                                                          
-                                                             <?php $i=0;$k=0;?>
-                                                       
-                                                        
-                                                                @foreach($querys as $query)
-                                                                    
-                                                                    <p id="deneme1{{$i}}"></p>  
-                                                                   
-                                                                  <?php $i++;?>   
-                                                                @endforeach
-                                                                @foreach($querys as $query)
-                                                                    
-                                                                     
-                                                                    <p id="deneme3{{$k}}"></p> 
-                                                                  <?php $k++;?>   
-                                                                @endforeach
-                                                        
-                                                        
-                                                        
-                                                         <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
+                                                                 
+                                                                    @foreach($kullanici->firmalar as $kullanicifirma)
+
+                                                                           <p id="deneme3{{$j}}"></p>  
+
+                                                                         <?php $j++;?>   
+                                                                    @endforeach
+                                                                  
+                                                            
                                                      </div>
                                                      <div class="modal-footer">                                                            
                                                      </div>
                                                  </div>
                                              </div>
                                          </div>
-                                                
+                                             
                                          @endif
                                
-                         <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
+                           
           
             <script type="text/javascript">
-                    function func(){
-                             var kullanici;
-                                @if(Auth::guest())
-                                    kullanici=0;
-                                @else
-                                    kullanici={{Auth::user()->kullanici_id}};
-                                @endif
+                
+                        
+                            function teklifver(){
+                                alert("hdfhdf");
+                                
+                                 @if(Auth::guest())
+                                     $('#myModal-fiyatlandırmaBilgileri').modal({
+                                        show: 'true'
+                                    }); 
+                                
+                                 @else
+                                     alert("ezgiiii");
+                                    @if($kullanici->firmalar->count()==1)
+                                                         
+                                       "<p id='deneme2{{$i}}>'</p>"
 
-                                $.ajax({
-                                  type:"GET",
-                                  url: "kullaniciFirma",
-                                  data:{kullanici_id:kullanici
-                                       },
-                                  cache: false,
-                                  success: function(data){
-                                     console.log(data);
-                                       for(var key=0; key <Object.keys(data).length;key++)
-                                    {
-                                         $("#deneme3"+key).append(data[key].adi);
+                                    @elseif($kullanici->firmalar->count()>1)
+                                       $('#myModal-fiyatlandırmaBilgileri').modal({
+                                        show: 'true'
+                                      }); 
+                                                        
+                                    @endif
+                                   
+                                 @endif
+                               
 
-                                    }
-                                 }
+                            }
+                            
+                            
+                            
+                            function func(){
+                                     var kullanici;
+                                        @if(Auth::guest())
+                                            kullanici=0;
+                                        @else
+                                            kullanici={{Auth::user()->kullanici_id}};
+                                        @endif
+
+                                        $.ajax({
+                                          type:"GET",
+                                          url: "kullaniciFirma",
+                                          data:{kullanici_id:kullanici
+                                               },
+                                          cache: false,
+                                          success: function(data){
+                                             console.log(data);
+                                               for(var key=0; key <Object.keys(data).length;key++)
+                                            {
+                                                 $("#deneme3"+key).append("<input type='radio' name='gender' value='male'>"+data[key].adi+"<br>");
 
 
-                               });
-                    }
+                                            }
+                                         }
+
+
+                                       });
+                            }
                 
                 
                 
@@ -539,8 +553,6 @@
                             }
                             
                             
-                       
-                           
                             $.ajax({
                               type:"GET",
                               url: "ilanAraFiltre",
@@ -573,24 +585,13 @@
                                  $("#ilan"+key).append(data[key].ilanadi);
                                  $("#adi"+key).append(data[key].adi);
                                  $("#il"+key).append(data[key].iladi);
-                                   
-                                    @if(Auth::guest())
+                                
+                                     
+                                 $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>");  
                                     
-                                    @else
-                                        if(say==1){
-                                        $("#deneme2"+key).append("<a href=ilanTeklifVer/"+data[key].firma_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />");  
-                                           }
-                                       if(say>1){
-
-                                          $("#deneme1"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+">tıkla</a></li></ul>");
-                                           
-                                         }
-                                    @endif
+                                 
                                 }
                                 
-                               
-                               
-                                 
                               } 
                             });
                     }
@@ -790,10 +791,9 @@
                 $('document').ready(function(){
                     auto_load();
                     func();
+                    
                 });
-                
-   
-                  </script>
+            </script>
                   
         <hr>
     </div>
