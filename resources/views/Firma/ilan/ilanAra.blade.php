@@ -315,7 +315,7 @@
                                                      <p id="il{{$i}}"></p>
                                                      
                                                      
-                                                     <p id="deneme2{{$i}}"></p>
+                                                     <a onclick='showModal()' ><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>
 
                                                        
                                                     
@@ -426,7 +426,8 @@
 
                                                                          <?php $j++;?>   
                                                                     @endforeach
-                                                                  
+                                                                    
+                                                                    <a onclick='teklifVer()' ><button  style='float:right' type='button' class='btn btn-info'>Firma Seçiniz</button></a><br><br>
                                                             
                                                      </div>
                                                      <div class="modal-footer">                                                            
@@ -442,7 +443,7 @@
             <script type="text/javascript">
                 
                         
-                            function teklifver(){
+                            function showModal(){
                                 alert("hdfhdf");
                                 
                                  @if(Auth::guest())
@@ -451,14 +452,15 @@
                                     }); 
                                 
                                  @else
-                                     alert("ezgiiii");
+                                    alert("ezgiiii");
                                     @if($kullanici->firmalar->count()==1)
                                                          
-                                       "<p id='deneme2{{$i}}>'</p>"
+                                       "<p id='deneme2{{$i}}'></p>"
 
                                     @elseif($kullanici->firmalar->count()>1)
                                        $('#myModal-fiyatlandırmaBilgileri').modal({
                                         show: 'true'
+                                         
                                       }); 
                                                         
                                     @endif
@@ -468,6 +470,50 @@
 
                             }
                             
+                            function teklifVer(){
+                               
+                              alert("girdi");
+                                 $.ajax({
+                              type:"GET",
+                              url: "ilanAraFiltre",
+                              data:{},
+                               cache: false,
+                               success: function(data){
+                               console.log(data);
+                                 
+                                 for(var key=0; key < {{$i}};key++)
+                                {
+                                 $("#ilan"+key).empty();
+                                 $("#adi"+key).empty();
+                                 $("#il"+key).empty();
+                                 $("#hr"+key).hide();
+                                }
+                                
+                                @if(Auth::guest())
+                                
+                                @else
+                                
+                                 var say ={{$kullanici->firmalar->count()}}
+                                @endif
+                                
+                                for(var key=0; key <Object.keys(data).length;key++)
+                                {
+                                    
+                                 $("#ilan"+key).append(data[key].ilanadi);
+                                 $("#adi"+key).append(data[key].adi);
+                                 $("#il"+key).append(data[key].iladi);
+                                
+                                  
+                                    window.location.href="ilanTeklifVer/"+data[key].firma_id;
+                                 
+                                }
+                                
+                              } 
+                            });
+                              
+                              
+                               
+                            }
                             
                             
                             function func(){
