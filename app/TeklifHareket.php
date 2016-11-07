@@ -4,16 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MalTeklif extends Model
+class TeklifHareket extends Model
 {
     //
-     protected $table = 'mal_teklifler';
+     protected $table = 'teklif_hareketler';
     
     public $timestamps = false;
     
-    public function ilan_mallar()
+    public function teklifler()
     {
-        return $this->belongsTo('App\IlanMal', 'ilan_mal_id', 'id');
+        return $this->belongsTo('App\Teklif', 'teklif_id', 'id');
     }
     public function firma_kullanicilar()
     {
@@ -22,9 +22,5 @@ class MalTeklif extends Model
     public function para_birimleri()
     {
         return $this->belongsTo('App\ParaBirimi', 'para_birimleri_id', 'id');
-    }
-     public function teklifler()
-    {
-        return $this->belongsTo('App\Teklif', 'teklif_id', 'id');
     }
 }
