@@ -66,7 +66,7 @@ use Illuminate\Http\Request;
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 
-                ->select('ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
+                ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
        
          $il_id = Input::get('il');
          $bas_tar = Input::get('bas_tar');
@@ -218,17 +218,14 @@ use Illuminate\Http\Request;
         return view('Firma.ilan.ilanlarim')->with('firma', $firma);
         
     });
-   Route::get('ilanTeklifVer/{id}'  ,function ($id) {
+   Route::get('ilanTeklifVer/{id}/{ilan_id}'  ,function ($id,$ilan_id) {
         $firma = Firma::find($id);
+        $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
        
-  
-        
-         return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('birimler',$birimler);
+        return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('ilan', $ilan)->with('birimler',$birimler);
            
 
-       
-        
     });
     
     //firma profil route...
@@ -330,11 +327,51 @@ use Illuminate\Http\Request;
     });
 
 //////////////////////////////////////teklifGor//////////////////////
-  Route::get('teklifGor/{id}/{ilanid}' ,function ($id,$ilanid) {
+    Route::get('teklifGor/{id}/{ilanid}' ,function ($id,$ilanid) {
         $firma = Firma::find($id);
         $ilan = Ilan::find($ilanid);
         return view('Firma.ilan.teklifGor')->with('firma', $firma)->with('ilan',$ilan);
         
+    }); 
+/////////////////////////////////////teklif Gönder /////////////////////////////////
+    Route::get('/teklifGonder/{firma_id}/{ilan_id}' ,function ($firma_id,$ilan_id,Request $request) {
+        
+        $now = new \DateTime();
+        
+        $ilan=  Ilan::find($ilan_id);
+        
+        $teklif = new \App\Teklif;
+        $teklif->firma_id =$firma_id;
+        $teklif->ilan_id = $ilan_id;
+        $teklif->save();
+        
+        $teklifHareket = new App\TeklifHareket;
+        foreach($request->fiyat as $fiyat){
+            $kdvFiyatToplam += $fiyat;
+        }
+        $teklifHareket->kdv_haric_fiyat=$kdvFiyatToplam;
+        $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
+        $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
+        $teklifHareket->tarih = $now;
+        
+        $teklif->teklif_hareketler()->save($teklifHareket);
+        if($ilan->ilan_mallar() != null){
+            for($i=0;$i < fiyatArray.length(); $i++){
+                $malTeklif= new \App\MalTeklif;
+                 $malTeklif->ilan_mallar_id= $idArray.[$i];
+                 $malTeklif->kdv_haric_fiyat=$fiyatArray.[$i];
+                 $malTeklif->kdv_orani= $kdvArray.[$i];
+                 $malTeklif->tarih = $now;
+                $teklif->mal_teklifler()->save($malTeklif); 
+            }
+        }elseif ($ilan->ilan_hizmetler() != null) {
+        
+        }elseif($ilan->goturu_bedeller() != null){
+            
+        }else{
+            
+        }
+        response($teklif);
     }); 
 
 

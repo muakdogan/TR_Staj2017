@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMalTekliflerTable extends Migration
+class CreateTeklifHareketlerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateMalTekliflerTable extends Migration
     public function up()
     {
         //
-        Schema::create('mal_teklifler', function (Blueprint $table) {
+        Schema::create('teklif_hareketler', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ilan_mal_id')->unsigned();
-            $table->foreign('ilan_mal_id')->references('id')->on('ilan_mallar')->onDelete('cascade');
             $table->integer('teklif_id')->unsigned();
-            $table->foreign('teklif_id')->references('id')->on('teklif')->onDelete('cascade');
+            $table->foreign('teklif_id')->references('id')->on('teklifler')->onDelete('cascade');
             $table->string('kdv_dahil_fiyat');
             $table->string('kdv_haric_fiyat');
             $table->string('kdv_orani');
@@ -39,6 +37,6 @@ class CreateMalTekliflerTable extends Migration
     public function down()
     {
         //
-        Schema::drop('mal_teklifler');
+        Schema::drop('teklif_hareketler');
     }
 }

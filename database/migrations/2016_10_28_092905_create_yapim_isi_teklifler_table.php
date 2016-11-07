@@ -17,7 +17,11 @@ class CreateYapimIsiTekliflerTable extends Migration
             $table->increments('id');
             $table->integer('ilan_yapim_isleri_id')->unsigned();
             $table->foreign('ilan_yapim_isleri_id')->references('id')->on('ilan_yapim_isleri')->onDelete('cascade');
-            $table->string('fiyat');
+            $table->integer('teklif_id')->unsigned();
+            $table->foreign('teklif_id')->references('id')->on('teklif')->onDelete('cascade');
+            $table->string('kdv_dahil_fiyat');
+            $table->string('kdv_haric_fiyat');
+            $table->string('kdv_orani');
             $table->integer('para_birimleri_id')->unsigned();
             $table->foreign('para_birimleri_id')->references('id')->on('para_birimleri')->onDelete('cascade');
             $table->date('tarih');

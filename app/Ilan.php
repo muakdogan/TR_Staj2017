@@ -50,5 +50,8 @@ class Ilan extends Model
     {
         return $this->belongsTo('App\Ilce', 'teslim_yeri_ilce_id', 'id');
     }
-    
+    public function teklifler()
+    {
+        return $this->hasMany('App\Teklif', 'ilan_id', 'id');
+    }
 }

@@ -67,7 +67,7 @@ tr:nth-child(even) {
              </div>
          </nav>
          <div class="col-sm-12">                     
-            <h3>{{$firma->adi}}'nın {{$firma->ilanlar->adi}} İlanına Teklif  Ver</h3>
+            <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
               <hr>
               <div class="panel-group" id="accordion">
                   <div id="mal"   class="panel panel-default">
@@ -96,14 +96,16 @@ tr:nth-child(even) {
                                           <th>Miktar:</th>
                                           <th>Birim:</th>
                                           <th>KDV Oranı:</th>
-                                          <th>Fiyat:</th>
+                                          <th>Birim Fiyat:</th>
                                           <th>Para Birimi</th>
                                           <th>Toplam:</th>
 
                                       </tr>
+                                    </thead>
+                                    <tbody>
                                        <?php $i=0;?>  
                                       @foreach($firma->ilanlar->ilan_mallar as $ilan_mal)
-                                      <tr>
+                                      <tr id="{{$ilan_mal->id}}tr">
                                           <td>
                                               {{$ilan_mal->sira}}
                                           </td>
@@ -127,32 +129,39 @@ tr:nth-child(even) {
                                           </td>
                                           
                                           <td>
-                                              <select class="form-control select" name="kdv" id="kdv{{$i}}" required>
+                                              <select class="form-control select" name="kdv[]" id="kdv" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
-                                                                 <option  value="2" >%8</option>
-                                                                 <option  value="3">%18</option>
+                                                                 <option  value="8" >%8</option>
+                                                                 <option  value="18">%18</option>
                                                                 
                                              </select>
                                           </td>
                                           <td>
-                                            <input type="text" class="form-control fiyat" id="fiyat{{$i}}" name="{{$ilan_mal->id}}" placeholder="Fiyat" value="" required>
+                                            <input type="text" class="form-control fiyat" id="fiyat" name="{{$ilan_mal->id}}" placeholder="Fiyat" value="" required>
                                           </td>
                                           <td>
                                               {{$firma->ilanlar->para_birimleri->adi}}
                                           </td>
-                                         
                                           <td>
-                                               <label for="inputEmail3"  id="{{$ilan_mal->id}}"  name ="{{$ilan_mal->id}}" class="col-sm-3 control-label toplam"></label>
+                                               <label for="inputEmail3"  id="{{$ilan_mal->id}}"  name ="fiyat" class="col-sm-3 control-label toplam"></label>
                                           </td>
-                                           <?php $i++;?>
-                                          
-                                          <input type="hidden" name="ilan_mal_id"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
-                                      </tr>
-                                      @endforeach
-                                      </thead>
+                                           <?php $i++;?>                                          
+                                          <input type="hidden" name="ilan_mal_id[]"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
+                                        </tr>
+                                        @endforeach
+                                        <tr>
+                                          <td colspan="10">
+                                            <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
+                                          </td>
+                                          <td>
+                                              <label for="inputEmail3" name="toplamFiyat" id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                          </td>
+                                        </tr>
+                                        </tbody>
                               </table>
+                              <a href="{{ URL::to('teklifGonder', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Teklif Gönder</button></a>            
                           </div>
                       </div>
                   </div>
@@ -181,7 +190,7 @@ tr:nth-child(even) {
                                           <th>Miktar:</th>
                                           <th>Miktar Birimi:</th>
                                            <th>KDV Oranı:</th>
-                                          <th>Fiyat:</th>
+                                          <th>Birim Fiyat:</th>
                                           <th>Para Birimi</th>
                                            <th>Toplam:</th>
                                       </tr>
@@ -225,6 +234,12 @@ tr:nth-child(even) {
                                          <input type="hidden" name="ilan_hizmet_id"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}"> 
                                       </tr>
                                       @endforeach
+                                      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                          <td>
+                                              <label for="inputEmail3" name=toplamFiyat id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                          </td>
+                                          <button style="float:right" id="teklifGonder" type="button" class="btn btn-info">Teklif Gönder</button>
+                                      </tr>
                                       </thead>
                               </table>                             
                           </div>
@@ -287,6 +302,12 @@ tr:nth-child(even) {
                                         <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
                                       </tr>
                                       @endforeach 
+                                      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                          <td>
+                                              <label for="inputEmail3" name=toplamFiyat id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                          </td>
+                                          <button style="float:right" id="teklifGonder" type="button" class="btn btn-info">Teklif Gönder</button>
+                                      </tr>
                                       </thead>
                               </table>                            
                           </div>
@@ -315,7 +336,7 @@ tr:nth-child(even) {
                                           <th>Miktar:</th>
                                           <th>Birim:</th>
                                           <th>KDV Oranı:</th>
-                                          <th>Fiyat:</th>
+                                          <th>Birim Fiyat:</th>
                                           <th>Para Birimi</th>
                                           <th>Toplam:</th>
                                       </tr>
@@ -344,7 +365,7 @@ tr:nth-child(even) {
                                              </select>
                                           </td>
                                           <td>
-                                            <input type="text" class="form-control fiyat" id="fiyat{{$i}}" name="{{$ilan_yapim_isi->id}}" placeholder="Fiyat" value="" required>
+                                            <input type="text" class="form-control " id="fiyat{{$i}}" name="{{$ilan_yapim_isi->id}}" placeholder="Fiyat" value="" required>
                                           </td>
                                           
                                           <td>
@@ -355,6 +376,12 @@ tr:nth-child(even) {
                                           <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}"> 
                                       </tr>
                                       @endforeach
+                                      <tr>
+                                          <td colspan="11">
+                                              <label for="inputEmail3" name=toplamFiyat id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                          </td>
+                                      </tr>
+                                      <button style="float:right" id="teklifGonder" type="button" class="btn btn-info">Teklif Gönder</button>
                                       </thead>
                               </table>                              
                           </div>
@@ -363,7 +390,7 @@ tr:nth-child(even) {
               </div>
               
               
-              <a href="#"><button style="float:right" type="button" class="btn btn-info">Teklif Gönder</button></a>
+              
               
               
               <br>
@@ -372,114 +399,75 @@ tr:nth-child(even) {
         </div>    
     </div>
 <script>
+    var toplamFiyat =0;
+    var kdv,fiyat;
+    var kdvArray = new Array();
+    var fiyatArray = new Array();
+    var idArray = new Array();
   for(var key=0; key < {{$i}};key++)
   {
- $('#kdv'+key).on('change', function() {
- 
- var kdv=parseInt(this.value);
- var result;
- 
-  $('.fiyat').on('change', function() {
-    var fiyat=parseInt(this.value);
-   
-    result=fiyat+(fiyat*kdv)/100;
-    
-    var name=$(this).attr('name');
+    $('#kdv'+key).on('change', function() {
 
-    $("#"+name).text(result);
-    //$()).text(result);
-    
-     
-  });
+     kdv=parseInt(this.value);
+     kdvArray.push(kdv);
+    var result;
+        $('.fiyat').on('change', function() {
+       
+          fiyat=parseInt(this.value);
+          fiyatArray.push(fiyat);
+          result=fiyat+(fiyat*kdv)/100;
+          toplamFiyat += result;
+          var name=$(this).attr('name');
+          idArray.push(name);
+          $("#"+name).text(result);
+          //$()).text(result);
+          $("#toplamFiyatLabel").text("Toplam Fiyat:");
+          $("#toplamFiyat").text(toplamFiyat);
+
+        });
   
-});
+    });
 }
 
  for(var key=0; key < {{$i}};key++)
   {
-$('#fiyat'+key).on('change', function() {
-    
-   
-    var fiyat=parseInt(this.value);
-    var result;
-    var name=$(this).attr('name');
-    
-  $('#kdv'+key).on('change', function() {
-     
-       
-        var kdv2=parseInt(this.value);
-        
-        result=fiyat+(fiyat*kdv2)/100;
-       
-        $("#"+name).text(result);
-    
-  });
-  
-});
+    $('#fiyat'+key).on('change', function() {
+        var fiyat=parseInt(this.value);
+        var result;
+        var name=$(this).attr('name');
+
+            $('#kdv'+key).on('change', function() {
+
+
+                  var kdv2=parseInt(this.value);
+
+                  result=fiyat+(fiyat*kdv2)/100;
+
+                  $("#"+name).text(result);
+
+            });
+
+    });
   }
 
-var ilan_turu;
-var sozlesme_turu;
-
-$('#ilan_turu').on('change', function (e) {
-        ilan_turu = e.target.value;
-        
-        if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                  
-                }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="Götürü Bedel")
-                {
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                }
-            else if(ilan_turu=="Yapim İşi")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
- 
-});
-
-$('#sozlesme_turu').on('change', function (e) {
-             sozlesme_turu = e.target.value;
-             if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                  
-                }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="Götürü Bedel")
-                {
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                }
-            else if(ilan_turu=="Yapim İşi")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
- });
+var firma_id = '{{$firma->id}}';
+var ilan_id = '{{$ilan->id}}';
+var url = window.location.href;  
+$("#teklifGonder").on('click' , function(){
+    alert(url);
+   $.ajax({
+        type:"POST",
+        url: "teklifGonder",
+        data:{id:idArray,fiyat:fiyatArray,kdv:kdvArray,
+                toplam:toplamFiyat,firma_id:firma_id,ilan_id:ilan_id
+            },
+            cache: false,
+            success: function(data){
+                alert("girdi");
+                console.log(data);
+            }
+        });                     
+}); 
 
 $( document ).ready(function() {
 

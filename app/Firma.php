@@ -84,6 +84,10 @@ class Firma extends Model
     {
         return $this->hasManyThrough('App\IlanGoturuBedel', 'App\Ilan','firma_id','ilan_id','id');
     }
+    public function teklifler()
+    {
+        return $this->hasMany('App\Teklif', 'firma_id', 'id');
+    }
     
     
     
