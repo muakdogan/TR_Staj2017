@@ -445,6 +445,27 @@ tr:nth-child(even) {
  
 
 
+       });
+ 
+ $('.fiyat').on('change', function() {
+                
+        var fiyat=parseFloat(this.value);
+        var result;
+        
+               if($(this).parent().prev().children().val() !== '')
+               {
+                   var miktar = parseFloat($(this).parent().prev().prev().prev().text());
+                   kdv=parseFloat($(this).parent().prev().children().val());
+                        result=(fiyat+(fiyat*kdv)/100)*miktar;
+                        var name=$(this).attr('name');
+                        $("#"+name).text(result);
+                }
+                
+
+       });
+ 
+
+
 var firma_id = '{{$firma->id}}';
 var ilan_id = '{{$ilan->id}}';
 var url = window.location.href;  
