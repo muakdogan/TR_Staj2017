@@ -586,7 +586,7 @@
                                  $("#adi"+key).append(data[key].adi);
                                  $("#il"+key).append(data[key].iladi);
                                 
-                                     
+                                 @if(Auth::guest())    
                                  $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>");  
                                     
                                     @else
