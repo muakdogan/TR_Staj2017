@@ -78,6 +78,14 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse4" class="panel-collapse collapse">
                           <div class="panel-body">
+                               <?php 
+                                   
+                                            $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                            foreach($kullanici->firmalar as $kullaniciFirma){
+                                                $kullaniciFirmaID = $kullaniciFirma->id;
+                                            }
+                                    ?>
+                            {{ Form::open(array('url'=>'teklifGonder/'. $kullaniciFirmaID .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}  
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -145,6 +153,7 @@ tr:nth-child(even) {
                                           </td>
                                           <td>
                                                <label for="inputEmail3"  id="{{$ilan_mal->id}}"  name ="fiyat" class="col-sm-3 control-label toplam"></label>
+                                               <input type="hidden" name="fiyat[]"  id="{{$ilan_mal->id}}" value="">
                                           </td>
                                            <?php $i++;?>                                          
                                           <input type="hidden" name="ilan_mal_id[]"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
@@ -155,13 +164,16 @@ tr:nth-child(even) {
                                             <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
                                           </td>
                                           <td>
-                                              <label for="inputEmail3" name="toplamFiyat" id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                              <label for="inputEmail3" name="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
+                                              <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
                                           </td>
                                         </tr>
                                         </tbody>
+                                       
                               </table>
-                              <a href="{{ URL::to('teklifGonder', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Teklif Gönder</button></a>            
-                          </div>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'. $kullaniciFirmaID.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                {!! Form::close() !!}
+                            </div>
                       </div>
                   </div>
                   <div  id="hizmet"   class="panel panel-default">
@@ -172,6 +184,7 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse5" class="panel-collapse collapse">
                           <div class="panel-body">
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -215,8 +228,8 @@ tr:nth-child(even) {
                                           <td>
                                               {{$ilan_hizmet->miktar_birimler->adi}}
                                           </td>
-                                           <td>
-                                              <select class="form-control select kdv{{$i}}" name="kdv" id="kdv{{$i}}" required>
+                                            <td>
+                                              <select class="form-control select" name="kdv[]" id="kdv" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
@@ -226,23 +239,32 @@ tr:nth-child(even) {
                                              </select>
                                           </td>
                                           <td>
-                                            <input type="text" class="form-control fiyat" id="fiyat{{$i}}" name="{{$ilan_hizmet->id}}" placeholder="Fiyat" value="" required>
+                                            <input type="text" class="form-control fiyat" id="fiyat" name="{{$ilan_hizmet->id}}" placeholder="Fiyat" value="" required>
                                           </td>
                                           <td>
-                                             <label for="inputEmail3"  name="{{$ilan_hizmet->id}}" id="{{$ilan_hizmet->id}}" class="col-sm-3 control-label toplam"></label>
+                                              {{$firma->ilanlar->para_birimleri->adi}}
                                           </td>
-                                         <input type="hidden" name="ilan_hizmet_id"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}"> 
-                                      </tr>
-                                      <?php $i++;?>
-                                      @endforeach
-                                      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                           <td>
-                                              <label for="inputEmail3" name=toplamFiyat id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                               <label for="inputEmail3"  id="{{$ilan_hizmet->id}}"  name ="fiyat" class="col-sm-3 control-label toplam"></label>
+                                               <input type="hidden" name="fiyat[]"  id="{{$ilan_hizmet->id}}" value="">
                                           </td>
-                                          <button style="float:right" id="teklifGonder" type="button" class="btn btn-info">Teklif Gönder</button>
-                                      </tr>
-                                      </thead>
-                              </table>                             
+                                           <?php $i++;?>                                          
+                                          <input type="hidden" name="ilan_hizmet_id[]"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}"> 
+                                        </tr>
+                                        @endforeach
+                                        <tr>
+                                          <td colspan="10">
+                                            <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
+                                          </td>
+                                          <td>
+                                              <label for="inputEmail3" name="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
+                                              <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
+                                          </td>
+                                        </tr>
+                                        </tbody>
+                              </table>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                {!! Form::close() !!}        
                           </div>
                       </div>
                   </div>
@@ -254,6 +276,7 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse6" class="panel-collapse collapse">
                           <div class="panel-body">
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -285,8 +308,8 @@ tr:nth-child(even) {
                                           <td>
                                               {{$ilan_goturu_bedel->miktar_turu}}
                                           </td>
-                                           <td>
-                                              <select class="form-control select kdv{{$i}}" name="kdv" id="kdv{{$i}}" required>
+                                             <td>
+                                              <select class="form-control select" name="kdv[]" id="kdv" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
@@ -296,23 +319,32 @@ tr:nth-child(even) {
                                              </select>
                                           </td>
                                           <td>
-                                            <input type="text" class="form-control fiyat" id="fiyat{{$i}}" name="{{$ilan_goturu_bedel->id}}" placeholder="Fiyat" value="" required>
+                                            <input type="text" class="form-control fiyat" id="fiyat" name="{{$ilan_goturu_bedel->id}}" placeholder="Fiyat" value="" required>
                                           </td>
                                           <td>
-                                            <label for="inputEmail3" name="{{$ilan_goturu_bedel->id}}" id="{{$ilan_goturu_bedel->id}}" class="col-sm-3 control-label toplam"></label>
+                                              {{$firma->ilanlar->para_birimleri->adi}}
                                           </td>
-                                        <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
-                                      </tr>
-                                      <?php $i++;?>
-                                      @endforeach 
-                                      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                           <td>
-                                              <label for="inputEmail3" name=toplamFiyat id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                               <label for="inputEmail3"  id="{{$ilan_goturu_bedel->id}}"  name ="fiyat" class="col-sm-3 control-label toplam"></label>
+                                               <input type="hidden" name="fiyat[]"  id="{{$ilan_goturu_bedel->id}}" value="">
                                           </td>
-                                          <button style="float:right" id="teklifGonder" type="button" class="btn btn-info">Teklif Gönder</button>
-                                      </tr>
-                                      </thead>
-                              </table>                            
+                                           <?php $i++;?>                                          
+                                          <input type="hidden" name="ilan_goturu_bedel_id[]"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
+                                        </tr>
+                                        @endforeach
+                                        <tr>
+                                          <td colspan="10">
+                                            <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
+                                          </td>
+                                          <td>
+                                              <label for="inputEmail3" name="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
+                                              <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
+                                          </td>
+                                        </tr>
+                                        </tbody>
+                              </table>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                {!! Form::close() !!}                         
                           </div>
                       </div>
                   </div>
@@ -324,6 +356,7 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse7" class="panel-collapse collapse">
                           <div class="panel-body">
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -360,35 +393,42 @@ tr:nth-child(even) {
                                               {{$ilan_yapim_isi->birimler->adi}}
                                           </td>
                                            <td>
-                                              <select class="form-control select kdv{{$i}} " name="kdv" id="kdv" required>
+                                              <select class="form-control select" name="kdv[]" id="kdv" required>
                                                                  <option selected disabled>Seçiniz</option>
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>                                                                
+                                                                 <option  value="18">%18</option>
+                                                                
                                              </select>
                                           </td>
                                           <td>
-                                            <input type="text" class="form-control " id="fiyat{{$i}}" name="{{$ilan_yapim_isi->id}}" placeholder="Fiyat" value="" required>
+                                            <input type="text" class="form-control fiyat" id="fiyat" name="{{$ilan_yapim_isi->id}}" placeholder="Fiyat" value="" required>
                                           </td>
-                                          
                                           <td>
-                                             <label for="inputEmail3" name="{{$ilan_yapim_isi->id}}" id="{{$ilan_yapim_isi->id}}" class="col-sm-3 control-label toplam"></label>
+                                              {{$firma->ilanlar->para_birimleri->adi}}
                                           </td>
-                                          
-                                          
-                                          <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}"> 
-                                      </tr>
-                                      <?php $i++;?>
-                                      @endforeach
-                                      <tr>
-                                          <td colspan="11">
-                                              <label for="inputEmail3" name=toplamFiyat id="toplamFiyat" class="col-sm-3 control-label toplam"></label>
+                                          <td>
+                                               <label for="inputEmail3"  id="{{$ilan_yapim_isi->id}}"  name ="fiyat" class="col-sm-3 control-label toplam"></label>
+                                               <input type="hidden" name="fiyat[]"  id="{{$ilan_yapim_isi->id}}" value="">
                                           </td>
-                                      </tr>
-                                      <button style="float:right" id="teklifGonder" type="button" class="btn btn-info">Teklif Gönder</button>
-                                      </thead>
-                              </table>                              
+                                           <?php $i++;?>                                          
+                                          <input type="hidden" name="ilan_yapim_isi_id[]"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}"> 
+                                        </tr>
+                                        @endforeach
+                                        <tr>
+                                          <td colspan="10">
+                                            <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
+                                          </td>
+                                          <td>
+                                              <label for="inputEmail3" name="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
+                                              <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
+                                          </td>
+                                        </tr>
+                                        </tbody>
+                              </table>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                {!! Form::close() !!}                         
                           </div>
                       </div>
                   </div>
@@ -404,86 +444,91 @@ tr:nth-child(even) {
         </div>    
     </div>
 <script>
-        var fiyat;
-     var temp=0;
-      var count=0;
+    var fiyat;
+    var temp=0;
+    var count=0;
+    var toplamFiyat=0; 
 
-      
  $('.kdv').on('change', function() {
                 
-        var kdv=parseFloat(this.value);
-        var result;
+    var kdv=parseFloat(this.value);
+    var result;
+       
+    if($(this).parent().next().children().val() !== '')
+    {
+        var miktar = parseFloat($(this).parent().prev().prev().text());
+        fiyat=parseFloat($(this).parent().next().children().val()); 
+        result=(fiyat+(fiyat*kdv)/100)*miktar;
+        toplamFiyat += result;
+        var name=$(this).attr('name');
+        alert("toplamFiyat");
+        $("#"+name).text(result);
+        $("#"+name).val(result);
+        $('#toplamFiyatLabel').text("Toplam Fiyat: ");
+        $('#toplamFiyatL').text(toplamFiyat);
+        $('#toplamFiyat').val(toplamFiyat);
+    }
+    
+    
+});
+$('.btn').on('click',function(){
+    alert("ezgi");
+    var ilan_id = "{{$ilan->id}}";
+    var firma_id = "{{$kullaniciFirmaID}}";
+    $.ajax({
+        type:"GET",
+        url: "teklifAra",
+        data:{ilan_id:ilan_id,firma_id:firma_id
+            },
+        cache: false,
+        success: function(data){
+            console.log(data);
+            alert("ozge");
+        }
+    });
+    
+});
+ 
+$('.fiyat').on('change', function() {
+                
+    var fiyat=parseFloat(this.value);
+    var result;
         
-               if($(this).parent().next().children().val() !== '')
-               {
-                   var miktar = parseFloat($(this).parent().prev().prev().text());
-                   fiyat=parseFloat($(this).parent().next().children().val()); 
-                        result=(fiyat+(fiyat*kdv)/100)*miktar;
-                        var name=$(this).attr('name');
-                        $("#"+name).text(result);
-                }
+    if($(this).parent().prev().children().val() !== '')
+    {
+        var miktar = parseFloat($(this).parent().prev().prev().prev().text());
+        kdv=parseFloat($(this).parent().prev().children().val());
+        result=(fiyat+(fiyat*kdv)/100)*miktar;
+        toplamFiyat += result;
+        var name=$(this).attr('name');
+        $("#"+name).text(result);
+        $("#"+name).val(result);
+        $('#toplamFiyatLabel').text("Toplam Fiyat: ");
+        $('#toplamFiyatL').text(toplamFiyat);
+        $('#toplamFiyat').val(toplamFiyat);
+    }
                 
 
-       });
+});
  
- $('.fiyat').on('change', function() {
+$('.fiyat').on('change', function() {
                 
-        var fiyat=parseFloat(this.value);
-        var result;
+    var fiyat=parseFloat(this.value);
+    var result;
         
-               if($(this).parent().prev().children().val() !== '')
-               {
-                   var miktar = parseFloat($(this).parent().prev().prev().prev().text());
-                   kdv=parseFloat($(this).parent().prev().children().val());
-                        result=(fiyat+(fiyat*kdv)/100)*miktar;
-                        var name=$(this).attr('name');
-                        $("#"+name).text(result);
-                }
-                
-
-       });
- 
-
-
-       });
- 
- $('.fiyat').on('change', function() {
-                
-        var fiyat=parseFloat(this.value);
-        var result;
-        
-               if($(this).parent().prev().children().val() !== '')
-               {
-                   var miktar = parseFloat($(this).parent().prev().prev().prev().text());
-                   kdv=parseFloat($(this).parent().prev().children().val());
-                        result=(fiyat+(fiyat*kdv)/100)*miktar;
-                        var name=$(this).attr('name');
-                        $("#"+name).text(result);
-                }
-                
-
-       });
- 
-
+    if($(this).parent().prev().children().val() !== '')
+    {
+        var miktar = parseFloat($(this).parent().prev().prev().prev().text());
+        kdv=parseFloat($(this).parent().prev().children().val());
+        result=(fiyat+(fiyat*kdv)/100)*miktar;
+        var name=$(this).attr('name');
+        $("#"+name).text(result);
+    }
+});
 
 var firma_id = '{{$firma->id}}';
 var ilan_id = '{{$ilan->id}}';
-var url = window.location.href;  
-$("#teklifGonder").on('click' , function(){
-    alert(url);
-   $.ajax({
-        type:"POST",
-        url: "teklifGonder",
-        data:{id:idArray,fiyat:fiyatArray,kdv:kdvArray,
-                toplam:toplamFiyat,firma_id:firma_id,ilan_id:ilan_id
-            },
-            cache: false,
-            success: function(data){
-                alert("girdi");
-                console.log(data);
-            }
-        });                     
-}); 
+var url = window.location.href; 
 
 $( document ).ready(function() {
 

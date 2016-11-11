@@ -305,7 +305,7 @@
                             
                             ?>
                            @endif
-                               <h3>İlanlar</h3>
+                               <h3>İlanlar</h3> 
                                                   <hr>
                                                 @foreach($querys as $query)
                                                   
@@ -539,7 +539,7 @@
                                              console.log(data);
                                                for(var key=0; key <Object.keys(data).length;key++)
                                             {
-                                                 $("#deneme3"+key).append("<input type='radio' name='gender' value='male'>"+data[key].adi+"<br>");
+                                                 $("#deneme3"+key).append("<input type='radio' >"+data[key].adi+"<br>");
 
 
                                             }
