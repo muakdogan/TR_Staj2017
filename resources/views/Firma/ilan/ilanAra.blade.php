@@ -303,7 +303,6 @@
                             
                             $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
                             
-                            
                             ?>
                            @endif
                                <h3>İlanlar</h3>
@@ -313,12 +312,17 @@
                                                      <p id="ilan{{$i}}"></p>
                                                      <p id="adi{{$i}}"></p>
                                                      <p id="il{{$i}}"></p>
-                                                     
-                                                     
-                                                     <a onclick='showModal()' ><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>
+                                                        @if (Auth::guest())
+                                                        <a onclick='showModal()' ><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>
+                                                        @else
+                                                            @if($kullanici->firmalar->count()==1)
 
-                                                       
-                                                    
+                                                                <p id='deneme2{{$i}}'></p>
+                                                            @elseif($kullanici->firmalar->count()>1)
+
+                                                               <a onclick='showModal()' ><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>
+                                                            @endif
+                                                       @endif
                                                     <?php $i++;?>
                                                 @endforeach
                                                {{$querys->links()}}
@@ -407,7 +411,7 @@
                                          @else
                                           <?php $j=0;$k=0;?>
                                             
-                                                <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                             <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                  <div class="modal-dialog">
                                                  <div class="modal-content">
                                                      <div class="modal-header">
@@ -444,7 +448,8 @@
                 
                         
                             function showModal(){
-                                alert("hdfhdf");
+                                
+                                 alert("hdfhdf");
                                 
                                  @if(Auth::guest())
                                      $('#myModal-fiyatlandırmaBilgileri').modal({
@@ -454,10 +459,11 @@
                                  @else
                                     alert("ezgiiii");
                                     @if($kullanici->firmalar->count()==1)
-                                                         
+                                      alert("tek");             
                                        "<p id='deneme2{{$i}}'></p>"
 
                                     @elseif($kullanici->firmalar->count()>1)
+                                    alert("çok");
                                        $('#myModal-fiyatlandırmaBilgileri').modal({
                                         show: 'true'
                                          
@@ -467,49 +473,48 @@
                                    
                                  @endif
                                
-
                             }
+                            
                             
                             function teklifVer(){
                                
                               alert("girdi");
-                                 $.ajax({
-                              type:"GET",
-                              url: "ilanAraFiltre",
-                              data:{},
-                               cache: false,
-                               success: function(data){
-                               console.log(data);
-                                 
-                                 for(var key=0; key < {{$i}};key++)
-                                {
-                                 $("#ilan"+key).empty();
-                                 $("#adi"+key).empty();
-                                 $("#il"+key).empty();
-                                 $("#hr"+key).hide();
-                                }
-                                
-                                @if(Auth::guest())
-                                
-                                @else
-                                
-                                 var say ={{$kullanici->firmalar->count()}}
-                                @endif
-                                
-                                for(var key=0; key <Object.keys(data).length;key++)
-                                {
-                                    
-                                 $("#ilan"+key).append(data[key].ilanadi);
-                                 $("#adi"+key).append(data[key].adi);
-                                 $("#il"+key).append(data[key].iladi);
-                                
-                                  
-                                    window.location.href="ilanTeklifVer/"+data[key].firma_id;
-                                 
-                                }
-                                
-                              } 
-                            });
+                                        $.ajax({
+                                            type:"GET",
+                                            url: "ilanAraFiltre",
+                                            data:{},
+                                             cache: false,
+                                             success: function(data){
+                                             console.log(data);
+
+                                               for(var key=0; key < {{$i}};key++)
+                                              {
+                                               $("#ilan"+key).empty();
+                                               $("#adi"+key).empty();
+                                               $("#il"+key).empty();
+                                               $("#hr"+key).hide();
+                                              }
+
+                                              @if(Auth::guest())
+
+                                              @else
+
+                                               var say ={{$kullanici->firmalar->count()}}
+                                              @endif
+
+                                              for(var key=0; key <Object.keys(data).length;key++)
+                                              {
+
+                                               $("#ilan"+key).append(data[key].ilanadi);
+                                               $("#adi"+key).append(data[key].adi);
+                                               $("#il"+key).append(data[key].iladi);
+
+                                                    window.location.href="ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id;
+
+                                              }
+
+                                            } 
+                                   });
                               
                               
                                
@@ -623,6 +628,7 @@
                                 @else
                                 
                                  var say ={{$kullanici->firmalar->count()}}
+                         
                                 @endif
                                 
                                 for(var key=0; key <Object.keys(data).length;key++)
@@ -633,15 +639,15 @@
                                  $("#il"+key).append(data[key].iladi);
                                 
                                  @if(Auth::guest())    
-                                 $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>");  
+                                   $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+"><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>");  
                                     
                                     @else
                                         if(say==1){
-                                        $("#deneme2"+key).append("<a href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />");  
+                                        $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+"><button style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br><hr />");  
                                            }
                                        if(say>1){
 
-                                          $("#deneme1"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+">tıkla</a></li></ul>");
+                                        $("#deneme1"+key).append("<ul style='list-style-type:square'><li><a  href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+">tıkla</a></li></ul>");
                                            
                                          }
                                     @endif

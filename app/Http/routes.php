@@ -12,11 +12,55 @@ use App\iletisim_bilgileri;
 use App\Ilan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Mail\Mailer;
 
+   
+    /* Route::get('/adminAnasayfa',function () {
+        return view('admin.layouts');
+    });
+    
+    Route::get('/login2','Adminauth\AuthController@showLoginForm');
+    Route::post('login2','Adminauth\AuthController@login2');
+    
+    Route::group(['middleware'=>['admin']],function () {
+       Route::get('/dashboard','Admin\AdminController@dashboard');
+       Route::get('/logout','Adminauth\AuthController@logout');
+    });
+    */
+    
+    //Route::get('/create',function () {
+        //App\Admin::create([
+            //'name'=>'ezgi',
+            //'email'=>'ezgiboz@gmail.com',
+            //7'password'=>bcrypt('123456'),
+            
+       // ]);
+    //});
+
+
+    Route::get('admin/login','Adminauth\AuthController@showLoginForm');
+    Route::post('admin/login','Adminauth\AuthController@login');
+    Route::get('admin/password/reset','Adminauth\PasswordController@resetPassword');
+
+    Route::group(['middleware' => ['admin']], function () {
+        //Login Routes...
+        Route::get('admin/logout','Adminauth\AuthController@logout');
+
+        // Registration Routes...
+        Route::get('admin/register', 'Adminauth\AuthController@showRegistrationForm');
+        Route::post('admin/register', 'Adminauth\AuthController@register');
+
+        Route::get('admin', 'Admin\AdminController@index');
+    });
+    
+   
     Route::get('/firmalist', ['middleware'=>'auth' ,function () {
         $firmalar = Firma::paginate(2);
         return view('Firma.firmalar')->with('firmalar', $firmalar);
     }]);
+  
+  
     Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
         $firmas = Firma::find($id);
         return view('firmas.upload')->with('firmas', $firmas);
@@ -219,8 +263,17 @@ use Illuminate\Http\Request;
         $kullanici->users()->save($user);
 
         $firma->kullanicilar()->attach($kullanici);
+        
+                $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
 
-        return redirect('/');
+                Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request) 
+                {
+                   
+                    $message->to($request->email, $data['ad'])
+                    ->subject('YENİ KAYIT OLMA İSTEĞİ!');
+                   
+                });
+          return redirect('/');
     });
     
      Route::post('/yeniFirma/{id}', function (Request $request,$id) {
@@ -247,8 +300,19 @@ use Illuminate\Http\Request;
             $firma->sektorler()->attach($request->sektor_id);
 
             $kullanici->firmalar()->attach($firma);
+            
+            $data = ['ad' => $kullanici->adi, 'soyad' => $kullanici->soyadi];
 
-        return redirect('firmaIslemleri/'.$firma->id); 
+                Mail::send('auth.emails.mesaj', $data, function($message) use($data,$id) 
+                {
+                    $kullanici= App\Kullanici::find($id);
+                    $message->to($kullanici->users->email, $data['ad'])
+                    ->subject('YENİ FİRMA EKLEME İSTEĞİ!');
+                   
+                });
+            
+
+        return redirect('/'); 
     });
     
     
