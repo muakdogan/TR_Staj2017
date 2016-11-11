@@ -67,9 +67,10 @@
                                 <li class="dropdown"><a class="dropdown-toggle yazi" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Firma İşlemleri</a>
                                     <?php 
                                    
-                                     $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);                   
+                                     $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                     $kullaniciF=$kullanici->firmalar()->where('onay','=','onay');
                                     ?>
-                                    @foreach($kullanici->firmalar as $kullanicifirma)
+                                    @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
                                         <li ><a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
                                         </ul>
