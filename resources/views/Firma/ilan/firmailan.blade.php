@@ -13,7 +13,6 @@
      <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
         <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
         <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
@@ -398,7 +397,7 @@
                                  </div>
                              </div>
                          </div>
-                         <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
+                         <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
                      </div>
                  </div>
              </div>
@@ -1222,109 +1221,147 @@ var ilan_turu;
 var sozlesme_turu;
 var ezgi="ö";
 $('#ilan_turu').on('change', function (e) {
-        ilan_turu = e.target.value;
+    ilan_turu = e.target.value;
         
-        if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
+    if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+    {
+        $('#hizmet').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()
                   
-                }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="Götürü Bedel")
-                {
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                }
-            else if(ilan_turu=="Yapim İşi")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
- 
+    }
+    else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+    {
+        $('#mal').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()
+    }
+    else if(sozlesme_turu=="Götürü Bedel")
+    {
+        $('#hizmet').hide()
+        $('#mal').hide()
+        $('#yapim').hide();
+    }
+    else if(ilan_turu=="Yapim İşi")
+    {
+        $('#hizmet').hide()
+        $('#goturu').hide()
+        $('#mal').hide()
+    }
 });
 
 $('#sozlesme_turu').on('change', function (e) {
-             sozlesme_turu = e.target.value;
-             if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                  
-                }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="Götürü Bedel")
-                {
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                }
-            else if(ilan_turu=="Yapim İşi")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
+    sozlesme_turu = e.target.value;
+    if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+    {
+        $('#hizmet').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()                  
+    }
+    else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+    {
+        $('#mal').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()
+    }
+    else if(sozlesme_turu=="Götürü Bedel")
+    {
+        $('#hizmet').hide()
+        $('#mal').hide()
+        $('#yapim').hide();
+    }
+    else if(ilan_turu=="Yapim İşi")
+    {
+        $('#hizmet').hide()
+        $('#goturu').hide()
+        $('#mal').hide()
+    }
  });
+    var yayin_tarihi = '{{$ilan->yayin_tarihi}}';
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    } 
+
+    if(mm<10) {
+        mm='0'+mm
+    } 
+
+    today = yyyy+'-'+mm+'-'+dd;
+    alert(today);
+    alert(yayin_tarihi);
+$("#btn-add-ilanBilgileri").on('click',function(e){
+    if(yayin_tarihi <= today){
+        alert("Bu ilan şuanda yayında olduğu için güncellenemez !!!");   
+    }
+    else{
+        $('#myModal-ilanBilgileri').modal('show');
+    } 
+});
+$("#btn-add-fiyatlandırmaBilgileri").on('click',function(e){
+    if(yayin_tarihi <= today){
+        alert("Bu ilan şuanda yayında olduğu için güncellenemez !!!");   
+    }
+    else{
+        $('#myModal-fiyatlandırmaBilgileri').modal('show');
+    } 
+});
+$("#btn-add-mal").on('click',function(e){
+    if(yayin_tarihi <= today){
+        alert("Bu ilan şuanda yayında olduğu için güncellenemez !!!");   
+    }
+    else{
+        $('#myModal-mal_birimfiyat_add').modal('show');
+    } 
+});
+
 
 $( document ).ready(function() {
-
+    
+    
     var ilan_turu="{{$ilan->ilan_turu}}";
     var sozlesme_turu="{{$ilan->sozlesme_turu}}";
     
     if(sozlesme_turu!="Birim Fiyatlı")
     {
         sozlesme_turu="Götürü Bedel";
-    
     }
     
-            if(ilan_turu=="") 
-             {
-                          $('#hizmet').hide()
-                          $('#mal').hide()
-                          $('#goturu').hide()
-                          $('#yapim').hide()
-             }
-            else if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                  
-                }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="Götürü Bedel")
-                {
-                    
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                }
-            else if(ilan_turu=="Yapim İşi")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
+    if(ilan_turu=="") 
+    {
+        $('#hizmet').hide()
+        $('#mal').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()
+    }
+    else if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+    {
+        $('#hizmet').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()              
+    }
+    else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+    {
+        $('#mal').hide()
+        $('#goturu').hide()
+        $('#yapim').hide()
+    }
+    else if(sozlesme_turu=="Götürü Bedel")
+    {            
+        $('#hizmet').hide()
+        $('#mal').hide()
+        $('#yapim').hide();
+    }
+    else if(ilan_turu=="Yapim İşi")
+    {
+        $('#hizmet').hide()
+        $('#goturu').hide()
+        $('#mal').hide()
+    }
                  //alert(ilan_turu);
                 // alert(sozlesme_turu);
                 //alert(ezgi);
