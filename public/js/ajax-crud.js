@@ -26,8 +26,7 @@ $(document).ready(function(){
 
     //display modal form for creating new task
     $('#btn-add').click(function(){
-        
-        $('#myModal').modal('show');
+        $('#myModal').modal('show');        
     });
 
     //delete task and remove it from list

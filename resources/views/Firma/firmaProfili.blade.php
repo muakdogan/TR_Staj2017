@@ -281,7 +281,7 @@
                                </div>
                            </div>
                        </div>
-                       <button id="btn-add" name="btn-add" class="btn btn-primary btn-xs" onclick="selectDD">Ekle / Düzenle</button>
+                       <button id="btn-add" name="btn-add" onclick="populateDD()" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
                    </div>
                </div>
            </div>
@@ -1320,33 +1320,109 @@
            </div>
        </div>
    </div>       
-<script>
-    
-$( document ).ready(function() {
-    var max_fields      = 10; //maximum input boxes allowed
-    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
-    var add_button      = $(".add_field_button"); //Add button ID
-    
-    var x = 1; //initlal text box count
-    $(add_button).click(function(e){ //on add input button click
-        e.preventDefault();
-        if(x < max_fields){ //max input box allowed
-            x++; //text box increment
-            $(wrapper).append('<div><input type="text" name="firmanin_urettigi_markalar_[]"/><a href="#" class="remove_field">Sil</a></div>'); //add input box
-        }
+<script>    
+    $( document ).ready(function() {
+        var max_fields      = 10; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+        var add_button      = $(".add_field_button"); //Add button ID
+
+        var x = 1; //initlal text box count
+        $(add_button).click(function(e){ //on add input button click
+            e.preventDefault();
+            if(x < max_fields){ //max input box allowed
+                x++; //text box increment
+                $(wrapper).append('<div><input type="text" name="firmanin_urettigi_markalar_[]"/><a href="#" class="remove_field">Sil</a></div>'); //add input box
+            }
+        });
+
+        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        });
+
+        $('#il_id').on('change', function (e) {
+            var il_id = e.target.value;
+            GetIlce(il_id);
+            //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
+            //$("#semt_id")[0].selectedIndex=0;
+        });
+
+        $('#ilce_id').on('change', function (e) {
+            var ilce_id = e.target.value;
+            GetSemt(ilce_id);
+            //popDropDown('semt_id', 'ajax-subcatt?ilce_id=', ilce_id);
+        });
     });
+    function GetIlce(il_id) {
+        if (il_id > 0) {
+            $("#ilce_id").get(0).options.length = 0;
+            $("#ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+
+            $.ajax({
+                type: "GET",
+                url: "/tamrekabet/public/index.php/ajax-subcat?il_id="+il_id,
+
+                contentType: "application/json; charset=utf-8",
+
+                success: function(msg) {
+                    $("#ilce_id").get(0).options.length = 0;
+                    $("#ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
+
+                    $.each(msg, function(index, ilce) {
+                        $("#ilce_id").get(0).options[$("#ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
+                    });
+                },
+                async: false,
+                error: function() {
+                    $("#ilce_id").get(0).options.length = 0;
+                    alert("İlçeler yükelenemedi!!!");
+                }
+            });
+        }
+        else {
+            $("#ilce_id").get(0).options.length = 0;
+        }
+    }
     
-    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-        e.preventDefault(); $(this).parent('div').remove(); x--;
-    })
-    
-});
+    function GetSemt(ilce_id) {
+        if (ilce_id > 0) {
+            $("#semt_id").get(0).options.length = 0;
+            $("#semt_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
 
+            $.ajax({
+                type: "GET",
+                url: "/tamrekabet/public/index.php/ajax-subcatt?ilce_id="+ilce_id,
 
+                contentType: "application/json; charset=utf-8",
 
+                success: function(msg) {
+                    $("#semt_id").get(0).options.length = 0;
+                    $("#semt_id").get(0).options[0] = new Option("Seçiniz", "-1");
 
+                    $.each(msg, function(index, semt) {
+                        $("#semt_id").get(0).options[$("#semt_id").get(0).options.length] = new Option(semt.adi, semt.id);
+                    });
+                },
+                async: false,
+                error: function() {
+                    $("#semt_id").get(0).options.length = 0;
+                    alert("Semtler yükelenemedi!!!");
+                }
+            });
+        }
+        else {
+            $("#semt_id").get(0).options.length = 0;
+        }
+    }
 
+    function populateDD(){
+        GetIlce({{$firmaAdres->iller->id}});
+        GetSemt({{$firmaAdres->ilceler->id}});
+        $("#il_id").val({{$firmaAdres->iller->id}});
+        $("#ilce_id").val({{$firmaAdres->ilceler->id}});
+        $("#semt_id").val({{$firmaAdres->semtler->id}});
+    }
 </script>
+
 </body>
 </html>
 @endsection
