@@ -602,8 +602,6 @@
                             if (selected4.length > 0) {
                                 selectedSozlesme = selected4.val();
                             }
-                            
-                            
                             $.ajax({
                               type:"GET",
                               url: "ilanAraFiltre",
