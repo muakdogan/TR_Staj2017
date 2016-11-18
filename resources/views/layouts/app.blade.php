@@ -68,7 +68,7 @@
                                     <?php 
                                    
                                      $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
-                                     $kullaniciF=$kullanici->firmalar()->where('onay','=','onay');
+                                     $kullaniciF=$kullanici->firmalar()->where('onay','onay')->get();
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
