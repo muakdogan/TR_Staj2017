@@ -17,45 +17,56 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
    
-    /* Route::get('/adminAnasayfa',function () {
-        return view('admin.layouts');
-    });
-    
-    Route::get('/login2','Adminauth\AuthController@showLoginForm');
-    Route::post('login2','Adminauth\AuthController@login2');
-    
-    Route::group(['middleware'=>['admin']],function () {
-       Route::get('/dashboard','Admin\AdminController@dashboard');
-       Route::get('/logout','Adminauth\AuthController@logout');
-    });
-    */
-    
-    //Route::get('/create',function () {
-        //App\Admin::create([
-            //'name'=>'ezgi',
-            //'email'=>'ezgiboz@gmail.com',
-            //7'password'=>bcrypt('123456'),
-            
-       // ]);
-    //});
-
-
-    Route::get('admin/login','Adminauth\AuthController@showLoginForm');
-    Route::post('admin/login','Adminauth\AuthController@login');
-    Route::get('admin/password/reset','Adminauth\PasswordController@resetPassword');
-
-    Route::group(['middleware' => ['admin']], function () {
-        //Login Routes...
-        Route::get('admin/logout','Adminauth\AuthController@logout');
-
-        // Registration Routes...
-        Route::get('admin/register', 'Adminauth\AuthController@showRegistrationForm');
-        Route::post('admin/register', 'Adminauth\AuthController@register');
-
-        Route::get('admin', 'Admin\AdminController@index');
-    });
-    
    
+Route::get('/anasayfa', function () {
+    return view('welcome');
+});
+
+
+Route::group(['middleware' => ['web']], function () {
+    //Login Routes...
+    Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
+    Route::post('/admin/login','AdminAuth\AuthController@login');
+    Route::get('/admin/logout','AdminAuth\AuthController@logout');
+
+    // Registration Routes...
+    Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');
+    Route::post('admin/register', 'AdminAuth\AuthController@register');
+
+    Route::post('admin/password/email','AdminAuth\PasswordController@sendResetLinkEmail');
+    Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
+    Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
+
+    Route::get('/admin', 'AdminController@index');
+    Route::post('/firmaOnay', 'AdminController@firmaOnay');
+});
+
+Route::get('/', function () {
+      $firmalar=Firma::all();
+  return view('admin.dashboard')->with('firmalar',$firmalar);
+});
+
+Route::get('/', function () {
+
+ return view('Anasayfa.temelAnasayfa');
+});            
+  
+
+ Route::get('/firmaList', function () {
+      
+  return view('admin.firmaList');
+ });
+ 
+ 
+Route::get('/firmaOnay/{id}', function ($id) {
+ 
+    $firmas = Firma::find($id);
+    $firmas->onay="onay";
+    $firmas->save();
+    
+  return view('admin.firmaList');
+ });                    
+
     Route::get('/firmalist', ['middleware'=>'auth' ,function () {
         $firmalar = Firma::paginate(2);
         return view('Firma.firmalar')->with('firmalar', $firmalar);
@@ -66,10 +77,7 @@ use Illuminate\Support\Facades\Mail\Mailer;
         $firmas = Firma::find($id);
         return view('firmas.upload')->with('firmas', $firmas);
     }]);
-    Route::get('/', ['middleware'=>'auth',function () {
-
-        return view('Anasayfa.anasayfa');
-    }]);
+   
     Route::get('/firmaKayit' ,function () {
         $iller = App\Il::all();
         $sektorler= App\Sektor::all();
@@ -156,6 +164,8 @@ use Illuminate\Support\Facades\Mail\Mailer;
             $firma= new Firma();
 
             $firma->adi=$request->adi;
+            $now = new \DateTime();
+            $firma->olusturmaTarihi=$now;
             $firma->save();
 
             $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
@@ -213,6 +223,8 @@ use Illuminate\Support\Facades\Mail\Mailer;
             
             $firma= new Firma();
             $firma->adi=$request->adi;
+            $now = new \DateTime();
+            $firma->olusturmaTarihi=$now;
             $firma->save();
 
             $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
