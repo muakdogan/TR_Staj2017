@@ -40,16 +40,20 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/firmaOnay', 'AdminController@firmaOnay');
 });
 
-Route::get('/', function () {
-      $firmalar=Firma::all();
+/*Route::get('/adminAnasayfa', function () {
+$firmalar=Firma::all();
   return view('admin.dashboard')->with('firmalar',$firmalar);
-});
+});*/
 
 Route::get('/', function () {
 
  return view('Anasayfa.temelAnasayfa');
-});            
-  
+});  
+
+ Route::get('/tamrekabetAnasayfa', function () {
+
+ return view('Anasayfa.temelAnasayfa');
+});
 
  Route::get('/firmaList', function () {
       

@@ -30,9 +30,9 @@ class AuthController extends Controller
      * @var string
      */
             //auth/login?redirectTo='Firma.ilan.ilanAra';
-     protected $redirectPath = '/dashboard';
+             protected $redirectPath = '/tamrekabetAnasayfa';
            
-            protected $redirectTo = '/';
+            //protected $redirectTo = '/';
             
             
             
