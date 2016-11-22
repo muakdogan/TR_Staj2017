@@ -37,12 +37,13 @@
             </div>
             <!-- menu -->
             <nav class="nav">
-                <ul>
+                <ul style="float:right">
                   @if (Auth::guest())
                     
                     <li class="is-ara">
                         <a href="{{url('ilanAra/')}}" >İLAN ARA</a>
                     </li>
+               
 
                   <ul style="float:right">
                     <li >
@@ -60,35 +61,45 @@
                   
                   </ul>
                    @else
-                     <li class="dropdown">
-                       <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}<span class="caret"></span>
-                           </a>
-                           
-                            <ul class="dropdown-menu">
-                                <li class="dropdown"><a class="dropdown-toggle yazi" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Firma İşlemleri</a>
-                                    <?php 
-                                   
-                                     $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);                   
-                                    ?>
-                                    @foreach($kullanici->firmalar as $kullanicifirma)
-                                        <ul style="list-style-type:square">
-                                        <li  ><a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
-                                        </ul>
-                                    @endforeach
-                                   
-                                <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
-                                <li><a href="{{ url('/logout') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
-                            </ul>
-                            
-                            
-                        </li>
-                      <li>
-                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
-                     </li>
+                    <li class="is-ara">
+                        <a href="{{url('ilanAra/')}}" >İLAN ARA</a>
+                    </li>
+                   
+                    <li>
+                       <a href="" target="_blank" onclick=""> {{ Auth::user()->name }}</a>
+                       <ul>
+                           <li>
+                               <a href="" target="_blank" onclick="">Firma İşlemleri</a>
+                               <ul style="list-style-type:square">
+                                   <?php
+                                   $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                   ?>
+                                   @foreach($kullanici->firmalar as $kullanicifirma)
+                                   <li>
+                                       <a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}" target="_blank" onclick="">{{$kullanicifirma->adi}}</a>
+                                   </li>
+                                   @endforeach
+
+                               </ul>
+                           </li>
+
+                          <li>
+                               <a href="" target="_blank" onclick="">Yardım</a>
+                           </li>
+                           <li>
+                               <a href="{{ url('/logout') }}" target="_blank" onclick="">Çıkış</a>
+                           </li>
+
+                       </ul>
+                    </li>
+
+                   
+                    <li>
+                        <a href="#"><img src="{{asset('images/user.png')}}"></a>
+                    </li>
                 @endif
                    
-                </ul>
+               </ul>
             </nav>
           
         </div>
