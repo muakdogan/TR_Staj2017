@@ -513,6 +513,5 @@ class FirmaIlanController extends Controller
          
         return redirect('ilanEkle/'.$request->firma_id.'/'.$yapim->ilan_id);
     }
-    
  
 }

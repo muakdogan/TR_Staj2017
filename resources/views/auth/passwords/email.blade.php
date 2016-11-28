@@ -53,7 +53,7 @@
                         {!! csrf_field() !!}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Addresi</label>
+                            <label class="col-md-4 control-label">E-Mail Adres</label>
 
                             <div class="col-md-6">
                                 <input type="email" class="form-control" name="email" value="{{ old('email') }}">
@@ -68,8 +68,8 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button  type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-envelope"></i>Şifreyi Yenile 
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-envelope"></i>Şifre yenilemek için link gönder
                                 </button>
                             </div>
                         </div>

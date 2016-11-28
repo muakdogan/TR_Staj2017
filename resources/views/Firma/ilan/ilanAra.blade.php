@@ -602,8 +602,6 @@
                             if (selected4.length > 0) {
                                 selectedSozlesme = selected4.val();
                             }
-                            
-                            
                             $.ajax({
                               type:"GET",
                               url: "ilanAraFiltre",
@@ -634,9 +632,9 @@
                                 for(var key=0; key <Object.keys(data).length;key++)
                                 {
                                     
-                                 $("#ilan"+key).append(data[key].ilanadi);
-                                 $("#adi"+key).append(data[key].adi);
-                                 $("#il"+key).append(data[key].iladi);
+                                    $("#ilan"+key).append(data[key].ilanadi);
+                                    $("#adi"+key).append(data[key].adi);
+                                    $("#il"+key).append(data[key].iladi);
                                 
                                  @if(Auth::guest())    
                                    $("#deneme2"+key).append("<a onclick='teklifver()' href=ilanTeklifVer/"+data[key].firma_id+"/"+data[key].ilan_id+"><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>");  

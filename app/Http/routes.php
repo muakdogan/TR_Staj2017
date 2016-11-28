@@ -10,6 +10,7 @@ use App\Firma;
 use App\FirmaReferans;
 use App\iletisim_bilgileri;
 use App\Ilan;
+
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -99,18 +100,11 @@ Route::get('/firmaOnay/{id}', function ($id) {
         }
         return view('Firma.firmaIslemleri')->with('firma',$firma)->with('kullanici',$kullanici);
     }]);
-    Route::get('/ilanAra/', function (Request $request) {
-         $iller = App\Il::all();
-         $firma=  Firma::all();
-        
-          $sektorler= App\Sektor::all();
-          $odeme_turleri=  App\OdemeTuru::all();
-          $querys = Ilan::paginate(5);
-           
-        return view('Firma.ilan.ilanAra')->with('iller', $iller)->with('sektorler',$sektorler)->with('querys',$querys)->with('odeme_turleri',$odeme_turleri)->with('firma',$firma);
-    });
     
-     Route::get('/kullaniciFirma',function () {
+    Route::get('/ilanAra', 'IlanController@showIlan');
+    Route::get('/ilanAra/{page}', 'IlanController@showIlan');
+    
+    Route::get('/kullaniciFirma',function () {
          
                $kullanici_id=Input::get('kullanici_id');
                 $kullaniciFirma=  \App\Kullanici::find($kullanici_id);
@@ -124,75 +118,8 @@ Route::get('/firmaOnay/{id}', function ($id) {
                  $querys=$querys->get();
                return Response::json($querys);
      });
-   
-    
-    Route::get('/ilanAraFiltre',function () {
-       $querys = DB::table('ilanlar')
-                ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
-                ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
-                ->join('iller', 'adresler.il_id', '=', 'iller.id')
-                
-                ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
-       
-         $il_id = Input::get('il');
-         $bas_tar = Input::get('bas_tar');
-         $bit_tar = Input::get('bit_tar');   
-         $sektorler = Input::get('sektor');
-         $tur = Input::get('tur');
-         $usul= Input::get('usul');
-         $usul= Input::get('usul');
-         $radSearch= Input::get('radSearch');
-         $input= Str::lower(Input::get('input'));
-         $sozlesme= Input::get('sozles');
-         $odeme= Input::get('odeme');
-        if($radSearch != NULL){
-            if($radSearch == "tum"){
-                $querys->where('LOWER(`ilanlar.adi`)' ,$input )->orWhere('LOWER(`ilanlar.usulu`) ',$input )
-                        ->orWhere('LOWER(`ilanlar.ilan_turu`) ','LIKE', '%' . $input . '%')->orWhere('LOWER(`ilanlar.yayin_tarihi`) ','LIKE', '%' . $input . '%')
-                        ->orWhere('LOWER(`ilanlar.kapanma_tarihi`) ','LIKE', '%' . $input . '%')
-                        ->orWhere('LOWER(`ilanlar.sozlesme_turu`) ','LIKE', '%' . $input . '%')->orWhere('LOWER(`ilanlar.usulu`) ','LIKE', '%' . $input . '%');
-            }
-            else if($radSearch == "ilan_baslık"){
-                $querys->where('LOWER(`ilanlar.adi`) like ?', $input);
-            }
-            else{
-                $querys->where('LOWER(`firmalar.adi`) like ?', $input);
-                
-            }
-        }
-        if($il_id != NULL)
-            {
-             $querys->whereIn('adresler.il_id',$il_id);
-            }
-        if ($bas_tar != NULL) {
-            $querys->where('ilanlar.yayin_tarihi','>=', $bas_tar);
-        }
-        if ($bit_tar != NULL) {
-            $querys->where('ilanlar.kapanma_tarihi','<=',$bit_tar);
-        }
-        if($sektorler != NULL){
-            $querys->whereIn('ilanlar.firma_sektor',$sektorler);
-        }
-        if($tur != NULL){
-            $querys->where('ilanlar.ilan_turu',$tur);
-        }
-        if($usul != NULL){
-            $querys->where('ilanlar.usulu',$usul);
-        }
-        if($sozlesme != NULL){
-            $querys->where('ilanlar.sozlesme_turu',$sozlesme);
-        }
-        if($odeme != NULL){
-            $querys->whereIn('ilanlar.odeme_turu_id',$odeme);
-        }
-        $querys=$querys->get();
-  
-        return Response::json($querys);
 
-    });
-    
-    
-    Route::get('/il',function(){
+     Route::get('/il',function(){
         $il_id = Input::get('data');
         $il = \App\Il::find($il_id);
         return Response::json($il);

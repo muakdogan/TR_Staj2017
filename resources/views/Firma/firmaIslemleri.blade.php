@@ -2,7 +2,6 @@
 <br>
  <br>
  @section('content')
-  
 
  
  <style>
@@ -42,6 +41,7 @@ tr:nth-child(even) {
 }
 
 </style>
+
      <div class="container">
          
         @include('layouts.alt_menu') 
@@ -49,7 +49,9 @@ tr:nth-child(even) {
                  <div class="col-xs-12 col-sm-6 col-md-8">
 
                      <div class="panel-group">
-
+                         <?php $ilanlarFirma = $firma->ilanlar()->
+                                orderBy('yayin_tarihi','desc')->limit('5')->get();
+                               ?>
                          <div class="panel panel-default">
                              <div class="panel-heading">Son İlanlarım</div>
                              <div class="panel-body">
@@ -59,12 +61,14 @@ tr:nth-child(even) {
                                          <th>Başvuru Sayısı</th>
                                          <th></th>
                                      </tr>
+                                    @foreach($ilanlarFirma as $ilan)
+                                    <?php $ilanTeklifsayısı = $ilan->teklifler()->count(); ?>
                                      <tr>
-                                         <td></td>
-                                         <td></td>
-                                         <td><button class="button"> Düzenle</button></td>
+                                         <td>{{$ilan->adi}}</td>
+                                         <td>{{$ilanTeklifsayısı}}</td>
+                                         <td><a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button class="button"> Düzenle</button></a></td>
                                      </tr>
-
+                                    @endforeach
                                  </table>
 
                              </div>
@@ -73,17 +77,28 @@ tr:nth-child(even) {
                          <div class="panel panel-default">
                              <div class="panel-heading">Son Başvurularım</div>
                              <div class="panel-body">
+                                 <?php $teklifler= DB::table('teklifler')->where('firma_id',$firma->id)
+                                         ->limit(5)
+                                         ->get(); 
+                                        
+                                   ?>
                                  <table>
                                      <tr>
                                          <th>Başvuru İlan İsmi</th>
                                          <th>Başvuru Sayısı</th>
                                          <th></th>
                                      </tr>
+                                    @foreach($teklifler as $teklif)
+                                     <?php 
+                                        $ilanlar = App\Ilan::find($teklif->ilan_id);
+                                            $ilanTeklifcount= $ilanlar->teklifler()->count();
+                                     ?>
                                      <tr>
-                                         <td></td>
-                                         <td></td>
+                                         <td>{{$ilanlar->adi}}</td>
+                                         <td>{{$ilanTeklifcount}}</td>
                                          <td><button class="button">Düzenle</button></td>
                                      </tr>
+                                    @endforeach 
                                  </table>
 
                              </div>
@@ -96,7 +111,9 @@ tr:nth-child(even) {
 
                          <div class="panel panel-default">
                              <div class="panel-heading"><img src="{{asset('images/istatistik.png')}}">&nbsp;İstatistik</div>
-                             <div class="panel-body"></div>
+                             <div class="panel-body">
+                                 @include('Firma.chart')
+                             </div>
                          </div>
                          <div class="panel panel-default">
                              <div class="panel-heading"><img src="{{asset('images/doluluk.png')}}">&nbsp;Firma Profili Doluluk Oranı</div>
