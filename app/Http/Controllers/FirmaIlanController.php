@@ -32,10 +32,10 @@ class FirmaIlanController extends Controller
        
         return view('Firma.ilan.firmailan', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
     }
-     public function showFirmaIlanEkle($id,$ilan_id,$kul_id){
+     public function showFirmaIlanEkle($id,$ilan_id){
         $firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
-        $kullanici = \App\Kullanici::find($kul_id);
+       
           if (Gate::denies('show', $firma)) {
               return Redirect::to('/');
         }
@@ -46,7 +46,7 @@ class FirmaIlanController extends Controller
         $iller = Il::all();
         $birimler=  \App\Birim::all();
        
-        return view('Firma.ilan.firmaIlanEkle', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan)->with('kullanici',$kullanici);
+        return view('Firma.ilan.firmaIlanEkle', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
     }
      public function firmaBilgilerimAdd(Request $request,$id){
         $firma = Firma::find($request->id);

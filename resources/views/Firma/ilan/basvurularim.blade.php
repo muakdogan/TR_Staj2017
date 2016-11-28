@@ -77,7 +77,7 @@ tr:nth-child(even) {
                <p><strong>Başvuru Tarihi:</strong>&nbsp;{{$sonuc->tarih}}</p>
                <p><strong>Kaçıncı Sıradayım:</strong>&nbsp;</p>
            
-               <button id="btn-add-detay" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info">Detayları Gör</button>
+               <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info ">Detayları Gör</button>
                <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info">Düzenle</button>
                  
                <br>
@@ -97,11 +97,11 @@ tr:nth-child(even) {
                                            <div class="col-sm-9">
                                                
                                                hdjafjhafhj
-                                                <?php $i=0;?>
-                                               @foreach($detaylar  as $detay)
-                                               <p id="deneme3{{$i}}"> </p>
-                                                <?php $i++;?>
-                                               @endforeach
+                                          
+                                              
+                                                 <p id="deneme3"> </p>
+                                               
+                                              
                                        </div>
                                     {!! Form::submit('Kaydet', array('url'=>'firmaProfili/tanitim/'.$firma->id,'class'=>'btn btn-danger')) !!}
                                        {!! Form::close() !!}
@@ -141,29 +141,38 @@ tr:nth-child(even) {
                        </div>
              
     </div>
+<script type="text/javascript" language="JavaScript">
+            var detay=0;
+          
+
+ $(".btn btn-info").click(function(){
+
+                 detay=$(this).attr("name");
+                            alert("hfdsfhsd");
+                        alert(detay);
+
+                          func();
+          });
+
+    
+    function func(){
+                                   
+
+            $.ajax({
+            type:"GET",
+            url: "basvuruDetay",
+            data:{teklif_id:detay},
+            cache: false,
+            success: function(data){
+            console.log(data);
+            alert(data);
+            $("#deneme3").append(data.ilan_mal_id);
+             }
+
+        });
+    }
+ </script>
 @endsection
 
- <script>
-                           function func(){
-                                    var teklif;
 
-                                        $.ajax({
-                                          type:"GET",
-                                          url: "basvuruDetay",
-                                          data:{teklif_id:teklif},
-                                          cache: false,
-                                          success: function(data){
-                                             console.log(data);
-                                               for(var key=0; key <Object.keys(data).length;key++)
-                                            {
-                                                 $("#deneme3"+key).append(data[key].ilan_mal_id);
-
-
-                                            }
-                                         }
-
-
-                                       });
-                            }
-                       </script>
                
