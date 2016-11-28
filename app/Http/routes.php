@@ -15,8 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
-   
-   
+Route::controllers([
+   'password' => 'Auth\PasswordController',
+]);
 Route::get('/anasayfa', function () {
     return view('welcome');
 });
@@ -46,14 +47,9 @@ $firmalar=Firma::all();
 });*/
 
 Route::get('/', function () {
-
+ 
  return view('Anasayfa.temelAnasayfa');
 });  
-
- Route::get('/tamrekabetAnasayfa', function () {
-
- return view('Anasayfa.temelAnasayfa');
-});
 
  Route::get('/firmaList', function () {
       
@@ -95,16 +91,18 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return view('Firma.yeniFirmaKaydet')->with('iller', $iller)->with('sektorler',$sektorler)->with('kullanici',$kullanici)->with('kullanici_id',$kullanici_id);
     });
     
-    Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
+    Route::get('/firmaIslemleri/{id}/{kul_id}',['middleware'=>'auth', function ($id,$kul_id) {
         $firma = Firma::find($id);
+        $kullanici=  App\Kullanici::find($kul_id);
         if (Gate::denies('show', $firma)) {
               return Redirect::to('/');
         }
-        return view('Firma.firmaIslemleri')->with('firma',$firma);
+        return view('Firma.firmaIslemleri')->with('firma',$firma)->with('kullanici',$kullanici);
     }]);
-    Route::get('/ilanAra', function (Request $request) {
+    Route::get('/ilanAra/', function (Request $request) {
          $iller = App\Il::all();
          $firma=  Firma::all();
+        
           $sektorler= App\Sektor::all();
           $odeme_turleri=  App\OdemeTuru::all();
           $querys = Ilan::paginate(5);
@@ -335,11 +333,41 @@ Route::get('/firmaOnay/{id}', function ($id) {
     });
     
     
-   Route::get('ilanlarim/{id}' ,function ($id) {
+   Route::get('ilanlarim/{id}/{kul_id}' ,function ($id,$kul_id) {
         $firma = Firma::find($id);
-        return view('Firma.ilan.ilanlarim')->with('firma', $firma);
+        $kullanici = App\Kullanici::find($kul_id);
+        return view('Firma.ilan.ilanlarim')->with('firma', $firma)->with('kullanici', $kullanici);
         
     });
+     Route::get('basvurularim/{id}/{kul_id}' ,function ($id,$kul_id) {
+        $firma = Firma::find($id);
+        $teklifler=  \App\Teklif::all();
+        $kullanici = App\Kullanici::find($kul_id); 
+        $detaylar = App\MalTeklif::all();
+        return view('Firma.ilan.basvurularim')->with('firma', $firma)->with('kullanici', $kullanici)->with('teklifler', $teklifler)->with('detaylar', $detaylar);
+        
+    });
+     Route::get('/basvuruDetay/{teklif_id}',function ($teklif_id){
+         
+               
+               //$kullanici =  \App\Kullanici::find($kul_id);
+               $teklif = \App\Teklif::find($teklif_id);
+               
+                 $detaylar = DB::table('mal_teklifler')
+                        ->join('firma_kullanicilar', 'firma_kullanicilar.id', '=', 'mal_teklifler.firma_kullanicilar_id')
+                        ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
+                        ->where( 'mal_teklifler.teklif_id', '=', $teklif_id)
+                        ->select('mal_teklifler.*');  
+                        
+                $detaylar=$detaylar->get();
+               return Response::json($detaylar);
+               
+               
+                  
+                        
+     });
+   
+
    Route::get('ilanTeklifVer/{id}/{ilan_id}'  ,function ($id,$ilan_id) {
         $firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
@@ -368,7 +396,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
     Route::delete('firmaProfili/kaliteSil/{id}', 'FirmaController@deleteKalite');
     Route::delete('firmaProfili/referansSil/{id}', 'FirmaController@deleteReferans');
     Route::delete('firmaProfili/brosurSil/{id}', 'FirmaController@deleteBrosur');
-    Route::get('/firmaProfili/{id}', 'FirmaController@showFirma');
+    Route::get('/firmaProfili/{id}/{kul_id}', 'FirmaController@showFirma');
     Route::get('/firma/{ref_id?}',function($ref_id){
         $referans=  FirmaReferans::find($ref_id);
         return Response::json($referans);
@@ -382,7 +410,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
 
     //firma ilan route...
     Route::get('/firmaIlanOlustur/{id}/{ilanid}', 'FirmaIlanController@showFirmaIlan');
-    Route::get('/ilanEkle/{id}/{ilan_id}', 'FirmaIlanController@showFirmaIlanEkle');
+    Route::get('/ilanEkle/{id}/{ilan_id}/{kul_id}', 'FirmaIlanController@showFirmaIlanEkle');
     
     
     

@@ -79,3 +79,21 @@
 
         return redirect()->intended('/path_for_normal_user');
     }
+    
+    
+    
+    
+     $detaylar = DB::table('teklifler')
+                        ->where( 'teklifler.id', '=',  $teklif_id)
+                        ->join('mal_teklifler', 'mal_teklifler.teklif_id', '=', 'teklifler.id')
+                        ->join('hizmet_teklifler', 'hizmet_teklifler.teklif_id', '=', 'teklifler.id')
+                        ->join('yapim_isi_teklifler', 'yapim_isi_teklifler.teklif_id', '=', 'teklifler.id')
+                        ->join('firma_kullanicilar', 'firma_kullanicilar.id', '=', 'mal_teklifler.firma_kullanicilar_id')
+                        ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
+                        ->join('firma_kullanicilar', 'firma_kullanicilar.id', '=', 'hizmet_teklifler.firma_kullanicilar_id')
+                        ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
+                       
+                        ->join('firma_kullanicilar', 'firma_kullanicilar.id', '=', 'yapim_isi_teklifler.firma_kullanicilar_id')
+                        ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
+                       
+                        ->select('mal_teklifler.*','hizmet_teklifler.*','yapim_isi_teklifler.*')   ; 

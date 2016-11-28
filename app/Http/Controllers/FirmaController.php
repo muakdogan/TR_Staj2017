@@ -314,10 +314,10 @@ class FirmaController extends Controller
         }
          
      }
-    public function showFirma($id){
+    public function showFirma($id,$kul_id){
         
 
-        
+        $kullanici = \App\Kullanici::find($kul_id);
         $firma = Firma::find($id);
         if (Gate::denies('show', $firma)) {
               return Redirect::to('/');
@@ -335,7 +335,7 @@ class FirmaController extends Controller
         $kalite_belgeleri= \App\KaliteBelgesi::all();
         $calisma_günleri= \App\CalismaGunu::all();
         
-        return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)->with('markalar',$markalar)->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)->with('calisma_günleri',$calisma_günleri);
+        return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)->with('markalar',$markalar)->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)->with('calisma_günleri',$calisma_günleri)->with('kullanici',$kullanici);
     }
     public function deleteKalite(Request $request,$id){  
         

@@ -66,23 +66,25 @@
                     </li>
                    
                     <li>
-                       <a href="" target="_blank" onclick=""> {{ Auth::user()->name }}</a>
+                       <a href="" onclick=""> {{ Auth::user()->name }}</a>
                        <ul>
                            <li>
-                               <a href="" target="_blank" onclick="">Firma İşlemleri</a>
+                               <a href=""  onclick="">Firma İşlemleri</a>
                                <ul style="list-style-type:square">
                                    <?php
                                    $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
                                    ?>
                                    @foreach($kullanici->firmalar as $kullanicifirma)
                                    <li>
-                                       <a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}" target="_blank" onclick="">{{$kullanicifirma->adi}}</a>
+                                       <a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id,$kullanici->id), false)}}"  onclick="">{{$kullanicifirma->adi}}</a>
                                    </li>
                                    @endforeach
 
                                </ul>
                            </li>
-
+                            <li>
+                                <a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" >Yeni Firma Ekle</a>
+                            </li>
                           <li>
                                <a href="" target="_blank" onclick="">Yardım</a>
                            </li>
@@ -112,8 +114,9 @@
     <section class="job-search" style="">
         <div class="wrapper">
             <!-- title -->
+             <?php $ilan = DB::table('ilanlar')->count();?>
                     <h1>
-                        Senin için  burada (Sorgu) ilan var!
+                        Senin için  burada {{$ilan}} ilan var!
                     </h1>
             <!-- search area -->
             <div class="search-area">
@@ -512,8 +515,8 @@
 </footer>
 
     <script src="{{asset('kariyerJS/three.js')}}"></script> 
-    <script src="{{asset('kariyerJS/four.js')}}"></script>
-    <script src="{{asset('kariyerJS/five.js')}}"></script>
+    <!--script src="{{asset('kariyerJS/four.js')}}"></script-->
+    <!--script src="{{asset('kariyerJS/five.js')}}"></script-->
     <script src="{{asset('kariyerJS/six.js')}}"></script>
 
 </body>
