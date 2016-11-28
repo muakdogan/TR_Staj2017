@@ -32,7 +32,7 @@ class AuthController extends Controller
             //auth/login?redirectTo='Firma.ilan.ilanAra';
     
            
-            protected $redirectTo = '/';
+            protected $redirectTo = '/ilanAra';
             
             
             

@@ -2,8 +2,11 @@
     <h3>İlanlar</h3> 
     <hr>
     @foreach($ilanlar as $ilan)
-        <p>{{$ilan->ilanadi}}</p>
-        <p >{{$ilan->adi}}</p>
-        <a onclick='showModal()' ><button  style='float:right' type='button' class='btn btn-info'>Teklif Ver</button></a><br><br>
+        <p><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
+        <p>Firma: {{$ilan->adi}}</p>
+        <p>{{$ilan->iladi}}</p>
+        <p>{{$ilan->yayin_tarihi}}</p>
+        <button type="button" class="btn btn-primary basvur" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button><br><br>
+        <hr>
     @endforeach
 {{$ilanlar->links()}}
