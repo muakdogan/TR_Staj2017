@@ -1,6 +1,8 @@
 
     <h3>İlanlar</h3> 
     <hr>
+    <?php $count=$ilanlar->total();?>
+    <input type="hidden" name="totalCount" value='{{$ilanlar->total()}}'>
     @foreach($ilanlar as $ilan)
         <p><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
         <p>Firma: {{$ilan->adi}}</p>
