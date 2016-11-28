@@ -159,25 +159,21 @@
        
            
    </style>
-
-      
   
        <div  class="container-fuild">
            <div id ="header" class="row content ">
                <div class="container">
                    <div class="col-sm-3">
-                        <?php $ilan = $ilanlar->total();?>
-                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}"><p id="total"></p> ilan </h4>
+                        <?php $ilan = DB::table('ilanlar')->count();?>
+                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}"> {{$ilan}} ilan </h4>
                    </div>
                     <div class="col-sm-6">
                         <ul style="list-style: none outside none;">
                             <?php $j=0; ?>
                             <li class="li" id="multiSel{{$j}}">
                               
-                            </li>
-                            
+                            </li>                            
                         </ul>
-
                     </div>
                     <div class="col-sm-3">
                         <div style="float:right">
@@ -186,233 +182,218 @@
                     </div>
                </div>
            </div>
-       </div>
-
-   
+       </div>   
    
    <br>
    <br>
    <br>
-    
-    
       
-       <div  class="container">
-              <div class="row content"  >
-                        <div class="col-sm-3">
-
-
-                            <div class="search" id="radioDiv3">
-
-                                       <div>
-                                           <input type="text" name="search" id="search" placeholder="Anahtar Kelime"><input type="button" id="button"  value="ARA">
-                                       </div>
-                                       <div>
-                                          <input type="radio" name="gender" value="tum"> Tüm İlanda<br>
-                                          <input type="radio" name="gender" value="ilan_baslık"> Sadece İlan Başlığında<br>
-                                          <input type="radio" name="gender" value="firma"> Sadece Firma Adında Ara
-                                       </div>
-
-                            </div>
+        <div  class="container">
+            <div id="FilterSection" class="row content">
+                <div class="col-sm-3">
+                    <div class="search" id="radioDiv3">
+                       <div>
+                           <input type="text" name="search" id="search" placeholder="Anahtar Kelime"><input type="button" id="button"  value="ARA">
+                       </div>
+                       <div>
+                          <input type="radio" name="gender" value="tum"> Tüm İlanda<br>
+                          <input type="radio" name="gender" value="ilan_baslık"> Sadece İlan Başlığında<br>
+                          <input type="radio" name="gender" value="firma"> Sadece Firma Adında Ara
+                       </div>
+                    </div>
+                    <br>
+                    <div class="soldivler">
+                        <form  >
+                            <h4>İllerde Arama</h4>
                             <br>
-                            <div class="soldivler">
-                                <form  >
-                                    <h4>İllerde Arama</h4>
-                                    <br>
-                                    <br>
-                                     <dl class="dropdown">
-                                       <dt>
-                                       <a href="#">
-                                         <span class="hida">Seçiniz<span class="caret"></span></span>    
+                            <br>
+                             <dl class="dropdown">
+                               <dt>
+                               <a href="#">
+                                 <span class="hida">Seçiniz<span class="caret"></span></span>    
 
-                                       </a>
-                                       </dt>
+                               </a>
+                               </dt>
 
-                                       <dd>
-                                           <div class="mutliSelect">
-                                               <ul>
-                                                   @foreach($iller as $il)
-                                                   <li>
-                                                       <input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
-                                                   @endforeach
+                               <dd>
+                                   <div class="mutliSelect">
+                                       <ul>
+                                           @foreach($iller as $il)
+                                           <li>
+                                               <input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
+                                           @endforeach
 
-                                               </ul>
-                                           </div>
-                                       </dd>
-                                   </dl>
-                                </form>
+                                       </ul>
+                                   </div>
+                               </dd>
+                           </dl>
+                        </form>
+                    </div>
+                    <div class="soldivler">
+                        <h4>İlan Tarihi Aralığı</h4>
+                        <p>Başlangıç Tarihi</p>
+                        <input type="date" class="form-control datepicker" id="baslangic_tarihi" name="baslangic_tarihi" placeholder="" value="">
+                        <br>
+                        <p>Bitiş Tarihi</p>
+                        <input type="date" class="form-control datepicker" id="bitis_tarihi" name="bitis_tarihi" placeholder="" value="">
+                    </div>
+                    <div class="soldivler">
+                        <h4>İlan Sektörü</h4>
+                        @foreach($sektorler as $sektor)
+                         <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
+                        @endforeach
+                    </div>
+                    <div class="soldivler" id="radioDiv">
+                        <h4>İlan Türü</h4>
+                        <input type="radio" name="ilanTuru[]" class="tur" value="Mal"><span class="lever"></span>Mal<br>
+                        <input type="radio" name="ilanTuru[]" class="tur" value="Hizmet"><span class="lever"></span>Hizmet<br>
+                        <input type="radio" name="ilanTuru[]" class="tur" value="Yapım İşi"><span class="lever"></span>Yapım İşi
+                    </div>
+                     <div class="soldivler" id="radioDiv4"> 
+                        <h4>Sözleşme Türü</h4>
+                        <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Birim Fiyatlı"><span class="lever"></span>Birim Fiyatlı<br>
+                        <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Götürü Bedel"><span class="lever"></span>Götürü Bedel<br>
+                     </div>
+                     <div class="soldivler">
+                        <h4>Ödeme Türleri</h4>
+                        @foreach($odeme_turleri as $odeme)
+                         <input type="checkbox" class="checkboxClass2" value="{{$odeme->id}}" name="{{$odeme->adi}}"> {{$odeme->adi}}<br>
+                        @endforeach
+                    </div>
+                    <div class="soldivler" id="radioDiv2">
+                        <h4>İlan Usulü</h4>
+                        <input type="radio" name="gender[]" class="usul" value="Açık"> Açık<br>
+                        <input type="radio" name="gender[]" class="usul" value="Belirli İstekler Arasında">Belirli İstekler Arasında<br>
+                        <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
+                    </div>
+                </div>
+
+                <div class="col-sm-9 ilanlar" id="auto_load_div">
+                   @include('Firma.ilan.ilanlar')                                               
+               </div>
+            </div>
+
+            @if (Auth::guest())
+            <div class="modal fade" id="modalLogin" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Lütfen Giriş Yapınız!</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Giriş</div>
+                                        <div class="panel-body">
+                                            <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                                                {!! csrf_field() !!}
+                                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                                    <label class="col-md-4 control-label">E-Mail Adresi</label>
+                                                    <div class="col-md-6">
+                                                        <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+
+                                                        @if ($errors->has('email'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('email') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                                    <label class="col-md-4 control-label">Şifre</label>
+
+                                                    <div class="col-md-6">
+                                                        <input type="password" class="form-control" name="password">
+
+                                                        @if ($errors->has('password'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('password') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-md-offset-4">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" name="remember"> Beni Hatırla!
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-md-offset-4">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="fa fa-btn fa-sign-in"></i>Giriş
+                                                        </button>
+
+                                                        <a class="btn btn-link" href="{{ url('/password/reset') }}">Şifreyi mi Unuttun?</a>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="soldivler">
-
-                                    <h4>İlan Tarihi Aralığı</h4>
-                                    <p>Başlangıç Tarihi</p>
-                                     <input type="date" class="form-control datepicker" id="baslangic_tarihi" name="baslangic_tarihi" placeholder="" value="">
-                                         <br>
-                                    <p>Bitiş Tarihi</p>
-                                     <input type="date" class="form-control datepicker" id="bitis_tarihi" name="bitis_tarihi" placeholder="" value="">
-
-                            </div>
-                            <div class="soldivler">
-
-                                    <h4>İlan Sektörü</h4>
-                                    @foreach($sektorler as $sektor)
-                                     <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
-                                    @endforeach
-
-                            </div>
-
-                            <div class="soldivler" id="radioDiv">
-                                    <h4>İlan Türü</h4>
-                                    <input type="radio" name="ilanTuru[]" class="tur" value="Mal"><span class="lever"></span>Mal<br>
-                                    <input type="radio" name="ilanTuru[]" class="tur" value="Hizmet"><span class="lever"></span>Hizmet<br>
-                                    <input type="radio" name="ilanTuru[]" class="tur" value="Yapım İşi"><span class="lever"></span>Yapım İşi
-                            </div>
-                             <div class="soldivler" id="radioDiv4"> 
-                                    <h4>Sözleşme Türü</h4>
-                                    <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Birim Fiyatlı"><span class="lever"></span>Birim Fiyatlı<br>
-                                    <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Götürü Bedel"><span class="lever"></span>Götürü Bedel<br>
-
-                            </div>
-                             <div class="soldivler">
-
-                                    <h4>Ödeme Türleri</h4>
-                                    @foreach($odeme_turleri as $odeme)
-                                     <input type="checkbox" class="checkboxClass2" value="{{$odeme->id}}" name="{{$odeme->adi}}"> {{$odeme->adi}}<br>
-                                    @endforeach
-
-                            </div>
-                            <div class="soldivler" id="radioDiv2">
-                                    <h4>İlan Usulü</h4>
-                                     <input type="radio" name="gender[]" class="usul" value="Açık"> Açık<br>
-                                     <input type="radio" name="gender[]" class="usul" value="Belirli İstekler Arasında">Belirli İstekler Arasında<br>
-                                     <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
-
-                            </div>   
-
 
                         </div>
-                         
-                        <div class="col-sm-9 ilanlar" id="auto_load_div">
-                           @include('Firma.ilan.ilanlar')
-                                               
-                       </div>
-                       
+                        <div class="modal-footer">                                                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @else
+            <?php $j=0;$k=0;
+                $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+            ?>
+            <div class="modal fade" id="myModalSirketListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                         <h4 class="modal-title" id="myModalLabel">Lütfen Şirket Seçiniz!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-weight:bold;text-align: center;font-size:x-large">{{ Auth::user()->name }}  </p>
+                        <hr>
+                        @foreach($kullanici->firmalar as $kullanicifirma)
+                            <p id="deneme3{{$j}}"></p>  
+                            <?php $j++;?>   
+                        @endforeach
+                        <a onclick='teklifVer()' ><button  style='float:right' type='button' class='btn btn-info'>Firma Seçiniz</button></a><br><br>
+                    </div>
+                    <div class="modal-footer">                                                            
+                    </div>
                  </div>
-             
-                                         @if (Auth::guest())
-                                         <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                             <div class="modal-dialog">
-                                                 <div class="modal-content">
-                                                     <div class="modal-header">
-                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                         <h4 class="modal-title" id="myModalLabel">Lütfen Giriş Yapınız!</h4>
-                                                     </div>
-                                                     <div class="modal-body">
-                                                         <div class="row">
-                                                             <div class="col-md-8 col-md-offset-2">
-                                                                 <div class="panel panel-default">
-                                                                     <div class="panel-heading">Giriş</div>
-                                                                     <div class="panel-body">
-                                                                         <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                                                                             {!! csrf_field() !!}
+             </div>
+            </div>
 
-                                                                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                                                                 <label class="col-md-4 control-label">E-Mail Adresi</label>
+            @endif
 
-                                                                                 <div class="col-md-6">
-                                                                                     <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                                                                         @if ($errors->has('email'))
-                                                                                         <span class="help-block">
-                                                                                             <strong>{{ $errors->first('email') }}</strong>
-                                                                                         </span>
-                                                                                         @endif
-                                                                                 </div>
-                                                                             </div>
-
-                                                                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                                                                 <label class="col-md-4 control-label">Şifre</label>
-
-                                                                                 <div class="col-md-6">
-                                                                                     <input type="password" class="form-control" name="password">
-
-                                                                                         @if ($errors->has('password'))
-                                                                                         <span class="help-block">
-                                                                                             <strong>{{ $errors->first('password') }}</strong>
-                                                                                         </span>
-                                                                                         @endif
-                                                                                 </div>
-                                                                             </div>
-
-                                                                             <div class="form-group">
-                                                                                 <div class="col-md-6 col-md-offset-4">
-                                                                                     <div class="checkbox">
-                                                                                         <label>
-                                                                                             <input type="checkbox" name="remember"> Beni Hatırla!
-                                                                                         </label>
-                                                                                     </div>
-                                                                                 </div>
-                                                                             </div>
-
-                                                                             <div class="form-group">
-                                                                                 <div class="col-md-6 col-md-offset-4">
-                                                                                     <button type="submit" class="btn btn-primary">
-                                                                                         <i class="fa fa-btn fa-sign-in"></i>Giriş
-                                                                                     </button>
-
-                                                                                     <a class="btn btn-link" href="{{ url('/password/reset') }}">Şifreyi mi Unuttun?</a>
-                                                                                 </div>
-                                                                             </div>
-                                                                             
-                                                                         </form>
-                                                                     </div>
-                                                                 </div>
-                                                             </div>
-                                                         </div>
-
-                                                     </div>
-                                                     <div class="modal-footer">                                                            
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                         @else
-                                          <?php $j=0;$k=0;?>
-                                            
-                                             <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                 <div class="modal-dialog">
-                                                 <div class="modal-content">
-                                                     <div class="modal-header">
-                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                         <h4 class="modal-title" id="myModalLabel">Lütfen Şirket Seçiniz!</h4>
-                                                     </div>
-                                                     <div class="modal-body">
-                                                          
-                                                         <p style="font-weight:bold;text-align: center;font-size:x-large">{{ Auth::user()->name }}  </p>
-                                                         <hr>
-                                                         
-                                                                 
-                                                                    @foreach($kullanici->firmalar as $kullanicifirma)
-
-                                                                           <p id="deneme3{{$j}}"></p>  
-
-                                                                         <?php $j++;?>   
-                                                                    @endforeach
-                                                                    
-                                                                    <a onclick='teklifVer()' ><button  style='float:right' type='button' class='btn btn-info'>Firma Seçiniz</button></a><br><br>
-                                                            
-                                                     </div>
-                                                     <div class="modal-footer">                                                            
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                             
-                                         @endif
-                               
             <script type="text/javascript">
-                function silme(name){
-                        
+                $('.basvur').click(function(){
+                    @if(Auth::guest())
+                        alert("guest");
+                        $('#modalLogin').modal('show');
+                    @else
+                        alert("kullanıcı");
+                        var say = {{$kullanici->firmalar->count()}};
+                        if(say > 1){
+                            $('#myModalSirketListe').modal('show');
+                        }
+                        else {
+                            //window.loacation.href=
+                        }
+                    @endif
+                    alert($(this).attr('id'));
+                });
+                function silme(name){                        
                         alert('içerde');
                         $('li[name='+name+']').remove();
                         if(name == "tarım" || name == "hizmet"){
@@ -581,7 +562,6 @@
                 });
 
                 $('.mutliSelect input[type="checkbox"]').on('click', function() {
-
                     var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
                       title = $(this).attr('name');
 
@@ -595,13 +575,11 @@
                       $('span[title="' + title + '"]').remove();
                       var ret = $(".hida");
                       $('.dropdown dt a').append(ret);
-
                     }
-  
                 });
+                
                 $(document).ready(function(){
                     $(document).on('click', '.pagination a', function (e){
-                        alert($(this).attr('href').split('page=')[1]);
                         getIlanlar($(this).attr('href').split('page=')[1]);
                         e.preventDefault();
                     });                    
@@ -663,8 +641,6 @@
                                     sozles:selectedSozlesme
                         },
                     }).done(function(data){
-                        alert($('#totalCount').val());
-                        $('#total').text("2");
                         $('.ilanlar').html(data);
                         location.hash = page;
                     }).fail(function(){ 

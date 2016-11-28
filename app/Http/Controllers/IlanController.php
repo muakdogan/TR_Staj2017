@@ -26,11 +26,9 @@ class IlanController extends Controller
                 ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
-                ->select(DB::raw('count(*) as ilan_count'))
-                ->select('ilanlar.id as ilan_id',
-                        'ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 
-                        'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'
-                        ); 
+                ->where('adresler.tur_id', '=' , 1)
+                ->orderBy('ilanlar.yayin_tarihi', 'DESC')
+                ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
        
             $il_id = Input::get('il');
             $bas_tar = Input::get('bas_tar');
