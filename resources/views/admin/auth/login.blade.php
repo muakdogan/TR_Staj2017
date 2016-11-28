@@ -1,30 +1,66 @@
-@extends('admin.layouts')
+@extends('layouts.appAdmin')
+
 @section('content')
-  <body class="login-img3-body">
-    <div class="container">
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Giriş</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/admin/login') }}">
+                        {{ csrf_field() }}
 
-      <form class="login-form" action="{{!! url('/login')!!}}" method="POST">  
-          {!! csrf_field() !!}
-        <div class="login-wrap">
-            <p class="login-img"><i class="icon_lock_alt"></i></p>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="icon_profile"></i></span>
-              <input type="email"  name="email" class="form-control" placeholder="Email" autofocus>
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label">E-Mail Adres</label>
+
+                            <div class="col-md-6">
+                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label">Şifre</label>
+
+                            <div class="col-md-6">
+                                <input type="password" class="form-control" name="password">
+
+                                @if ($errors->has('password'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember"> Beni Hatırla
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-sign-in"></i>Giriş
+                                </button>
+
+                                <a class="btn btn-link" href="{{ url('admin/password/reset') }}">Şifreni mi Unuttun?</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="input-group">
-                <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-                <input type="password" name ="password"class="form-control" placeholder="Password">
-            </div>
-            <label class="checkbox">
-                <input type="checkbox" value="remember-me"> Remember me
-                <span class="pull-right"> <a href="#"> Forgot Password?</a></span>
-            </label>
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-            <button class="btn btn-info btn-lg btn-block" type="submit">Signup</button>
         </div>
-      </form>
-
     </div>
-  </body>
-
-@endsection()
+</div>
+@endsection
