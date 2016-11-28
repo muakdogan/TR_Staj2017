@@ -75,8 +75,8 @@
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             <li><a href="#">Başvurularım</a></li>
-                             <li><a href="#">Başvur</a></li>
+                             <li><a href="{{ URL::to('basvurularim', array($firma->id,$kullanici->id), false)}}">Başvurularım</a></li>
+                             <li><a href="{{url('ilanAra/')}}">Başvur</a></li>
                          </ul>
                      </li>
                      <li><a href="#">Mesajlar</a></li>
@@ -140,7 +140,8 @@
                                  </tr>
                                  <tr>
                                      <td>İlan Sektor:</td>
-                                      @foreach($sektorler as $ilanSektor)<?php
+                                      @foreach($sektorler as $ilanSektor)
+                                          <?php
                                    if($ilanSektor->id == $ilan->firma_sektor){
                                        ?>
                                           <td>{{$ilanSektor->adi}}</td>

@@ -17,6 +17,7 @@
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
       
     <style>
         .yazi{
@@ -72,7 +73,8 @@
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
-                                        <li ><a href="{{url('firmaIslemleri/'.$kullanicifirma->id)}}">{{$kullanicifirma->adi}}</a></li>
+                                        <li ><a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id,$kullanici->id), false)}}">{{$kullanicifirma->adi}}</a></li>
+                                        
                                         </ul>
                                     @endforeach
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>

@@ -44,30 +44,7 @@ tr:nth-child(even) {
 
 </style>
      <div class="container">
-         <nav class="navbar navbar-inverse">
-             <div class="container-fluid">
-                 <div class="navbar-header">
-                     <a class="navbar-brand" href="#"><img src='{{asset('images/anasayfa.png')}}'></a>
-                 </div>
-                 <ul class="nav navbar-nav">
-                     <li class=""><a href="{{ url('firmaProfili/'.$firma->id)}}">Firma Profili</a></li>
-                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
-                         <ul class="dropdown-menu">
-                             <li><a href="{{ url('ilanlarim/'.$firma->id) }}">İlanlarım</a></li>
-                             <li><a href="{{ url('firmaIlanOlustur/ilanEkle/'.$firma->id) }}">İlan Oluştur</a></li>
-                         </ul>
-                     </li>
-                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
-                         <ul class="dropdown-menu">
-                             <li><a href="#">Başvurularım</a></li>
-                             <li><a href="#">Başvur</a></li>
-                         </ul>
-                     </li>
-                     <li><a href="#">Mesajlar</a></li>
-                     <li><a href="#">Kullanici İşlemleri</a></li>
-                 </ul>
-             </div>
-         </nav>
+          @include('layouts.alt_menu') 
          <div class="panel-header">
              <h3><strong>{{$firma->adi}}</strong> firmasının <strong>{{$ilan->adi}}</strong> ilanının Teklifleri </h3>
          </div>
