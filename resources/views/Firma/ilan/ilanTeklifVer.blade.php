@@ -427,7 +427,7 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger teklifGonder')) !!}
                                 {!! Form::close() !!}                         
                           </div>
                       </div>
@@ -525,7 +525,9 @@ $('.fiyat').on('change', function() {
         $("#"+name).text(result);
     }
 });
-
+$('.teklifGonder').on('click', function() {
+    alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
+});
 var firma_id = '{{$firma->id}}';
 var ilan_id = '{{$ilan->id}}';
 var url = window.location.href; 

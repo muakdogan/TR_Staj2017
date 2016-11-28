@@ -166,8 +166,8 @@
            <div id ="header" class="row content ">
                <div class="container">
                    <div class="col-sm-3">
-                        <?php $ilan = DB::table('ilanlar')->count();?>
-                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}"> {{$ilan}} ilan </h4>
+                        <?php $ilan = $ilanlar->total();?>
+                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}"><p id="total"></p> ilan </h4>
                    </div>
                     <div class="col-sm-6">
                         <ul style="list-style: none outside none;">
@@ -663,7 +663,8 @@
                                     sozles:selectedSozlesme
                         },
                     }).done(function(data){
-                        alert(data);
+                        alert($('#totalCount').val());
+                        $('#total').text("2");
                         $('.ilanlar').html(data);
                         location.hash = page;
                     }).fail(function(){ 
