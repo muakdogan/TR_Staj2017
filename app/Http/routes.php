@@ -295,7 +295,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
      });
    
 
-   Route::get('ilanTeklifVer/{id}/{ilan_id}'  ,function ($id,$ilan_id) {
+   Route::get('ilanTeklifVer/{id}/{ilan_id}',['middleware'=>'auth' ,function ($id,$ilan_id) {
         $firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
@@ -303,7 +303,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('ilan', $ilan)->with('birimler',$birimler);
            
 
-    });
+    }]);
     
     //firma profil route...
     Route::post('firmaProfili/uploadImage/{id}', 'FirmaController@uploadImage');

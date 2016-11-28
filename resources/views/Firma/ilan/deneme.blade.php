@@ -382,14 +382,7 @@
                         alert("guest");
                         $('#modalLogin').modal('show');
                     @else
-                        alert("kullanıcı");
-                        var say = {{$kullanici->firmalar->count()}};
-                        if(say > 1){
-                            $('#myModalSirketListe').modal('show');
-                        }
-                        else {
-                            //window.loacation.href=
-                        }
+                        
                     @endif
                     alert($(this).attr('id'));
                 });
