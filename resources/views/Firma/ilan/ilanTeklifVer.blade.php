@@ -42,8 +42,10 @@ tr:nth-child(even) {
 
 </style>
      <div class="container">
+         <?php $firma=$ilan->firmalar;?>
           @include('layouts.alt_menu') 
-         <div class="col-sm-12">                     
+         <div class="col-sm-12">     
+             
             <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
               <hr>
               <div class="panel-group" id="accordion">
@@ -88,7 +90,7 @@ tr:nth-child(even) {
 
                                       </tr>
                                        
-                                      @foreach($firma->ilanlar->ilan_mallar as $ilan_mal)
+                                      @foreach($ilan->ilan_mallar as $ilan_mal)
                                       <tr id="{{$ilan_mal->id}}tr">
                                           <td>
                                               {{$ilan_mal->sira}}
@@ -404,13 +406,38 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger teklifGonder')) !!}
+                              <?php $firma_id = session()->get('firma_id'); ?>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id,'class'=>'btn btn-danger teklifGonder')) !!}
                                 {!! Form::close() !!}                         
                           </div>
                       </div>
                   </div>
               </div>
-              
+              <?php $j=0;$k=0;
+                $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+            ?>
+            <div class="modal fade" id="myModalSirketListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                         <h4 class="modal-title" id="myModalLabel">Lütfen Şirket Seçiniz!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-weight:bold;text-align: center;font-size:x-large">{{ Auth::user()->name }}  </p>
+                        <hr>
+                        <div id="radioDiv">
+                        @foreach($kullanici->firmalar as $kullanicifirma)
+                        <input type="radio" name="firmaSec" value="{{$kullanicifirma->id}}"> {{$kullanicifirma->adi}}<br>   
+                        @endforeach
+                        </div>
+                        <button  style='float:right' type='button' class="firmaButton" class='btn btn-info'>Firma Seçiniz</button><br><br>
+                    </div>
+                    <div class="modal-footer">                                                            
+                    </div>
+                 </div>
+                </div>
+            </div>
               
               
               
@@ -475,9 +502,25 @@ $('.fiyat').on('change', function() {
 $('.teklifGonder').on('click', function() {
     alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
 });
-
+$('.firmaButton').on('click', function() {
+    var selected = $("#radioDiv input[type='radio']:checked").val();
+    $.ajax({
+        type:"GET",
+         url: "../set_session",
+         data: { role: selected },
+         }).done(function(data){
+                    $('#myModalSirketListe').modal('toggle');
+                    console.log(data);
+                    alert(data);                
+                    }).fail(function(){ 
+                        alert('Yüklenemiyor !!!  ');
+                    });
+        
+});
 $(document).ready(function() {
-    $("#mete").text("Toplam Fiyat: ");
+    $('#myModalSirketListe').modal({
+                                        show: 'true'
+                                    });
     var ilan_turu='{{$ilan->ilan_turu}}';
     var sozlesme_turu='{{$ilan->sozlesme_turu}}';
  
@@ -513,7 +556,7 @@ $(document).ready(function() {
                    $('#hizmet').hide()
                    $('#goturu').hide()
                    $('#mal').hide()
-                }
+                }      
 });
 </script>
 @endsection

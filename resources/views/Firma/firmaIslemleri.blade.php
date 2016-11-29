@@ -112,12 +112,20 @@ tr:nth-child(even) {
                          <div class="panel panel-default">
                              <div class="panel-heading"><img src="{{asset('images/istatistik.png')}}">&nbsp;İstatistik</div>
                              <div class="panel-body">
-                                 @include('Firma.chart')
+                                 <div>
+                                     Toplam İlan Sayım: {{$firma->ilanlar()->count()}}
+                                 </div>
+                                 <div>
+                                      <?php $tekliflerCount= DB::table('teklifler')->where('firma_id',$firma->id)->count(); ?>
+                                     Toplam Başvuru Sayım: {{$tekliflerCount}}
+                                 </div>
                              </div>
                          </div>
                          <div class="panel panel-default">
                              <div class="panel-heading"><img src="{{asset('images/doluluk.png')}}">&nbsp;Firma Profili Doluluk Oranı</div>
-                             <div class="panel-body"></div>
+                             <div class="panel-body">
+                                 @include('Firma.chart')
+                             </div>
                          </div>
 
                      </div>
