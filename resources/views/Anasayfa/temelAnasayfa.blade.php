@@ -72,7 +72,7 @@
                                    ?>
                                    @foreach($kullanici->firmalar as $kullanicifirma)
                                    <li>
-                                       <a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id,$kullanici->id), false)}}"  onclick="">{{$kullanicifirma->adi}}</a>
+                                       <a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id), false)}}"  onclick="">{{$kullanicifirma->adi}}</a>
                                    </li>
                                    @endforeach
 

@@ -102,11 +102,11 @@ $(document).ready(function(){
     
     
     
-      $('#btn-add-detay').click(function(){
+      $('.detay').click(function(){
         $('#btn-save-detay').val("add");
         $('#myModal-detay').modal('show');
     });
-      $('#btn-add-düzenle').click(function(){
+      $('.düzenle').click(function(){
         $('#btn-save-düzenle').val("add");
         $('#myModal-düzenle').modal('show');
     });
