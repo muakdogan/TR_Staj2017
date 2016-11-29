@@ -16,9 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
-Route::controllers([
-   'password' => 'Auth\PasswordController',
-]);
+
 Route::get('/anasayfa', function () {
     return view('welcome');
 });
