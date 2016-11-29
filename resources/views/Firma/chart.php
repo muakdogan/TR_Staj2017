@@ -4,7 +4,6 @@
 		<title>ChartJS - Pie Chart</title>
 		<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../../../public/js/chart.js"></script>
-               
 	</head>
 	<body>
 		<canvas id="mycanvas" width="256" height="256">

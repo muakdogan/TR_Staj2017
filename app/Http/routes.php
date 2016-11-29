@@ -266,7 +266,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return view('Firma.ilan.ilanlarim')->with('firma', $firma);
         
     });
-     Route::get('basvurularim/{id}/' ,function ($id) {
+     Route::get('basvurularim/{id}' ,function ($id) {
         $firma = Firma::find($id);
         $teklifler=  \App\Teklif::all();
         //$kullanici = App\Kullanici::find($kul_id); 
@@ -274,19 +274,60 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return view('Firma.ilan.basvurularim')->with('firma', $firma)->with('teklifler', $teklifler)->with('detaylar', $detaylar);
         
     });
+
      Route::get('/basvuruDetay/',function (){
-         
-               
+          $teklifler =  \App\Teklif::all();
+                
                //$kullanici =  \App\Kullanici::find($kul_id);
-              $teklif_id = Input::get('teklif_id');
-               
-                 $detaylar = DB::table('mal_teklifler')
-                        ->join('firma_kullanicilar', 'firma_kullanicilar.id', '=', 'mal_teklifler.firma_kullanicilar_id')
-                        ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
+                $teklif_id = Input::get('teklif_id');
+                 foreach($teklifler as $teklif){
+                  if($teklif->ilanlar->ilan_turu=='Mal'){
+                       $detaylar = DB::table('mal_teklifler')
+                        ->join('ilan_mallar', 'ilan_mallar.id', '=', 'mal_teklifler.ilan_mal_id')
+                        ->join('ilanlar', 'ilanlar.id', '=', 'ilan_mallar.ilan_id')
+                        ->join('birimler', 'birimler.id', '=', 'ilan_mallar.birim_id')
                         ->where( 'mal_teklifler.teklif_id', '=', $teklif_id)
-                        ->select('mal_teklifler.*');  
+                        ->select('ilan_mallar.*','ilanlar.adi as ilanadi','birimler.adi as birimadi');  
                         
-                $detaylar=$detaylar->get();
+                     $detaylar=$detaylar->get();
+                      
+                  }
+                  else if($teklif->ilanlar->ilan_turu=='Hizmet'){
+                       $detaylar = DB::table('hizmet_teklifler')
+                        ->join('ilan_hizmetler', 'ilan_hizmetler.id', '=', 'hizmet_teklifler.ilan_hizmet_id')
+                        ->join('ilanlar', 'ilanlar.id', '=', 'ilan_hizmetler.ilan_id')
+                        ->join('birimler', 'birimler.id', '=', 'ilan_hizmetler.fiyat_standardi_birim_id')
+                       //->join('birimler', 'birimler.id', '=', 'ilan_hizmetler.miktar_birim_id')
+                        ->where( 'hizmet_teklifler.teklif_id', '=', $teklif_id)
+                        ->select('ilan_hizmetler.*','ilanlar.adi as ilanadi','birimler.adi as fiyat_standardi_birim_adi');  
+                        
+                     $detaylar=$detaylar->get();
+                      
+                  }
+                  else if($teklif->ilanlar->ilan_turu=='Götürü Bedel'){
+                       $detaylar = DB::table('goturu_bedeller_teklifler')
+                        ->join('ilan_goturu_bedeller', 'ilan_goturu_bedeller.id', '=', 'goturu_bedeller_teklifler.ilan_goturu_bedel_id')
+                        ->join('ilanlar', 'ilanlar.id', '=', 'ilan_goturu_bedeller.ilan_id')
+                        ->where( 'goturu_bedeller_teklifler.teklif_id', '=', $teklif_id)
+                        ->select('ilan_goturu_bedeller.*','ilanlar.adi as ilanadi');  
+                        
+                     $detaylar=$detaylar->get();
+                      
+                  }
+                  else if($teklif->ilanlar->ilan_turu=='Yapim İşi'){
+                       $detaylar = DB::table('yapim_isi_teklifler')
+                        ->join('ilan_yapim_isileri', 'ilan_yapim_isileri.id', '=', 'yapim_isi_teklifler.ilan_yapim_isi_id')
+                        ->join('ilanlar', 'ilanlar.id', '=', 'ilan_yapim_isleri.ilan_id')
+                        ->join('birimler', 'birimler.id', '=', 'ilan_yapim_isleri.birim_id')
+                        ->where( 'yapim_isi_teklifler.teklif_id', '=', $teklif_id)
+                        ->select('ilan_yapim_isleri.*','ilanlar.adi as ilanadi','birimler.adi as birimadi');  
+                        
+                     $detaylar=$detaylar->get();
+                      
+                  }
+                 }
+                  
+                
                return Response::json($detaylar);
                
                
@@ -295,7 +336,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
      });
    
 
-   Route::get('ilanTeklifVer/{id}/{ilan_id}'  ,function ($id,$ilan_id) {
+   Route::get('ilanTeklifVer/{id}/{ilan_id}',['middleware'=>'auth' ,function ($id,$ilan_id) {
         $firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
@@ -303,7 +344,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('ilan', $ilan)->with('birimler',$birimler);
            
 
-    });
+    }]);
     
     //firma profil route...
     Route::post('firmaProfili/uploadImage/{id}', 'FirmaController@uploadImage');

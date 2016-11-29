@@ -138,7 +138,7 @@ tr:nth-child(even) {
                                         @endforeach
                                         <tr>
                                           <td colspan="10">
-                                            <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
+                                            <label for="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
                                           </td>
                                           <td>
                                               <label for="inputEmail3" name="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
@@ -230,11 +230,11 @@ tr:nth-child(even) {
                                         </tr>
                                         @endforeach
                                         <tr>
-                                          <td colspan="10">
-                                            <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
+                                          <td colspan="9">
+                                            <label for='toplamFiyatLabel' id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
                                           </td>
                                           <td>
-                                              <label for="inputEmail3" name="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
+                                              <label for="toplamFiyatL" id="toplamFiyatL" class="col-sm-3 control-label toplam"></label>
                                               <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
                                           </td>
                                         </tr>
@@ -310,7 +310,7 @@ tr:nth-child(even) {
                                         </tr>
                                         @endforeach
                                         <tr>
-                                          <td colspan="10">
+                                          <td colspan="9">
                                             <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
                                           </td>
                                           <td>
@@ -440,32 +440,15 @@ tr:nth-child(even) {
         var name=$(this).attr('name');
         alert("toplamFiyat");
         $("#"+name).text(result);
-        $("#"+name).val(result);
-        $('#toplamFiyatLabel').text("Toplam Fiyat: ");
-        $('#toplamFiyatL').text(toplamFiyat);
-        $('#toplamFiyat').val(toplamFiyat);
+        $("#toplamFiyatLabel").text("Toplam Fiyat: ");
+        $("#toplamFiyatL").text(toplamFiyat);
+        $("#toplamFiyat").val(toplamFiyat);
+        alert(toplamFiyat);
     }
     
     
 });
-$('.btn').on('click',function(){
-    alert("ezgi");
-    var ilan_id = "{{$ilan->id}}";
-    var firma_id = "{{$kullaniciFirmaID}}";
-    $.ajax({
-        type:"GET",
-        url: "teklifAra",
-        data:{ilan_id:ilan_id,firma_id:firma_id
-            },
-        cache: false,
-        success: function(data){
-            console.log(data);
-            alert("ozge");
-        }
-    });
-    
-});
- 
+
 $('.fiyat').on('change', function() {
                 
     var fiyat=parseFloat(this.value);
@@ -478,41 +461,25 @@ $('.fiyat').on('change', function() {
         result=(fiyat+(fiyat*kdv)/100)*miktar;
         toplamFiyat += result;
         var name=$(this).attr('name');
+        alert(name);
         $("#"+name).text(result);
-        $("#"+name).val(result);
-        $('#toplamFiyatLabel').text("Toplam Fiyat: ");
-        $('#toplamFiyatL').text(toplamFiyat);
-        $('#toplamFiyat').val(toplamFiyat);
+        $("label[for='toplamFiyatLabel']").text("toplamFiyat :");
+        $("label[for='toplamFiyatL']").text(toplamFiyat);
+        $("#toplamFiyat").val(toplamFiyat);
+        alert(toplamFiyat);
     }
                 
 
 });
  
-$('.fiyat').on('change', function() {
-                
-    var fiyat=parseFloat(this.value);
-    var result;
-        
-    if($(this).parent().prev().children().val() !== '')
-    {
-        var miktar = parseFloat($(this).parent().prev().prev().prev().text());
-        kdv=parseFloat($(this).parent().prev().children().val());
-        result=(fiyat+(fiyat*kdv)/100)*miktar;
-        var name=$(this).attr('name');
-        $("#"+name).text(result);
-    }
-});
 $('.teklifGonder').on('click', function() {
     alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
 });
-var firma_id = '{{$firma->id}}';
-var ilan_id = '{{$ilan->id}}';
-var url = window.location.href; 
 
-$( document ).ready(function() {
-
-    var ilan_turu='{{$firma->ilanlar->ilan_turu}}';
-    var sozlesme_turu='{{$firma->ilanlar->sozlesme_turu}}';
+$(document).ready(function() {
+    $("#mete").text("Toplam Fiyat: ");
+    var ilan_turu='{{$ilan->ilan_turu}}';
+    var sozlesme_turu='{{$ilan->sozlesme_turu}}';
  
     
             if(ilan_turu=="") 
