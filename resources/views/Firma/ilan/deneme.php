@@ -97,3 +97,37 @@
                         ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
                        
                         ->select('mal_teklifler.*','hizmet_teklifler.*','yapim_isi_teklifler.*')   ; 
+                        
+                        
+                        
+                        
+                        
+                          function func(){
+        
+            alert("mmm");                 
+            $.ajax({
+            type:"GET",
+            url:"../basvuruDetay",
+            data:{teklif_id:detay
+       
+            },
+            cache: false,
+            success: function(data){
+            console.log(data);
+            
+            
+            for(var key=0; key <Object.keys(data).length;key++)
+             {
+                $("#sira").append(data[key].sira);
+                $("#marka").append(data[key].marka);
+                $("#model").append(data[key].model);
+                $("#adi").append(data[key].adi);
+                $("#ambalaj").append(data[key].ambalaj);
+                $("#miktar").append(data[key].miktar);
+                $("#birim").append(data[key].birimadi);
+                $("#ilan_adi").append(data[key].ilanadi);
+             }
+         }
+
+        });
+    }
