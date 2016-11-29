@@ -295,12 +295,12 @@ Route::get('/firmaOnay/{id}', function ($id) {
      });
    
 
-   Route::get('ilanTeklifVer/{id}/{ilan_id}',['middleware'=>'auth' ,function ($id,$ilan_id) {
-        $firma = Firma::find($id);
+   Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
+        //$firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
        
-        return view('Firma.ilan.ilanTeklifVer')->with('firma', $firma)->with('ilan', $ilan)->with('birimler',$birimler);
+        return view('Firma.ilan.ilanTeklifVer')->with('ilan', $ilan)->with('birimler',$birimler);
            
 
     }]);
@@ -402,6 +402,15 @@ Route::get('/firmaOnay/{id}', function ($id) {
             return Response::json($yapim);
 
     });
+ /////////////////////////////////////SET SESSION//////////////////////
+ Route::get('/set_session' ,function () {
+    
+    $firma_id = Input::get('role');
+    Session::set('firma_id', $firma_id);
+    
+    response($firma_id);
+    });
+    
  /////////////////////////Teklif Ara ///////////////////////////////////   
 Route::get('teklifAra' ,function () {
     
@@ -441,26 +450,43 @@ Route::get('teklifAra' ,function () {
         foreach($request->fiyat as $kdvliFiyat){
             $array[] = $kdvliFiyat;
         }
-        if($ilan->ilan_mallar() != null){
-            foreach($request->ilan_mal_id as $fiyat){
+        if($ilan->ilan_turu == 'Mal'){
+            if(is_array($request->ilan_mal_id)){
+                foreach($request->ilan_mal_id as $fiyat){
+                    $arrayFiyat[] = $request->$fiyat;
+                    $kdvsizFiyatToplam = $kdvsizFiyatToplam + $request->$fiyat;
+                }
+                $i=0;
+                foreach($request->ilan_mal_id as $id){
+                    $ilan_mal= \App\IlanMal::find($id);
+                    $ilan_mal_teklifler = new App\MalTeklif;
+                    $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
+                    $ilan_mal_teklifler-> teklif_id = $teklif->id;
+                    $ilan_mal_teklifler->kdv_orani = $arrayKdv[$i];
+                    $ilan_mal_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
+                    $ilan_mal_teklifler->kdv_dahil_fiyat=$array[$i];
+                    $ilan_mal_teklifler->tarih= $now;
+                    $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                    $ilan_mal_teklifler->save();
+                    $i++;
+                }
+            }
+            else{
+                $fiyat=$request->ilan_mal_id;
                 $arrayFiyat[] = $request->$fiyat;
                 $kdvsizFiyatToplam = $kdvsizFiyatToplam + $request->$fiyat;
+                $ilan_mal= \App\IlanMal::find($request->ilan_mal_id);
+                    $ilan_mal_teklifler = new App\MalTeklif;
+                    $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
+                    $ilan_mal_teklifler-> teklif_id = $teklif->id;
+                    $ilan_mal_teklifler->kdv_orani = $arrayKdv[$i];
+                    $ilan_mal_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
+                    $ilan_mal_teklifler->kdv_dahil_fiyat=$array[$i];
+                    $ilan_mal_teklifler->tarih= $now;
+                    $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                    $ilan_mal_teklifler->save();
             }
-            $i=0;
-            foreach($request->ilan_mal_id as $id){
-                $ilan_mal= \App\IlanMal::find($id);
-                $ilan_mal_teklifler = new App\MalTeklif;
-                $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
-                $ilan_mal_teklifler-> teklif_id = $teklif->id;
-                $ilan_mal_teklifler->kdv_orani = $arrayKdv[$i];
-                $ilan_mal_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-                $ilan_mal_teklifler->kdv_dahil_fiyat=$array[$i];
-                $ilan_mal_teklifler->tarih= $now;
-                $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
-                $ilan_mal_teklifler->save();
-                $i++;
-            }
-        }elseif ($ilan->ilan_hizmetler() != null) {
+        }elseif ($ilan->ilan_turu == 'Hizmet') {
             foreach($request->ilan_hizmet_id as $fiyat){
                 $arrayFiyat[] = $request->$fiyat;
                 $kdvsizFiyatToplam = $kdvsizFiyatToplam + $request->$fiyat;
@@ -469,18 +495,19 @@ Route::get('teklifAra' ,function () {
             foreach($request->ilan_hizmet_id as $id){
                 $ilan_hizmet= \App\IlanHizmet::find($id);
                 $ilan_hizmet_teklifler = new App\HizmetTeklif;
-                $ilan_hizmet_teklifler-> ilan_mal_id = $ilan_hizmet->id;
+                $ilan_hizmet_teklifler-> ilan_hizmet_id = $ilan_hizmet->id;
                 $ilan_hizmet_teklifler-> teklif_id = $teklif->id;
                 $ilan_hizmet_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_hizmet_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
                 $ilan_hizmet_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_hizmet_teklifler->tarih= $now;
-                $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                $ilan_hizmet_teklifler->para_birimleri_id=$ilan_hizmet->miktar_birim_id;
+                $ilan_hizmet_teklifler->firma_kullanicilar_id=1;
                 $ilan_hizmet_teklifler->save();
                 $i++;
             }
         
-        }elseif($ilan->goturu_bedeller() != null){
+        }elseif($ilan->sozlesme_turu != 'Götürü Bedel'){
             foreach($request->goturu_bedel_id as $fiyat){
                 $arrayFiyat[] = $request->$fiyat;
                 $kdvsizFiyatToplam = $kdvsizFiyatToplam + $request->$fiyat;
@@ -489,7 +516,7 @@ Route::get('teklifAra' ,function () {
             foreach($request->ilan_goturu_bedel_id as $id){
                 $ilan_goturu = \App\IlanGoturuBedel::find($id);
                 $ilan_goturu_teklifler = new App\GoturuBedelTeklif;
-                $ilan_goturu_teklifler-> ilan_mal_id = $ilan_goturu->id;
+                $ilan_goturu_teklifler-> ilan_goturu_bedel_id = $ilan_goturu->id;
                 $ilan_goturu_teklifler-> teklif_id = $teklif->id;
                 $ilan_goturu_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_goturu_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
@@ -509,7 +536,7 @@ Route::get('teklifAra' ,function () {
             foreach($request->yapim_isi_id as $id){
                 $ilan_yapim = \App\IlanYapimIsi::find($id);
                 $ilan_yapim_teklifler = new App\YapimIsiTeklif;
-                $ilan_yapim_teklifler-> ilan_mal_id = $ilan_yapim->id;
+                $ilan_yapim_teklifler-> ilan_yapim_isi_id = $ilan_yapim->id;
                 $ilan_yapim_teklifler-> teklif_id = $teklif->id;
                 $ilan_yapim_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_yapim_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];

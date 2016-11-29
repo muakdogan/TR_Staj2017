@@ -9,7 +9,7 @@
         <p>{{$ilan->iladi}}</p>
         <p>{{$ilan->yayin_tarihi}}</p>
         
-        <a href="{{ URL::to('ilanTeklifVer', array($ilan->firmaid,$ilan->ilan_id), false) }}"><button type="button" class="btn btn-primary" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+        <a href="{{ URL::to('ilanTeklifVer', array($ilan->ilan_id), false) }}"><button type="button" class="btn btn-primary" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
         <hr>
     @endforeach
 {{$ilanlar->links()}}
