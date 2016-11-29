@@ -8,19 +8,15 @@
     <title>Tamrekabet</title>  
  
     <!--link rel="shortcut icon" href="" mce_href="" /--sayfa köşesine koyulacak logo yeri-->
-    <script src="{{asset('kariyerJS/one.js')}}"></script>
+    <!--script src="{{asset('kariyerJS/one.js')}}"></script-->
     <link href="{{asset('kariyerCss/five.css')}}" rel="stylesheet"/>
     <link href="{{asset('kariyerCss/one.css')}}" rel="stylesheet"/>
     <link href="{{asset('kariyerCss/two.css')}}" rel="stylesheet"/>
     <link href="{{asset('kariyerCss/three.css')}}" rel="stylesheet"/>
     <link href="{{asset('kariyerCss/four.css')}}" rel="stylesheet"/>
-    <script src="{{asset('kariyeJS/two.js')}}"></script>
-
+    <script src="{{asset('kariyerJS/two.js')}}"></script>
 
 </head>
-
-
-
 
 <body class="header-static">
  
@@ -116,7 +112,7 @@
             <!-- title -->
              <?php $ilan = DB::table('ilanlar')->count();?>
                     <h1>
-                        Senin için  burada {{$ilan}} ilan var!
+                        Sizin için  burada {{$ilan}} ilan var!
                     </h1>
             <!-- search area -->
             <div class="search-area">
@@ -143,7 +139,7 @@
                     <!-- button -->
                     <div class="button">
                         <a id="btnFindWork" href="" onclick="">
-                            İŞ BUL
+                            İLAN BUL
                         </a>
                     </div>
                 </div>
@@ -161,7 +157,7 @@
     <section class="featured-jobs " >
         <div class=" wrapper">
         <!-- title -->
-        <h2>ÖNE ÇIKAN İŞ İLANLARI</h2>
+        <h2>ÖNE ÇIKAN İLANLAR</h2>
         <!-- rotator -->
         <div class="rotator">
          
