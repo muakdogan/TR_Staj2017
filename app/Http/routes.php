@@ -341,7 +341,8 @@ Route::get('/firmaOnay/{id}', function ($id) {
                  
                        $basvuruControl = DB::table('teklifler')
                         ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
-                        ->where( 'teklifler.ilan_id', '=', $ilan_id);
+                        ->where( 'teklifler.ilan_id', '=', $ilan_id)
+                        ->where( 'teklifler.firma_id', '=', $firma_id);
                  
                         
                      $basvuruControl=$basvuruControl->get();
