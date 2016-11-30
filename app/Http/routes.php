@@ -335,14 +335,14 @@ Route::get('/firmaOnay/{id}', function ($id) {
      
      Route::get('/basvuruControl/',function (){
           
-                
+               $firma_id = session()->get('firma_id'); 
+                                    
                 $ilan_id = Input::get('ilan_id');
                
-                 
                        $basvuruControl = DB::table('teklifler')
-                        ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
-                        ->where( 'teklifler.ilan_id', '=', $ilan_id)
-                        ->where( 'teklifler.firma_id', '=', $firma_id);
+                       
+                        ->where( 'teklifler.ilan_id', '=', $ilan_id);
+                        //->where( 'teklifler.firma_id', '=', $firma_id);
                  
                         
                      $basvuruControl=$basvuruControl->get();
