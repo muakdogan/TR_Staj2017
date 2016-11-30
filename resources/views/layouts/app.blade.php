@@ -60,8 +60,10 @@
                     </li>
                    @else
                         <li class="dropdown">
+                            <?php $firma_id = session()->get('firma_id'); 
+                                    ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}<span class="caret"></span>
+                               {{ Auth::user()->name }}/ {{$firma_id}}<span class="caret"></span>
                             </a>
                            
                             <ul class="dropdown-menu">
@@ -73,7 +75,7 @@
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
-                                        <li ><a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id), false)}}">{{$kullanicifirma->adi}}</a></li>
+                                            <li ><a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id),false)}}" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                         
                                         </ul>
                                     @endforeach
@@ -118,5 +120,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    <script>
+        $('.firmaSec').on('click', function() {
+        var selected = $(this).attr('name');
+        $.ajax({
+            type:"GET",
+             url: "../set_session",
+             data: { role: selected },
+             }).done(function(data){
+                        $('#myModalSirketListe').modal('toggle');
+                        console.log(data);
+                        alert(data);                
+                        }).fail(function(){ 
+                            alert('Yüklenemiyor !!!  ');
+                        });
+        
+});
+    </script>
 </body>
 </html>

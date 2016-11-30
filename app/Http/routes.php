@@ -468,16 +468,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
     response($firma_id);
     });
     
- /////////////////////////Teklif Ara ///////////////////////////////////   
-Route::get('teklifAra' ,function () {
-    
-    $ilan_id = Input::get('ilan_id');
-    $firma_id = Input::get('firma_id');
-    $teklifler = App\Teklif::all()->where('ilan_id', $ilan_id)->where('firma_id', id)->get();
-    response($teklifler);
-        
-        
-    }); 
+ 
 //////////////////////////////////////teklifGor//////////////////////
     Route::get('teklifGor/{id}/{ilanid}' ,function ($id,$ilanid) {
         $firma = Firma::find($id);
@@ -486,7 +477,7 @@ Route::get('teklifAra' ,function () {
         
     }); 
 /////////////////////////////////////teklif Gönder /////////////////////////////////
-    Route::post('/teklifGonder/{firma_id}/{ilan_id}' ,function ($firma_id,$ilan_id,Request $request) {
+    Route::post('/teklifGonder/{firma_id}/{ilan_id}/{kullanici_id}' ,function ($firma_id,$ilan_id,$kullanici_id,Request $request) {
         
         $now = new \DateTime();
         
@@ -558,7 +549,7 @@ Route::get('teklifAra' ,function () {
                 $ilan_hizmet_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
                 $ilan_hizmet_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_hizmet_teklifler->tarih= $now;
-                $ilan_hizmet_teklifler->para_birimleri_id=$ilan_hizmet->miktar_birim_id;
+                $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
                 $ilan_hizmet_teklifler->firma_kullanicilar_id=1;
                 $ilan_hizmet_teklifler->save();
                 $i++;
@@ -604,11 +595,15 @@ Route::get('teklifAra' ,function () {
                 $i++;
             }
         }
+         
+        $firma_kullanici = DB::table('firma_kullanicilar')->where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->get();
+        //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
         $teklifHareket = new App\TeklifHareket;
         $teklifHareket->kdv_haric_fiyat=$kdvsizFiyatToplam;
         $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
         $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
         $teklifHareket->tarih = $now;
+        $teklifHareket->firma_kullanicilar_id=$firma_kullanici->id;
         $teklif->teklif_hareketler()->save($teklifHareket);
         
        return Redirect::to('firmaIslemleri/'.$firma_id);
