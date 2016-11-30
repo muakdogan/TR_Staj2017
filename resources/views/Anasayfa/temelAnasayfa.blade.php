@@ -8,7 +8,7 @@
     <title>Tamrekabet</title>  
  
     <!--link rel="shortcut icon" href="" mce_href="" /--sayfa köşesine koyulacak logo yeri-->
-    <!--script src="{{asset('kariyerJS/one.js')}}"></script-->
+    <script src="{{asset('kariyerJS/one.js')}}"></script>
     <link href="{{asset('kariyerCss/five.css')}}" rel="stylesheet"/>
     <link href="{{asset('kariyerCss/one.css')}}" rel="stylesheet"/>
     <link href="{{asset('kariyerCss/two.css')}}" rel="stylesheet"/>

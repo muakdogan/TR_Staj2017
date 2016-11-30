@@ -273,7 +273,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         
     });
 
-     Route::get('/basvuruDetay/',function (){
+   Route::get('/basvuruDetay/',function (){
           $teklifler =  \App\Teklif::all();
                 
                //$kullanici =  \App\Kullanici::find($kul_id);
@@ -332,13 +332,31 @@ Route::get('/firmaOnay/{id}', function ($id) {
                   
                         
      });
-   
+     
+     Route::get('/basvuruControl/',function (){
+          
+                
+                $ilan_id = Input::get('ilan_id');
+               
+                 
+                       $basvuruControl = DB::table('teklifler')
+                        ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
+                        ->where( 'teklifler.ilan_id', '=', $ilan_id);
+                 
+                        
+                     $basvuruControl=$basvuruControl->get();
+          
+                 
+       
+               return Response::json($basvuruControl);
+                     
+     });
 
    Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
         //$firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
-       
+     
         return view('Firma.ilan.ilanTeklifVer')->with('ilan', $ilan)->with('birimler',$birimler);
            
 
