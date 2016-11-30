@@ -510,7 +510,7 @@ $('.teklifGonder').on('click', function() {
     alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
 });
 $('.firmaButton').on('click', function() {
-    var selected = $("#radioDiv input[type='radio']:checked").val();
+   var selected = $("#radioDiv input[type='radio']:checked").val();
     $.ajax({
         type:"GET",
          url: "../set_session",
@@ -525,9 +525,12 @@ $('.firmaButton').on('click', function() {
         
 });
 $(document).ready(function() {
-    $('#myModalSirketListe').modal({
-                                        show: 'true'
-                                    });
+    var session = "{{session()->get('firma_id')}}";
+    if(session === null){
+        $('#myModalSirketListe').modal({
+            show: 'true'
+        });
+    }
     var ilan_turu='{{$ilan->ilan_turu}}';
     var sozlesme_turu='{{$ilan->sozlesme_turu}}';
  

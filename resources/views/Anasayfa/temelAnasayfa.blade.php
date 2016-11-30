@@ -76,7 +76,7 @@
                                    ?>
                                    @foreach($kullanici->firmalar as $kullanicifirma)
                                    <li>
-                                       <a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id), false)}}"  onclick="">{{$kullanicifirma->adi}}</a>
+                                        <li ><a href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                    </li>
                                    @endforeach
 
@@ -518,6 +518,22 @@
     <!--script src="{{asset('kariyerJS/four.js')}}"></script-->
     <!--script src="{{asset('kariyerJS/five.js')}}"></script-->
     <script src="{{asset('kariyerJS/six.js')}}"></script>
-
+    <script>
+        $('.firmaSec').on('click', function() {
+        var selected = $(this).attr('name');
+        $.ajax({
+            type:"GET",
+             url: "set_session",
+             data: { role: selected },
+             }).done(function(data){
+                        console.log(data);
+                        alert(data);                
+                        location.href="firmaIslemleri/"+selected;
+                        }).fail(function(){ 
+                            alert('Yüklenemiyor !!!  ');
+                        });
+        
+});
+    </script>
 </body>
 </html>
