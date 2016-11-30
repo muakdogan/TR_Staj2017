@@ -57,14 +57,10 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse4" class="panel-collapse collapse">
                           <div class="panel-body">
-                               <?php 
-                                   
-                                            $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
-                                            foreach($kullanici->firmalar as $kullaniciFirma){
-                                                $kullaniciFirmaID = $kullaniciFirma->id;
-                                            }
-                                    ?>
-                            {{ Form::open(array('url'=>'teklifGonder/'. $kullaniciFirmaID .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}  
+                                <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}  
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -148,9 +144,11 @@ tr:nth-child(even) {
                                           </td>
                                         </tr>
                                         </tbody>
-                                       
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'. $kullaniciFirmaID.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                            <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
                                 {!! Form::close() !!}
                             </div>
                       </div>
@@ -162,8 +160,10 @@ tr:nth-child(even) {
                           </h4>
                       </div>
                       <div id="collapse5" class="panel-collapse collapse">
-                          <div class="panel-body">
-                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
+                          <div class="panel-body"> <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -242,7 +242,8 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                              
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
                                 {!! Form::close() !!}        
                           </div>
                       </div>
@@ -254,8 +255,10 @@ tr:nth-child(even) {
                           </h4>
                       </div>
                       <div id="collapse6" class="panel-collapse collapse">
-                          <div class="panel-body">
-                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
+                          <div class="panel-body"> <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -322,7 +325,8 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                             
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
                                 {!! Form::close() !!}                         
                           </div>
                       </div>
@@ -335,7 +339,10 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse7" class="panel-collapse collapse">
                           <div class="panel-body">
-                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
+                              <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -406,8 +413,8 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                              <?php $firma_id = session()->get('firma_id'); ?>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id,'class'=>'btn btn-danger teklifGonder')) !!}
+                              
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger teklifGonder')) !!}
                                 {!! Form::close() !!}                         
                           </div>
                       </div>
