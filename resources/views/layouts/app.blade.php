@@ -75,7 +75,7 @@
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
-                                            <li ><a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id),false)}}" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
+                                            <li ><a href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                         
                                         </ul>
                                     @endforeach
@@ -123,14 +123,15 @@
     <script>
         $('.firmaSec').on('click', function() {
         var selected = $(this).attr('name');
+        var firma_id = 24;
         $.ajax({
             type:"GET",
              url: "../set_session",
              data: { role: selected },
              }).done(function(data){
-                        $('#myModalSirketListe').modal('toggle');
                         console.log(data);
                         alert(data);                
+                       
                         }).fail(function(){ 
                             alert('Yüklenemiyor !!!  ');
                         });

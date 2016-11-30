@@ -577,7 +577,6 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $i++;
             }
         }
-         
         $firma_kullanici = DB::table('firma_kullanicilar')->where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->get();
         //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
         $teklifHareket = new App\TeklifHareket;
