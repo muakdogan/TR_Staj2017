@@ -593,7 +593,11 @@ Route::get('/firmaOnay/{id}', function ($id) {
             
     }); 
 
-
+Route::get('ilanDetay', function () {
+    $ilan_id = Input::get('ilan_id');
+    $ilan = Ilan::find($ilan_id);
+    return Response::json($ilan);
+});
 
 Route::get('/ajax-subcat', function (Request $request) {
     
