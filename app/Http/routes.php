@@ -16,9 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
-Route::controllers([
-   'password' => 'Auth\PasswordController',
-]);
+
 Route::get('/anasayfa', function () {
     return view('welcome');
 });
@@ -275,7 +273,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         
     });
 
-     Route::get('/basvuruDetay/',function (){
+   Route::get('/basvuruDetay/',function (){
           $teklifler =  \App\Teklif::all();
                 
                //$kullanici =  \App\Kullanici::find($kul_id);
@@ -334,13 +332,39 @@ Route::get('/firmaOnay/{id}', function ($id) {
                   
                         
      });
-   
+     
+     Route::get('/basvuruControl/',function (){
+          
+        $firma_id = session()->get('firma_id');                  
+        $ilan_id = Input::get('ilan_id');
+        
+        $sektorler =  \App\FirmaSektor::where('firma_sektorler.firma_id', '=',session()->get('firma_id'))
+            ->select('sektor_id');
+        
+        $sektorler = $sektorler->get()->toArray();
+        //$sektorler = $sektorler->to_array();
+               
+        $basvuruControl = DB::table('teklifler')
+            ->join('firmalar', 'firmalar.id', '=', 'teklifler.firma_id')
+            ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
+            ->whereIn('ilanlar.firma_sektor', $sektorler) 
+            ->where('teklifler.ilan_id', '=', $ilan_id)
+            ->where('teklifler.firma_id', '=', $firma_id);
+
+
+        $basvuruControl = $basvuruControl->count();
+
+
+
+        return Response::json($basvuruControl);
+                     
+     });
 
    Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
         //$firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
-       
+     
         return view('Firma.ilan.ilanTeklifVer')->with('ilan', $ilan)->with('birimler',$birimler);
            
 

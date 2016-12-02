@@ -21,7 +21,7 @@ class IlanController extends Controller
         $firma=  Firma::all();
         $sektorler= Sektor::all();
         $odeme_turleri= OdemeTuru::all();
-        
+          $teklifler= \App\Teklif::all();
         $ilanlar = DB::table('ilanlar')
                 ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
@@ -85,7 +85,7 @@ class IlanController extends Controller
         if (Request::ajax()) {
             return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar))->render());
         }
-        return View::make('Firma.ilan.deneme')-> with('ilanlar',$ilanlar)->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)->with('firma',$firma);
+        return View::make('Firma.ilan.deneme')-> with('ilanlar',$ilanlar)->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)->with('firma',$firma)->with('teklifler',$teklifler);
     
     }
 }

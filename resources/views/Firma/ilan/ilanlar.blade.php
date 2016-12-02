@@ -28,10 +28,11 @@
         <p>{{$ilan->iladi}}</p>
         <p>{{$ilan->yayin_tarihi}}</p>
         
-        <a href="{{ URL::to('ilanTeklifVer', array($ilan->ilan_id), false) }}"><button type="button" class="btn btn-primary" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+       <button type="button" class="btn btn-primary" id="{{$ilan->ilan_id}}" name="{{$ilan->ilan_id}}" style='float:right'>Başvur</button><br><br>
         <hr>
     </div>
     @endforeach
+    
 {{$ilanlar->links()}}
 
 <script>
