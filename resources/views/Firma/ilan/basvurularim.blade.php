@@ -206,16 +206,13 @@ tr:nth-child(even) {
        $(".btn-info").click(function(){
 
                  detay=$(this).attr("name");
-                       alert("hfdsfhsd");
-                       alert(detay);
-                       alert(control);
+                      
                         func();
        });
        
  
     function func(){
-        
-            alert("mmm");                 
+                    
             $.ajax({
             type:"GET",
             url:"../basvuruDetay",
@@ -225,6 +222,49 @@ tr:nth-child(even) {
             cache: false,
             success: function(data){
             console.log(data);
+            
+            
+            if(control=='Hizmet'){
+                  
+                                                             
+                    $("#sira").empty();
+                    $("#adi").empty();
+                    $("#fiyat_standart").empty();
+                    $("#fiyat_standart_birim").empty();
+                    $("#miktar").empty();
+                    $("#miktar_birimi").empty();
+                    $("#ilan_adi").empty();
+                    
+                }
+                else if(control=='Mal'){
+                    $("#sira").empty();
+                    $("#marka").empty();
+                    $("#model").empty();
+                    $("#adi").empty();
+                    $("#ambalaj").empty();
+                    $("#miktar").empty();
+                    $("#birim").empty();
+                    $("#ilan_adi").empty();
+                    
+                }
+                 else  if(control=='Gotürü Bedel'){
+                     
+                                                             
+                    $("#sira").empty();
+                    $("#isin_adi").empty();
+                    $("#miktar_turu").empty();
+                    $("#ilan_adi").empty();
+                    
+                    
+                }
+                else  if(control=='Yapim İşi'){
+                     
+                     $("#sira").empty;
+                    $("#adi").empty();
+                    $("#miktar").empty();
+                    $("#birim_id").empty();
+                    $("#ilan_adi").empty();
+                }
             
             
             for(var key=0; key <Object.keys(data).length;key++)

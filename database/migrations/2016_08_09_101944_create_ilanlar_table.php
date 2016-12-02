@@ -17,7 +17,7 @@ class CreateIlanlarTable extends Migration {
             $table->integer('firma_id')->unsigned();
             $table->foreign('firma_id')->references('id')->on('firmalar')->onDelete('cascade');
             $table->string('firma_adi_gizli');
-            $table->string('firma_sektor');
+            $table->integer('firma_sektor');
             $table->string('adi');
             $table->string('aciklama');
             $table->date('yayin_tarihi');

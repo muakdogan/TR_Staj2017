@@ -63,7 +63,7 @@
                             <?php $firma_id = session()->get('firma_id'); 
                                     ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}/ {{$firma_id}}<span class="caret"></span>
+                               {{ Auth::user()->name }}/{{$firma_id}}<span class="caret"></span>
                             </a>
                            
                             <ul class="dropdown-menu">
