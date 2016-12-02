@@ -335,21 +335,28 @@ Route::get('/firmaOnay/{id}', function ($id) {
      
      Route::get('/basvuruControl/',function (){
           
-               $firma_id = session()->get('firma_id'); 
-                                    
-                $ilan_id = Input::get('ilan_id');
+        $firma_id = session()->get('firma_id');                  
+        $ilan_id = Input::get('ilan_id');
+        
+        $sektorler =  \App\FirmaSektor::where('firma_sektorler.firma_id', '=',session()->get('firma_id'))
+            ->select('sektor_id');
+        
+        $sektorler = $sektorler->get()->toArray();
+        //$sektorler = $sektorler->to_array();
                
-                       $basvuruControl = DB::table('teklifler')
-                       
-                        ->where( 'teklifler.ilan_id', '=', $ilan_id);
-                        //->where( 'teklifler.firma_id', '=', $firma_id);
-                 
-                        
-                     $basvuruControl=$basvuruControl->get();
-          
-                 
-       
-               return Response::json($basvuruControl);
+        $basvuruControl = DB::table('teklifler')
+            ->join('firmalar', 'firmalar.id', '=', 'teklifler.firma_id')
+            ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
+            ->whereIn('ilanlar.firma_sektor', $sektorler) 
+            ->where('teklifler.ilan_id', '=', $ilan_id)
+            ->where('teklifler.firma_id', '=', $firma_id);
+
+
+        $basvuruControl = $basvuruControl->count();
+
+
+
+        return Response::json($basvuruControl);
                      
      });
 

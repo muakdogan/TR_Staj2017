@@ -42,10 +42,10 @@
             success: function(data){
             console.log(data);
             alert("mdnfjkdn");
-           if(data==null){
+           if(data==0){
                
                
-             window.location.href="ilanTeklifVer"+ilan_id;
+             window.location.href="ilanTeklifVer/"+ilan_id;
               
                
            }
