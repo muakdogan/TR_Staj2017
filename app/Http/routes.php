@@ -21,13 +21,13 @@ Route::get('/anasayfa', function () {
     return view('welcome');
 });
 
+Route::get('/logout','Auth\AuthController@getLogout');
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
     Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
     Route::post('/admin/login','AdminAuth\AuthController@login');
     Route::get('/admin/logout','AdminAuth\AuthController@logout');
-
     // Registration Routes...
     Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');
     Route::post('admin/register', 'AdminAuth\AuthController@register');
@@ -470,10 +470,12 @@ Route::get('/firmaOnay/{id}', function ($id) {
  /////////////////////////////////////SET SESSION//////////////////////
  Route::get('/set_session' ,function () {
     
-    $firma_id = Input::get('role');
-    Session::set('firma_id', $firma_id);
+    $firmaId = Input::get('role');
+    $firmaAdi = Firma::find($firmaId);
+    Session::set('firma_id', $firmaId);
+    Session::set('firma_adi', $firmaAdi->adi);
     
-    response($firma_id);
+    return;
     });
     
  

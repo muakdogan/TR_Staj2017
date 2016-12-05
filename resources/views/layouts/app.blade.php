@@ -60,32 +60,26 @@
                     </li>
                    @else
                         <li class="dropdown">
-                            <?php $firma_id = session()->get('firma_id');
-                                  $firma = App\Firma::find($firma_id);
-                                    ?>
+                            <?php $firmaAdi = session()->get('firma_adi');
+                            ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}/ {{$firma->adi}}<span class="caret"></span>
-                            </a>
-                           
+                               {{ Auth::user()->name }}/ {{$firmaAdi}}<span class="caret"></span>
+                            </a>                           
                             <ul class="dropdown-menu">
                                 <li class="dropdown"><a class="dropdown-toggle yazi" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Firma İşlemleri</a>
-                                    <?php 
-                                   
-                                     $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
-                                     $kullaniciF=$kullanici->firmalar()->where('onay','onay')->get();
+                                    <?php                                   
+                                        $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                        $kullaniciF=$kullanici->firmalar()->where('onay','onay')->get();
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
                                             <li ><a href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
-                                        
                                         </ul>
                                     @endforeach
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
                                 <li><a href="{{ url('/logout') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>
-                            
-                            
                         </li>
                       <li>
                           <a href="#"><img src="{{asset('images/user.png')}}"></a>
@@ -124,7 +118,6 @@
     <script>
         $('.firmaSec').on('click', function() {
         var selected = $(this).attr('name');
-        var firma_id = 24;
         $.ajax({
             type:"GET",
              url: "../set_session",

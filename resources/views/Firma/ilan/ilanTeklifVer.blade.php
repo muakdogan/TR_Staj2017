@@ -116,8 +116,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                               
                                              </select>
                                           </td>
                                           <td>
@@ -213,8 +212,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                                
                                              </select>
                                           </td>
                                           <td>
@@ -266,8 +264,7 @@ tr:nth-child(even) {
                                           if (!$firma->ilanlar)
                                               $firma->ilanlar = new App\Ilan();
                                           if (!$firma->ilanlar->ilan_goturu_bedeller)
-                                              $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
-                                     
+                                              $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();                                     
                                           ?>
                                       <tr>
                                           <th>Sıra:</th>
@@ -296,8 +293,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                                
                                              </select>
                                           </td>
                                           <td>
@@ -384,8 +380,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                                
                                              </select>
                                           </td>
                                           <td>
@@ -513,28 +508,27 @@ $('.firmaButton').on('click', function() {
    var selected = $("#radioDiv input[type='radio']:checked").val();
     $.ajax({
         type:"GET",
-         url: "../set_session",
-         data: { role: selected },
-         }).done(function(data){
-                    $('#myModalSirketListe').modal('toggle');
-                    console.log(data);
-                    alert(data);                
-                    }).fail(function(){ 
-                        alert('Yüklenemiyor !!!  ');
-                    });
+        url: "../set_session",
+        data: { role: selected },
+        }).done(function(data){
+            $('#myModalSirketListe').modal('toggle');
+            location.reload();
+        }).fail(function(){ 
+            alert('Yüklenemiyor !!!  ');
+        });
         
 });
 $(document).ready(function() {
-    var session = "{{session()->get('firma_id')}}";
-    if(session === null){
+    alert({{session()->get('firma_id')}});
+    var firmaId = "{{session()->get('firma_id')}}";
+    alert(firmaId);
+    if(firmaId === ""){
         $('#myModalSirketListe').modal({
             show: 'true'
         });
     }
     var ilan_turu='{{$ilan->ilan_turu}}';
-    var sozlesme_turu='{{$ilan->sozlesme_turu}}';
- 
-    
+    var sozlesme_turu='{{$ilan->sozlesme_turu}}';    
             if(ilan_turu=="") 
              {
                           $('#hizmet').hide()
