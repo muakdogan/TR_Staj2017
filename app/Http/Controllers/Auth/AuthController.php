@@ -33,7 +33,13 @@ class AuthController extends Controller
              protected $redirectPath = '/';
            
             //protected $redirectTo = '/';
-            
+             
+             
+    public function getLogout(){
+        Auth::logout();
+        Session::flush();
+        return Redirect::to('/');
+    }        
             
             
 
