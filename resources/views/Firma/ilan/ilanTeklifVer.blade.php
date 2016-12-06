@@ -57,14 +57,10 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse4" class="panel-collapse collapse">
                           <div class="panel-body">
-                               <?php 
-                                   
-                                            $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
-                                            foreach($kullanici->firmalar as $kullaniciFirma){
-                                                $kullaniciFirmaID = $kullaniciFirma->id;
-                                            }
-                                    ?>
-                            {{ Form::open(array('url'=>'teklifGonder/'. $kullaniciFirmaID .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}  
+                                <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}  
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -120,8 +116,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                               
                                              </select>
                                           </td>
                                           <td>
@@ -148,9 +143,11 @@ tr:nth-child(even) {
                                           </td>
                                         </tr>
                                         </tbody>
-                                       
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'. $kullaniciFirmaID.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                            <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
                                 {!! Form::close() !!}
                             </div>
                       </div>
@@ -162,8 +159,10 @@ tr:nth-child(even) {
                           </h4>
                       </div>
                       <div id="collapse5" class="panel-collapse collapse">
-                          <div class="panel-body">
-                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
+                          <div class="panel-body"> <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -213,8 +212,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                                
                                              </select>
                                           </td>
                                           <td>
@@ -242,7 +240,8 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                              
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
                                 {!! Form::close() !!}        
                           </div>
                       </div>
@@ -254,8 +253,10 @@ tr:nth-child(even) {
                           </h4>
                       </div>
                       <div id="collapse6" class="panel-collapse collapse">
-                          <div class="panel-body">
-                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
+                          <div class="panel-body"> <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -263,8 +264,7 @@ tr:nth-child(even) {
                                           if (!$firma->ilanlar)
                                               $firma->ilanlar = new App\Ilan();
                                           if (!$firma->ilanlar->ilan_goturu_bedeller)
-                                              $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
-                                     
+                                              $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();                                     
                                           ?>
                                       <tr>
                                           <th>Sıra:</th>
@@ -293,8 +293,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                                
                                              </select>
                                           </td>
                                           <td>
@@ -322,7 +321,8 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
+                             
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
                                 {!! Form::close() !!}                         
                           </div>
                       </div>
@@ -335,7 +335,10 @@ tr:nth-child(even) {
                       </div>
                       <div id="collapse7" class="panel-collapse collapse">
                           <div class="panel-body">
-                              {{ Form::open(array('url'=>'teklifGonder/'.$firma->id .'/'.$ilan->id,'method' => 'POST', 'files'=>true)) }}
+                              <?php $firma_id = session()->get('firma_id'); 
+                                    $kullanici_id=Auth::user()->kullanici_id;
+                              ?>
+                              {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}
                               <table class="table" >
                                   <thead id="tasks-list" name="tasks-list">
                                       <tr id="firma{{$firma->id}}">
@@ -377,8 +380,7 @@ tr:nth-child(even) {
                                                                  <option  value="0" >%0</option>
                                                                  <option  value="1" >%1</option>
                                                                  <option  value="8" >%8</option>
-                                                                 <option  value="18">%18</option>
-                                                                
+                                                                 <option  value="18">%18</option>                                                                
                                              </select>
                                           </td>
                                           <td>
@@ -406,8 +408,8 @@ tr:nth-child(even) {
                                         </tr>
                                         </tbody>
                               </table>
-                              <?php $firma_id = session()->get('firma_id'); ?>
-                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id,'class'=>'btn btn-danger teklifGonder')) !!}
+                              
+                                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger teklifGonder')) !!}
                                 {!! Form::close() !!}                         
                           </div>
                       </div>
@@ -503,28 +505,30 @@ $('.teklifGonder').on('click', function() {
     alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
 });
 $('.firmaButton').on('click', function() {
-    var selected = $("#radioDiv input[type='radio']:checked").val();
+   var selected = $("#radioDiv input[type='radio']:checked").val();
     $.ajax({
         type:"GET",
-         url: "../set_session",
-         data: { role: selected },
-         }).done(function(data){
-                    $('#myModalSirketListe').modal('toggle');
-                    console.log(data);
-                    alert(data);                
-                    }).fail(function(){ 
-                        alert('Yüklenemiyor !!!  ');
-                    });
+        url: "../set_session",
+        data: { role: selected },
+        }).done(function(data){
+            $('#myModalSirketListe').modal('toggle');
+            location.reload();
+        }).fail(function(){ 
+            alert('Yüklenemiyor !!!  ');
+        });
         
 });
 $(document).ready(function() {
-    $('#myModalSirketListe').modal({
-                                        show: 'true'
-                                    });
+    alert({{session()->get('firma_id')}});
+    var firmaId = "{{session()->get('firma_id')}}";
+    alert(firmaId);
+    if(firmaId === ""){
+        $('#myModalSirketListe').modal({
+            show: 'true'
+        });
+    }
     var ilan_turu='{{$ilan->ilan_turu}}';
-    var sozlesme_turu='{{$ilan->sozlesme_turu}}';
- 
-    
+    var sozlesme_turu='{{$ilan->sozlesme_turu}}';    
             if(ilan_turu=="") 
              {
                           $('#hizmet').hide()

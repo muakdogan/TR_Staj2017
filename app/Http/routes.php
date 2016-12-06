@@ -21,13 +21,13 @@ Route::get('/anasayfa', function () {
     return view('welcome');
 });
 
+Route::get('/logout','Auth\AuthController@getLogout');
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
     Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
     Route::post('/admin/login','AdminAuth\AuthController@login');
     Route::get('/admin/logout','AdminAuth\AuthController@logout');
-
     // Registration Routes...
     Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');
     Route::post('admin/register', 'AdminAuth\AuthController@register');
@@ -273,7 +273,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         
     });
 
-     Route::get('/basvuruDetay/',function (){
+   Route::get('/basvuruDetay/',function (){
           $teklifler =  \App\Teklif::all();
                 
                //$kullanici =  \App\Kullanici::find($kul_id);
@@ -332,13 +332,39 @@ Route::get('/firmaOnay/{id}', function ($id) {
                   
                         
      });
-   
+     
+     Route::get('/basvuruControl/',function (){
+          
+        $firma_id = session()->get('firma_id');                  
+        $ilan_id = Input::get('ilan_id');
+        
+        $sektorler =  \App\FirmaSektor::where('firma_sektorler.firma_id', '=',session()->get('firma_id'))
+            ->select('sektor_id');
+        
+        $sektorler = $sektorler->get()->toArray();
+        //$sektorler = $sektorler->to_array();
+               
+        $basvuruControl = DB::table('teklifler')
+            ->join('firmalar', 'firmalar.id', '=', 'teklifler.firma_id')
+            ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
+            ->whereIn('ilanlar.firma_sektor', $sektorler) 
+            ->where('teklifler.ilan_id', '=', $ilan_id)
+            ->where('teklifler.firma_id', '=', $firma_id);
+
+
+        $basvuruControl = $basvuruControl->count();
+
+
+
+        return Response::json($basvuruControl);
+                     
+     });
 
    Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
         //$firma = Firma::find($id);
         $ilan = Ilan::find($ilan_id);
         $birimler=  \App\Birim::all();
-       
+     
         return view('Firma.ilan.ilanTeklifVer')->with('ilan', $ilan)->with('birimler',$birimler);
            
 
@@ -444,22 +470,15 @@ Route::get('/firmaOnay/{id}', function ($id) {
  /////////////////////////////////////SET SESSION//////////////////////
  Route::get('/set_session' ,function () {
     
-    $firma_id = Input::get('role');
-    Session::set('firma_id', $firma_id);
+    $firmaId = Input::get('role');
+    $firmaAdi = Firma::find($firmaId);
+    Session::set('firma_id', $firmaId);
+    Session::set('firma_adi', $firmaAdi->adi);
     
-    response($firma_id);
+    return;
     });
     
- /////////////////////////Teklif Ara ///////////////////////////////////   
-Route::get('teklifAra' ,function () {
-    
-    $ilan_id = Input::get('ilan_id');
-    $firma_id = Input::get('firma_id');
-    $teklifler = App\Teklif::all()->where('ilan_id', $ilan_id)->where('firma_id', id)->get();
-    response($teklifler);
-        
-        
-    }); 
+ 
 //////////////////////////////////////teklifGor//////////////////////
     Route::get('teklifGor/{id}/{ilanid}' ,function ($id,$ilanid) {
         $firma = Firma::find($id);
@@ -468,7 +487,7 @@ Route::get('teklifAra' ,function () {
         
     }); 
 /////////////////////////////////////teklif Gönder /////////////////////////////////
-    Route::post('/teklifGonder/{firma_id}/{ilan_id}' ,function ($firma_id,$ilan_id,Request $request) {
+    Route::post('/teklifGonder/{firma_id}/{ilan_id}/{kullanici_id}' ,function ($firma_id,$ilan_id,$kullanici_id,Request $request) {
         
         $now = new \DateTime();
         
@@ -540,7 +559,7 @@ Route::get('teklifAra' ,function () {
                 $ilan_hizmet_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
                 $ilan_hizmet_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_hizmet_teklifler->tarih= $now;
-                $ilan_hizmet_teklifler->para_birimleri_id=$ilan_hizmet->miktar_birim_id;
+                $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
                 $ilan_hizmet_teklifler->firma_kullanicilar_id=1;
                 $ilan_hizmet_teklifler->save();
                 $i++;
@@ -586,18 +605,25 @@ Route::get('teklifAra' ,function () {
                 $i++;
             }
         }
+        $firma_kullanici = DB::table('firma_kullanicilar')->where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->get();
+        //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
         $teklifHareket = new App\TeklifHareket;
         $teklifHareket->kdv_haric_fiyat=$kdvsizFiyatToplam;
         $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
         $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
         $teklifHareket->tarih = $now;
+        $teklifHareket->firma_kullanicilar_id=$firma_kullanici->id;
         $teklif->teklif_hareketler()->save($teklifHareket);
         
        return Redirect::to('firmaIslemleri/'.$firma_id);
             
     }); 
 
-
+Route::get('ilanDetay', function () {
+    $ilan_id = Input::get('ilan_id');
+    $ilan = Ilan::find($ilan_id);
+    return Response::json($ilan);
+});
 
 Route::get('/ajax-subcat', function (Request $request) {
     

@@ -150,8 +150,10 @@ window.requestAnimationFrame = window.requestAnimationFrame
                     </li>
                    @else
                         <li class="dropdown">
+                            <?php $firmaAdi = session()->get('firma_adi');
+                            ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}<span class="caret"></span>
+                               {{ Auth::user()->name }}/ {{$firmaAdi}}<span class="caret"></span>
                             </a>
                            
                             <ul class="dropdown-menu">
