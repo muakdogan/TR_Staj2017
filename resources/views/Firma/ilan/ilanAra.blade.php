@@ -330,6 +330,12 @@
                             getIlanlar(1);
                                             
                         }
+                        if($('#search').val() != null){
+                            $("#radioDiv3 input[type='radio']").each(function(){
+                                $(this).prop('checked', false);
+                            });
+                            $('#search').val(null);
+                        }
                         if(name.indexOf("bitiş") != -1){
                             alert("ezgi");
                             $(' input[type=date]').each( function resetDate(){
@@ -361,6 +367,7 @@
                         $("#multiSel"+key).append(html);                                     
                 }
                 $('#button').click(function(){
+                    doldurma($('#search').val());
                     getIlanlar(1);
                 });
                 $('#il_id').change(function(){
