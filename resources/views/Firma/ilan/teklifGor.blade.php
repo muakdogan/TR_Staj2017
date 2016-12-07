@@ -66,11 +66,8 @@ tr:nth-child(even) {
                           $birFirmayaAitTeklifler = $teklif->teklif_hareketler()->groupBY('teklif_id');
                         ?>
                             @foreach($teklifHareket as $teklifhareket)
-                            <?php  $kullanici = DB::table('firma_kullanicilar')
-                                    ->where('firma_kullanicilar.id',$teklifhareket->firma_kullanicilar_id)
-                                    ->join('kullanicilar', 'firma_kullanicilar.kullanici_id', '=', 'kullanicilar.id')
-                                    ->first();
-                                    $birFirmayaAitTeklifler->where('kullanici_id',$teklifhareket->firma_kullanicilar)->get();
+                            <?php  $kullanici = App\Kullanici::find($teklifhareket->kullanici_id);
+                                   $birFirmayaAitTeklifler->where('kullanici_id',$teklifhareket->kullanici_id)->get();
                            ?>
                             <tr>
                                 <td>{{$i}}</td>

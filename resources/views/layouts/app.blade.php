@@ -159,7 +159,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                     @endforeach
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
-                                <li><a href="{{ url('/logoutUser')}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
+                                <li><a href="{{ url('/sessionKill')}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>
                         </li>
                       <li>
