@@ -20,8 +20,12 @@ use Illuminate\Support\Facades\Mail\Mailer;
 Route::get('/anasayfa', function () {
     return view('welcome');
 });
+Route::get('/sessionKill', function () {
+        Auth::logout();
+        Session::flush();
+        return Redirect::to('/');
 
-Route::get('/logoutUser','Auth\AuthController@getLogout');
+}); 
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
