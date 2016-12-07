@@ -19,28 +19,17 @@
     <link href="{{asset('yeniTemplate/styles/custom.css')}}" rel="stylesheet" type="text/css" />
 
 
-      <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
    
-   
-
-
     <!-- Owl Carousel Assets -->
     <link href="{{asset('owl-carousel/owl.carousel.css')}}" rel="stylesheet">
     <link href="{{asset('owl-carousel/owl.theme.css')}}" rel="stylesheet">
-
-    <!-- Prettify -->
-     
-     
-        
-        
+   
 </head>
 <body id="pageBody">
- <script src="{{asset('assets/js/bootstrap-transition.js')}}"></script>
-<script src="{{asset('assets/js/bootstrap-tab.js')}}"></script>
-<script src="{{asset('assets/js/jquery-1.9.1.min.js')}}"></script> 
+
 <script src="{{asset('owl-carousel/owl.carousel.js')}}"></script>
-<script src="{{asset('assets/js/google-code-prettify/prettify.js')}}"></script>
-<script src="{{asset('assets/js/application.js')}}"></script>
+
 <script>
  $(document).ready(function() {
       $("#owl-demo").owlCarousel({
