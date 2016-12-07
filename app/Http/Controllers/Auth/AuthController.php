@@ -36,6 +36,7 @@ class AuthController extends Controller
              
              
     public function getLogout(){
+        $firma = Firma::find(1);
         Auth::logout();
         Session::flush();
         return Redirect::to('/');

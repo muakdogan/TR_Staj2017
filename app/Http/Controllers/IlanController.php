@@ -38,15 +38,23 @@ class IlanController extends Controller
         $tur = Input::get('tur');
         $usul= Input::get('usul');
         $radSearch= Input::get('radSearch');
-        $input= Str::lower(Input::get('input'));
+        $input= Input::get('input');
         $sozlesme= Input::get('sozles');
         $odeme= Input::get('odeme');
+        
         if($radSearch != NULL){
             if($radSearch == "tum"){
+                $sektorler = Sektor::all();
+                foreach ($sektorler as $sektor){
+                    if($sektor->adi == $input){
+                        $sektor_id = $sektor->id;
+                    }
+                }
                 $ilanlar->where('ilanlar.adi',$input )
                         ->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
                         ->orWhere('ilanlar.kapanma_tarihi', $input )
-                        ->orWhere('firmalar.adi',$keyword )
+                        ->orWhere('firmalar.adi',$input )
+                        ->orWhere('ilanlar.firma_sektor',$sektor_id)
                         ->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
             }
             else if($radSearch == "ilan_baslık"){
@@ -60,14 +68,15 @@ class IlanController extends Controller
             $ilanlar->where('adresler.il_id',$ilId);
         }
         if($keyword != NULL){
-            $ilanlar->join('firma_sektorler','firma_sektorler.firma_id','=','firma_sektorler.sektor_id')
-                    ->join('sektorler','sektorler.id','=','firma_sektorler.sektor_id')
-                    ->where('ilanlar.adi' ,$keyword )
+            $sektorler = Sektor::all();
+            foreach ($sektorler as $sektor){
+                if($sektor->adi == $keyword){
+                    $sektor_id = $sektor->id;
+                }
+            }
+            $ilanlar->where('ilanlar.adi' ,$keyword )
                     ->orWhere('firmalar.adi',$keyword )
-                    ->orWhere('sektorler.adi', $keyword);
-                        
-                        
-            
+                    ->orWhere('ilanlar.firma_sektor',$sektor_id);
         }
         if($il_id != NULL)
             {
