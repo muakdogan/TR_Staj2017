@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 <?php use App\IletisimBilgi; 
 use App\Il;?>
 

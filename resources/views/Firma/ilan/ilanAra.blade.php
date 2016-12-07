@@ -196,9 +196,9 @@
                            <input type="text" name="search" id="search" placeholder="Anahtar Kelime"><input type="button" id="button"  value="ARA">
                        </div>
                        <div>
-                          <input type="radio" name="gender" value="tum"> Tüm İlanda<br>
-                          <input type="radio" name="gender" value="ilan_baslık"> Sadece İlan Başlığında<br>
-                          <input type="radio" name="gender" value="firma"> Sadece Firma Adında Ara
+                          <input type="radio" name="searchBox" value="tum"> Tüm İlanda<br>
+                          <input type="radio" name="searchBox" value="ilan_baslık"> Sadece İlan Başlığında<br>
+                          <input type="radio" name="searchBox" value="firma"> Sadece Firma Adında Ara
                        </div>
                     </div>
                     <br>
@@ -473,7 +473,31 @@
                     $(document).on('click', '.pagination a', function (e){
                         getIlanlar($(this).attr('href').split('page=')[1]);
                         e.preventDefault();
-                    });                    
+                    });
+                    var sehirId = "{{$ilId}}";
+                    var keyword = "{{$keyword}}";
+                    
+                    if(sehirId != ""){
+                        jQuery('.mutliSelect input[type="checkbox"]').each(function(){
+                            if($(this).val() == sehirId ){
+                                var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
+                                    title = $(this).attr('name');
+                                var html = '<span title="' + title + '">' + title + '</span>';
+                                $(".hida").append(title+",");
+                                $(this).prop( "checked", true );
+                                doldurma(title);
+                            }
+                        });
+                    }
+                    if(keyword != ""){
+                        $("#search").val(keyword);
+                        doldurma(keyword);
+                        $("#radioDiv3 input[type='radio']").each(function(){
+                            if($(this).val() == "tum"){
+                                $(this).prop("checked",true);
+                            }
+                        });
+                    }
                 });
                 
                 function getIlanlar(page) {

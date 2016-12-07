@@ -18,16 +18,98 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
-      
-    <style>
-        .yazi{
+   
+     <style>
+          .yazi{
             font-family:"Times New Roman";
             
             background-color: #ccc;
                 
         }
-        
-    </style>
+
+
+
+div#header{
+  width: 100%;
+  height: 100px;
+  background: rgba(99,184,255,1);
+  margin: 0;
+  padding: 5px;
+  z-index:1080;
+}
+
+
+div#contentarea{
+  padding: 10px;
+}
+
+body.sticky div#header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+
+
+</style>
+<script>
+
+window.requestAnimationFrame = window.requestAnimationFrame
+                               || window.mozRequestAnimationFrame
+                               || window.webkitRequestAnimationFrame
+                               || window.msRequestAnimationFrame
+                               || function(f){return setTimeout(f, 1000/60)}
+
+
+;(function($){ // enclose everything in a immediately invoked function to make all variables and functions local
+
+	var $body,
+			$target,
+			targetoffsetTop,
+			resizetimer,
+			stickyclass= 'sticky'
+
+	function updateCoords(){
+		targetoffsetTop = $target.offset().top()
+	}
+
+	function makesticky(){
+		var scrollTop = $(document).scrollTop()
+		if (scrollTop >= targetoffsetTop){
+			if (!$body.hasClass(stickyclass)){
+				$body.addClass(stickyclass)
+			}
+		}
+		else{
+			if ($body.hasClass(stickyclass)){
+				$body.removeClass(stickyclass)
+			}
+		}
+	}
+
+	$(window).on('load', function(){
+		$body = $(document.body)
+		$target = $('#header')
+		updateCoords()
+		$(window).on('scroll', function(){
+			requestAnimationFrame(makesticky)
+		})
+		$(window).on('resize', function(){
+			clearTimeout(resizetimer)
+			resizetimer = setTimeout(function(){
+				$body.removeClass(stickyclass)
+				updateCoords()
+				makesticky()
+			}, 50)
+		})
+	})
+
+})(jQuery)
+
+
+
+</script>
+
     
 
 </head>
@@ -112,20 +194,18 @@
     </footer>
     </div>
     <!-- JavaScripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-    <script>
+     <script>
         $('.firmaSec').on('click', function() {
         var selected = $(this).attr('name');
         $.ajax({
             type:"GET",
-             url: "../set_session",
+             url: "./set_session",
              data: { role: selected },
              }).done(function(data){
                         console.log(data);
                         alert(data);                
-                       
+                        location.href="firmaIslemleri/"+selected;
                         }).fail(function(){ 
                             alert('Yüklenemiyor !!!  ');
                         });

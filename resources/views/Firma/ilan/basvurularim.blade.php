@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <br>
- <br>
+<br>
  @section('content')
   
  <style>
@@ -77,12 +77,13 @@ tr:nth-child(even) {
           
                  
                         $querys = DB::table('teklif_hareketler')
-                        ->join('firma_kullanicilar', 'firma_kullanicilar.id', '=', 'teklif_hareketler.firma_kullanicilar_id')
+                        ->join('firma_kullanicilar', 'firma_kullanicilar.kullanici_id', '=', 'teklif_hareketler.kullanici_id')
                         ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
                         ->join('teklifler', 'teklif_hareketler.teklif_id', '=', 'teklifler.id')
                         ->join('ilanlar', 'teklifler.ilan_id', '=', 'ilanlar.id')
                         ->join('firmalar', 'teklifler.firma_id', '=', 'firmalar.id')
-                        ->where( 'firma_kullanicilar.firma_id', '=', $firma->id)      
+                        ->where( 'firma_kullanicilar.firma_id', '=', $firma->id)  
+                             
                         ->select('firmalar.adi as firmaadi','ilanlar.adi as ilanadi','teklif_hareketler.*')        
                         ->orderBy('tarih','desc');
                       
@@ -274,43 +275,43 @@ tr:nth-child(even) {
                 if(control=='Hizmet'){
                   
                                                              
-                    $("#sira").append(data[key].sira);
-                    $("#adi").append(data[key].adi);
-                    $("#fiyat_standart").append(data[key].fiyat_standardi);
-                    $("#fiyat_standart_birim").append(data[key].adi);
-                    $("#miktar").append(data[key].miktar);
-                    $("#miktar_birimi").append(data[key].birimadi);
-                    $("#ilan_adi").append(data[key].ilanadi);
+                    $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
+                    $("#adi").append("<strong>Adı:</strong> "+data[key].adi);
+                    $("#fiyat_standart").append("<strong>Fiyat Standartı:</strong> "+data[key].fiyat_standardi);
+                    $("#fiyat_standart_birim").append("<strong>Fiyat Standartı Birimi:</strong> "+data[key].adi);
+                    $("#miktar").append("<strong>Miktar:</strong> "+data[key].miktar);
+                    $("#miktar_birimi").append("<strong>Miktar Birimi: </strong>"+data[key].birimadi);
+                    $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
                     
                 }
                 else if(control=='Mal'){
-                    $("#sira").append(data[key].sira);
-                    $("#marka").append(data[key].marka);
-                    $("#model").append(data[key].model);
-                    $("#adi").append(data[key].adi);
-                    $("#ambalaj").append(data[key].ambalaj);
-                    $("#miktar").append(data[key].miktar);
-                    $("#birim").append(data[key].birimadi);
-                    $("#ilan_adi").append(data[key].ilanadi);
+                    $("#sira").append("<strong>Sıra: </strong>"+data[key].sira);
+                    $("#marka").append("<strong>Marka:</strong> "+data[key].marka);
+                    $("#model").append("<strong>Model:</strong> "+data[key].model);
+                    $("#adi").append("<strong>Adı:</strong> "+data[key].adi);
+                    $("#ambalaj").append("<strong>Ambalaj:</strong> "+data[key].ambalaj);
+                    $("#miktar").append("<strong>Miktar:</strong> "+data[key].miktar);
+                    $("#birim").append("<strong>Birim:</strong> "+data[key].birimadi);
+                    $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
                     
                 }
                  else  if(control=='Gotürü Bedel'){
                      
                                                              
-                    $("#sira").append(data[key].sira);
-                    $("#isin_adi").append(data[key].isin_adi);
-                    $("#miktar_turu").append(data[key].miktar_turu);
-                    $("#ilan_adi").append(data[key].ilanadi);
+                    $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
+                    $("#isin_adi").append("<strong>İşin Adı:</strong> "+data[key].isin_adi);
+                    $("#miktar_turu").append("<strong>Miktar Türü: </strong>"+data[key].miktar_turu);
+                    $("#ilan_adi").append("<strong>İlan Adı:</strong> "+data[key].ilanadi);
                     
                     
                 }
                 else  if(control=='Yapim İşi'){
                      
-                     $("#sira").append(data[key].sira);
-                    $("#adi").append(data[key].adi);
-                    $("#miktar").append(data[key].miktar);
-                    $("#birim_id").append(data[key].birimadi);
-                    $("#ilan_adi").append(data[key].ilanadi);
+                    $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
+                    $("#adi").append("<strong>Adı: </strong>"+data[key].adi);
+                    $("#miktar").append("<strong>Miktar: </strong>"+data[key].miktar);
+                    $("#birim_id").append("<strong>Birimi:</strong> "+data[key].birimadi);
+                    $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
                 }
                
              }

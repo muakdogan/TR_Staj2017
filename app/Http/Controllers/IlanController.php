@@ -43,16 +43,17 @@ class IlanController extends Controller
         $odeme= Input::get('odeme');
         if($radSearch != NULL){
             if($radSearch == "tum"){
-                $ilanlar->where('LOWER(`ilanlar.adi`)' ,$input )->orWhere('LOWER(`ilanlar.usulu`) ',$input )
-                        ->orWhere('LOWER(`ilanlar.ilan_turu`) ','LIKE', '%' . $input . '%')->orWhere('LOWER(`ilanlar.yayin_tarihi`) ','LIKE', '%' . $input . '%')
-                        ->orWhere('LOWER(`ilanlar.kapanma_tarihi`) ','LIKE', '%' . $input . '%')
-                        ->orWhere('LOWER(`ilanlar.sozlesme_turu`) ','LIKE', '%' . $input . '%')->orWhere('LOWER(`ilanlar.usulu`) ','LIKE', '%' . $input . '%');
+                $ilanlar->where('ilanlar.adi',$input )
+                        ->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
+                        ->orWhere('ilanlar.kapanma_tarihi', $input )
+                        ->orWhere('firmalar.adi',$keyword )
+                        ->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
             }
             else if($radSearch == "ilan_baslık"){
-                $ilanlar->where('LOWER(`ilanlar.adi`) like ?', $input);
+                $ilanlar->where('ilanlar.adi', $input);
             }
             else{
-                $ilanlar->where('LOWER(`firmalar.adi`) like ?', $input);                
+                $ilanlar->where('firmalar.adi', $input);                
             }
         }
         if($ilId != NULL){
@@ -61,9 +62,9 @@ class IlanController extends Controller
         if($keyword != NULL){
             $ilanlar->join('firma_sektorler','firma_sektorler.firma_id','=','firma_sektorler.sektor_id')
                     ->join('sektorler','sektorler.id','=','firma_sektorler.sektor_id')
-                    ->where('LOWER(`ilanlar.adi`)' ,$keyword )
-                    ->orWhere('LOWER(`firmalar.adi`)','LIKE', '%' . $keyword . '%')
-                    ->orWhere('LOWER(`sektorler.adi`)','LIKE', '%' . $keyword . '%');
+                    ->where('ilanlar.adi' ,$keyword )
+                    ->orWhere('firmalar.adi',$keyword )
+                    ->orWhere('sektorler.adi', $keyword);
                         
                         
             
@@ -102,7 +103,7 @@ class IlanController extends Controller
         return View::make('Firma.ilan.ilanAra')-> with('ilanlar',$ilanlar)
                 ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
                 ->with('firma',$firma)->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('il',$ilId)->with('keyword',$keyword);
+                ->with('ilId',$ilId)->with('keyword',$keyword);
     
     }
 }

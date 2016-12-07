@@ -1,9 +1,8 @@
 @extends('layouts.app')
 <br>
- <br>
+<br>
  @section('content')
 
- 
  <style>
 table {
     font-family: arial, sans-serif;
