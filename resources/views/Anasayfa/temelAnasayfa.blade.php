@@ -115,40 +115,48 @@
                         Sizin için  burada {{$ilan}} ilan var!
                     </h1>
             <!-- search area -->
-            <div class="search-area">
+            {{ Form::open(array('url'=>'ilanAra','method' => 'POST', 'files'=>true)) }}
+                              
+                <div class="search-area">
                 <!-- find job -->
-                <div class="find-job">
-                    <!-- search -->
-                    <div class="search">
-                        <!-- city combo -->
-                        <div class="city-combo">
-                            <div class="select disable-selected">
-                                <select id="ulkesehirid1" name="" class="select2" data-placeholder="Şehir">
-                                    <option value=""></option>
-                                   
-                                </select>
-                                <input type="hidden" name="ulkesehirid" id="ulkesehirid" />
+                    <div class="find-job">
+                        <!-- search -->
+                        <div class="search">
+                            <!-- city combo -->
+                            <div class="city-combo">
+                                <div class="select disable-selected">
+                                    <select id="ulkesehirid1" name="ilAdi" class="select2" data-placeholder="Şehir">
+                                        <option value=""></option>
+                                        <?php $iller = App\Il::all(); ?>
+                                        @foreach($iller as $il)
+                                                   <option  value="{{$il->id}}" >{{$il->adi}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="ulkesehirid" id="ulkesehirid" />
+                                </div>
+                            </div>
+                            <!-- autocomplete -->
+                            <div class="autocomplete">
+                                <input name="keyword" id="" type="text" placeholder="İlan Adı, firma adı, sektör">
+
                             </div>
                         </div>
-                        <!-- autocomplete -->
-                        <div class="autocomplete">
-                            <input name="" id="" type="text" placeholder="Pozisyon, firma adı, sektör">
-                           
+                        <!-- button -->
+                        <div class="button">
+                            <a id="btnFindWork" href="ilanAra" type="submit" onclick="">
+                                İŞ BUL
+                            </a>
                         </div>
-                    </div>
-                    <!-- button -->
-                    <div class="button">
-                        <a id="btnFindWork" href="" onclick="">
-                            İLAN BUL
+        {!! Form::submit('İLAN BUL', array('url'=>'ilanAra','class'=>'btn btn-danger')) !!}
+                                
+            {!! Form::close() !!}  
+              
+                <!-- detailed search -->
+                    <div class="detailed-search">
+                        <a id="btnFindDetailWork" href="" onclick="">
+                            DETAYLI ARA
                         </a>
                     </div>
-                </div>
-                <!-- detailed search -->
-                <div class="detailed-search">
-                    <a id="btnFindDetailWork" href="" onclick="">
-                        DETAYLI ARA
-                    </a>
-                </div>
             </div>
         </div>
     </section>

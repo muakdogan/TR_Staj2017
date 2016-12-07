@@ -21,7 +21,7 @@ Route::get('/anasayfa', function () {
     return view('welcome');
 });
 
-Route::get('/logout','Auth\AuthController@getLogout');
+Route::get('/logoutUser','Auth\AuthController@getLogout');
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
@@ -98,7 +98,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         }
         return view('Firma.firmaIslemleri')->with('firma',$firma);
     }]);
-    
+    Route::post('/ilanAra', 'IlanController@showIlan');
     Route::get('/ilanAra', 'IlanController@showIlan');
     Route::get('/ilanAra/{page}', 'IlanController@showIlan');
     
@@ -525,6 +525,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
                     $ilan_mal_teklifler->kdv_dahil_fiyat=$array[$i];
                     $ilan_mal_teklifler->tarih= $now;
                     $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                    $ilan_mal_teklifler->kullanici_id=$kullanici_id;
                     $ilan_mal_teklifler->save();
                     $i++;
                 }
@@ -541,7 +542,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
                     $ilan_mal_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
                     $ilan_mal_teklifler->kdv_dahil_fiyat=$array[$i];
                     $ilan_mal_teklifler->tarih= $now;
-                    $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                    $ilan_mal_teklifler->kullanici_id=$kullanici_id;
                     $ilan_mal_teklifler->save();
             }
         }elseif ($ilan->ilan_turu == 'Hizmet') {
@@ -560,7 +561,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_hizmet_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_hizmet_teklifler->tarih= $now;
                 $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
-                $ilan_hizmet_teklifler->firma_kullanicilar_id=1;
+                $ilan_hizmet_teklifler->kullanici_id=$kullanici_id;
                 $ilan_hizmet_teklifler->save();
                 $i++;
             }
@@ -581,6 +582,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_goturu_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_goturu_teklifler->tarih= $now;
                 $ilan_goturu_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                $ilan_goturu_teklifler->kullanici_id=$kullanici_id;
                 $ilan_goturu_teklifler->save();
                 $i++;
             }
@@ -601,6 +603,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_yapim_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_yapim_teklifler->tarih= $now;
                 $ilan_yapim_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                $ilan_yapim_teklifler->kullanici_id=$kullanici_id;
                 $ilan_yapim_teklifler->save();
                 $i++;
             }
@@ -612,7 +615,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
         $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
         $teklifHareket->tarih = $now;
-        $teklifHareket->firma_kullanicilar_id=$firma_kullanici->id;
+        $teklifHareket->kullanici_id=$kullanici_id;
         $teklif->teklif_hareketler()->save($teklifHareket);
         
        return Redirect::to('firmaIslemleri/'.$firma_id);
