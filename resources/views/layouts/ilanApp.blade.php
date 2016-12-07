@@ -3,19 +3,17 @@
 <html lang="en">
 
 <head>
-    	
-
-
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title></title>
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
-  <script src="{{asset('js/jquery.js')}}"></script>
+    
+     <meta name="csrf-token" content="{{ csrf_token() }}" />
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta name="description" content="">
+     <meta name="author" content="">
+     <title></title>
+     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+     <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
+     <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
      <style>
@@ -153,7 +151,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                             <?php $firmaAdi = session()->get('firma_adi');
                             ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}/ {{$firmaAdi}}<span class="caret"></span>
+                               {{ Auth::user()->name }} / {{$firmaAdi}}<span class="caret"></span>
                             </a>
                            
                             <ul class="dropdown-menu">
