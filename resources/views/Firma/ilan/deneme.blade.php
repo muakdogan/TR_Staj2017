@@ -1,4 +1,5 @@
-@extends('layouts.ilanApp')
+@extends('layouts.app')
+
  @section('content')
  
     <style>
