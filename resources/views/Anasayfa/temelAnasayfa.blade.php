@@ -199,21 +199,21 @@
                     <h1 style="color:#ccc">
                         Sizin için  burada {{$ilan}} ilan var!
                     </h1>
-               <form class="form-wrapper">
+                    {{ Form::open(array('url'=>'ilanAra','method' => 'GET','class'=>'form-wrapper', 'files'=>true)) }}
+               
                     <div>
                       <select id="search" name="ilAdi" class="select2" placeholder="Şehir">
                          <option value="" disabled selected>Şehir</option>
-                        <option value="">Adana</option>
-                        <option value="">Bursa</option>
-                        <option value="">İstanbul</option>
-                        <option value="">Trabzon</option>
-                        <option value="">Manisa</option>
+                        <?php $iller = App\Il::all(); ?>
+-                             @foreach($iller as $il)
+-                                    <option  value="{{$il->id}}" >{{$il->adi}}</option>
+-                             @endforeach
                        </select>
                     </div>
-                    <input type="text" id="searchKeyword" placeholder="Firma Adı,İlan Adı,Sektör">
-                      <input type="submit" value="İLAN BUL" id="submit">
-               </form>
-                        
+                    <input type="text" id="searchKeyword" name="keyword" placeholder="Firma Adı,İlan Adı,Sektör">
+                    {!! Form::submit('İLAN BUL', array('url'=>'ilanAra','id'=>'submit')) !!}
+               
+                    {!! Form::close() !!}  
                    
                <div id="owl-demo" class="owl-carousel" style="top: 100px;">
                 <div class="item"><img style="filter:grayscale();" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale()'" src="{{asset('reklam/1.jpg')}}" alt="Owl Image"></div>
@@ -317,7 +317,7 @@
             <div class="row-fluid">
                 <div class="span3" id="footerArea1">
                 
-                    <h3>About Company</h3>
+                    <h3>Firma Hakkında</h3>
 
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.</p>
                     
@@ -331,7 +331,7 @@
                 </div>
                 <div class="span3" id="footerArea2">
 
-                    <h3>Recent Blog Posts</h3> 
+                    <h3>Son Blog Yazıları</h3> 
                     <p>
                         <a href="#" title="">Lorem Ipsum is simply dummy text</a><br />
                         <span style="text-transform:none;">2 hours ago</span>
@@ -351,7 +351,7 @@
                 </div>
                 <div class="span3" id="footerArea3">
 
-                    <h3>Sample Content</h3> 
+                    <h3>Örnek İçerik</h3> 
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s. 
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
                     </p>
@@ -359,12 +359,12 @@
                 </div>
                 <div class="span3" id="footerArea4">
 
-                    <h3>Get in Touch</h3>  
+                    <h3>Bize Ulaşın</h3>  
                                                                
                     <ul id="contact-info">
                     <li>                                    
                         <i class="general foundicon-phone icon"></i>
-                        <span class="field">Phone:</span>
+                        <span class="field">Tel:</span>
                         <br />
                         (123) 456 7890 / 456 7891                                                                      
                     </li>
@@ -372,11 +372,11 @@
                         <i class="general foundicon-mail icon"></i>
                         <span class="field">Email:</span>
                         <br />
-                        <a href="mailto:info@yourdomain.com" title="Email">info@yourdomain.com</a>
+                        <a href="mailto:info@tamrekabet.com" title="Email">info@tamrekabet.com</a>
                     </li>
                     <li>
                         <i class="general foundicon-home icon" style="margin-bottom:50px"></i>
-                        <span class="field">Address:</span>
+                        <span class="field">Adres:</span>
                         <br />
                         123 Street<br />
                         12345 City, State<br />
@@ -391,7 +391,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <p class="copyright">
-                        Copyright © 2013 Your Company. All Rights Reserved.
+                       
                     </p>
 
                     <p class="social_bookmarks">

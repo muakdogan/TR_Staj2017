@@ -10,7 +10,7 @@ use App\Il;?>
                 <h1>Firma Bilgileri</h1>
                 <div class="form-group">
                     {!! Form::label('Firma adı') !!}
-                    {!! Form::text('adi', null, 
+                    {!! Form::text('firma_adi', null, 
                     array('required', 
                     'class'=>'form-control', 
                     'placeholder'=>'Firma adı')) !!}
