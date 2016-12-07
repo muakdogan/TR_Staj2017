@@ -210,21 +210,21 @@
                     <h1 style="color:#ccc">
                         Sizin için  burada {{$ilan}} ilan var!
                     </h1>
-               <form class="form-wrapper">
+                    {{ Form::open(array('url'=>'ilanAra','method' => 'GET','class'=>'form-wrapper', 'files'=>true)) }}
+               
                     <div>
                       <select id="search" name="ilAdi" class="select2" placeholder="Şehir">
                          <option value="" disabled selected>Şehir</option>
-                        <option value="">Adana</option>
-                        <option value="">Bursa</option>
-                        <option value="">İstanbul</option>
-                        <option value="">Trabzon</option>
-                        <option value="">Manisa</option>
+                        <?php $iller = App\Il::all(); ?>
+-                             @foreach($iller as $il)
+-                                    <option  value="{{$il->id}}" >{{$il->adi}}</option>
+-                             @endforeach
                        </select>
                     </div>
-                    <input type="text" id="searchKeyword" placeholder="Firma Adı,İlan Adı,Sektör">
-                      <input type="submit" value="İLAN BUL" id="submit">
-               </form>
-                        
+                    <input type="text" id="searchKeyword" name="keyword" placeholder="Firma Adı,İlan Adı,Sektör">
+                    {!! Form::submit('İLAN BUL', array('url'=>'ilanAra','id'=>'submit')) !!}
+               
+                    {!! Form::close() !!}  
                    
                <div id="owl-demo" class="owl-carousel" style="top: 100px;">
                 <div class="item"><img style="filter:grayscale();" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale()'" src="{{asset('reklam/1.jpg')}}" alt="Owl Image"></div>
