@@ -18,6 +18,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
+    
    
      <style>
           .yazi{
@@ -110,11 +111,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
 </script>
 
-    
-
 </head>
 <body id="app-layout">
-   
+
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
         <div class="container">
             <div class="navbar-header">
@@ -204,8 +203,7 @@ s    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
              url: "./set_session",
              data: { role: selected },
              }).done(function(data){
-                        console.log(data);
-                        alert(data);                
+                        console.log(data);         
                         location.href="firmaIslemleri/"+selected;
                         }).fail(function(){ 
                             alert('Yüklenemiyor !!!  ');

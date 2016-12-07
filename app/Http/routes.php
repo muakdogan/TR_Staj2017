@@ -166,7 +166,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
 
             $firma= new Firma();
 
-            $firma->adi=$request->adi;
+            $firma->adi=$request->firma_adi;
             $now = new \DateTime();
             $firma->olusturmaTarihi=$now;
             $firma->save();

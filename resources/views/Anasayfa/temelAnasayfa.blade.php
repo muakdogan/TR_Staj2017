@@ -19,28 +19,17 @@
     <link href="{{asset('yeniTemplate/styles/custom.css')}}" rel="stylesheet" type="text/css" />
 
 
-      <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
    
-   
-
-
     <!-- Owl Carousel Assets -->
     <link href="{{asset('owl-carousel/owl.carousel.css')}}" rel="stylesheet">
     <link href="{{asset('owl-carousel/owl.theme.css')}}" rel="stylesheet">
-
-    <!-- Prettify -->
-     
-     
-        
-        
+   
 </head>
 <body id="pageBody">
- <script src="{{asset('assets/js/bootstrap-transition.js')}}"></script>
-<script src="{{asset('assets/js/bootstrap-tab.js')}}"></script>
-<script src="{{asset('assets/js/jquery-1.9.1.min.js')}}"></script> 
+
 <script src="{{asset('owl-carousel/owl.carousel.js')}}"></script>
-<script src="{{asset('assets/js/google-code-prettify/prettify.js')}}"></script>
-<script src="{{asset('assets/js/application.js')}}"></script>
+
 <script>
  $(document).ready(function() {
       $("#owl-demo").owlCarousel({
@@ -328,7 +317,7 @@
             <div class="row-fluid">
                 <div class="span3" id="footerArea1">
                 
-                    <h3>About Company</h3>
+                    <h3>Firma Hakkında</h3>
 
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.</p>
                     
@@ -342,7 +331,7 @@
                 </div>
                 <div class="span3" id="footerArea2">
 
-                    <h3>Recent Blog Posts</h3> 
+                    <h3>Son Blog Yazıları</h3> 
                     <p>
                         <a href="#" title="">Lorem Ipsum is simply dummy text</a><br />
                         <span style="text-transform:none;">2 hours ago</span>
@@ -362,7 +351,7 @@
                 </div>
                 <div class="span3" id="footerArea3">
 
-                    <h3>Sample Content</h3> 
+                    <h3>Örnek İçerik</h3> 
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s. 
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.
                     </p>
@@ -370,12 +359,12 @@
                 </div>
                 <div class="span3" id="footerArea4">
 
-                    <h3>Get in Touch</h3>  
+                    <h3>Bize Ulaşın</h3>  
                                                                
                     <ul id="contact-info">
                     <li>                                    
                         <i class="general foundicon-phone icon"></i>
-                        <span class="field">Phone:</span>
+                        <span class="field">Tel:</span>
                         <br />
                         (123) 456 7890 / 456 7891                                                                      
                     </li>
@@ -383,11 +372,11 @@
                         <i class="general foundicon-mail icon"></i>
                         <span class="field">Email:</span>
                         <br />
-                        <a href="mailto:info@yourdomain.com" title="Email">info@yourdomain.com</a>
+                        <a href="mailto:info@tamrekabet.com" title="Email">info@tamrekabet.com</a>
                     </li>
                     <li>
                         <i class="general foundicon-home icon" style="margin-bottom:50px"></i>
-                        <span class="field">Address:</span>
+                        <span class="field">Adres:</span>
                         <br />
                         123 Street<br />
                         12345 City, State<br />
@@ -402,7 +391,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <p class="copyright">
-                        Copyright © 2013 Your Company. All Rights Reserved.
+                       
                     </p>
 
                     <p class="social_bookmarks">
