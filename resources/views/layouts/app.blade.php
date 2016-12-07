@@ -159,7 +159,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                     @endforeach
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
-                                <li><a href="{{ url('/sessionKill')}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
+                                <li><a href="{{ url('/sessionKill') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>
                         </li>
                       <li>
@@ -193,9 +193,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
     </footer>
     </div>
     <!-- JavaScripts -->
-    
-       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+s    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
      <script>
         $('.firmaSec').on('click', function() {
         var selected = $(this).attr('name');
