@@ -15,9 +15,9 @@ class TeklifHareket extends Model
     {
         return $this->belongsTo('App\Teklif', 'teklif_id', 'id');
     }
-    public function firma_kullanicilar()
+    public function kullanicilar()
     {
-        return $this->belongsTo('App\FirmaKullanici', 'firma_kullanicilar_id', 'id');
+        return $this->belongsTo('App\Kullanici', 'kullanici_id', 'id');
     }
     public function para_birimleri()
     {

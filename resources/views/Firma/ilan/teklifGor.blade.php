@@ -1,5 +1,5 @@
 
-@extends('layouts.app2')
+@extends('layouts.app')
 <br>
  <br>
  @section('content')
@@ -48,7 +48,6 @@ tr:nth-child(even) {
          <div class="panel-header">
              <h3><strong>{{$firma->adi}}</strong> firmasının <strong>{{$ilan->adi}}</strong> ilanının Teklifleri </h3>
          </div>
-         
          <div class="panel-body">
              <table class="table" id="myTable">
                  <thead>
@@ -63,17 +62,12 @@ tr:nth-child(even) {
                      <?php $i=1;
                      ?>
                      @foreach($ilan->teklifler as $teklif)
-                        <?php  $teklifHareket = $teklif->teklif_hareketler()->groupBy('firma_kullanicilar_id')->where('teklif_id',$teklif->id)->get();
-                          $birFirmayaAitTeklifler = $teklif->teklif_hareketler()->
-                                             
-                                              groupBY('teklif_id');
+                        <?php  $teklifHareket = $teklif->teklif_hareketler()->groupBy('kullanici_id')->where('teklif_id',$teklif->id)->get();
+                          $birFirmayaAitTeklifler = $teklif->teklif_hareketler()->groupBY('teklif_id');
                         ?>
                             @foreach($teklifHareket as $teklifhareket)
-                            <?php  $kullanici = DB::table('firma_kullanicilar')
-                                    ->where('firma_kullanicilar.id',$teklifhareket->firma_kullanicilar_id)
-                                    ->join('kullanicilar', 'firma_kullanicilar.kullanici_id', '=', 'kullanicilar.id')
-                                    ->first();
-                                    $birFirmayaAitTeklifler->where('firma_kullanicilar_id',$teklifhareket->firma_kullanicilar)->get();
+                            <?php  $kullanici = App\Kullanici::find($teklifhareket->kullanici_id);
+                                   $birFirmayaAitTeklifler->where('kullanici_id',$teklifhareket->kullanici_id)->get();
                            ?>
                             <tr>
                                 <td>{{$i}}</td>
@@ -109,8 +103,8 @@ tr:nth-child(even) {
                  </tbody>
              </table>
          </div>
-    </div>
-@endsection
+
+
 <script src="{{asset('js/jquery.js')}}"></script>
 <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
 
@@ -157,3 +151,7 @@ $(document).ready(function(){
   
 </script>
 <script src="http://cdn.datatables.net/plug-ins/1.10.12/sorting/turkish-string.js"></script>
+         
+    </div>
+
+@endsection

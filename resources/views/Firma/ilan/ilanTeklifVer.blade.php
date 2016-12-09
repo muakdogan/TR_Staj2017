@@ -494,7 +494,7 @@ $('.fiyat').on('change', function() {
         $("#"+name).text(result);
         $("label[for='toplamFiyatLabel']").text("toplamFiyat :");
         $("label[for='toplamFiyatL']").text(toplamFiyat);
-        $("#toplamFiyat").val(toplamFiyat);
+        $("label[for='toplamFiyat']").val(toplamFiyat);
         alert(toplamFiyat);
     }
                 

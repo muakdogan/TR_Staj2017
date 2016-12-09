@@ -3,19 +3,17 @@
 <html lang="en">
 
 <head>
-    	
-
-
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title></title>
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
-  <script src="{{asset('js/jquery.js')}}"></script>
+    
+     <meta name="csrf-token" content="{{ csrf_token() }}" />
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta name="description" content="">
+     <meta name="author" content="">
+     <title></title>
+     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+     <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
+     <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
      <style>
@@ -109,6 +107,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
       
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
+    
     <style>
         .yazi{
             font-family:"Times New Roman";
@@ -153,7 +152,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                             <?php $firmaAdi = session()->get('firma_adi');
                             ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}/ {{$firmaAdi}}<span class="caret"></span>
+                               {{ Auth::user()->name }} / {{$firmaAdi}}<span class="caret"></span>
                             </a>
                            
                             <ul class="dropdown-menu">
@@ -169,7 +168,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                     @endforeach
                                    
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
-                                <li><a href="{{ url('/logout') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
+                                <li><a href="{{ url('/sessionKill') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>
                             
                             
@@ -203,7 +202,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
     </footer>
     </div>
     <!-- JavaScripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>

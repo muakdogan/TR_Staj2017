@@ -21,7 +21,7 @@ class IlanController extends Controller
         $firma=  Firma::all();
         $sektorler= Sektor::all();
         $odeme_turleri= OdemeTuru::all();
-          $teklifler= \App\Teklif::all();
+        $teklifler= \App\Teklif::all();
         $ilanlar = DB::table('ilanlar')
                 ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
@@ -29,31 +29,54 @@ class IlanController extends Controller
                 ->where('adresler.tur_id', '=' , 1)
                 ->orderBy('ilanlar.yayin_tarihi', 'DESC')
                 ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
-       
-            $il_id = Input::get('il');
-            $bas_tar = Input::get('bas_tar');
-            $bit_tar = Input::get('bit_tar');   
-            $sektorlerInput = Input::get('sektor');
-            $tur = Input::get('tur');
-            $usul= Input::get('usul');
-            $radSearch= Input::get('radSearch');
-            $input= Str::lower(Input::get('input'));
-            $sozlesme= Input::get('sozles');
-            $odeme= Input::get('odeme');
+        $ilId = Input::get('ilAdi');
+        $keyword = Input::get('keyword');
+        $il_id = Input::get('il');
+        $bas_tar = Input::get('bas_tar');
+        $bit_tar = Input::get('bit_tar');   
+        $sektorlerInput = Input::get('sektor');
+        $tur = Input::get('tur');
+        $usul= Input::get('usul');
+        $radSearch= Input::get('radSearch');
+        $input= Input::get('input');
+        $sozlesme= Input::get('sozles');
+        $odeme= Input::get('odeme');
+        
         if($radSearch != NULL){
             if($radSearch == "tum"){
-                $ilanlar->where('LOWER(`ilanlar.adi`)' ,$input )->orWhere('LOWER(`ilanlar.usulu`) ',$input )
-                        ->orWhere('LOWER(`ilanlar.ilan_turu`) ','LIKE', '%' . $input . '%')->orWhere('LOWER(`ilanlar.yayin_tarihi`) ','LIKE', '%' . $input . '%')
-                        ->orWhere('LOWER(`ilanlar.kapanma_tarihi`) ','LIKE', '%' . $input . '%')
-                        ->orWhere('LOWER(`ilanlar.sozlesme_turu`) ','LIKE', '%' . $input . '%')->orWhere('LOWER(`ilanlar.usulu`) ','LIKE', '%' . $input . '%');
+                $sektorler = Sektor::all();
+                foreach ($sektorler as $sektor){
+                    if($sektor->adi == $input){
+                        $sektor_id = $sektor->id;
+                    }
+                }
+                $ilanlar->where('ilanlar.adi',$input )
+                        ->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
+                        ->orWhere('ilanlar.kapanma_tarihi', $input )
+                        ->orWhere('firmalar.adi',$input )
+                        ->orWhere('ilanlar.firma_sektor',$sektor_id)
+                        ->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
             }
             else if($radSearch == "ilan_baslık"){
-                $ilanlar->where('LOWER(`ilanlar.adi`) like ?', $input);
+                $ilanlar->where('ilanlar.adi', $input);
             }
             else{
-                $ilanlar->where('LOWER(`firmalar.adi`) like ?', $input);
-                
+                $ilanlar->where('firmalar.adi', $input);                
             }
+        }
+        if($ilId != NULL){
+            $ilanlar->where('adresler.il_id',$ilId);
+        }
+        if($keyword != NULL){
+            $sektorler = Sektor::all();
+            foreach ($sektorler as $sektor){
+                if($sektor->adi == $keyword){
+                    $sektor_id = $sektor->id;
+                }
+            }
+            $ilanlar->where('ilanlar.adi' ,$keyword )
+                    ->orWhere('firmalar.adi',$keyword )
+                    ->orWhere('ilanlar.firma_sektor',$sektor_id);
         }
         if($il_id != NULL)
             {
@@ -85,7 +108,11 @@ class IlanController extends Controller
         if (Request::ajax()) {
             return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar))->render());
         }
-        return View::make('Firma.ilan.deneme')-> with('ilanlar',$ilanlar)->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)->with('firma',$firma)->with('teklifler',$teklifler);
+        
+        return View::make('Firma.ilan.ilanAra')-> with('ilanlar',$ilanlar)
+                ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
+                ->with('firma',$firma)->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
+                ->with('ilId',$ilId)->with('keyword',$keyword);
     
     }
 }
