@@ -284,7 +284,6 @@
                     alert($(this).attr('id'));
                 });
                 function silme(name){                        
-                        alert('içerde');
                         $('li[name='+name+']').remove();
                         if(name == "tarım" || name == "hizmet"){
                             $('.checkboxClass[name='+name+']').prop("checked", false);
