@@ -150,14 +150,25 @@
                 background:	#1E90FF;
                 padding: 5px;
             }
-              .li {
-                     position: relative;
-                     display: inline;
-                     margin: 20px;
-              }
+            .li {
+                   position: relative;
+                   display: inline;
+                   margin: 20px;
+            }
+            .ajax-loader {
+                visibility: hidden;
+                background-color: rgba(255,255,255,0.7);
+                position: absolute;
+                z-index: +100 !important;
+                width: 100%;
+                height:100%;
+            }
 
-       
-           
+            .ajax-loader img {
+                position: relative;
+                top:50%;
+                left:32%;
+            }
    </style>
   
        <div  class="container-fuild">
@@ -177,7 +188,9 @@
                     </div>
                     <div class="col-sm-3">
                         <div style="float:right">
-                            <img  src="{{asset('images/sil1.png')}}">&nbsp;Temizle</img>
+                            <button id="temizleButton">
+                                <img  src="{{asset('images/sil1.png')}}">&nbsp;Temizle</img>
+                            </button>
                         </div>
                     </div>
                </div>
@@ -271,20 +284,20 @@
                 <div class="col-sm-9 ilanlar" id="auto_load_div">
                    @include('Firma.ilan.ilanlar')                                               
                </div>
+                <div class="ajax-loader">
+                    <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+                </div>
             </div>
             
             <script type="text/javascript">
-                $('.basvur').click(function(){
-                    @if(Auth::guest())
-                        alert("guest");
-                        $('#modalLogin').modal('show');
-                    @else
-                        
-                    @endif
-                    alert($(this).attr('id'));
+                $("#temizleButton").click(function(){
+                    
+                   $(".silmeButton").each(function(){
+                       $(this).click();
+                   });
+                   return false;
                 });
-                function silme(name){                        
-                        alert('içerde');
+                function silme(name){
                         $('li[name='+name+']').remove();
                         if(name == "tarım" || name == "hizmet"){
                             $('.checkboxClass[name='+name+']').prop("checked", false);
@@ -312,7 +325,7 @@
                             getIlanlar(1);
                         }
                         if(name == "Birim Fiyatlı" || name == "Götürü Bedel"){
-                            
+                            alert("ozge");
                             $("#radioDiv4 input[type='radio']").each(function(){
                                 alert($(this).val());
                                 $(this).prop('checked', false);
@@ -321,14 +334,12 @@
                             getIlanlar(1);
                         }
                         if(name.indexOf("başlangıç") != -1){
-                            alert("ozge");
                             $(' input[type=date]').each( function resetDate(){
                                 if(name.indexOf(this.value) != -1){
                                     this.value = this.defaultValue;
                                 }
                             } );
-                            getIlanlar(1);
-                                            
+                            getIlanlar(1);    
                         }
                         if($('#search').val() != null){
                             $("#radioDiv3 input[type='radio']").each(function(){
@@ -337,7 +348,6 @@
                             $('#search').val(null);
                         }
                         if(name.indexOf("bitiş") != -1){
-                            alert("ezgi");
                             $(' input[type=date]').each( function resetDate(){
                                 if(name.indexOf(this.value) != -1){
                                     this.value = this.defaultValue;
@@ -358,12 +368,11 @@
                         }
                     }
                 function doldurma(name){
-                        var key=0;
-                         alert(name);           
+                        var key=0;          
                         $("#multisel"+key).empty();
                         var valName="'"+name+"'";
-                        var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button onclick=silme("'+name+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
-                        alert(name);
+                        var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+name+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
+                        
                         $("#multiSel"+key).append(html);                                     
                 }
                 $('#button').click(function(){
@@ -556,6 +565,9 @@
                         selectedSozlesme = selected4.val();
                     }
                     $.ajax({
+                        beforeSend: function(){
+                            $('.ajax-loader').css("visibility", "visible");
+                        },
                         url : '?page='+page,
                         dataType: 'json',
                         data:{il:selectedIl,bas_tar:basTar,bit_tar:bitTar,sektor:selectedSektor,tur:selectedTur,
@@ -565,6 +577,7 @@
                     }).done(function(data){
                         $('.ilanlar').html(data);
                         location.hash = page;
+                        $('.ajax-loader').css("visibility", "hidden");
                     }).fail(function(){ 
                         alert('İlanlar Yüklenemiyor !!!  ');
                     });
