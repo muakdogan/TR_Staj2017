@@ -363,6 +363,18 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return Response::json($basvuruControl);
                      
      });
+   Route::get('/emailControl/',function (){
+          
+                        
+        $email = Input::get('email');   
+        $emailControl = DB::table('users')
+            ->where('email', '=', $email);
+
+        $emailControl = $emailControl->count();
+
+        return Response::json($emailControl);
+                     
+     });
 
    Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
         //$firma = Firma::find($id);
