@@ -104,12 +104,12 @@ use App\Il;?>
                     'class'=>'form-control', 
                     'placeholder'=>'Kullanıcı Adı')) !!}
                 </div>
-              <div class="form-group">
+                <div class="form-group">
                     {!! Form::label('Email') !!}
                     {!! Form::email('email', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'E-postanız')) !!}
+                      array('required', 
+                    'class'=>'form-control email', 
+                    'placeholder'=>'E-postanız' , 'onFocusout'=>'emailControl();')) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('Şifre') !!}
@@ -136,7 +136,47 @@ use App\Il;?>
         </div>
     </div>
 
-    <script>
+<script>
+    
+     var email; 
+function emailControl(){
+   alert("girdi");
+     email = $('.email').val();
+     alert(email);
+     func();
+   
+
+
+
+} 
+function func(){
+                    
+            $.ajax({
+            type:"GET",
+            url:"../emailControl",
+            data:{email:email
+       
+            },
+            cache: false,
+            success: function(data){
+            console.log(data);
+           
+            if(data==1){
+                alert("BU EMAİL SİSTEME KAYITLIDIR.BAŞKA EMAİL İLE TEKRAR DENEYİNİZ");
+                $('.email').val("");
+            }
+                 
+             
+         }
+         
+    });
+    
+} 
+   
+
+    
+    
+
 $('#il_id').on('change', function (e) {
     console.log(e);
 
@@ -186,10 +226,5 @@ $('#semt_id').on('change', function (e) {
     });
 });
 
-
-
-
-    </script>
-
-
+</script>
 @endsection
