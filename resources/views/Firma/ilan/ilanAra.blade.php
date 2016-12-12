@@ -565,6 +565,8 @@
                     }).done(function(data){
                         $('.ilanlar').html(data);
                         location.hash = page;
+                        window.scrollTo(0, 0);
+                        
                     }).fail(function(){ 
                         alert('İlanlar Yüklenemiyor !!!  ');
                     });

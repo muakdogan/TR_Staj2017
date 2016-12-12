@@ -28,7 +28,7 @@
         <p>{{$ilan->iladi}}</p>
         <p>{{$ilan->yayin_tarihi}}</p>
         
-        <a href="{{ URL::to('ilanTeklifVer', array($ilan->ilan_id), false) }}"><button type="button" class="btn btn-primary" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+        <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
         <hr>
     </div>
     @endforeach
@@ -42,4 +42,48 @@
     $('.ilanDetayPop').mouseleave(function () {
         $('div.pop-up').hide();
     });
+    
+   var ilan_id;
+  
+   $(".btn-primary").click(function(){
+
+       ilan_id=$(this).attr("name");
+      
+       func();
+    });
+          
+
+    function func(){
+                    
+           $.ajax({
+            type:"GET",
+            url:"basvuruControl",
+            data:{ilan_id:ilan_id
+      
+           },
+           cache: false,
+           success: function(data){
+            console.log(data);
+            alert("mdnfjkdn");
+                if(data==0){
+                      
+                     
+                    window.location.href="ilanTeklifVer/"+ilan_id;
+                     
+                     
+                }
+                else{
+                      
+                    alert("Bu İlana Daha Önce Teklif Verdiniz.Teklif Veremezsiniz.Ancak Teklifi Düzenleye Bilirsiniz.");
+                }
+                  
+                  
+        
+          }
+
+        });
+    }
+                       
+
+
 </script>
