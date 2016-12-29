@@ -310,7 +310,7 @@
                         if(name == "Mal" || name == "Hizmet" || name == "Yapım İşi"){
                             
                             $("#radioDiv input[type='radio']").each(function(){
-                                alert($(this).val());
+                                
                                 $(this).prop('checked', false);
                             });
                             getIlanlar(1);
@@ -318,7 +318,7 @@
                         if(name == "Açık" || name == "Belirli İstekler Arasında" || name == "Başvuru"){
                             
                             $("#radioDiv2 input[type='radio']").each(function(){
-                                alert($(this).val());
+                              
                                 $(this).prop('checked', false);
                                 
                             });
@@ -327,7 +327,7 @@
                         if(name == "Birim Fiyatlı" || name == "Götürü Bedel"){
                             alert("ozge");
                             $("#radioDiv4 input[type='radio']").each(function(){
-                                alert($(this).val());
+                              
                                 $(this).prop('checked', false);
                                 
                             });

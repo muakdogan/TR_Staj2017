@@ -23,7 +23,7 @@
                                 <li><a href="#">Başvur</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">Mesajlar</a></li>
+                        <li><a href="{{ url('/tablesControl')}}">Tablo İşlemleri</a></li>
                         <li><a href="#">Kullanici İşlemleri</a></li>
                     </ul>
                 </div>

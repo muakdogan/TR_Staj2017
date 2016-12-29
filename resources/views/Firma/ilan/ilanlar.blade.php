@@ -58,43 +58,28 @@
     });
     
    var ilan_id;
-  
    $(".btn-primary").click(function(){
-
        ilan_id=$(this).attr("name");
       
        func();
     });
-          
-
-    function func(){
-                    
+    function func(){          
            $.ajax({
             type:"GET",
             url:"basvuruControl",
             data:{ilan_id:ilan_id
-      
-           },
-           cache: false,
-           success: function(data){
-            console.log(data);
-            alert("mdnfjkdn");
-                if(data==0){
-                      
-                     
-                    window.location.href="ilanTeklifVer/"+ilan_id;
-                     
-                     
-                }
-                else{
-                      
-                    alert("Bu İlana Daha Önce Teklif Verdiniz.Teklif Veremezsiniz.Ancak Teklifi Düzenleye Bilirsiniz.");
-                }
-                  
-                  
-        
-          }
+            },
+            cache: false,
+            success: function(data){
+                console.log(data);
+                    if(data==0){ 
+                        window.location.href="ilanTeklifVer/"+ilan_id;    
+                    }
+                    else{
 
+                        alert("Bu İlana Daha Önce Teklif Verdiniz.Teklif Veremezsiniz.Ancak Teklifi Düzenleye Bilirsiniz.");
+                    }
+            }
         });
     }
     $(".puanlama").each(function(){

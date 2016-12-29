@@ -138,15 +138,12 @@ use App\Il;?>
 
 <script>
     
-     var email; 
+var email; 
 function emailControl(){
    alert("girdi");
      email = $('.email').val();
      alert(email);
      func();
-   
-
-
 
 } 
 function func(){
