@@ -13,6 +13,7 @@ class CreateSirketTurleriTable extends Migration
     public function up()
     {
         Schema::create('sirket_turleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
         });

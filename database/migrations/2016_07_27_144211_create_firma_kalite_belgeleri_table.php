@@ -13,6 +13,7 @@ class CreateFirmaKaliteBelgeleriTable extends Migration
     public function up()
     {
         Schema::create('firma_kalite_belgeleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('firma_id')->unsigned();
             $table->foreign('firma_id')->references('id')->on('firmalar')->onDelete('cascade');

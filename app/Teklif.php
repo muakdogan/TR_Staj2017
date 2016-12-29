@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Teklif extends Model
 {
     //
-     protected $table = 'teklifler';
+    protected $table = 'teklifler';
     
     public $timestamps = false;
     
@@ -35,7 +35,7 @@ class Teklif extends Model
     {
         return $this->belongsTo('App\Ilan', 'ilan_id', 'id');
     }
-     public function firmalar()
+    public function firmalar()
     {
         return $this->belongsTo('App\Firma', 'firma_id', 'id');
     }

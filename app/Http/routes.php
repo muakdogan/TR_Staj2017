@@ -186,6 +186,10 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $firmalar = Firma::paginate(2);
         return view('Firma.firmalar')->with('firmalar', $firmalar);
     }]);
+    Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
+        $firma=Firma::find($firmaid);
+        return view('Firma.firmaDetay')->with('firma', $firma);
+    });
   
   
     Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {

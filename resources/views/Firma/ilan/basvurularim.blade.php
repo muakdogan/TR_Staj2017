@@ -82,13 +82,13 @@ tr:nth-child(even) {
                         ->join('teklifler', 'teklif_hareketler.teklif_id', '=', 'teklifler.id')
                         ->join('ilanlar', 'teklifler.ilan_id', '=', 'ilanlar.id')
                         ->join('firmalar', 'teklifler.firma_id', '=', 'firmalar.id')
-                        ->where( 'firma_kullanicilar.firma_id', '=', $firma->id)  
-                             
-                        ->select('firmalar.adi as firmaadi','ilanlar.adi as ilanadi','teklif_hareketler.*')        
+                        ->where( 'teklifler.firma_id', '=', $firma->id)  
+                        ->select('firmalar.adi as firmaadi','ilanlar.adi as ilanadi','ilanlar.id as ilanid','teklif_hareketler.*')        
                         ->orderBy('tarih','desc');
                       
                         $querys=$querys->get();
                         
+                       
                        
                   
                           
@@ -99,8 +99,9 @@ tr:nth-child(even) {
             
              @foreach($querys as $sonuc)
                   <hr>
-
-                  <p><strong>Firma Adı:</strong>&nbsp;{{$sonuc->firmaadi}}</p>
+                  <?php  $ilan= App\Ilan::find($sonuc->ilanid);
+                          ?>
+                  <p><strong>Firma Adı:</strong>&nbsp;{{$ilan->firmalar->adi}}</p>
                   <p><strong>İlan Adı:</strong>&nbsp;{{$sonuc->ilanadi}}</p>
                   <p><strong>Başvuru Tarihi:</strong>&nbsp;{{$sonuc->tarih}}</p>
                   <p><strong>Kaçıncı Sıradayım:</strong>&nbsp;{{$sonuc->teklif_id}}</p>

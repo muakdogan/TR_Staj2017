@@ -14,6 +14,7 @@ class CreateOdemeTurleriTable extends Migration
     {
         //
         Schema::create('odeme_turleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
            

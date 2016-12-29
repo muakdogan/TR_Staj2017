@@ -14,6 +14,7 @@ class CreateIlanGoturuBedellerTable extends Migration
     {
         //
         Schema::create('ilan_goturu_bedeller', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('ilan_id')->unsigned();
             $table->foreign('ilan_id')->references('id')->on('ilanlar')->onDelete('cascade');

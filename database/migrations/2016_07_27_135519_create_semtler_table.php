@@ -13,6 +13,7 @@ class CreateSemtlerTable extends Migration
     public function up()
     {
         Schema::create('semtler', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('ilce_id')->unsigned();
             $table->foreign('ilce_id')->references('id')->on('ilceler')->onDelete('cascade');

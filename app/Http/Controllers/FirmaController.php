@@ -255,7 +255,7 @@ class FirmaController extends Controller
         
         $firma = Firma::find($request->id);
         $firma_calisan = $firma->firma_calisma_bilgileri ?: new \App\FirmaCalismaBilgisi();
-        $firma_calisan->calisma_gunleri_id=$request->id;
+        $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
         $firma_calisan->calisma_saatleri=$request->calisma_saatleri;
         $firma_calisan->calisan_profili=$request->calisma_profili;
         $firma_calisan->calisan_sayisi=$request->calisma_sayisi;

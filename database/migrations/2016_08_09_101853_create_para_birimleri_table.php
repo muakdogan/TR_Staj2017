@@ -14,6 +14,7 @@ class CreateParaBirimleriTable extends Migration
     {
         //
         Schema::create('para_birimleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
            
