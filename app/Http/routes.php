@@ -39,10 +39,18 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('admin/password/email','AdminAuth\PasswordController@sendResetLinkEmail');
     Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
     Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
-
     Route::get('/admin', 'AdminController@index');
     Route::post('/firmaOnay', 'AdminController@firmaOnay');
 });
+
+Route::get('/tablesControl', function () {
+    return view('admin.index');
+});
+
+Route::get('/api/v1/admins/{id?}', 'Admins@index');
+Route::post('/api/v1/admins', 'Admins@store');
+Route::post('/api/v1/admins/{id}', 'Admins@update');
+Route::delete('/api/v1/admins/{id}', 'Admins@destroy');
 
 /*Route::get('/adminAnasayfa', function () {
 $firmalar=Firma::all();
@@ -67,7 +75,112 @@ Route::get('/firmaOnay/{id}', function ($id) {
     $firmas->save();
     
   return view('admin.firmaList');
- });                    
+ });    
+ 
+   Route::get('/kullaniciIslemleri/{id}', function ($id) {
+           $firma = Firma::find($id);
+           $roller=  App\Rol::all();
+           
+          return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+
+   }); 
+     Route::get('/kullaniciBilgileri/{id}', function ($id) {
+           $firma = Firma::find($id);
+          return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
+
+    });
+     Route::post('/kullaniciBilgileriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
+           $firma = Firma::find($id);
+           
+          $kullanici= App\Kullanici::find($kul_id);
+          $kullanici->adi = $request->adi;
+          $kullanici->soyadi = $request->soyadi;
+          $kullanici->unvani = $request->unvani;
+          $kullanici->email = $request->email;
+          $kullanici->telefon = $request->telefon;
+          $kullanici->save();
+          
+           $user = DB::table('users')
+            ->where( 'users.kullanici_id', '=',  $kul_id);
+           $user->name=$request->kul_adi;
+           $user->save();
+           
+           
+         return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
+         
+         
+
+   }); 
+    Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $request,$id,$user_id) {
+          $firma = Firma::find($id);
+           
+          $user= App\User::find($user_id);
+          $user->email = $request->email;
+          $user->password =Hash::make( $request->sifre);
+          
+         return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
+         
+         
+
+   }); 
+    Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
+           $firma = Firma::find($id);
+           $roller=  App\Rol::all();
+            
+        
+          $kullanici= new App\Kullanici();
+          $kullanici->adi = $request->adi;
+          $kullanici->soyadi = $request->soyadi;
+          $kullanici->email = $request->email;
+          $kullanici->save();
+          
+            $user = $kullanici->user ?: new App\User();
+           
+            $user->email = $request->email;
+            
+            $user->password =Hash::make('tamrekabet');
+
+            $rol=$request->rol;
+
+            $kullanici->users()->save($user);
+
+             $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol]);
+             
+             $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
+
+                Mail::send('auth.emails.password', $data, function($message) use($data,$request) 
+                {
+                   
+                    $message->to($request->email, $data['ad'],$request->to)
+                    ->subject('YENİ KAYIT OLMA İSTEĞİ!');
+                   
+                });
+            
+             
+         return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+         
+         
+
+   }); 
+    Route::get('/kullanici/{kullanici_id?}',function($kullanici_id){
+            $kul= App\Kullanici::find($kullanici_id);
+            return Response::json($kul);
+
+    });
+    Route::delete('/kullaniciDelete/{id}/{firma_id}',function($id,$firma_id,Request $request){
+            $firma = Firma::find($firma_id);
+            $roller=  App\Rol::all();
+            $kul= App\Kullanici::find($id);
+            $user = DB::table('users')
+            ->where( 'users.kullanici_id', '=',  $id);
+                                        
+            $user->delete();
+            $kul->delete();
+         
+            return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+
+    });
+   
 
     Route::get('/firmalist', ['middleware'=>'auth' ,function () {
         $firmalar = Firma::paginate(2);
@@ -161,6 +274,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return Response::json($querys);
 
     });
+    
 
    Route::post('/form', function (Request $request) {
 
@@ -193,21 +307,21 @@ Route::get('/firmaOnay/{id}', function ($id) {
           $kullanici->email = $request->email;
           $kullanici->unvani = $request->unvan;
           $kullanici->telefon = $request->telefonkisisel;
-
           $kullanici->save(); 
+         
 
             $user = $kullanici->user ?: new App\User();
             $user->name = $request->kullanici_adi;
             $user->email = $request->email;
+            $user->password =Hash::make( $request->password);
 
-        $user->password =Hash::make( $request->password);
-
-
+            
 
         $kullanici->users()->save($user);
-
-        $firma->kullanicilar()->attach($kullanici);
+        $firma->kullanicilar()->attach($kullanici,['rol_id'=>1]);
+   
         
+          
                 $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
 
                 Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request) 

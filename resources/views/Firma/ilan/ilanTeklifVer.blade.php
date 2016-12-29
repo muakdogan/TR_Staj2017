@@ -467,12 +467,12 @@ tr:nth-child(even) {
         result=(fiyat+(fiyat*kdv)/100)*miktar;
         toplamFiyat += result;
         var name=$(this).attr('name');
-        alert("toplamFiyat");
+       
         $("#"+name).text(result);
         $("#toplamFiyatLabel").text("Toplam Fiyat: ");
         $("#toplamFiyatL").text(toplamFiyat);
         $("#toplamFiyat").val(toplamFiyat);
-        alert(toplamFiyat);
+     
     }
     
     
@@ -490,12 +490,12 @@ $('.fiyat').on('change', function() {
         result=(fiyat+(fiyat*kdv)/100)*miktar;
         toplamFiyat += result;
         var name=$(this).attr('name');
-        alert(name);
+      
         $("#"+name).text(result);
         $("label[for='toplamFiyatLabel']").text("toplamFiyat :");
         $("label[for='toplamFiyatL']").text(toplamFiyat);
         $("label[for='toplamFiyat']").val(toplamFiyat);
-        alert(toplamFiyat);
+        
     }
                 
 
@@ -519,9 +519,7 @@ $('.firmaButton').on('click', function() {
         
 });
 $(document).ready(function() {
-    alert({{session()->get('firma_id')}});
     var firmaId = "{{session()->get('firma_id')}}";
-    alert(firmaId);
     if(firmaId === ""){
         $('#myModalSirketListe').modal({
             show: 'true'
