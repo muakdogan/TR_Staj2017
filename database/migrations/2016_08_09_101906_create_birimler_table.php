@@ -14,6 +14,7 @@ class CreateBirimlerTable extends Migration
     {
         //
         Schema::create('birimler', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
            

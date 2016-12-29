@@ -13,6 +13,7 @@ class CreateFirmaFaaliyetlerTable extends Migration
     public function up()
     {
         Schema::create('firma_faaliyetler', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('firma_id')->unsigned();
             $table->foreign('firma_id')->references('id')->on('firmalar')->onDelete('cascade');

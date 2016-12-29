@@ -54,4 +54,12 @@ class Ilan extends Model
     {
         return $this->hasMany('App\Teklif', 'ilan_id', 'id');
     }
+    public function yorumlar()
+    {
+        return $this->hasMany('App\Yorum', 'ilan_id', 'id');
+    }
+    public function puanlamalar()
+    {
+        return $this->hasMany('App\Puanlama', 'ilan_id', 'id');
+    }
 }

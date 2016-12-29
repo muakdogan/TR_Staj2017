@@ -88,9 +88,22 @@ class Firma extends Model
     {
         return $this->hasMany('App\Teklif', 'firma_id', 'id');
     }
-    
-    
-    
+    public function yorumlar()
+    {
+        return $this->hasMany('App\Yorum', 'firma_id', 'id');
+    }
+    public function yorumlarFirma()
+    {
+        return $this->hasMany('App\Yorum', 'yorum_yapan_firma_id', 'id');
+    }
+    public function puanlamalar()
+    {
+        return $this->hasMany('App\Puanlama', 'firma_id', 'id');
+    }
+    public function puanlamalarFirma()
+    {
+        return $this->hasMany('App\Puanlama', 'yorum_yapan_firma_id', 'id');
+    }
     
     
 }

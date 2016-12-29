@@ -1,4 +1,18 @@
-
+<style>
+.puanlama {
+                
+                background: #dddddd;
+                width: 30px;
+                border-radius: 4px;
+                position: absolute;
+                margin: auto;
+                text-align: center;
+                color: white;
+            }
+            a{
+                padding: 35px;
+            }
+</style>
     <h3>İlanlar</h3> 
     <hr>
     <?php $count=$ilanlar->total();?>
@@ -24,7 +38,7 @@
         </div>
         
         <p><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
-        <p>Firma: {{$ilan->adi}}</p>
+        <div class="puanlama">10</div><p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
         <p>{{$ilan->iladi}}</p>
         <p>{{$ilan->yayin_tarihi}}</p>
         
@@ -83,6 +97,33 @@
 
         });
     }
+    $(".puanlama").each(function(){
+        var puan = $(this).text();
+        if(puan > 0 && puan < 3){
+            $(this).css("background", "#e65100");
+        }
+        else if (puan >= 3 && puan <= 5){
+            $(this).css("background", "#e54100");
+        }
+        else if (puan > 5 && puan <= 6){
+            $(this).css("background", "#f46f02");
+        }
+        else if (puan > 5 && puan <= 6){
+            $(this).css("background", "#f46f02");
+        }
+        else if (puan > 6 && puan <= 7){
+            $(this).css("background", "#ffba04");
+        }
+        else if (puan > 7 && puan <= 8){
+            $(this).css("background", "#d6d036");
+        }
+        else if (puan > 8 && puan <= 9){
+            $(this).css("background", "#a5c530");
+        }
+        else if (puan > 9 && puan <= 10){
+            $(this).css("background", "#45c538");
+        }
+    });
                        
 
 

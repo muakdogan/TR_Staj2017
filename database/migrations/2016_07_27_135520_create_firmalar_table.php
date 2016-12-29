@@ -13,6 +13,7 @@ class CreateFirmalarTable extends Migration
     public function up()
     {
         Schema::create('firmalar', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi', 255);
             $table->string('logo');

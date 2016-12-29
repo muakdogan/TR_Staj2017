@@ -14,6 +14,7 @@ class CreateRollerTable extends Migration
     {
         //
         Schema::create('roller', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('adi');
            

@@ -13,6 +13,7 @@ class CreateSatilanMarkalarTable extends Migration
     public function up()
     {
         Schema::create('satilan_markalar', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
         });
