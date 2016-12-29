@@ -15,7 +15,7 @@ class CreateRollerTable extends Migration
         //
         Schema::create('roller', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('adi');
+            $table->string('adi');
            
         });
     }

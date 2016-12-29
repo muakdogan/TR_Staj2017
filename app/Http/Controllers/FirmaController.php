@@ -16,6 +16,10 @@ use App\Http\Requests;
 
 class FirmaController extends Controller
 {
+    
+    
+    
+    
     public function uploadImage(Request $request) {
         $file = $request->file('logo');
         $file = array('logo' => $request->file('logo'));
