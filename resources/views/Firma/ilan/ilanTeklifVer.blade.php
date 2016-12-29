@@ -398,7 +398,7 @@ tr:nth-child(even) {
                                         </tr>
                                         @endforeach
                                         <tr>
-                                          <td colspan="10">
+                                            <td colspan="10">
                                             <label for="inputEmail3" name="toplamFiyatLabel" id="toplamFiyatLabel" class="col-sm-3 control-label toplam"></label>  
                                           </td>
                                           <td>
@@ -455,110 +455,107 @@ tr:nth-child(even) {
     var count=0;
     var toplamFiyat=0; 
 
- $('.kdv').on('change', function() {
-                
-    var kdv=parseFloat(this.value);
-    var result;
-       
-    if($(this).parent().next().children().val() !== '')
-    {
-        var miktar = parseFloat($(this).parent().prev().prev().text());
-        fiyat=parseFloat($(this).parent().next().children().val()); 
-        result=(fiyat+(fiyat*kdv)/100)*miktar;
-        toplamFiyat += result;
-        var name=$(this).attr('name');
-       
-        $("#"+name).text(result);
-        $("#toplamFiyatLabel").text("Toplam Fiyat: ");
-        $("#toplamFiyatL").text(toplamFiyat);
-        $("#toplamFiyat").val(toplamFiyat);
-     
-    }
-    
-    
-});
+    $('#kdv').on('change', function() {
+        alert("kdv");
+        var kdv=parseFloat(this.value);
+        var result;
 
-$('.fiyat').on('change', function() {
-                
-    var fiyat=parseFloat(this.value);
-    var result;
-        
-    if($(this).parent().prev().children().val() !== '')
-    {
-        var miktar = parseFloat($(this).parent().prev().prev().prev().text());
-        kdv=parseFloat($(this).parent().prev().children().val());
-        result=(fiyat+(fiyat*kdv)/100)*miktar;
-        toplamFiyat += result;
-        var name=$(this).attr('name');
-      
-        $("#"+name).text(result);
-        $("label[for='toplamFiyatLabel']").text("toplamFiyat :");
-        $("label[for='toplamFiyatL']").text(toplamFiyat);
-        $("label[for='toplamFiyat']").val(toplamFiyat);
-        
-    }
-                
+        if($(this).parent().next().children().val() !== '')
+        {
+            var miktar = parseFloat($(this).parent().prev().prev().text());
+            fiyat=parseFloat($(this).parent().next().children().val()); 
+            result=(fiyat+(fiyat*kdv)/100)*miktar;
+            toplamFiyat += result;
+            var name=$(this).attr('name');
+            alert("miktar:" + miktar);
+            alert("fiyat:" + fiyat);
+            alert("kdv:" + kdv);
+            alert("name:" + name);
+            $(this).parent().next().next().next().children().next().text(result);
+            $("#toplamFiyatLabel").text("Toplam Fiyat: " + toplamFiyat);
+            $("#toplamFiyatL").text(toplamFiyat);
+            $("#toplamFiyat").val(toplamFiyat);
+            alert(toplamFiyat);
+        }  
+    });
 
-});
- 
-$('.teklifGonder').on('click', function() {
-    alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
-});
-$('.firmaButton').on('click', function() {
-   var selected = $("#radioDiv input[type='radio']:checked").val();
-    $.ajax({
-        type:"GET",
-        url: "../set_session",
-        data: { role: selected },
-        }).done(function(data){
-            $('#myModalSirketListe').modal('toggle');
-            location.reload();
-        }).fail(function(){ 
-            alert('Yüklenemiyor !!!  ');
-        });
-        
-});
-$(document).ready(function() {
-    var firmaId = "{{session()->get('firma_id')}}";
-    if(firmaId === ""){
-        $('#myModalSirketListe').modal({
-            show: 'true'
-        });
-    }
-    var ilan_turu='{{$ilan->ilan_turu}}';
-    var sozlesme_turu='{{$ilan->sozlesme_turu}}';    
-            if(ilan_turu=="") 
-             {
-                          $('#hizmet').hide()
-                          $('#mal').hide()
-                          $('#goturu').hide()
-                          $('#yapim').hide()
-             }
-            else if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+    $('.fiyat').on('change', function() {
+
+        var fiyat=parseFloat(this.value);
+        var result;
+
+        if($(this).parent().prev().children().val() !== '')
+        {
+            var miktar = parseFloat($(this).parent().prev().prev().prev().text());
+            kdv=parseFloat($(this).parent().prev().children().val());
+            result=(fiyat+(fiyat*kdv)/100)*miktar;
+            toplamFiyat += result;
+            var name=$(this).attr('name');
+            alert(name);
+            $("#"+name).text(result);
+            $("label[for='toplamFiyatLabel']").text("Toplam Fiyat: " + toplamFiyat);
+            $("label[for='toplamFiyatL']").text(toplamFiyat);
+            $("label[for='toplamFiyat']").val(toplamFiyat);
+            alert(toplamFiyat);
+        }
+    });
+
+    $('.teklifGonder').on('click', function() {
+        alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
+    });
+    $('.firmaButton').on('click', function() {
+       var selected = $("#radioDiv input[type='radio']:checked").val();
+        $.ajax({
+            type:"GET",
+            url: "../set_session",
+            data: { role: selected },
+            }).done(function(data){
+                $('#myModalSirketListe').modal('toggle');
+                location.reload();
+            }).fail(function(){ 
+                alert('Yüklenemiyor !!!  ');
+            });
+    });
+    $(document).ready(function() {
+        var firmaId = "{{session()->get('firma_id')}}";
+        if(firmaId === ""){
+            $('#myModalSirketListe').modal({
+                show: 'true'
+            });
+        }
+        var ilan_turu='{{$ilan->ilan_turu}}';
+        var sozlesme_turu='{{$ilan->sozlesme_turu}}';    
+                if(ilan_turu=="") 
                 {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                  
+                    $('#hizmet').hide()
+                    $('#mal').hide()
+                    $('#goturu').hide()
+                    $('#yapim').hide()
                 }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="Götürü Bedel")
-                {
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                }
-            else if(ilan_turu=="Yapim İşi")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }      
-});
+                else if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+                    {
+                       $('#hizmet').hide()
+                       $('#goturu').hide()
+                       $('#yapim').hide()
+                    }
+                 else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+                    {
+                       $('#mal').hide()
+                       $('#goturu').hide()
+                       $('#yapim').hide()
+                    }
+                 else if(sozlesme_turu=="Götürü Bedel")
+                    {
+                       $('#hizmet').hide()
+                       $('#mal').hide()
+                       $('#yapim').hide();
+                    }
+                else if(ilan_turu=="Yapim İşi")
+                    {
+                       $('#hizmet').hide()
+                       $('#goturu').hide()
+                       $('#mal').hide()
+                    }      
+    });
 </script>
 @endsection
