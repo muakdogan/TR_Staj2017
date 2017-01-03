@@ -26,6 +26,11 @@ Route::get('/sessionKill', function () {
         return Redirect::to('/');
 
 }); 
+Route::get('/kalemlerTablolari', function () {
+        
+        return view('admin.kalemlerTablolari');
+
+}); 
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
