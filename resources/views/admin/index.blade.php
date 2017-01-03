@@ -26,13 +26,12 @@
                                 <li><a href="">İlan Oluştur</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Başvurularım</a></li>
-                                <li><a href="#">Başvur</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="{{ url('/tablesControl')}}">Tablo İşlemleri</a></li>
+                     
+                                <li><a href="{{ url('/tablesControl')}}">Tablolar</a></li>
+                                <li><a href="{{ url('/kalemlerTablolari')}}">Kalemler Tabloları İşlemleri</a></li>
+                         
+                        
+                        
                         <li><a href="#">Kullanici İşlemleri</a></li>
                     </ul>
                 </div>
