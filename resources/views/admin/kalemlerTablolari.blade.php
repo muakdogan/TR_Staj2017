@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Editable Tree - jQuery EasyUI Demo</title>
-    <link rel="stylesheet" type="text/css" href="{{asset('css/easyui.css')}}">
-    <link rel="stylesheet" type="text/css" href="<?= asset('css/icon.css') ?>">
-    <link rel="stylesheet" type="text/css" href="<?= asset('css/demo1.css') ?>">
-    <script type="text/javascript" src="<?= asset('js/jqueryss.min.js') ?>"></script>
-    <script type="text/javascript" src="<?= asset('js/jquery.easyui.min.js') ?>"></script>
+<title>jQuery Multi Nested Lists Plugin Demo</title>
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{asset('css/style.css')}}">
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 </head>
 <body>
-    <h2>Editable Tree</h2>
-    <p>Click the node to begin edit, press enter key to stop edit or esc key to cancel edit.</p>
-    <div style="margin:20px 0;"></div>
-    <div class="easyui-panel" style="padding:5px">
-        <ul id="tt" class="easyui-tree" data-options="
-                url: 'http://localhost:8080/22.11.2016tamrekabet/resources/views/admin/ajax-tree-products.json',
-                method: 'get',
-                animate: true,
-                onClick: function(node){
-                    $(this).tree('beginEdit',node.target);
-                }
-            "></ul>
-    </div>
+
+<h1 style="margin-top:0px;"></h1>
+
+<div class="container">
+
+    <?php $kalemler = App\Kalem::where("parent_id",'=',0)->get();?>
+    <ul>
+        @foreach($kalemler as $kalem)
+        <li><a href="#">{{$kalem->adi}}&nbsp;&nbsp;&nbsp;&nbsp; <input type="checkbox"  id="{{$kalem->id}}"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="{{$kalem->id}}" value="{{$kalem->nace_kodu}}"/></a>
+            <?php $child = $kalem->where("parent_id",'=',"id")->get(); 
+                if($child->count() > 0){
+            ?>
+            <ul id="{{$kalem->adi}}"> 
+            </ul>
+                <?php }
+                ?>
+        </li>
+        @endforeach
+    </ul>
+</div>
 </body>
 </html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{asset('js/MultiNestedList.js')}}"></script>
