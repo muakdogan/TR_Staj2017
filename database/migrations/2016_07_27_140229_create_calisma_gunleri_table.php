@@ -13,6 +13,7 @@ class CreateCalismaGunleriTable extends Migration
     public function up()
     {
         Schema::create('calisma_gunleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
         });

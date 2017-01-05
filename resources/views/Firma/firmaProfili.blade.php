@@ -78,7 +78,7 @@
            <div class="form-group">
                <br>
                <div class="row">
-                   <div class="col-sm-4" ><img src="/tamrekabet/public/uploads/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
+                   <div class="col-sm-4" ><img src="../../public/uploads/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
                    <div class="col-sm-4" ><h3>{{$firma->adi}}</h3></div>
                </div>
                <div class="modal fade" id="myModal-image" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

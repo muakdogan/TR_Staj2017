@@ -14,6 +14,7 @@ class CreateKullanicilarTable extends Migration
     {
         //
         Schema::create('kullanicilar', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
             $table->string('soyadi');

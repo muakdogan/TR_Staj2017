@@ -14,6 +14,7 @@ class CreateLoginTable extends Migration
     {
         //
         Schema::create('login', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->integer('kullanici_id')->unsigned();
             $table->foreign('kullanici_id')->references('id')->on('kullanicilar')->onDelete('cascade');
             $table->string('kullanici_adi');

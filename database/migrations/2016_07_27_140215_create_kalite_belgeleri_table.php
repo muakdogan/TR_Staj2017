@@ -13,6 +13,7 @@ class CreateKaliteBelgeleriTable extends Migration
     public function up()
     {
         Schema::create('kalite_belgeleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
         });

@@ -26,6 +26,11 @@ Route::get('/sessionKill', function () {
         return Redirect::to('/');
 
 }); 
+Route::get('/kalemlerTablolari', function () {
+        
+        return view('admin.kalemlerTablolari');
+
+}); 
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
@@ -41,6 +46,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
     Route::get('/admin', 'AdminController@index');
     Route::post('/firmaOnay', 'AdminController@firmaOnay');
+});
+Route::get('/findChildrenTree', function () {
+    $parent_id = Input::get('id');
+    $child = \App\Kalem::where("parent_id",'=',$parent_id)->get();
+    
+    return Response::json($child);
+
 });
 
 Route::get('/tablesControl', function () {
@@ -186,6 +198,10 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $firmalar = Firma::paginate(2);
         return view('Firma.firmalar')->with('firmalar', $firmalar);
     }]);
+    Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
+        $firma=Firma::find($firmaid);
+        return view('Firma.firmaDetay')->with('firma', $firma);
+    });
   
   
     Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {

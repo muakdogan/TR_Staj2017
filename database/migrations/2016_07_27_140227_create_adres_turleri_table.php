@@ -13,6 +13,7 @@ class CreateAdresTurleriTable extends Migration
     public function up()
     {
         Schema::create('adres_turleri', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('adi');
         });

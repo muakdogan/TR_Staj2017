@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('kullanici_id')->unsigned();
             $table->foreign('kullanici_id')->references('id')->on('kullanicilar')->onDelete('cascade');

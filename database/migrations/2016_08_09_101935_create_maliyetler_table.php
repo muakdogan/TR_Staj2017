@@ -13,12 +13,11 @@ class CreateMaliyetlerTable extends Migration
     public function up()
     {
         //
-          Schema::create('maliyetler', function (Blueprint $table) {
+        Schema::create('maliyetler', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('alt_deger');
             $table->integer('ust_deger');
-          
-            
         });
     }
 
