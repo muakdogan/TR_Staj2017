@@ -11,6 +11,7 @@ use App\FirmaReferans;
 use App\iletisim_bilgileri;
 use App\Ilan;
 
+
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -45,12 +46,34 @@ Route::group(['middleware' => ['web']], function () {
 Route::get('/kalemlerTablolari', function () {
     return view('admin.kalemlerTablolari');
 
+});
+Route::post('/updateTree', function () {
+    $id = Input::get('id');
+    $value = Input::get('value');
+    $type = Input::get('type');
+    $kalem = App\Kalem::find($id);
+    
+    if( $type == "checkbox"){
+        $kalem->is_aktif = $value;
+    }
+    else if($type == "updateName"){
+        $kalem->adi = $value;
+    }
+    else if($type == "updateNaceKodu"){
+        $kalem->nace_kodu = $value;
+    }
+    
+    $kalem->save();
 }); 
 Route::get('/findChildrenTree', function () {
-    $parent_id = Input::get('id');
-    $child = \App\Kalem::where("parent_id",'=',$parent_id)->get();
-    
-    return Response::json($child);
+        $id = Input::get('id');
+        $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key', 
+        (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
+        (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif, nace_kodu
+        FROM kalemler as k1
+        where k1.parent_id = '$id'" ));
+ 
+        return Response::json($kalemler);
 
 }); 
 Route::get('/tablesControl', function () {
