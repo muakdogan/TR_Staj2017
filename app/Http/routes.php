@@ -26,11 +26,6 @@ Route::get('/sessionKill', function () {
         return Redirect::to('/');
 
 }); 
-Route::get('/kalemlerTablolari', function () {
-        
-        return view('admin.kalemlerTablolari');
-
-}); 
 
 Route::group(['middleware' => ['web']], function () {
     //Login Routes...
@@ -47,14 +42,17 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/admin', 'AdminController@index');
     Route::post('/firmaOnay', 'AdminController@firmaOnay');
 });
+Route::get('/kalemlerTablolari', function () {
+    return view('admin.kalemlerTablolari');
+
+}); 
 Route::get('/findChildrenTree', function () {
     $parent_id = Input::get('id');
-    $child = \App\Kalem::where("parent_id",'=',$parent_id)->get();
+    $child = \App\Kalem::where("parent_id",'=',0)->get();
     
     return Response::json($child);
 
-});
-
+}); 
 Route::get('/tablesControl', function () {
     return view('admin.index');
 });
@@ -487,9 +485,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
 
 
         $basvuruControl = $basvuruControl->count();
-
-
-
+        
         return Response::json($basvuruControl);
                      
      });
