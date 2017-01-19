@@ -1,7 +1,9 @@
 <nav class="navbar navbar-inverse">
              <div class="container-fluid">
                  <div class="navbar-header">
-                     <a class="navbar-brand" href="#"><img src='{{asset('images/anasayfa.png')}}'></a>
+                      <?php $firmaAdi = session()->get('firma_adi');
+                            ?>
+                     <a class="navbar-brand" href="{{ URL::to('firmaIslemleri', array($firma->id), false)}}"><img src='{{asset('images/anasayfa.png')}}'></a>
                  </div>
                  <ul class="nav navbar-nav">
                      

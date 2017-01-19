@@ -43,8 +43,8 @@
             }
             .puanlama {
                 background: #dddddd;
-                width: 59px;
-                height:50px;
+                width: 140px;
+                height:65px;
                 border-radius: 3px;
                 position: relative;
                 margin: auto;
@@ -80,21 +80,26 @@
             
        </div>
         <div class="col-lg-10"> <h3><strong>{{$firma->adi}}</strong> firmasının profili</h3></div>
-        <div class="panel panel-warning col-lg-4">
+        <div class="panel panel-warning col-lg-8">
             <div class="panel-heading">Firmanın Puanları</div>
-            <div class="panel-body" style="height:80px">
+            <div class="panel-body" style="height:95px">
+            <?php $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
+                        ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
+                        ->get();
+            $puanlar = $puanlar->toArray();
+            ?>    
                 <div class="row">
                     <div class="puanlama col-sm-3">
-                        <span>Kriter1</span><point class="point">7.2</point>
+                        <span>Ürün/hizmet kalitesi</span><point class="point">{{number_format($puanlar[0]['ortalama1'],1)}}</point>
                     </div>&nbsp;
                     <div class="puanlama col-sm-3">
-                        <span>Kriter2</span><point class="point">8.7</point>
+                        <span><br>Teslimat<br></span><point class="point">{{number_format($puanlar[0]['ortalama2'],1)}}</point>
                     </div>&nbsp;
                     <div class="puanlama col-sm-3">
-                        <span>Kriter3</span><point class="point">5.0</point>
+                        <span>Teknik ve yönetsel yeterlilik</span><point class="point">{{number_format($puanlar[0]['ortalama3'],1)}}</point>
                     </div>
                     <div class="puanlama col-sm-3">
-                        <span>Kriter4</span><point class="point">9.0</point>
+                        <span>İletişim ve esneklik</span><point class="point">{{number_format($puanlar[0]['ortalama4'],1)}}</point>
                     </div>
                 </div>
             </div>
@@ -117,7 +122,13 @@
                     <h3>Notice the gap between the content and tab after applying a background color</h3>
                 </div>
                 <div class="tab-pane" id="3">
-                    <h3>add clearfix to tab-content (see the css)</h3>
+                     <?php $yorumlar = App\Yorum::where('firma_id','=',$firma->id)->orderBy('tarih','DESC')->get();?>
+                    @foreach($yorumlar as $yorum)
+                    <?php $yorumYapanFirma = App\Firma::find($yorum->yorum_yapan_firma_id); ?>
+                    <hr>
+                    <h4><strong>{{$yorumYapanFirma->adi}}</strong>'sının Yorumu</h4>
+                    <p>{{$yorum->yorum}}</p>
+                    @endforeach
                 </div>
             </div>
           </div>
