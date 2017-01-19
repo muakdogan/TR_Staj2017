@@ -11,7 +11,7 @@ class FirmaKullanici extends Model
     
     public function roller()
     {
-        return $this->belongsTo('App\Rol', 'rol_id', 'id');
+        return $this->belongsTo('App\Rol')->withPivot('rol_id', 'id');
     }
     public function mal_teklifler()
     {
