@@ -15,7 +15,11 @@
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
+                             
+                            
                              <li><a href="{{ URL::to('basvurularim', array($firma->id), false)}}">Başvurularım</a></li>
+                          
+                             
                              <li><a href="{{url('ilanAra/')}}">Başvur</a></li>
                              
                          </ul>
