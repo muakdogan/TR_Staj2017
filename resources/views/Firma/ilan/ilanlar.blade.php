@@ -36,9 +36,24 @@
                         <p id="popIlanIsinSuresi">İşin Süresi: {{$ilan->isin_suresi}}</p>
                         <p id="popIlanSözlesmeTuru">Sözleşme Türü: {{$ilan->sozlesme_turu}}</p>                                
         </div>
-        
+        <?php $puan = App\Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                        ->where('firma_id',$ilan->firmaid)
+                        ->get();
+               $puan = $puan->toArray();
+              
+            /*$i=0;
+            $i=$i+1;
+            $ortalama=0;
+            foreach ($puanlar as $puan){
+                //$i=$i+1;
+                
+                $ortalama += ($puan->kriter1+$puan->kriter2+$puan->kriter3+$puan->kriter4)/4;
+                
+            }
+            $ortalama = $ortalama/$i;*/
+        ?>
         <p><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
-        <div class="puanlama">10</div><p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
+        <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div><p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
         <p>{{$ilan->iladi}}</p>
         <p>{{$ilan->yayin_tarihi}}</p>
         
