@@ -1,19 +1,15 @@
 @extends('layouts.app')
 <br>
- <br>
+<br>
  @section('content')
-  
- 
      <div class="container">
          
            @include('layouts.alt_menu') 
            
-          <div class="col-sm-12">
+            <div class="col-sm-12">
                               
-              <h3>Kullanıcılar &nbsp;&nbsp;&nbsp; </h3>
+              <h3>Kullanıcılar &nbsp;&nbsp;&nbsp;</h3>
            <hr>
-           
-           
            <div id="mal"   class="panel panel-default">
                  <div class="panel-heading">
                      <h4 class="panel-title">
@@ -48,21 +44,25 @@
                                          
                                      </td>
                                   
-                                        <?php
-                                        $rol_id=$kullanici->pivot->rol_id;
-                                         $querys = DB::table('roller')
-                                        ->join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
-                                        ->where( 'firma_kullanicilar.rol_id', '=',  $rol_id)
-                                        ->select('roller.adi');
+                                       <?php
                                        
-                                         $querys=$querys->get();
+                                       
+                                        $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici->id)
+                                                ->where( 'firma_id', '=', $firma->id)
+                                                  ->select('rol_id')->get();
+                                        $rol_id=$rol_id->toArray();
+                                        
+                                        
+                                        $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                                        ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                                        ->select('roller.adi as rolAdi')->get();
+                                         $querys=$querys->toArray();
                                        ?>
                                         
                                      <td>
-                                           {{$kullanici->pivot->rol_id}}
-                                            @foreach($querys as $sonuc)
-                                             {{$sonuc->adi}}
-                                            @endforeach
+                                         
+                                           {{$querys[0]['rolAdi']}}
+                                           
                                       
                                      </td>
                                       

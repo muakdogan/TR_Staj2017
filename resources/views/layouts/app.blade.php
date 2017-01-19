@@ -194,7 +194,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
     </div>
     <!-- JavaScripts -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-s    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+   {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
      <script>
         $('.firmaSec').on('click', function() {
         var selected = $(this).attr('name');

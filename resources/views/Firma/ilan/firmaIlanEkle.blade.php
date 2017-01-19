@@ -374,7 +374,43 @@
                                  </div>
                              </div>
                          </div>
-                         <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
+                         
+                         
+                         <?php 
+                            $kullanici_id= Auth::user()->kullanici_id;
+                           $firma_id=$firma->id;
+
+                             $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                                     ->where( 'firma_id', '=', $firma_id)
+                                     ->select('rol_id')->get();
+                                     $rol_id=$rol_id->toArray();
+
+
+                             $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                             ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                             ->select('roller.adi as rolAdi')->get();
+                             $querys=$querys->toArray();
+
+                             $rol=$querys[0]['rolAdi'];
+
+                         
+                         ?>
+                         @if ( $rol === 'Yönetici')
+                    
+                            <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
+                         @elseif ($rol ==='Satın Alma')
+
+                             <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
+                             
+                         @elseif ($rol ==='Satın Alma / Satış')
+                         
+                            <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>    
+                         @else
+
+                         @endif
+                         
+                         
+                         
                      </div>
                  </div>
              </div>
@@ -469,8 +505,21 @@
                                  </div>
                              </div>
                          </div>
+                         
+                         
+                         @if ( $rol === 'Yönetici')
+                    
+                           <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
+                         @elseif ($rol ==='Satın Alma')
 
-                         <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
+                            <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
+                            
+                         @elseif ($rol ==='Satın Alma / Satış')
+                         
+                            <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>   
+                         @else
+
+                         @endif
 
                      </div>
                  </div>

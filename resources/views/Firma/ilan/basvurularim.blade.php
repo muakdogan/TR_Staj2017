@@ -100,14 +100,56 @@ tr:nth-child(even) {
              @foreach($querys as $sonuc)
                   <hr>
                   <?php  $ilan= App\Ilan::find($sonuc->ilanid);
-                          ?>
+                  
+                  
+                    $kullanici_id= Auth::user()->kullanici_id;
+                    $firma_id=$firma->id;
+              
+                    $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                            ->where( 'firma_id', '=', $firma_id)
+                            ->select('rol_id')->get();
+                            $rol_id=$rol_id->toArray();
+                                        
+                                        
+                    $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                    ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                    ->select('roller.adi as rolAdi')->get();
+                    $querys=$querys->toArray();
+
+                    $rol=$querys[0]['rolAdi'];
+                
+                  
+                  
+                   ?>
                   <p><strong>Firma Adı:</strong>&nbsp;{{$ilan->firmalar->adi}}</p>
                   <p><strong>İlan Adı:</strong>&nbsp;{{$sonuc->ilanadi}}</p>
                   <p><strong>Başvuru Tarihi:</strong>&nbsp;{{$sonuc->tarih}}</p>
                   <p><strong>Kaçıncı Sıradayım:</strong>&nbsp;{{$sonuc->teklif_id}}</p>
+                  
+                  
+                    @if ( $rol === 'Yönetici')
+                    
+                        <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
+                        <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
 
-                   <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
-                   <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
+                    @elseif ($rol ==='Satış')
+                    
+                        <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
+                        <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
+
+                    @elseif ($rol ==='Satın Alma / Satış')
+                    
+                        <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
+                        <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
+
+                    @else
+                        
+                    @endif
+                  
+
+                  
+                  
+                  
 
                   <br>
                

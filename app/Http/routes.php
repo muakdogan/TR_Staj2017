@@ -352,8 +352,6 @@ Route::get('/firmaOnay/{id}', function ($id) {
             $user->email = $request->email;
             $user->password =Hash::make( $request->password);
 
-            
-
         $kullanici->users()->save($user);
         $firma->kullanicilar()->attach($kullanici,['rol_id'=>1]);
    
@@ -424,6 +422,8 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $teklifler=  \App\Teklif::all();
         //$kullanici = App\Kullanici::find($kul_id); 
         $detaylar = App\MalTeklif::all();
+   
+        
         return view('Firma.ilan.basvurularim')->with('firma', $firma)->with('teklifler', $teklifler)->with('detaylar', $detaylar);
         
     });
