@@ -4,51 +4,22 @@
 <html lang="en-US" ng-app="adminRecords">
     <head>
         <title>Laravel 5 AngularJS CRUD Example</title>
-
-        <!-- Load Bootstrap CSS -->
         <link href="<?= asset('css/bootstrap.min.css') ?>" rel="stylesheet">
     </head>
     <body>
         
-            <div class="row">
+        <div class="row">
         <div class="col-md-10 col-md-offset-1">
            
-            <nav style="background-color:#f5f5f5;border-color:#f5f5f5"class="navbar navbar-inverse">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a style="padding:0px"class="navbar-brand" href="#"><img src='{{asset('images/anasayfa.png')}}'></a>
-                    </div>
-                    <ul class="nav navbar-nav">
-                        <li class=""><a href="{{ url('/firmaList')}}">Firma Onayı</a></li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="">İlanlarım</a></li>
-                                <li><a href="">İlan Oluştur</a></li>
-                            </ul>
-                        </li>
-                     
-                                <li><a href="{{ url('/tablesControl')}}">Tablolar</a></li>
-                                <li><a href="{{ url('/kalemlerTablolari')}}">Kalemler Tabloları İşlemleri</a></li>
-                         
-                        
-                        
-                        <li><a href="#">Kullanici İşlemleri</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <div class="panel panel-default">
-<h2>Admin Tablosu</h2>
+             @include('layouts.admin_alt_menu') 
+        <div class="panel panel-default">
+                <h2>Admin Tablosu</h2>
         <div  ng-controller="adminsController">
-  
-            
             <table class="table">
                 <thead>
-                    <tr>
-                       
-                        <th>Name</th>
+                    <tr>               
+                        <th>Ad</th>
                         <th>Email</th>
-                       
-                        
                         <th><button id="btn-add" class="btn btn-primary btn-xs" ng-click="toggle('add', 0)">Yeni Admin Ekle</button></th>
                     </tr>
                 </thead>
@@ -56,11 +27,9 @@
                     <tr ng-repeat="admin in admins">
                         <td>@{{admin.name }}</td>
                         <td>@{{ admin.email }}</td>
-                        
-                       
                         <td>
-                            <button class="btn btn-default btn-xs btn-detail" ng-click="toggle('edit', admin.id)">Edit</button>
-                            <button class="btn btn-danger btn-xs btn-delete" ng-click="confirmDelete(admin.id)">Delete</button>
+                            <button class="btn btn-default btn-xs btn-detail" ng-click="toggle('edit', admin.id)">Düzenle</button>
+                            <button class="btn btn-danger btn-xs btn-delete" ng-click="confirmDelete(admin.id)">Sil</button>
                         </td>
                     </tr>
                 </tbody>
@@ -121,16 +90,10 @@
             </div>
         </div>
     </div>
-
-        
-        
-
         <!-- Load Javascript Libraries (AngularJS, JQuery, Bootstrap) -->
         <script src="<?= asset('app/libs/angular/angular.min.js') ?>"></script>
         <script src="<?= asset('js/jquery.min.js') ?>"></script>
-        <script src="<?= asset('js/bootstrap.min.js') ?>"></script>
-        
-        <!-- AngularJS Application Scripts -->
+        <!--script src="<?= asset('js/bootstrap.min.js') ?>"></script-->   
         <script src="<?= asset('app/app.js') ?>"></script>
         <script src="<?= asset('app/controllers/admins.js') ?>"></script>
     </body>
