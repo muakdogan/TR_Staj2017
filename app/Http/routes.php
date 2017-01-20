@@ -18,9 +18,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
 
-Route::get('/anasayfa', function () {
+/*Route::get('/anasayfa', function () {
     return view('welcome');
-});
+  //Admin Welcome sayfası kullanılmamaktadır.
+});-,*/
 Route::get('/sessionKill', function () {
         Auth::logout();
         Session::flush();
@@ -42,11 +43,16 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
     Route::get('/admin', 'AdminController@index');
     Route::post('/firmaOnay', 'AdminController@firmaOnay');
+   
+      
 });
-Route::get('/kalemlerTablolari', function () {
+  Route::get('/kalemlerTablolari',['middleware' => 'admin' , function () {
     return view('admin.kalemlerTablolari');
 
-});
+  }]);
+
+
+
 Route::post('/updateTree', function () {
     $id = Input::get('id');
     $value = Input::get('value');
@@ -76,9 +82,9 @@ Route::get('/findChildrenTree', function () {
         return Response::json($kalemler);
 
 }); 
-Route::get('/tablesControl', function () {
+Route::get('/tablesControl',['middleware' => 'admin' , function () {
     return view('admin.index');
-});
+}]);
 
 Route::get('/api/v1/admins/{id?}', 'Admins@index');
 Route::post('/api/v1/admins', 'Admins@store');
@@ -152,9 +158,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
           $user->password =Hash::make( $request->sifre);
           
          return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
-         
-         
-
+      
    }); 
     Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
            $firma = Firma::find($id);
@@ -188,12 +192,8 @@ Route::get('/firmaOnay/{id}', function ($id) {
                     ->subject('YENİ KAYIT OLMA İSTEĞİ!');
                    
                 });
-            
-             
          return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
          
-         
-
    }); 
     Route::get('/kullanici/{kullanici_id?}',function($kullanici_id){
             $kul= App\Kullanici::find($kullanici_id);
@@ -512,6 +512,26 @@ Route::get('/firmaOnay/{id}', function ($id) {
         return Response::json($basvuruControl);
                      
      });
+     
+      Route::get('/IlanFirmaControl/',function (){
+        $firma_adi = session()->get('firma_adi');
+          $ilan_id = Input::get('ilan_id');  
+          
+          
+        $basvuruControl = DB::table('firmalar')
+            ->join('ilanlar', 'ilanlar.firma_id', '=', 'firmalar.id')
+            ->where('ilanlar.id', '=', $ilan_id)    
+            ->where('firmalar.adi', '=', $firma_adi); 
+        
+        $basvuruControl = $basvuruControl->count();
+        
+        return Response::json($basvuruControl);
+                     
+     });
+     
+     
+     
+     
    Route::get('/emailControl/',function (){
           
                         

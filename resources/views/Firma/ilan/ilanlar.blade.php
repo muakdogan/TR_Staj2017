@@ -58,6 +58,11 @@
         <p>{{$ilan->yayin_tarihi}}</p>
         
         <?php
+        if(Auth::guest()){
+            
+        }
+        else{
+            
               $kullanici_id = Auth::user()->kullanici_id;
               
               $firma=  App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id )
@@ -81,25 +86,48 @@
                 
                 $rol=$querys[0]['rolAdi'];
                 
+                
+                
+                //Firmanın kendi ilanına basvurmasını engelleme.
+                $ilan_firma_adi= App\Firma::join('ilanlar', 'firmalar.id', '=', 'ilanlar.firma_id')
+                 ->select('firmalar.adi as firmaAdi')->get();
+                $ilan_firma_adi=$ilan_firma_adi->toArray();
+                
+                $ilanFirmaAdi=$ilan_firma_adi[0]['firmaAdi'];
+                $firma_adi = session()->get('firma_adi');  
+         
+        
+        }
+                
          ?>
+             
         
-                    @if ( $rol === 'Yönetici')
-                    
-                      <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
-                     
-                      
-                    @elseif ($rol ==='Satış')
-                    
-                       <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
-                       
-                    @elseif ($rol ==='Satın Alma / Satış')
-                    
-                       <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
-                       
-                    @else
-                        
-                    @endif
-        
+       
+                                @if(Auth::guest())
+
+
+                                @else
+
+                                    @if ( $rol === 'Yönetici')
+
+
+                                      <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+
+
+                                    @elseif ($rol ==='Satış')
+
+                                       <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+
+                                    @elseif ($rol ==='Satın Alma / Satış')
+
+                                       <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+
+                                    @else
+
+                                    @endif
+
+                                @endif
+            
         
         <hr>
     </div>
@@ -118,9 +146,10 @@
    var ilan_id;
    $(".btn-primary").click(function(){
        ilan_id=$(this).attr("name");
-      
-       func();
+       funcIlanFirma();
+       
     });
+    
     function func(){          
            $.ajax({
             type:"GET",
@@ -131,6 +160,7 @@
             success: function(data){
                 console.log(data);
                     if(data==0){ 
+                        
                         window.location.href="ilanTeklifVer/"+ilan_id;    
                     }
                     else{
@@ -140,6 +170,27 @@
             }
         });
     }
+    
+    function funcIlanFirma(){          
+        $.ajax({
+        type:"GET",
+        url:"IlanFirmaControl",
+        data:{ilan_id:ilan_id},
+        cache: false,
+        success: function(data){
+            console.log(data);
+                if(data==0){ 
+                        
+                    func();    
+                }
+                else{
+
+                   alert("Kendi Firmanızın İlanına Başvuru Yapamazsınız!");
+                }
+            }
+        });
+    }
+    
     $(".puanlama").each(function(){
         var puan = $(this).text();
         if(puan > 0 && puan < 3){

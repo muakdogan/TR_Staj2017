@@ -140,6 +140,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
                     </li>
                    @else
+                   
+                       
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
                             ?>
@@ -196,20 +198,55 @@ window.requestAnimationFrame = window.requestAnimationFrame
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
      <script>
-        $('.firmaSec').on('click', function() {
-        var selected = $(this).attr('name');
-        $.ajax({
+          var selected;
+          var count;
+          var click=0;
+$( document ).ready(function() {
+    
+    
+    count = '{{$kullanici->firmalar()->count()}}';
+   
+    
+    @if(Auth::guest())
+  
+    @else
+        
+        if(count==1){
+            
+               selected='{{$kullanicifirma->id}}';
+            
+               func();
+        }
+  
+    @endif
+}); 
+         
+$('.firmaSec').on('click', function() {
+         
+    selected = $(this).attr('name');
+    func();
+    click=1;
+      
+        
+});
+ function func(){
+       $.ajax({
             type:"GET",
              url: "./set_session",
              data: { role: selected },
              }).done(function(data){
-                        console.log(data);         
-                        location.href="firmaIslemleri/"+selected;
+                        console.log(data); 
+                        
+                        if(click==1 ){
+                          location.href="firmaIslemleri/"+selected;
+                        }
                         }).fail(function(){ 
                             alert('Yüklenemiyor !!!  ');
                         });
-        
-});
+     
+     
+ }
+
     </script>
 </body>
 </html>
