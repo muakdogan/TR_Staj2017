@@ -188,7 +188,18 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                         @foreach($ilanlarım as $ilan)
                             <p>{{$ilan->adi}}</p>
                             <p>{{$ilan->kapanma_tarihi}}</p>
-                            <a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Düzenle</button></a>
+                            
+                            
+                            @if($ilan->yayinlanma_tarihi > time())
+                              <a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Düzenle</button></a>
+                              
+                             @else
+                             
+                              <a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Gör</button></a>
+                             
+                            @endif
+                            
+                           
 
                             <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Teklif Gör</button></a>
                              <br>

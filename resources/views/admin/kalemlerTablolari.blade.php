@@ -1,27 +1,22 @@
+@extends('layouts.appAdmin')
+
+@section('content')
 <!DOCTYPE html>
 <html>
 <head>
  <meta charset="utf-8">
-  <title>Multiple Extensions - Fancytree</title>
-
+ 
   <link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
   <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-
-  <!-- jquery-contextmenu (https://github.com/mar10/jquery-ui-contextmenu/) -->
   <script src="//cdn.jsdelivr.net/jquery.ui-contextmenu/1/jquery.ui-contextmenu.min.js"></script>
-
   <link href="{{asset('../resources/views/admin/skin-lion/ui.fancytree.css')}}" rel="stylesheet">
   <script src="{{asset('../resources/views/admin/js/jquery.fancytree.js')}}"></script>
   <script src="{{asset('../resources/views/admin/js/jquery.fancytree.dnd.js')}}"></script>
   <script src="{{asset('../resources/views/admin/js/jquery.fancytree.edit.js')}}"></script>
   <script src="{{asset('../resources/views/admin/js/jquery.fancytree.gridnav.js')}}"></script>
   <script src="{{asset('../resources/views/admin/js/jquery.fancytree.table.js')}}"></script>
-<!--
-  <script src="../../build/jquery.fancytree-all.min.js"></script>
--->
 
-  <!-- (Irrelevant source removed.) -->
 
 <style type="text/css">
   .ui-menu {
@@ -360,43 +355,47 @@ $(function(){
 </head>
 
 <body class="example">
-  
-
-  <h1>Table Tree</h1>
-  <div>
-    <label>Fake input:<input id="input1"/></label>
-  </div>
-  <table id="tree" style="width: 60%">
-    <colgroup>
-    <col width="7%">
-    <col width="7%">
-    <col width="51%">
-    <col width="7%">
-    <col width="7%">
-    </colgroup>
-    <thead>
-      <tr> <th></th> <th>#</th> <th></th> <th>Id</th> <th>Nace Kodu</th> </tr>
-    </thead>
-    <tbody>
-      <!-- Define a row template for all invariant markup: -->
-      <tr>
-        <td class="alignCenter"><input class="cbx" name="aktif" id="dummy" type="checkbox"></td>
-        <td></td>
-        <td></td>
-        <td><input name="input1" type="input" disabled></td>
-        <td><input name="input2" type="input"></td>
-        <!--td class="alignCenter"><input name="cb1" type="checkbox"></td>
-        <td class="alignCenter"><input name="cb2" type="checkbox"></td>
-        <td>
-          <select name="sel1" id="">
-            <option value="a">A</option>
-            <option value="b">B</option>
-          </select>
-        </td-->
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- (Irrelevant source removed.) -->
+    
+        <div class="col-md-10 col-md-offset-1">
+             @include('layouts.admin_alt_menu')
+            <div class="panel panel-default">
+                    <div class="panel-heading">Kalemler Listesi Tabloları</div>
+                      
+                    <div class="panel-body">
+                        <table id="tree" style="width: 60%">
+                            <colgroup>
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="51%">
+                            <col width="7%">
+                            <col width="7%">
+                            </colgroup>
+                            <thead>
+                              <tr> <th></th> <th></th> <th></th> <th>Id</th> <th>Nace Kodu</th> </tr>
+                            </thead>
+                            <tbody>
+                              <!-- Define a row template for all invariant markup: -->
+                              <tr>
+                                <td class="alignCenter"><input class="cbx" name="aktif" id="dummy" type="checkbox"></td>
+                                <td></td>
+                                <td></td>
+                                <td><input name="input1" type="input" disabled></td>
+                                <td><input name="input2" type="input"></td>
+                                <!--td class="alignCenter"><input name="cb1" type="checkbox"></td>
+                                <td class="alignCenter"><input name="cb2" type="checkbox"></td>
+                                <td>
+                                  <select name="sel1" id="">
+                                    <option value="a">A</option>
+                                    <option value="b">B</option>
+                                  </select>
+                                </td-->
+                              </tr>
+                            </tbody>
+                        </table>
+                    </div>          
+                </div>
+        </div>
+   
 </body>
 </html>
+@endsection
