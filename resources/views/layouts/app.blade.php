@@ -204,13 +204,13 @@ window.requestAnimationFrame = window.requestAnimationFrame
 $( document ).ready(function() {
     
     
-    count = '{{$kullanici->firmalar()->count()}}';
+    
    
     
     @if(Auth::guest())
   
     @else
-        
+        count = '{{$kullanici->firmalar()->count()}}';
         if(count==1){
             
                selected='{{$kullanicifirma->id}}';
