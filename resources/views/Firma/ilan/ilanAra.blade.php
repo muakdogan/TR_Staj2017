@@ -174,9 +174,9 @@
        <div  class="container-fuild">
            <div id ="header" class="row content ">
                <div class="container">
-                   <div class="col-sm-3">
-                        <?php $ilan = DB::table('ilanlar')->count();?>
-                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}"> {{$ilan}} ilan </h4>
+                   <div class="col-sm-3" id="ilanCount">
+                        <?php $ilanCount = DB::table('ilanlar')->count();?>
+                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}">  </h4>
                    </div>
                     <div class="col-sm-6">
                         <ul style="list-style: none outside none;">
@@ -584,6 +584,7 @@
                         alert('İlanlar Yüklenemiyor !!!  ');
                     });
                 }
+     
 
             </script>
                   

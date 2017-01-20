@@ -2,7 +2,6 @@
 <br>
 <br>
  @section('content')
-
  <style>
 table {
     font-family: arial, sans-serif;
@@ -61,11 +60,15 @@ tr:nth-child(even) {
                                          <th></th>
                                      </tr>
                                     @foreach($ilanlarFirma as $ilan)
-                                    <?php $ilanTeklifsayısı = $ilan->teklifler()->count(); ?>
+                                    <?php $ilanTeklifsayısı = $ilan->teklifler()->count();
+                                         
+                                    ?>
                                      <tr>
                                          <td>{{$ilan->adi}}</td>
                                          <td>{{$ilanTeklifsayısı}}</td>
+                                         @if($ilan->yayinlanma_tarihi > time())
                                          <td><a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button class="button"> Düzenle</button></a></td>
+                                         @endif
                                      </tr>
                                     @endforeach
                                  </table>
