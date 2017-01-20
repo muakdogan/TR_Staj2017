@@ -18,6 +18,7 @@
     <?php $count=$ilanlar->total();?>
     <input type="hidden" name="totalCount" value='{{$ilanlar->total()}}'>
     @foreach($ilanlar as $ilan)
+    <?php $sektorAdi = App\Sektor::find($ilan->firma_sektor); ?>
     <div class="ilanDetayPop" name="{{$ilan->ilan_id}}">
         <div class="pop-up"  style="display: none;
                                         position: absolute;
@@ -32,6 +33,7 @@
                         <p id="popIlanAdi">İlan Adı : {{$ilan->adi}}</p>
                         <p id="popIlanTuru">İlan Türü: {{$ilan->ilan_turu}}</p>
                         <p id="popIlanUsulu">Usulü: {{$ilan->usulu}}</p>
+                        <p id="popIlanSektoru">İlan Sektörü: {{$sektorAdi->adi}}</p>
                         <p id="popIlanAciklama">Açıklama: {{$ilan->aciklama}}</p>
                         <p id="popIlanIsinSuresi">İşin Süresi: {{$ilan->isin_suresi}}</p>
                         <p id="popIlanSözlesmeTuru">Sözleşme Türü: {{$ilan->sozlesme_turu}}</p>                                
@@ -53,7 +55,13 @@
             $ortalama = $ortalama/$i;*/
         ?>
         <p><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
-        <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div><p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
+        @if(number_format($puan[0]['ortalama'],1)> 0)
+            <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
+            <p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
+        @else
+            <p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" style="padding: 0px" >Firma: {{$ilan->adi}}</a></p>
+        @endif
+        
         <p>{{$ilan->iladi}}</p>
         <p>{{$ilan->yayin_tarihi}}</p>
         
@@ -140,6 +148,7 @@
             }
         });
     }
+    
     $(".puanlama").each(function(){
         var puan = $(this).text();
         if(puan > 0 && puan < 3){
@@ -166,8 +175,8 @@
         else if (puan > 9 && puan <= 10){
             $(this).css("background", "#45c538");
         }
+        
     });
-                       
-
+    
 
 </script>

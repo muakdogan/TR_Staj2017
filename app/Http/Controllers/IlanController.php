@@ -10,6 +10,7 @@ use App\Sektor;
 use DB;
 use Input;
 use View;
+use Carbon\Carbon;
 use Response;
 use Illuminate\Support\Str;
 
@@ -17,6 +18,8 @@ class IlanController extends Controller
 {
     //
     public function showIlan(){
+        $dt = Carbon::now();
+        $dt->toDateString();  
         $iller = Il::all();
         $firma=  Firma::all();
         $sektorler= Sektor::all();
@@ -27,6 +30,8 @@ class IlanController extends Controller
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
+                ->where('ilanlar.yayin_tarihi', '>=' , $dt->today())
+                ->where('ilanlar.kapanma_tarihi', '>' , $dt->today())
                 ->orderBy('ilanlar.yayin_tarihi', 'DESC')
                 ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
         $ilId = Input::get('ilAdi');
@@ -48,6 +53,9 @@ class IlanController extends Controller
                 foreach ($sektorler as $sektor){
                     if($sektor->adi == $input){
                         $sektor_id = $sektor->id;
+                    }
+                    else{
+                        $sektor_id = 0;
                     }
                 }
                 $ilanlar->where('ilanlar.adi',$input )
@@ -72,6 +80,9 @@ class IlanController extends Controller
             foreach ($sektorler as $sektor){
                 if($sektor->adi == $keyword){
                     $sektor_id = $sektor->id;
+                }
+                else{
+                    $sektor_id = 0;
                 }
             }
             $ilanlar->where('ilanlar.adi' ,$keyword )
