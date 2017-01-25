@@ -4,7 +4,6 @@ use App\Il;?>
 
 @section('content')
 
-
 <style>
     
      .ajax-loader {

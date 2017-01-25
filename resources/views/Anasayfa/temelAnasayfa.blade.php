@@ -39,8 +39,7 @@
         itemsDesktopSmall : [979,3]
      
       });
-      
-
+     
     });
     </script>
 
