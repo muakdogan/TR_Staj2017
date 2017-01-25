@@ -9,6 +9,8 @@ class IlanMal extends Model
     //
     public $timestamps=false;
     protected $table = 'ilan_mallar';
+    protected $fillable = ['id', 'ilan_id', 'marka','model', 'adi', 'ambalaj','miktar', 'birim_id'];
+     
      public function birimler()
     {
         return $this->belongsTo('App\Birim', 'birim_id', 'id');

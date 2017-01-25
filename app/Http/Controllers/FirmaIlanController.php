@@ -122,7 +122,7 @@ class FirmaIlanController extends Controller
                     $ilan->kapanma_tarihi= $request->kapanma_tarihi;
                     $ilan->aciklama = $request->aciklama;
                     $ilan->ilan_turu= $request->ilan_turu;
-                    $ilan->usulu= $request->ilan_usulu;
+                    $ilan->usulu= $request->rekabet_sekli;
                     $ilan->sozlesme_turu= $request->sozlesme_turu;
                     
                     $ilan->teknik_sartname = $fileName;
@@ -192,7 +192,7 @@ class FirmaIlanController extends Controller
                     $ilan->kapanma_tarihi= $request->kapanma_tarihi;
                     $ilan->aciklama = $request->aciklama;
                     $ilan->ilan_turu= $request->ilan_turu;
-                    $ilan->usulu= $request->ilan_usulu;
+                    $ilan->usulu= $request->rekabet_sekli;
                     $ilan->sozlesme_turu= $request->sozlesme_turu;
                     
                     $ilan->teknik_sartname = $fileName;
@@ -228,70 +228,11 @@ class FirmaIlanController extends Controller
         }
          
      }
-   
-    public function kalemlerListesiMal(Request $request,$id){
-         
-         $ilan = Ilan::find($request->id);
-         $mal=  new \App\IlanMal();
-         
-         $mal->sira=$request->sira;
-         $mal->marka=$request->marka;
-         $mal->model=$request->model;
-         $mal->adi=$request->adi;
-         $mal->ambalaj=$request->ambalaj;
-         $mal->miktar=$request->miktar;
-         $mal->birim_id=$request->birim;   
-         
-         $ilan->ilan_mallar()->save($mal);
-         
-         return redirect('/firmaIlanOlustur/'.$ilan->firma_id.'/'.$mal->ilan_id);
-         
-     }
-    public function kalemlerListesiHizmet(Request $request,$id){
-         
-         $ilan = Ilan::find($request->id);
-         $hizmet=  new \App\IlanHizmet();
-         $hizmet->sira=$request->sira;
-         $hizmet->adi=$request->adi;
-         $hizmet->fiyat_standardi=$request->fiyat_standardi;
-         $hizmet->fiyat_standardi_birim_id=$request->fiyat_standardi_birimi;
-         $hizmet->miktar=$request->miktar;   
-         $hizmet->miktar_birim_id=$request->miktar_birim_id;
-         $ilan->ilan_hizmetler()->save($hizmet);
-         
-         return redirect('/firmaIlanOlustur/'.$ilan->firma_id.'/'.$hizmet->ilan_id);
-         
-     }
-    public function kalemlerListesiGoturu(Request $request,$id){
-         
-         $ilan = Ilan::find($request->id);
-         $goturu= new \App\IlanGoturuBedel();
-         $goturu->sira=$request->sira;
-         $goturu->isin_adi=$request->isin_adi;
-         $goturu->miktar_turu=$request->miktar_turu;
-         $ilan->ilan_goturu_bedeller()->save($goturu);
-         
-         return redirect('/firmaIlanOlustur/'.$ilan->firma_id.'/'.$goturu->ilan_id);
-         
-     }
-    public function kalemlerListesiYapimİsi(Request $request,$id){
-         
-         $ilan = Ilan::find($request->id);
-         $yapim=  new \App\IlanYapimIsi();
-         $yapim->sira=$request->sira;
-         $yapim->adi=$request->adi;
-         $yapim->miktar=$request->miktar;
-         $yapim->birim_id=$request->birim;
-         $ilan->ilan_yapim_isleri()->save($yapim);
-         
-         return redirect('/firmaIlanOlustur/'.$ilan->firma_id.'/'.$yapim->ilan_id);
-         
-     }
-     
+
     public function kalemlerListesiMalUpdate(Request $request,$id){  
         
          $mallar = \App\IlanMal::find($id);
-         $mallar->sira=$request->sira;
+         //$mallar->sira=$request->sira;
          $mallar->marka=$request->marka;
          $mallar->model=$request->model;
          $mallar->adi=$request->adi;
@@ -299,44 +240,48 @@ class FirmaIlanController extends Controller
          $mallar->miktar=$request->miktar;
          $mallar->birim_id=$request->birim; 
          $mallar->save();
-        return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$mallar->ilan_id);
+         
+         return Redirect::back()->with($request->firma_id,$mallar->ilan_id);
+        //return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$mallar->ilan_id);
     }  
     public function kalemlerListesiHizmetUpdate(Request $request,$id){  
         
          $hizmetler = \App\IlanHizmet::find($id);
          
-         $hizmetler->sira=$request->sira;
+         //$hizmetler->sira=$request->sira;
          $hizmetler->adi=$request->adi;
          $hizmetler->fiyat_standardi=$request->fiyat_standardi;
          $hizmetler->fiyat_standardi_birim_id=$request->fiyat_standardi_birimi;
          $hizmetler->miktar=$request->miktar;   
          $hizmetler->miktar_birim_id=$request->miktar_birim_id;
          $hizmetler->save();
-         
-        return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$hizmetler->ilan_id);
+         return Redirect::back()->with($request->firma_id,$hizmetler->ilan_id);
+       // return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$hizmetler->ilan_id);
     }
     public function kalemlerListesiGoturuUpdate(Request $request,$id){  
         
          $goturuler = \App\IlanGoturuBedel::find($id);
          
-         $goturuler->sira=$request->sira;
+         //$goturuler->sira=$request->sira;
          $goturuler->isin_adi=$request->isin_adi;
          $goturuler->miktar_turu=$request->miktar_turu;
          $goturuler->save();
+         return Redirect::back()->with($request->firma_id,$goturuler->ilan_id);
          
-        return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$goturuler->ilan_id);
+        //return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$goturuler->ilan_id);
     }
     public function kalemlerListesiYapimİsiUpdate(Request $request,$id){  
         
          $yapimlar = \App\IlanYapimIsi::find($id);
          
-         $yapimlar->sira=$request->sira;
+         //$yapimlar->sira=$request->sira;
          $yapimlar->adi=$request->adi;
          $yapimlar->miktar=$request->miktar;
          $yapimlar->birim_id=$request->birim;
          $yapimlar->save();
+         return Redirect::back()->with($request->firma_id,$yapimlar->ilan_id);
          
-        return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$yapimlar->ilan_id);
+       // return redirect('firmaIlanOlustur/'.$request->firma_id.'/'.$yapimlar->ilan_id);
     }
     
     public function deleteMal(Request $request,$id){  
@@ -376,7 +321,7 @@ class FirmaIlanController extends Controller
          
          $ilan = Ilan::find($request->id);
           $mal= new \App\IlanMal();
-         $mal->sira=$request->sira;
+         
          $mal->marka=$request->marka;
          $mal->model=$request->model;
          $mal->adi=$request->adi;
@@ -386,26 +331,27 @@ class FirmaIlanController extends Controller
          
          $ilan->ilan_mallar()->save($mal);
          
-         return redirect('ilanEkle/'.$ilan->firma_id.'/'.$ilan->id);
+        return Redirect::back()->with($ilan->firma_id,$mal->ilan_id);
+        
          
      }
      public function kalemlerListesiGoturuEkle(Request $request,$id){
          
          $ilan = Ilan::find($request->id);
          $goturu= new \App\IlanGoturuBedel();
-         $goturu->sira=$request->sira;
+        
          $goturu->isin_adi=$request->isin_adi;
          $goturu->miktar_turu=$request->miktar_turu;
          $ilan->ilan_goturu_bedeller()->save($goturu);
          
-         return redirect('ilanEkle/'.$ilan->firma_id.'/'.$ilan->id);
+          return Redirect::back()->with($ilan->firma_id,$goturu->ilan_id);
          
      }
      public function kalemlerListesiHizmetEkle(Request $request,$id){
          
          $ilan = Ilan::find($request->id);
          $hizmet=  new \App\IlanHizmet();
-         $hizmet->sira=$request->sira;
+       
          $hizmet->adi=$request->adi;
          $hizmet->fiyat_standardi=$request->fiyat_standardi;
          $hizmet->fiyat_standardi_birim_id=$request->fiyat_standardi_birimi;
@@ -413,74 +359,24 @@ class FirmaIlanController extends Controller
          $hizmet->miktar_birim_id=$request->miktar_birim_id;
          $ilan->ilan_hizmetler()->save($hizmet);
          
-         return redirect('ilanEkle/'.$ilan->firma_id.'/'.$ilan->id);
+          return Redirect::back()->with($ilan->firma_id,$hizmet->ilan_id);
          
      }
      public function kalemlerListesiYapimİsiEkle(Request $request,$id){
          
          $ilan = Ilan::find($request->id);
          $yapim=  new \App\IlanYapimIsi();
-         $yapim->sira=$request->sira;
+       
          $yapim->adi=$request->adi;
          $yapim->miktar=$request->miktar;
          $yapim->birim_id=$request->birim;
          $ilan->ilan_yapim_isleri()->save($yapim);
          
-         return redirect('ilanEkle/'.$ilan->firma_id.'/'.$ilan->id);
+          return Redirect::back()->with($ilan->firma_id,$yapim->ilan_id);
          
      }
      
-     public function kalemlerListesiMalUpdateEkle(Request $request,$id){  
-        
-         $mallar = \App\IlanMal::find($id);
-         $mallar->sira=$request->sira;
-         $mallar->marka=$request->marka;
-         $mallar->model=$request->model;
-         $mallar->adi=$request->adi;
-         $mallar->ambalaj=$request->ambalaj;
-         $mallar->miktar=$request->miktar;
-         $mallar->birim_id=$request->birim; 
-         $mallar->save();
-        return redirect('ilanEkle/'.$request->firma_id.'/'.$mallar->ilan_id);
-    }
-     public function kalemlerListesiHizmetUpdateEkle(Request $request,$id){  
-        
-         $hizmetler = \App\IlanHizmet::find($id);
-         
-         $hizmetler->sira=$request->sira;
-         $hizmetler->adi=$request->adi;
-         $hizmetler->fiyat_standardi=$request->fiyat_standardi;
-         $hizmetler->fiyat_standardi_birim_id=$request->fiyat_standardi_birimi;
-         $hizmetler->miktar=$request->miktar;   
-         $hizmetler->miktar_birim_id=$request->miktar_birim_id;
-         $hizmetler->save();
-         
-        return redirect('ilanEkle/'.$request->firma_id.'/'.$hizmetler->ilan_id);
-    }
-     public function kalemlerListesiGoturuUpdateEkle(Request $request,$id){  
-        
-         $goturuler = \App\IlanGoturuBedel::find($id);
-         
-         $goturuler->sira=$request->sira;
-         $goturuler->isin_adi=$request->isin_adi;
-         $goturuler->miktar_turu=$request->miktar_turu;
-         $goturuler->save();
-         
-        return redirect('ilanEkle/'.$request->firma_id.'/'.$goturuler->ilan_id);
-    }
-     public function kalemlerListesiYapimİsiUpdateEkle(Request $request,$id){  
-        
-         $yapimlar = \App\IlanYapimIsi::find($id);
-         
-         $yapimlar->sira=$request->sira;
-         $yapimlar->adi=$request->adi;
-         $yapimlar->miktar=$request->miktar;
-         $yapimlar->birim_id=$request->birim;
-         $yapimlar->save();
-         
-        return redirect('ilanEkle/'.$request->firma_id.'/'.$yapimlar->ilan_id);
-    }
-    
+     
     public function deleteMalEkle(Request $request,$id){  
         
          $mal = \App\IlanMal::find($id);

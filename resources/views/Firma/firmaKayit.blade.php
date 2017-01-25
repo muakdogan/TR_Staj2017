@@ -206,8 +206,7 @@ $('#il_id').on('change', function (e) {
         beforeSend:( function(){
             $('.ajax-loader').css("visibility", "visible");
         });
-        
-        
+   
         $('#ilce_id').empty();
          $('#ilce_id').append('<option value=""> Seçiniz </option>');
         $.each(data, function (index, subcatObj) {
@@ -246,28 +245,7 @@ $('#ilce_id').on('change', function (e) {
            alert('İller Yüklenemiyor !!!  ');
         });
 });
-$('#semt_id').on('change', function (e) {
-    console.log(e);
 
-    var semt_id = e.target.value;
-
-    //ajax
-    $.get('/tamrekabet/public/index.php/ajax-subcattt?semt_id=' + semt_id, function (data) {
-        
-          beforeSend:( function(){
-            $('.ajax-loader').css("visibility", "visible");
-            alert("yukleniyor");
-        });
-        $('#semt_id').empty();
-        $.each(data, function (index, subcatObj) {
-            $('#semt_id').append('<option value="' + subcatObj.id + '">' + subcatObj.adi + '</option>');
-        });
-    }).done(function(data){  
-          $('.ajax-loader').css("visibility", "hidden");
-        }).fail(function(){ 
-           
-        });
-});
 
 </script>
 @endsection

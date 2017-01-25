@@ -202,22 +202,17 @@ window.requestAnimationFrame = window.requestAnimationFrame
           var count;
           var click=0;
 $( document ).ready(function() {
-    
-    
-    
-   
-    
+
     @if(Auth::guest())
-  
+ 
     @else
+       
         count = '{{$kullanici->firmalar()->count()}}';
         if(count==1){
-            
                selected='{{$kullanicifirma->id}}';
-            
                func();
         }
-  
+        
     @endif
 }); 
          
@@ -226,17 +221,15 @@ $('.firmaSec').on('click', function() {
     selected = $(this).attr('name');
     func();
     click=1;
-      
-        
+
 });
- function func(){
+function func(){
        $.ajax({
             type:"GET",
              url: "./set_session",
              data: { role: selected },
              }).done(function(data){
                         console.log(data); 
-                        
                         if(click==1 ){
                           location.href="firmaIslemleri/"+selected;
                         }
