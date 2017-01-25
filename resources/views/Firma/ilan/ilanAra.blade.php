@@ -289,6 +289,16 @@
                 </div>
             </div>
             
+            @if(Auth::guest())
+                <?php $sektor_id = 0; ?>
+            @else
+                <?php $id = session()->get('firma_id');
+                                $firma = App\Firma::find($id);
+                                ?>
+                @foreach($firma->sektorler as $sektor)
+                    <?php $sektor_id = $sektor->id ?>
+                @endforeach
+            @endif    
             <script type="text/javascript">
                 $("#temizleButton").click(function(){
                     
@@ -492,6 +502,7 @@
                     });
                     var sehirId = "{{$ilId}}";
                     var keyword = "{{$keyword}}";
+                    var sektorID = "{{$sektor_id}}";
                     
                     if(sehirId != ""){
                         jQuery('.mutliSelect input[type="checkbox"]').each(function(){
@@ -513,6 +524,27 @@
                                 $(this).prop("checked",true);
                             }
                         });
+                    }
+                    if(sektorID != ""){
+                        jQuery(".checkboxClass").each(function(){
+                            if($(this).val() == sektorID){
+                                $(this).prop("checked",true);
+                            }
+                        });
+                        var sonSecilen;
+                        var n = jQuery('.checkboxClass:checked').length;
+                            if (n > 0){
+                                jQuery('.checkboxClass:checked').each(function(){
+                                sonSecilen = $(this).attr('name');
+                                if(jQuery.inArray(sonSecilen, sektor) === -1){
+                                    sektor.push(sonSecilen);
+                                    return false;
+                                }
+                                });
+                            console.log(sonSecilen);
+                        }
+                        getIlanlar(1);
+                        doldurma(sonSecilen);
                     }
                 });
                 

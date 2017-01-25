@@ -227,6 +227,6 @@
         }
         
     });
-    
+    $('#ilanCount').children().html("Arama kriterlerinize uyan <img src='{{asset('images/sol.png')}}'> {{$count}} ilan");
 
 </script>

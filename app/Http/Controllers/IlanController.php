@@ -29,8 +29,8 @@ class IlanController extends Controller
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
-                ->where('ilanlar.yayin_tarihi', '>=' , $dt->today())
-                ->where('ilanlar.kapanma_tarihi', '>' , $dt->today())
+                ->where('ilanlar.yayin_tarihi', '<=' , $dt->today())
+                ->where('ilanlar.kapanma_tarihi', '>=' , $dt->today())
                 ->orderBy('ilanlar.yayin_tarihi', 'DESC')
                 ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
         $ilId = Input::get('ilAdi');

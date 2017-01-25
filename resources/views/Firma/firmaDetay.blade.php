@@ -127,7 +127,6 @@
                     <?php $yorumYapanFirma = App\Firma::find($yorum->yorum_yapan_firma_id); ?>
                     <hr>
                     <h4><strong>{{$yorumYapanFirma->adi}}</strong>'sının Yorumu</h4>
-                    <p>{{$yorum->yorum}}</p>
                     @endforeach
                 </div>
             </div>
@@ -137,10 +136,11 @@
 
    </div>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  
 </body>
 </html>
-<script>
+<script>                    <p>{{$yorum->yorum}}</p>
+
     $(".puanlama").each(function(){
         
         var puan = $(this).children().next().text();

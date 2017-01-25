@@ -408,15 +408,9 @@
     </div>
     
 </div>
-
- 
-
-
-
-
-
-
-
 </body>
 </html>
+<script>
+    
+    </script>
 @endsection

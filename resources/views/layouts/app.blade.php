@@ -201,13 +201,16 @@ window.requestAnimationFrame = window.requestAnimationFrame
           var selected;
           var count;
           var click=0;
+          var session_value;
+         
 $( document ).ready(function() {
-
+    
     @if(Auth::guest())
  
     @else
        
         count = '{{$kullanici->firmalar()->count()}}';
+        session_value = "{{$firmaAdi}}";
         if(count==1){
                selected='{{$kullanicifirma->id}}';
                func();
@@ -223,21 +226,24 @@ $('.firmaSec').on('click', function() {
     click=1;
 
 });
-function func(){
-       $.ajax({
-            type:"GET",
-             url: "./set_session",
-             data: { role: selected },
-             }).done(function(data){
-                        console.log(data); 
-                        if(click==1 ){
-                          location.href="firmaIslemleri/"+selected;
-                        }
-                        }).fail(function(){ 
-                            alert('Yüklenemiyor !!!  ');
-                        });
-     
-     
+ function func(){
+        
+        if(session_value === "" || click === 1){
+            $.ajax({
+                type:"GET",
+                 url: "./set_session",
+                 data: { role: selected },
+                 }).done(function(data){
+                            console.log(data); 
+
+                            if(click==1 ){
+                              location.href="firmaIslemleri/"+selected;
+                            }
+                            }).fail(function(){ 
+                                alert('Yüklenemiyor !!!  ');
+                            });
+                            
+        }
  }
 
     </script>
