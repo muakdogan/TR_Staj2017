@@ -18,7 +18,6 @@ class CreateIlanMallarTable extends Migration
             $table->increments('id');
             $table->integer('ilan_id')->unsigned();
             $table->foreign('ilan_id')->references('id')->on('ilanlar')->onDelete('cascade');
-            $table->integer('sira');
             $table->string('marka');
             $table->string('model');
             $table->string('adi');

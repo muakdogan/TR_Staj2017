@@ -18,7 +18,7 @@ class CreateIlanYapimIsleriTable extends Migration
             $table->increments('id');
             $table->integer('ilan_id')->unsigned();
             $table->foreign('ilan_id')->references('id')->on('ilanlar')->onDelete('cascade');
-            $table->integer('sira');
+           
             $table->string('adi');
             $table->string('miktar');
             $table->integer('birim_id')->unsigned();

@@ -599,16 +599,16 @@ Route::get('/firmaOnay/{id}', function ($id) {
     Route::post('firmaIlanOlustur/fiyatlandırmaBilgileri/{id}/{ilan_id}', 'FirmaIlanController@fiyatlandırmaBilgileriAdd');
     Route::post('firmaIlanOlustur/fiyatlandırmaBilgileriUpdate/{id}/{ilanid}', 'FirmaIlanController@fiyatlandırmaBilgileriUpdate');
     
-    
+   
     Route::post('kalemlerListesiMal/{id}', 'FirmaIlanController@kalemlerListesiMalEkle');
     Route::post('kalemlerListesiHizmet/{id}', 'FirmaIlanController@kalemlerListesiHizmetEkle');
     Route::post('kalemlerListesiGoturu/{id}', 'FirmaIlanController@kalemlerListesiGoturuEkle');
     Route::post('kalemlerListesiYapim/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiEkle');
-    
-    Route::post('kalemlerListesiMalUpdate/{id}', 'FirmaIlanController@kalemlerListesiMalUpdateEkle');
-    Route::post('kalemlerListesiHizmetUpdate/{id}', 'FirmaIlanController@kalemlerListesiHizmetUpdateEkle');
-    Route::post('kalemlerListesiGoturuUpdate/{id}', 'FirmaIlanController@kalemlerListesiGoturuUpdatEkle');
-    Route::post('kalemlerListesiYapimİsiUpdate/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiUpdateEkle');
+   
+    Route::post('kalemlerListesiMalUpdate/{id}', 'FirmaIlanController@kalemlerListesiMalUpdate');
+    Route::post('kalemlerListesiHizmetUpdate/{id}', 'FirmaIlanController@kalemlerListesiHizmetUpdate');
+    Route::post('kalemlerListesiGoturuUpdate/{id}', 'FirmaIlanController@kalemlerListesiGoturuUpdat');
+    Route::post('kalemlerListesiYapimİsiUpdate/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiUpdate');
     
     Route::delete('mal/{id}', 'FirmaIlanController@deleteMalEkle');
     Route::delete('hizmet/{id}', 'FirmaIlanController@deleteHizmetEkle');
@@ -617,10 +617,10 @@ Route::get('/firmaOnay/{id}', function ($id) {
     
     
     Route::post('firmaIlanOlustur/firmateknik/{id}', 'FirmaIlanController@firmaTeknik');
-    Route::post('firmaIlanOlustur/kalemlerListesiMal/{id}', 'FirmaIlanController@kalemlerListesiMal');
-    Route::post('firmaIlanOlustur/kalemlerListesiHizmet/{id}', 'FirmaIlanController@kalemlerListesiHizmet');
-    Route::post('firmaIlanOlustur/kalemlerListesiGoturu/{id}', 'FirmaIlanController@kalemlerListesiGoturu');
-    Route::post('firmaIlanOlustur/kalemlerListesiYapim/{id}', 'FirmaIlanController@kalemlerListesiYapimİsi');
+    Route::post('firmaIlanOlustur/kalemlerListesiMal/{id}', 'FirmaIlanController@kalemlerListesiMalEkle');
+    Route::post('firmaIlanOlustur/kalemlerListesiHizmet/{id}', 'FirmaIlanController@kalemlerListesiHizmetEkle');
+    Route::post('firmaIlanOlustur/kalemlerListesiGoturu/{id}', 'FirmaIlanController@kalemlerListesiGoturuEkle');
+    Route::post('firmaIlanOlustur/kalemlerListesiYapim/{id}', 'FirmaIlanController@kalemlerListesiYapimİsiEkle');
     
     Route::post('firmaIlanOlustur/kalemlerListesiMalUpdate/{id}', 'FirmaIlanController@kalemlerListesiMalUpdate');
     Route::post('firmaIlanOlustur/kalemlerListesiHizmetUpdate/{id}', 'FirmaIlanController@kalemlerListesiHizmetUpdate');
@@ -816,8 +816,6 @@ Route::get('ilanDetay', function () {
 Route::get('/ajax-subcat', function (Request $request) {
     
     $il_id = Input::get('il_id');
-    
-    //$il_id=1
     $ilceler = \App\Ilce::where('il_id', '=', $il_id)->get();
     return Response::json($ilceler);
 });
@@ -826,6 +824,9 @@ Route::get('/ajax-subcatt', function () {
     $semtler = \App\Semt::where('ilce_id', '=', $ilce_id)->get();
     return Response::json($semtler);
 });
+
+
+
  Route::auth();
 
 

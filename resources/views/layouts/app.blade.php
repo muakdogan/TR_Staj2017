@@ -206,17 +206,16 @@ window.requestAnimationFrame = window.requestAnimationFrame
 $( document ).ready(function() {
     
     @if(Auth::guest())
-  
+ 
     @else
+       
         count = '{{$kullanici->firmalar()->count()}}';
         session_value = "{{$firmaAdi}}";
         if(count==1){
-            
                selected='{{$kullanicifirma->id}}';
-            
                func();
         }
-  
+        
     @endif
 }); 
          
@@ -225,8 +224,7 @@ $('.firmaSec').on('click', function() {
     selected = $(this).attr('name');
     func();
     click=1;
-      
-        
+
 });
  function func(){
         

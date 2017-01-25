@@ -18,7 +18,7 @@ class CreateIlanHizmetlerTable extends Migration
             $table->increments('id');
             $table->integer('ilan_id')->unsigned();
             $table->foreign('ilan_id')->references('id')->on('ilanlar')->onDelete('cascade');
-            $table->integer('sira');
+           
             $table->string('adi');
             $table->string('fiyat_standardi');
             $table->integer('fiyat_standardi_birim_id')->unsigned();

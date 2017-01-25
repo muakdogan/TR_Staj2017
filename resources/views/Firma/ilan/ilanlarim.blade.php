@@ -313,12 +313,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 var deneme;
                 value[i].innerHTML = sliders[i].noUiSlider.get();
                 sliders[i].noUiSlider.on('change', function( values, handle ){
-                    alert("girdi0");
+                   
                     deneme = values[handle];
-                    alert(deneme);
+                  
                     value[i].innerHTML = "0";
                  });
-                alert(deneme);
+              
                 
         }
 });

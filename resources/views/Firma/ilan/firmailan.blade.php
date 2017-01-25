@@ -516,6 +516,7 @@
                                          $ilan = new App\Ilan();
                                      if (!$ilan->ilan_mallar)
                                          $ilan->ilan_mallar = new App\IlanMal();
+                                     $i=1;
                                      ?>
                                  <tr>
                                      <th>Sıra:</th>
@@ -531,8 +532,10 @@
                                  @foreach($ilan->ilan_mallar as $ilan_mal)
                                  <tr>
                                      <td>
-                                         {{$ilan_mal->sira}}
+                                         {{$i}}
                                      </td>
+                                     <?php $i++?>
+                                     
                                      <td>
                                          {{$ilan_mal->marka}}
                                      </td>
@@ -573,12 +576,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="" required>
-                                                         </div>
-                                                     </div>
+                                                     
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Marka</label>
                                                          <div class="col-sm-9">
@@ -646,12 +644,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="" required>
-                                                         </div>
-                                                     </div>
+                                                   
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Marka</label>
                                                          <div class="col-sm-9">
@@ -723,6 +716,7 @@
                                          $ilan = new App\Ilan();
                                      if (!$ilan->ilan_hizmetler)
                                          $ilan->ilan_hizmetler = new App\IlanHizmet();
+                                     $j=0;
                                      ?>
                                  <tr>
                                      <th>Sıra:</th>
@@ -737,9 +731,9 @@
                                  @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
                                  <tr>
                                      <td>
-                                         {{$ilan_hizmet->sira}}
+                                         {{$j}}
                                      </td>
-
+                                        <?php $j++ ?>
                                      <td>
                                          {{$ilan_hizmet->adi}}
                                      </td>
@@ -777,12 +771,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="{{$ilan_hizmet->sira}}" required>
-                                                         </div>
-                                                     </div>
+                                                   
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
@@ -850,13 +839,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="" required>
-                                                         </div>
-                                                     </div>
-
+                                                    
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
                                                          <div class="col-sm-9">
@@ -927,6 +910,7 @@
                                          $ilan = new App\Ilan();
                                      if (!$ilan->ilan_goturu_bedeller)
                                          $ilan->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
+                                     $k=0;
                                      ?>
                                  <tr>
                                      <th>Sıra:</th>
@@ -938,8 +922,9 @@
                                  @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
                                  <tr>
                                      <td>
-                                         {{$ilan_goturu_bedel->sira}}
+                                         {{$k}}
                                      </td>
+                                     <?php$k++?>
 
                                      <td>
                                          {{$ilan_goturu_bedel->isin_adi}}
@@ -968,12 +953,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="  {{$ilan_goturu_bedel->sira}}" required>
-                                                         </div>
-                                                     </div>
+                                                    
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">İşin Adı</label>
@@ -1015,12 +995,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="">
-                                                         </div>
-                                                     </div>
+                                                   
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">İşin Adı</label>
@@ -1066,6 +1041,7 @@
                                          $ilan = new App\Ilan();
                                      if (!$ilan->ilan_yapim_isleri)
                                          $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+                                     $y=0;
                                      ?>
                                  <tr>
                                      <th>Sıra:</th>
@@ -1078,9 +1054,9 @@
                                  @foreach($firma->ilanlar->ilan_yapim_isleri as $ilan_yapim_isi)
                                  <tr>
                                      <td>
-                                         {{$ilan_yapim_isi->sira}}
+                                         {{$y}}
                                      </td>
-
+                                        <?php $y++ ?>
                                      <td>
                                          {{$ilan_yapim_isi->adi}}
                                      </td>
@@ -1112,12 +1088,6 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="{{$ilan_yapim_isi->sira}}" required>
-                                                         </div>
-                                                     </div>
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
@@ -1168,13 +1138,7 @@
                                                  <div class="modal-body">
                                                      {!! Form::open(array('url'=>'firmaIlanOlustur/kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Sıra</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="sira" name="sira" placeholder="Sıra" value="" required>
-                                                         </div>
-                                                     </div>
-
+                                                    
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
                                                          <div class="col-sm-9">
