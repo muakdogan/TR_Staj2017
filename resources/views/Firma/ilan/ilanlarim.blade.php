@@ -2,8 +2,9 @@
 <br>
  <br>
  @section('content')
-   <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
-     <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
+    <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
+    <script src="{{asset('js/wNumb.js')}}"></script>
+    <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
  <style>
 table {
     font-family: arial, sans-serif;
@@ -76,7 +77,8 @@ nav ul li a.active {
 .dialog {
   position: relative;
   text-align: center;
-  background: #4478a0;
+  background: #fff;
+  border-radius: 8px;
   margin: 13px 0 4px 4px;
   display: inline-block;
   width: 600px;
@@ -106,18 +108,17 @@ nav ul li a.active {
   margin-left: -16px;
 }
 .dialog .title {
-  color: #fff;
   font-weight: bold;
   text-align: center;
-  border: 1px solid #5189B5;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
   border-width: 0px 0px 1px 0px;
   margin-left: 0;
   margin-right: 0;
   margin-bottom: 4px;
   margin-top: 8px;
   padding: 8px 16px;
-  background: #5C9CCE;
-  box-shadow: 0px 1px 4px rgba(68, 120, 160, 0.1);
+  background: #fff;
   font-size: 16px;
   line-height:2em;
 }
@@ -129,15 +130,16 @@ form
   padding:16px;
   padding-top: 0;
 }
-select[name=type]
-{
-appearance:none;
-	border-radius: 0;
+label1{
+    display: inline-block;
+    font-size: 12px;
 }
-textarea,input[type=text],input[type=datetime-local],input[type=time],select
+textarea,input[type=text],input[type=datetime-local],input[type=time],select,label1
 {
-  color: #fff;
-  border: 0;
+  color: #000;
+  border-width: 0px 0px 1px 0px;
+  border-radius: 8px;
+  border:0px solid #ccc;
   outline: 0;
   resize: none;
   margin: 0;
@@ -145,10 +147,11 @@ textarea,input[type=text],input[type=datetime-local],input[type=time],select
   padding: .5em;
   width:100%;
   border-bottom: 1px dotted rgba(250, 250, 250, 0.4);
-  background:#5d92ba;
+  background:#fff;
+  box-shadow:inset 0 2px 2px rgb(119, 119, 119);
 }
 input[type=text]:focus,input[type=datetime-local]:focus,input[type=time]:focus {
-  background-color: #4478a0;
+  background-color: #ddd;
 }
 input[type=submit]
 {
@@ -163,14 +166,15 @@ input[type=submit]:active
   background: #E1E5E5;
 }
 input:-moz-placeholder, textarea:-moz-placeholder {
-	color: #FAFEFF;
+	color: #555;
 }
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-  color: #FAFEFF;
+  color: #555;
 }
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-  	color:#FAFEFF;
+  	color:#555;
 }
+
 
 </style>
      <div class="container">
@@ -210,7 +214,9 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 <div class="panel panel-default">
                     <div class="panel-heading">Sonuçlanmış İlanlarım</div>
                     <div class="panel-body">
-                        <?php $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();?>
+                        <?php $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+                            $i=0;
+                        ?>
                         <hr>
                         @foreach($ilanlarım as $ilan)
                             <p>{{$ilan->adi}}</p>
@@ -219,43 +225,43 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             
                                 <ul>
                                 <li>
-                                   <a><button style="float:right" type="button" class="btn btn-info add">Puan Ver/Yorum Yap</button></a>
-                                  <div class="dialog" style="display:none">
-                                  <div class="title">Puanla/Yorum Yap</div>
-                                  <form action="addevent.php" method="post">
-                                    <div class="row col-lg-12">
-                                      <div class="col-lg-3">
-                                        <input name="kriter1" type="text" placeholder="Ürün/hizmet kalitesi"/>
-                                        <div id="puanlama">
-                                            <div class="sliders" id="k1"></div>
-                                            <div class="value" ></div>
+                                  <a><button style="float:right" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
+                                  <div class="dialog" id="dialog{{$i++}}" style="display:none">
+                                    <div class="title">Puanla/Yorum Yap</div>
+                                    <form method="post">
+                                      <div class="row col-lg-12">
+                                        <div class="col-lg-3">
+                                            <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
+                                          <div id="puanlama">
+                                              <div class="sliders" id="k1"></div>
+                                              <div class="value" ></div>
+                                          </div>
+                                        </div>  
+                                        <div class="col-lg-3" style="border-color:#ddd">
+                                            <label1 name="kriter2" type="text"><br>Teslimat</label1>
+                                          <div id="puanlama">
+                                              <div class="sliders" id="k2"></div>
+                                              <div class="value" ></div>
+                                          </div>
+                                        </div> 
+                                        <div class="col-lg-3">
+                                            <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
+                                          <div id="puanlama">
+                                              <div class="sliders" id="k3"></div>
+                                              <div class="value" ></div>
+                                          </div>
                                         </div>
-                                      </div>  
-                                      <div class="col-lg-3">
-                                        <input name="kriter2" type="text" placeholder="Teslimat"/>
-                                        <div id="puanlama">
-                                            <div class="sliders" id="k2"></div>
-                                            <div class="value" ></div>
-                                        </div>
-                                      </div> 
-                                      <div class="col-lg-3">
-                                        <input name="kriter3" type="text" placeholder="Teknik ve Yönetsel Yeterlilik"/>
-                                        <div id="puanlama">
-                                            <div class="sliders" id="k3"></div>
-                                            <div class="value" ></div>
-                                        </div>
+                                        <div class="col-lg-3">
+                                            <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
+                                          <div id="puanlama">
+                                              <div class="sliders" id="k4"></div>
+                                              <div class="value" ></div>
+                                          </div>
+                                        </div> 
                                       </div>
-                                      <div class="col-lg-3">
-                                        <input name="kriter4" type="text" placeholder="İletişim ve Esneklik"/>
-                                        <div id="puanlama">
-                                            <div class="sliders" id="k4"></div>
-                                            <div class="value" ></div>
-                                        </div>
-                                      </div> 
-                                    </div>
-                                    <textarea name="yorum" placeholder="Yorum" cols="30" rows="10" wrap="soft"></textarea>
-                                    <input type="submit" value="Ok"/>
-                                  </form>
+                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
+                                      <input type="submit" value="Ok"/>
+                                    </form>
                                 </div>
                                 </li>
 
@@ -270,58 +276,104 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
              
     </div>
 <script>
-    $(document).ready( function() {
+$(document).ready( function() {
     var changeNumber="";
-        $('.add').click(function(e){
+    var length={{$i}};
+    for(var key=0; key<{{$i}}; key++){
+        $('#'+key).click(function(e){
+            var j = $(this).attr('id');
           e.stopPropagation();
          if ($(this).hasClass('active')){
-           $('.dialog').fadeOut(200);
-           $(this).removeClass('active');
+            $('#dialog'+j).fadeOut(200);
+            $(this).removeClass('active');
          } else {
-           $('.dialog').delay(300).fadeIn(200);
-           $(this).addClass('active');
+            $('#dialog'+j).delay(300).fadeIn(200);
+            $(this).addClass('active');
          }
        });
+    }   
+    function closeMenu(){
+      $('.dialog').fadeOut(200);
+      $('.add').removeClass('active');  
+    }
 
+    $(document.body).click( function(e) {
+         closeMenu();
+    });
 
-       function closeMenu(){
-         $('.dialog').fadeOut(200);
-         $('.add').removeClass('active');  
-       }
+    $(".dialog").click( function(e) {
+        e.stopPropagation();
+    });
+    var sliders = document.getElementsByClassName('sliders');
+    var connect = document.getElementsByClassName('noUi-connect');
+    var tooltip = document.getElementsByClassName('noUi-tooltip');
+    console.log(tooltip);
+    var value = document.getElementsByClassName('value');
+    for ( var i = 0; i < sliders.length; i++ ) {
+        noUiSlider.create(sliders[i], {
+                start: 5,
+                step:1,
+                connect: [true, false],
+                range: {
+                        'min':[1],
+                        'max':[10]
+                },
+                format: wNumb({
+                    decimals:0
+                }),
+                tooltips:true
 
-       $(document.body).click( function(e) {
-            closeMenu();
-       });
-
-       $(".dialog").click( function(e) {
-           e.stopPropagation();
-       });
-        var sliders = document.getElementsByClassName('sliders');
-        var value = document.getElementsByClassName('value');
-        for ( var i = 0; i < sliders.length; i++ ) {
-
-                noUiSlider.create(sliders[i], {
-                        start: 1,
-                        step:1,
-                        connect: [true, false],
-                        range: {
-                                'min':[1],
-                                'max':[10]
-                        }
-
-                });
-                var deneme;
-                value[i].innerHTML = sliders[i].noUiSlider.get();
-                sliders[i].noUiSlider.on('change', function( values, handle ){
-                   
-                    deneme = values[handle];
-                  
-                    value[i].innerHTML = "0";
-                 });
-              
-                
-        }
+        });
+        var deneme;
+        sliders[i].noUiSlider.on('change', function( values, handle ,e){
+            var idCount=$(this.target.id).selector;
+            idCount=idCount.substring(1);
+            console.log($(this));
+            deneme = values[handle];
+            deneme = parseInt(deneme);
+            idCount = parseInt(idCount)-1;
+            if(deneme <= 4){
+                connect[idCount].style.backgroundColor = "#e65100";
+                tooltip[idCount].style.backgroundColor = "#e65100";
+                tooltip[idCount].style.border = "1px solid #e65100";
+            }
+            else if(deneme === 5){
+                connect[idCount].style.backgroundColor = "#e54100";
+                tooltip[idCount].style.backgroundColor = "#e54100";
+                tooltip[idCount].style.backgroundColor = "#e54100";
+            }
+            else if(deneme === 6){
+                connect[idCount].style.backgroundColor = "#f46f02";
+                tooltip[idCount].style.backgroundColor = "#f46f02";
+                tooltip[idCount].style.border = "1px solid #f46f02";
+            }
+            else if(deneme === 7){
+                connect[idCount].style.backgroundColor = "#ffba04";
+                tooltip[idCount].style.backgroundColor = "#ffba04";
+                tooltip[idCount].style.border = "1px solid #ffba04";
+            }
+            else if(deneme === 8){
+                connect[idCount].style.backgroundColor = "#d6d036";
+                tooltip[idCount].style.backgroundColor = "#d6d036";
+                tooltip[idCount].style.border = "1px solid #d6d036";
+            }
+            else if(deneme === 9){
+                connect[idCount].style.backgroundColor = "#a5c530";
+                tooltip[idCount].style.backgroundColor = "#a5c530";
+                tooltip[idCount].style.border = "1px solid #a5c530";
+            }
+            else if(deneme === 10){
+                connect[idCount].style.backgroundColor = "#45c538";
+                tooltip[idCount].style.backgroundColor = "#45c538";
+                tooltip[idCount].style.border = "1px solid #45c538";
+            }
+            
+            
+        });
+    }
+        
 });
+
 
 
 

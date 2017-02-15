@@ -127,6 +127,7 @@
                     <?php $yorumYapanFirma = App\Firma::find($yorum->yorum_yapan_firma_id); ?>
                     <hr>
                     <h4><strong>{{$yorumYapanFirma->adi}}</strong>'sının Yorumu</h4>
+                    <h5>{{$yorum->yorum}}</h5>
                     @endforeach
                 </div>
             </div>
@@ -139,7 +140,7 @@
   
 </body>
 </html>
-<script>                    <p>{{$yorum->yorum}}</p>
+<script>                  
 
     $(".puanlama").each(function(){
         

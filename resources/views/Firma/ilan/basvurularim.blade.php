@@ -102,7 +102,11 @@ tr:nth-child(even) {
                     ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
                     ->select('roller.adi as rolAdi')->get();
                     $querys=$querys->toArray();
-                    $rol=$querys[0]['rolAdi'];
+                    if($querys != null){
+                        $rol=$querys[0]['rolAdi'];
+                    }   
+                  
+                  
                    ?>
                   <p><strong>Firma Adı:</strong>&nbsp;{{$ilan->firmalar->adi}}</p>
                   <p><strong>İlan Adı:</strong>&nbsp;{{$sonuc->ilanadi}}</p>
@@ -113,7 +117,7 @@ tr:nth-child(even) {
                     @if ( $rol === 'Yönetici')
                     
                         <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
-                        <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
+                        <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button></a>
 
                     @elseif ($rol ==='Satış')
                     
@@ -183,32 +187,32 @@ tr:nth-child(even) {
                         </div>
 
           </div>
-               <div class="modal fade" id="myModal-düzenle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                           <div class="modal-dialog">
-                               <div class="modal-content">
-                                   <div class="modal-header">
-                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                       <h4 class="modal-title" id="myModalLabel">DÜZENLE</h4>
-                                   </div>
-                                   <div class="modal-body">
-                                       {!! Form::open(array('url'=>'firmaProfili/tanitim/'.$firma->id,'method'=>'POST', 'files'=>true)) !!}
-                                       
-                                       <div class="form-group">
-                                           <label for="inputEmail3" class="col-sm-3 control-label">DENEME</label>
-                                           <div class="col-sm-9">
-                                               <input type="text" class="form-control" id="tanıtım_yazısı" name="tanıtım_yazısı" placeholder="Tanıtım Yazısı" value="">
-                                               
-                                           </div>
-                                       </div>
+           <!--div class="modal fade" id="myModal-düzenle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">DÜZENLE</h4>
+                        </div>
+                        <div class="modal-body">
+                            {!! Form::open(array('url'=>'firmaProfili/tanitim/'.$firma->id,'method'=>'POST', 'files'=>true)) !!}
 
-                                       {!! Form::submit('Kaydet', array('url'=>'firmaProfili/tanitim/'.$firma->id,'class'=>'btn btn-danger')) !!}
-                                       {!! Form::close() !!}
-                                   </div>
-                                   <div class="modal-footer">                                                            
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">DENEME</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="tanıtım_yazısı" name="tanıtım_yazısı" placeholder="Tanıtım Yazısı" value="">
+
+                                </div>
+                            </div>
+
+                            {!! Form::submit('Kaydet', array('url'=>'firmaProfili/tanitim/'.$firma->id,'class'=>'btn btn-danger')) !!}
+                            {!! Form::close() !!}
+                        </div>
+                        <div class="modal-footer">                                                            
+                        </div>
+                    </div>
+                </div>
+            </div-->
              
     </div>
 <script >
