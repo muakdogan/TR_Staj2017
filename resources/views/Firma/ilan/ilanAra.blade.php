@@ -300,6 +300,9 @@
                 @endforeach
             @endif    
             <script type="text/javascript">
+                
+              
+                
                 $("#temizleButton").click(function(){
                     
                    $(".silmeButton").each(function(){

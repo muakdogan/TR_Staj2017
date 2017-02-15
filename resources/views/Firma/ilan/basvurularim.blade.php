@@ -68,14 +68,12 @@ tr:nth-child(even) {
                      <li><a href="#">Kullanici İşlemleri</a></li>
                  </ul>
              </div>
-</nav>
+        </nav>
               
           <div class="col-sm-12">
               
               <?php
               
-          
-                 
                         $querys = DB::table('teklif_hareketler')
                         ->join('firma_kullanicilar', 'firma_kullanicilar.kullanici_id', '=', 'teklif_hareketler.kullanici_id')
                         ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
@@ -85,41 +83,26 @@ tr:nth-child(even) {
                         ->where( 'teklifler.firma_id', '=', $firma->id)  
                         ->select('firmalar.adi as firmaadi','ilanlar.adi as ilanadi','ilanlar.id as ilanid','teklif_hareketler.*')        
                         ->orderBy('tarih','desc');
-                      
                         $querys=$querys->get();
-                        
-                       
-                       
                   
-                          
-              ?>
-            
-                                
+              ?>                   
              <h3>Başvurularım</h3>
             
              @foreach($querys as $sonuc)
                   <hr>
-                  <?php  $ilan= App\Ilan::find($sonuc->ilanid);
-                  
-                  
+                  <?php  
+                    $ilan= App\Ilan::find($sonuc->ilanid);
                     $kullanici_id= Auth::user()->kullanici_id;
                     $firma_id=$firma->id;
-              
                     $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
                             ->where( 'firma_id', '=', $firma_id)
                             ->select('rol_id')->get();
-                            $rol_id=$rol_id->toArray();
-                                        
-                                        
+                            $rol_id=$rol_id->toArray();              
                     $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
                     ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
                     ->select('roller.adi as rolAdi')->get();
                     $querys=$querys->toArray();
-
                     $rol=$querys[0]['rolAdi'];
-                
-                  
-                  
                    ?>
                   <p><strong>Firma Adı:</strong>&nbsp;{{$ilan->firmalar->adi}}</p>
                   <p><strong>İlan Adı:</strong>&nbsp;{{$sonuc->ilanadi}}</p>
@@ -145,14 +128,7 @@ tr:nth-child(even) {
                     @else
                         
                     @endif
-                  
-
-                  
-                  
-                  
-
                   <br>
-               
                @endforeach
                 <div class="modal fade" id="myModal-detay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -164,7 +140,7 @@ tr:nth-child(even) {
                                     <div class="modal-body">
                                     @foreach($teklifler as $teklif)
                                     @endforeach
-                                         @if($teklif->ilanlar->ilan_turu=='Hizmet')
+                                         @if($teklif->ilanlar->ilan_turu==2)
 
                                                  <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
                                                  <p id="adi"><strong>Adı:</strong>&nbsp;</p>
@@ -174,7 +150,7 @@ tr:nth-child(even) {
                                                  <p id="miktar_birimi"><strong>Miktar Birimi:</strong>&nbsp;</p>
                                                  <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
                                                
-                                        @elseif($teklif->ilanlar->ilan_turu=='Mal')  
+                                        @elseif($teklif->ilanlar->ilan_turu==1)  
                                                  <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
                                                  <p id="marka"><strong>Marka:</strong>&nbsp;</p>
                                                  <p id="model"><strong>Model:</strong>&nbsp;</p>
@@ -184,19 +160,13 @@ tr:nth-child(even) {
                                                  <p id="birim"><strong>Birim:</strong>&nbsp;</p>
                                                  <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
                                         
-                                        
-                                                
-                                        
                                         @elseif($teklif->ilanlar->ilan_turu=='Götürü Bedel')
                                                  <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
                                                  <p id="isin_adi"><strong>İşin Adı:</strong>&nbsp;</p>
                                                  <p id="miktar_turu"><strong>Miktar Türü:</strong>&nbsp;</p>
                                                  <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
-                                              
-                                        
-                                        
-                                        
-                                        @elseif($teklif->ilanlar->ilan_turu=='Yapim İşi')
+                                      
+                                        @elseif($teklif->ilanlar->ilan_turu==3)
                                         
                                                  <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
                                                  <p id="adi"><strong>Adı:</strong>&nbsp;</p>
@@ -205,8 +175,7 @@ tr:nth-child(even) {
                                                  <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
                                         
                                         @endif
-                                     
-
+                                  
                                     <div class="modal-footer">                                                            
                                     </div>
                                 </div>
@@ -243,34 +212,25 @@ tr:nth-child(even) {
              
     </div>
 <script >
-   
-       var detay=0;
-       var control='{{$teklif->ilanlar->ilan_turu}}';
-         
-       $(".btn-info").click(function(){
+    var detay=0;
+    var control='{{$teklif->ilanlar->ilan_turu}}';
+    alert(control);
 
-                 detay=$(this).attr("name");
-                      
-                        func();
-       });
+    $(".detay").click(function(){
+        detay=$(this).attr("name");
+        basvuruDetay();
+    });
        
- 
-    function func(){
-                    
-            $.ajax({
+    function basvuruDetay(){
+           $.ajax({
             type:"GET",
-            url:"../basvuruDetay",
+            url:"/tamrekabet/public/basvuruDetay",
             data:{teklif_id:detay
-       
             },
             cache: false,
             success: function(data){
             console.log(data);
-            
-            
-            if(control=='Hizmet'){
-                  
-                                                             
+            if(control==2){                                       
                     $("#sira").empty();
                     $("#adi").empty();
                     $("#fiyat_standart").empty();
@@ -280,7 +240,7 @@ tr:nth-child(even) {
                     $("#ilan_adi").empty();
                     
                 }
-                else if(control=='Mal'){
+                else if(control==1){
                     $("#sira").empty();
                     $("#marka").empty();
                     $("#model").empty();
@@ -301,7 +261,7 @@ tr:nth-child(even) {
                     
                     
                 }
-                else  if(control=='Yapim İşi'){
+                else  if(control==3){
                      
                      $("#sira").empty;
                     $("#adi").empty();
@@ -313,11 +273,8 @@ tr:nth-child(even) {
             
             for(var key=0; key <Object.keys(data).length;key++)
              {
-                 
-                 
-                if(control=='Hizmet'){
-                  
-                                                             
+                if(control==2){
+                                                         
                     $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
                     $("#adi").append("<strong>Adı:</strong> "+data[key].adi);
                     $("#fiyat_standart").append("<strong>Fiyat Standartı:</strong> "+data[key].fiyat_standardi);
@@ -327,7 +284,7 @@ tr:nth-child(even) {
                     $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
                     
                 }
-                else if(control=='Mal'){
+                else if(control==1){
                     $("#sira").append("<strong>Sıra: </strong>"+data[key].sira);
                     $("#marka").append("<strong>Marka:</strong> "+data[key].marka);
                     $("#model").append("<strong>Model:</strong> "+data[key].model);
@@ -338,9 +295,7 @@ tr:nth-child(even) {
                     $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
                     
                 }
-                 else  if(control=='Gotürü Bedel'){
-                     
-                                                             
+                 else  if(control=='Gotürü Bedel'){                                         
                     $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
                     $("#isin_adi").append("<strong>İşin Adı:</strong> "+data[key].isin_adi);
                     $("#miktar_turu").append("<strong>Miktar Türü: </strong>"+data[key].miktar_turu);
@@ -348,7 +303,7 @@ tr:nth-child(even) {
                     
                     
                 }
-                else  if(control=='Yapim İşi'){
+                else  if(control==3){
                      
                     $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
                     $("#adi").append("<strong>Adı: </strong>"+data[key].adi);
@@ -361,7 +316,8 @@ tr:nth-child(even) {
          }
 
         });
-    }
+        
+    };
     
  </script>
 @endsection

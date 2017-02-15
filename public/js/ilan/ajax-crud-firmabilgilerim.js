@@ -5,7 +5,10 @@ $(document).ready(function(){
         $('#btn-save-firmaBilgilerim').val("add");
         $('#myModal-firmaBilgilerim').modal('show');
     });
-   
+    $('#btn-add-ilanBilgileri').click(function () {
+        $('#btn-save-ilanBilgileri').val("add");
+        $('#myModal-ilanBilgileri').modal('show');
+    });
       $('#btn-add-fiyatlandırmaBilgileri').click(function () {
         $('#btn-save-fiyatlandırmaBilgileri').val("add");
         $('#myModal-fiyatlandırmaBilgileri').modal('show');
@@ -28,7 +31,6 @@ $(document).ready(function(){
      $('#btn-add-yapim_isleri').click(function () {
         $('#myModal-yapim_isleri_add').modal('show');
     });
-    
     
     
    var url = "/tamrekabet/public/index.php/firmaMal";

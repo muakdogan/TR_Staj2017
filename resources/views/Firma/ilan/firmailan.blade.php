@@ -1326,11 +1326,7 @@ $( document ).ready(function() {
         $('#goturu').hide()
         $('#mal').hide()
     }
-                 //alert(ilan_turu);
-                // alert(sozlesme_turu);
-                //alert(ezgi);
-        
-    
+
                
 });
 
