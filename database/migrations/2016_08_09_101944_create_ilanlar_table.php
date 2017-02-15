@@ -42,6 +42,10 @@ class CreateIlanlarTable extends Migration {
             $table->foreign('odeme_turu_id')->references('id')->on('odeme_turleri')->onDelete('cascade');
             $table->integer('para_birimi_id')->unsigned();
             $table->foreign('para_birimi_id')->references('id')->on('para_birimleri')->onDelete('cascade');
+            $table->string('yaklasik_maliyet');
+            $table->float('komisyon_miktari');
+            $table->string('fiyatlandirma_sekli');
+            $table->timestamps();
             
             
 

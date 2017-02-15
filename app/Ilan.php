@@ -8,7 +8,7 @@ class Ilan extends Model
 {
     //
     protected $table = 'ilanlar';
-     public $timestamps = false;
+     //public $timestamps = false;
     
     public function odeme_turleri()
     {
@@ -37,6 +37,11 @@ class Ilan extends Model
        public function ilan_goturu_bedeller()
     {
         return $this->hasMany('App\IlanGoturuBedel', 'ilan_id', 'id');
+    }
+    
+       public function belirli_istekliler()
+    {
+        return $this->hasMany('App\BelirliIstekli', 'ilan_id', 'id');
     }
        public function ilan_yapim_isleri()
     {

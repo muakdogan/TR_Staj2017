@@ -3,158 +3,249 @@
 use App\Il;?>
 
 @section('content')
+<head>
+    <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
+    <style>
+         .ajax-loader {
+                    visibility: hidden;
+                    background-color: rgba(255,255,255,0.7);
+                    position: absolute;
+                    z-index: +100 !important;
+                    width: 100%;
+                    height:100%;
+                }
 
-<style>
-    
-     .ajax-loader {
-                visibility: hidden;
-                background-color: rgba(255,255,255,0.7);
-                position: absolute;
-                z-index: +100 !important;
-                width: 100%;
-                height:100%;
-            }
-
-            .ajax-loader img {
-                position: relative;
-                top:50%;
-                left:32%;
-            }
-</style>
+                .ajax-loader img {
+                    position: relative;
+                    top:50%;
+                    left:32%;
+                }
+    </style>
+</head>
     <div class="container">
-        <div class="col-lg-6">
-            
-            {!! Form::open(array('url'=>'form' ,'method' => 'POST','files'=>true))!!}
-            <div class="form-group">
-                <h1>Firma Bilgileri</h1>
-                <div class="form-group">
-                    {!! Form::label('Firma adı') !!}
-                    {!! Form::text('firma_adi', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Firma adı')) !!}
-                </div>
-                <div class="form-group ">
-                    {!! Form::label('Sektorler') !!}
-                    
-                        <select class="form-control" name="sektor_id" id="sektor_id" required>
-                            <option selected disabled>Seçiniz</option>
-                            @foreach($sektorler as $sektor)
-                            <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
-                            @endforeach
-                        </select>
-                  
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Telefon') !!}
-                    {!! Form::text('telefon', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Telefonunuz')) !!}
-                </div>
-                
-                <label for="">Şehir</label>
-                <select class="form-control input-sm" name="il_id" id="il_id" required>
-                    <option selected disabled>Seçiniz</option>
-                    @foreach($iller as $il)
-                    <option value="{{$il->id}}">{{$il->adi}}</option>
-                    @endforeach
-                </select>
-                <div class="ajax-loader">
-                    <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
-               </div>
-            </div>
+        
+        <h1>TAMREKABET'E HOŞGELDİNİZ</h1>
+        <h1>ÜYELİK OLUŞTUR</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                {!! Form::open(array('url'=>'form' ,'method' => 'POST','files'=>true))!!}
+               
+                    <h3>Firma Bilgileri</h3>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                         
+                        {!! Form::label('Firma adı') !!}
+                        </div> 
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                        {!! Form::text('firma_adi', null, 
+                        array('required', 
+                        'class'=>'form-control', 
+                        'placeholder'=>'Firma adı')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-sm-3">
+                        {!! Form::label('Sektorler') !!}
+                        </div> 
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            <select class="form-control" name="sektor_id" id="sektor_id" required>
+                                <option selected disabled>Seçiniz</option>
+                                @foreach($sektorler as $sektor)
+                                <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                          <div class="col-sm-3">
+                        {!! Form::label('Telefon') !!}
+                          </div>
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                        {!! Form::text('telefon', null, 
+                        array('required', 
+                        'class'=>'form-control', 
+                        'placeholder'=>'Telefonunuz')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="col-sm-3">
+                    <label for="">İl</label>
+                    </div>
+                    <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            <select class="form-control input-sm" name="il_id" id="il_id" required>
+                                <option selected disabled>Seçiniz</option>
+                                @foreach($iller as $il)
+                                <option value="{{$il->id}}">{{$il->adi}}</option>
+                                @endforeach
+                            </select>
 
-            <div class="form-group">
-                <label for="">İlçe</label>
-                <select class="form-control input-sm" name="ilce_id" id="ilce_id" required>
-                  <option selected disabled>Seçiniz</option>
-                </select> 
+                            <div class="ajax-loader">
+                                <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+                           </div>
+                        </div>
+                    </div>
+               
+                
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label for="">İlçe</label>
+                    </div>
+                    <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            <select class="form-control input-sm" name="ilce_id" id="ilce_id" required>
+                              <option selected disabled>Seçiniz</option>
+                            </select> 
+                        </div>
+                </div>
+                <div class="form-group">
+                 <div class="col-sm-3">   
+                    <label for="">Semt</label>
+                 </div>
+                  <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            <select class="form-control input-sm" name="semt_id" id="semt_id" required>
+                                <option selected disabled>Seçiniz</option>   
+                            </select> 
+                        </div>
+                </div>
+                <br>
+                <hr>
+                <h3>Kişiler Bilgiler</h3>
+                <hr>
+                <div class="form-group">
+                    <div class="col-sm-3">   
+                        {!! Form::label('Adınız') !!}
+                    </div>
+                     <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::text('adi', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Adınız')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3"> 
+                        {!! Form::label('Soyadınız') !!}
+                        </div>
+                         <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::text('soyadi', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Soyadınız')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-3"> 
+                            {!! Form::label('unvan') !!}
+                       </div>
+                         <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::text('unvan', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Ünvanınız')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                          <div class="col-sm-3"> 
+                            {!! Form::label('E-posta') !!}
+                         </div>
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::email('email', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'E-postanız')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3"> 
+                             {!! Form::label('Telefon') !!}
+                        </div>
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::text('telefonkisisel', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Telefonunuz')) !!}
+                         </div>
+                    </div>
+                <br>   
+                <hr>
+               
+                <h3>Giriş Bilgilerinizi Oluşturun</h3>
+                <hr>
+                  <div class="form-group">
+                      <div class="col-sm-3"> 
+                        {!! Form::label(' Kullanıcı Adı') !!}
+                      </div>
+                      <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::text('kullanici_adi', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Kullanıcı Adı')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                        {!! Form::label('Email') !!}
+                        </div>
+                           <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::email('email', null, 
+                              array('required', 
+                            'class'=>'form-control email', 
+                            'placeholder'=>'E-postanız' , 'onFocusout'=>'emailControl();')) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                        {!! Form::label('Şifre') !!}
+                         </div>
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::password('password', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Şifre')) !!}
+                         </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="col-sm-3">
+                        {!! Form::label('Şifre Tekrar') !!}
+                        </div>
+                        <div class="col-sm-1">:</div> 
+                        <div class="col-sm-8">
+                            {!! Form::password('password_confirmation', null, 
+                            array('required', 
+                            'class'=>'form-control', 
+                            'placeholder'=>'Şifre Tekrar')) !!}
+                        </div>
+                    </div>
+            
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="form-group">
+                    {!! Form::submit('Kaydet!', 
+                    array('class'=>'btn btn-primary')) !!}
+                </div>
+
+                {!! Form::close() !!}
             </div>
-            <div class="form-group">
-                <label for="">Semt</label>
-                <select class="form-control input-sm" name="semt_id" id="semt_id" required>
-                    <option selected disabled>Seçiniz</option>   
-                </select>     
+            <div class="col-lg-6">
+
             </div>
-            <br>
             
-            <h1>Kişiler Bilgiler</h1>
-            <div class="form-group">
-                    {!! Form::label('Adınız') !!}
-                    {!! Form::text('adi', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Adınız')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Soyadınız') !!}
-                    {!! Form::text('soyadi', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Soyadınız')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('unvan') !!}
-                    {!! Form::text('unvan', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Ünvanınız')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('E-posta') !!}
-                    {!! Form::email('email', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'E-postanız')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Telefon') !!}
-                    {!! Form::text('telefonkisisel', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Telefonunuz')) !!}
-                </div>
-            <br>   
-            <hr>
-            <h1>Giriş Bilgilerinizi Oluşturun</h1>
-            
-              <div class="form-group">
-                    {!! Form::label(' Kullanıcı Adı') !!}
-                    {!! Form::text('kullanici_adi', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Kullanıcı Adı')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Email') !!}
-                    {!! Form::email('email', null, 
-                      array('required', 
-                    'class'=>'form-control email', 
-                    'placeholder'=>'E-postanız' , 'onFocusout'=>'emailControl();')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Şifre') !!}
-                    {!! Form::password('password', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Şifre')) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Şifre Tekrar') !!}
-                    {!! Form::password('password_confirmation', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Şifre Tekrar')) !!}
-                </div>
-            
-            
-            <div class="form-group">
-                {!! Form::submit('Kaydet!', 
-                array('class'=>'btn btn-primary')) !!}
-            </div>
-      
-            {!! Form::close() !!}
         </div>
     </div>
 

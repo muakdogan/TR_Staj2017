@@ -71,8 +71,9 @@ class FirmaIlanController extends Controller
          $ilan->kdv_dahil=$request->kdv;
          $ilan->odeme_turu_id=$request->odeme_turu;
          $ilan->para_birimi_id=$request->para_birimi;
+         $ilan->kismi_fiyat=$request->kismi_fiyat;
          $firma->ilanlar()->save($ilan);
-         
+        
          return redirect('ilanEkle/'.$firma->id.'/'.$ilan->id);
          
      }
@@ -83,39 +84,34 @@ class FirmaIlanController extends Controller
          $ilan->kdv_dahil=$request->kdv;
          $ilan->odeme_turu_id=$request->odeme_turu;
          $ilan->para_birimi_id=$request->para_birimi;
+         $ilan->kismi_fiyat=$request->kismi_fiyat;
          $firma->ilanlar()->save($ilan);
          
          return redirect('firmaIlanOlustur/'.$firma->id.'/'.$ilan->id);
          
      }
      public function ilanAdd(Request $request){
-         $file = $request->file('teknik');
-        
-        // getting all of the post data
+        $file = $request->file('teknik');
         $file = array('teknik' => $request->file('teknik'));
-        // setting up rules
-        $rules = array('teknik' => 'mimes:pdf|max:100000'); //mimes:jpeg,bmp,png and for max size max:10000
-        // doing the validation, passing post data, rules and the messages
+        $rules = array('teknik' => 'mimes:pdf|max:100000'); 
         $validator = Validator::make($file, $rules);
         if ($validator->fails()) {
-            // send back to the page with the input data and errors
             return Redirect::to('firmaIlanOlustur/'.$request->id)->withInput()->withErrors($validator);
         } 
         else {
-            // checking file is valid.
             if ($request->file('teknik')->isValid()) {
-                $destinationPath = 'Teknik'; // upload path
-                $extension = $request->file('teknik')->getClientOriginalExtension(); // getting image extension
-                $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
-
-                $firma = Firma::find($request->id);
+                $destinationPath = 'Teknik'; 
+                $extension = $request->file('teknik')->getClientOriginalExtension();
+                $fileName = rand(11111, 99999) . '.' . $extension; 
                 
+                $firma = Firma::find($request->id);
                 $firma->goster = $request->firma_adi_gizli;
                 $firma->save();
                 
-                $ilan=  new \App\Ilan();
                 
-               
+                
+                
+                $ilan=  new \App\Ilan();
                     $ilan->adi= $request->ilan_adi;
                     $ilan->firma_sektor=$request->firma_sektor;
                     $ilan->yayin_tarihi= $request->yayinlama_tarihi;
@@ -124,11 +120,9 @@ class FirmaIlanController extends Controller
                     $ilan->ilan_turu= $request->ilan_turu;
                     $ilan->usulu= $request->rekabet_sekli;
                     $ilan->sozlesme_turu= $request->sozlesme_turu;
-                    
                     $ilan->teknik_sartname = $fileName;
-                 
-                    
-                    $ilan->yaklasik_maliyet_id= $request->yaklasik_maliyet;
+                    $ilan->yaklasik_maliyet= $request->maliyet;
+                    $ilan->komisyon_miktari=$request->yaklasik_maliyet;
                     $ilan->teslim_yeri_satici_firma= $request->teslim_yeri;
                     $ilan->teslim_yeri_il_id= $request->il_id;
                     $ilan->teslim_yeri_ilce_id= $request->ilce_id;
@@ -138,20 +132,22 @@ class FirmaIlanController extends Controller
                     $ilan->adi= $request->ilan_adi;
                     $firma->ilanlar()->save($ilan);
                 
-                
+                 foreach($request->belirli_istekli as $belirli){
+                     $belirli_istekliler= new \App\BelirlIstekli();
+                     $belirli_istekliler->ilan_id = $ilan->id;
+                     $belirli_istekliler->firma_id=$belirli;
+                     $belirli_istekliler->save();
+                     
+                 }
 
-                $request->file('teknik')->move($destinationPath, $fileName); // uploading file to given path
-                // sending back with message
+                $request->file('teknik')->move($destinationPath, $fileName); 
                 Session::flash('success', 'Upload successfully');
-                /*if ($firma->firma_brosurler){
-                    
-                File::delete("brosur/$oldName");
-                }*/
+               
                 return Redirect::to('ilanEkle/'.$firma->id.'/'.$ilan->id);
-                //return  Redirect::route('commucations')->with('fileName', $fileName);
+                
             } 
             else {
-                // sending back with error message.
+               
                 Session::flash('error', 'uploaded file is not valid');
                 return Redirect::to('firmaIlanOlustur/'.$firma->id)->withInput()->withErrors($validator);
             }
@@ -182,10 +178,7 @@ class FirmaIlanController extends Controller
                 $ilanlar = Ilan::find($ilan_id);
                 $firma->goster = $request->firma_adi_gizli;
                 $firma->save();
-                
                 $ilan=  $firma->ilanlar ?:new \App\Ilan();
-                
-               
                     $ilan->adi= $request->ilan_adi;
                     $ilan->firma_sektor=$request->firma_sektor;
                     $ilan->yayin_tarihi= $request->yayinlama_tarihi;
@@ -196,9 +189,10 @@ class FirmaIlanController extends Controller
                     $ilan->sozlesme_turu= $request->sozlesme_turu;
                     
                     $ilan->teknik_sartname = $fileName;
-                 
+                    $ilan->yaklasik_maliyet= $request->maliyet;
+                    $ilan->komisyon_miktari=$request->yaklasik_maliyet;
                     
-                    $ilan->yaklasik_maliyet_id= $request->yaklasik_maliyet;
+                 
                     $ilan->teslim_yeri_satici_firma= $request->teslim_yeri;
                     $ilan->teslim_yeri_il_id= $request->il_id;
                     $ilan->teslim_yeri_ilce_id= $request->ilce_id;

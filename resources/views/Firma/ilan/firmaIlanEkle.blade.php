@@ -17,6 +17,7 @@
         <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
         <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <style>
             table {
             font-family: arial, sans-serif;
@@ -113,6 +114,7 @@
                                          $firmaAdres->ilceler = new Ilce();
                                          $firmaAdres->semtler = new Semt();
                                      }
+                                    
                                      ?>
                                      <td>{{$ilan->adi}}</td>
                                  </tr>
@@ -141,15 +143,36 @@
                                  </tr>
                                  <tr>
                                      <td>ilan Türü:</td>
-                                     <td>{{$ilan->ilan_turu}}</td>
+                                     
+                                     @if($ilan->ilan_turu=="1")
+                                         <td>Mal</td>
+                                     @elseif ($ilan->ilan_turu=="2")
+                                        <td>Hizmet</td>
+                                     @elseif ($ilan->ilan_turu=="3")
+                                        <td>Yapım İşi</td>
+                                     @endif
+                                     
+                                     
                                  </tr>
                                  <tr>
                                      <td>İlan Usulü:</td>
-                                     <td>{{$ilan->usulu}}</td>
+                                     @if($ilan->usulu=="1")
+                                         <td>Tamrekabet</td>
+                                     @elseif ($ilan->usulu=="2")
+                                        <td>Belirli İstekliler Arasında</td>
+                                     @elseif ($ilan->usulu=="3")
+                                        <td>Sadece Başvuru</td>
+                                     @endif
+                                    
                                  </tr>
                                  <tr>
                                      <td>Sözleşme Türü:</td>
-                                     <td>{{$ilan->sozlesme_turu}}</td>
+                                      @if($ilan->sozlesme_turu=="0")
+                                         <td>Birim Fiyatlı</td>
+                                     @elseif ($ilan->sozlesme_turu=="1")
+                                        <td>Götürü Bedel</td>
+                                     @endif
+                                    
                                  </tr>
                                  <tr>
                                      <td>Teknik Şartname:</td>
@@ -157,8 +180,9 @@
                                  </tr>
                                  <tr>
                                      <td>Yaklaşık Maliyet:</td>
-                                     <td></td>
+                                     <td>{{$ilan->yaklasik_maliyet}}</td>
                                  </tr>
+                                
                                  <tr>
                                      <td>Teslim Yeri:</td>
                                      <?php
@@ -195,6 +219,8 @@
 
                          <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                              <div class="modal-dialog">
+                                  <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
+                                  <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
                                  <div class="modal-content">
                                      <div class="modal-header">
                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -256,9 +282,9 @@
                                              <div class="col-sm-9">
                                                  <select class="form-control" name="ilan_turu" id="ilan_turu" required>
                                                      <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="Mal">Mal</option>
-                                                     <option  value="Hizmet">Hizmet</option>
-                                                     <option  value="Yapım İşi">Yapım İşi</option>
+                                                     <option  value="1">Mal</option>
+                                                     <option  value="2">Hizmet</option>
+                                                     <option  value="3">Yapım İşi</option>
                                                  </select>
                                              </div>
                                          </div>
@@ -267,19 +293,31 @@
                                              <div class="col-sm-9">
                                                  <select class="form-control" name="rekabet_sekli" id="rekabet_sekli" required>
                                                      <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="Tamrekabet">Tamrekabet</option>
-                                                     <option  value="Belirli İstekliler Arasında<">Belirli İstekliler Arasında</option>
-                                                     <option  value="Sadece Başvuru"> Sadece Başvuru</option>
+                                                     <option  value="1">Tamrekabet</option>
+                                                     <option  value="2">Belirli İstekliler Arasında</option>
+                                                     <option  value="3"> Sadece Başvuru</option>
                                                  </select>
                                              </div>
                                          </div>
+                                         
+                                          <div class="form-group"  id="belirli-istekliler">
+                                             <label for="inputEmail3" class="col-sm-3 control-label">Firma Seçiniz</label>
+                                            <div class="col-sm-9 ezgi">
+                                            
+                                             <select id='custom-headers' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" required >
+                                                    
+                                                
+                                             </select>
+                                            </div>
+                                         </div>
+                                       
                                          <div class="form-group">
                                              <label for="inputEmail3" class="col-sm-3 control-label">Sözleşme Türü</label>
                                              <div class="col-sm-9">
                                                  <select class="form-control" name="sozlesme_turu" id="sozlesme_turu" required>
                                                      <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="Birim Fiyatlı">Birim Fiyatlı</option>
-                                                     <option  value="Götürü Bedel">Götürü Bedel</option>
+                                                     <option   value="0">Birim Fiyatlı</option>
+                                                     <option  value="1">Götürü Bedel</option>
                                                  </select>
                                              </div>
                                          </div>
@@ -307,11 +345,14 @@
                                                  <select class="form-control" name="yaklasik_maliyet" id="yaklasik_maliyet" required>
                                                      <option selected disabled>Seçiniz</option>
                                                      @foreach($maliyetler as $maliyet)
-                                                     <option  value="{{$maliyet->id}}" >{{$maliyet->alt_deger}}</option>
+                                                     <option name="{{$maliyet->aralik}}" value="{{$maliyet->miktar}}" >{{$maliyet->aralik}}</option>
+                                                     
                                                      @endforeach
                                                  </select>
+                                                 <input type="hidden" id="maliyet" name="maliyet" value=""></input>
                                              </div>
                                          </div>
+                                       
                                          <div class="form-group">
                                              <label for="inputEmail3" class="col-sm-3 control-label">Teslim Yeri</label>
                                              <div class="col-sm-9">
@@ -322,6 +363,7 @@
                                                  </select>
                                              </div>
                                          </div>
+                                     
                                          <div class="form-group error">
                                              <label for="inputTask" class="col-sm-3 control-label">Teslim Yeri İl</label>
                                              <div class="col-sm-9">
@@ -378,7 +420,7 @@
                          
                          
                          <?php 
-                            $kullanici_id= Auth::user()->kullanici_id;
+                           $kullanici_id= Auth::user()->kullanici_id;
                            $firma_id=$firma->id;
 
                              $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
@@ -399,6 +441,7 @@
                          @if ( $rol === 'Yönetici')
                     
                             <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
+                            
                          @elseif ($rol ==='Satın Alma')
 
                              <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
@@ -457,11 +500,24 @@
                                      <td>{{$ilan->para_birimleri->adi}}</td>
                                      <?php }?>
                                  </tr>
+                                 <tr>
+                                     <td>Fiyatlandırma Şekli:</td>
+                                       @if($ilan->fiyatlandirma_sekli==1)
+                                        <td>Kısmş Fiyat Teklifine Açık</td>
+                                       @elseif($ilan->fiyatlandirma_sekli==0)
+                                         <td>Kısmi Fiyat Teklifine Kapalı</td>
+                                       @endif
+                                     
+                                     
+                                 </tr>
                                  </tr>
                              </thead>
                          </table>
                          <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                              <div class="modal-dialog">
+                                 
+                           
+                                  
                                  <div class="modal-content">
                                      <div class="modal-header">
                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -498,6 +554,16 @@
                                                  </select>
                                              </div>
                                          </div>
+                                         <div class="form-group">
+                                             <label for="inputEmail3" class="col-sm-3 control-label">Fiyatlandırma Şekli</label>
+                                             <div class="col-sm-9">
+                                                 <select class="form-control" name="kismi_fiyat" id="kismi_fiyat" required>
+                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                     <option   value="1">Kısmi Fiyat Teklifine Açık</option>
+                                                     <option  value="0">Kısmi Fiyat Teklifine Kapalı</option>
+                                                 </select>
+                                             </div>
+                                         </div>
                                          {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
                                          {!! Form::close() !!}
                                      </div>
@@ -525,6 +591,10 @@
                      </div>
                  </div>
              </div>
+             
+             
+                    
+             
 
              <div id="mal"   class="panel panel-default">
                  <div class="panel-heading">
@@ -1207,36 +1277,119 @@
          </div>
     </div>
 
-<script charset="utf-8">
+<script charset="utf-8">  
+  
+var sektor;
     
+$(function() {
+    $("#yaklasik_maliyet").change(function(){
+        var option = $('option:selected', this).attr('name');
+        $('#maliyet').val(option);   
+    });
+});
+
+$(function() {
+    $("#firma_sektor").change(function(){
+      sektor = $('option:selected', this).attr('value');
+    });
+});
+function funcBelirli(){             
+    $.ajax({
+        type:"GET",
+        url: "/tamrekabet/public/belirli",
+        data:{sektorBelirli:sektor },
+        cache: false,
+        success: function(data){
+           console.log(data);
+           for(var key=0; key <Object.keys(data).length;key++)
+            {
+                $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key });
+        
+            } 
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        }
+    });
+}
+$(function() {
+    $("#rekabet_sekli").change(function(){
+        var option = $('option:selected', this).attr('value');
+    
+        if(option==="2"){
+            $('#belirli-istekliler').show();
+            funcBelirli();
+        }
+        else
+        {
+             $('#belirli-istekliler').hide();
+            
+        }
+
+    });
+});
+
+$('#custom-headers').multiSelect({
+  selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  afterInit: function(ms){
+    var that = this,
+        $selectableSearch = that.$selectableUl.prev(),
+        $selectionSearch = that.$selectionUl.prev(),
+        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+    .on('keydown', function(e){
+      if (e.which === 40){
+        that.$selectableUl.focus();
+        return false;
+      }
+    });
+
+    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+    .on('keydown', function(e){
+      if (e.which == 40){
+        that.$selectionUl.focus();
+        return false;
+      }
+    });
+  },
+  afterSelect: function(){
+    this.qs1.cache();
+    this.qs2.cache();
+  },
+  afterDeselect: function(){
+    this.qs1.cache();
+    this.qs2.cache();
+  }
+});
+
 var ilan_turu;
 var sozlesme_turu;
 
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
-        
-   
-        
-        if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+        if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
                   
                 }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+             else if(ilan_turu=="2" && sozlesme_turu=="0")
                 {
                    $('#mal').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
                 }
-             else if(sozlesme_turu=="Götürü Bedel")
+             else if(sozlesme_turu=="1")
                 {
                    $('#hizmet').hide()
                    $('#mal').hide()
                    $('#yapim').hide();
                 }
-            else if(ilan_turu=="Yapim İşi")
+            else if(ilan_turu=="3")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()
@@ -1247,26 +1400,26 @@ $('#ilan_turu').on('change', function (e) {
 
 $('#sozlesme_turu').on('change', function (e) {
              sozlesme_turu = e.target.value;
-             if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+             if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
                   
                 }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+             else if(ilan_turu=="2" && sozlesme_turu=="0")
                 {
                    $('#mal').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
                 }
-             else if(sozlesme_turu=="Götürü Bedel")
+             else if(sozlesme_turu=="1")
                 {
                    $('#hizmet').hide()
                    $('#mal').hide()
                    $('#yapim').hide();
                 }
-            else if(ilan_turu=="Yapim İşi")
+            else if(ilan_turu=="3")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()
@@ -1275,11 +1428,9 @@ $('#sozlesme_turu').on('change', function (e) {
  });
 
 $( document ).ready(function() {
-
+    $('#belirli-istekliler').hide();
     var ilan_turu='{{$ilan->ilan_turu}}';
     var sozlesme_turu='{{$ilan->sozlesme_turu}}';
- 
-    
             if(ilan_turu=="") 
              {
                           $('#hizmet').hide()
@@ -1287,26 +1438,26 @@ $( document ).ready(function() {
                           $('#goturu').hide()
                           $('#yapim').hide()
              }
-            else if(ilan_turu=="Mal" && sozlesme_turu=="Birim Fiyatlı")
+            else if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
                   
                 }
-             else if(ilan_turu=="Hizmet" && sozlesme_turu=="Birim Fiyatlı")
+             else if(ilan_turu=="2" && sozlesme_turu=="0")
                 {
                    $('#mal').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
                 }
-             else if(sozlesme_turu=="Götürü Bedel")
+             else if(sozlesme_turu=="1")
                 {
                    $('#hizmet').hide()
                    $('#mal').hide()
                    $('#yapim').hide();
                 }
-            else if(ilan_turu=="Yapim İşi")
+            else if(ilan_turu=="3")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()

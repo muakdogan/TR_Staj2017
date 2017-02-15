@@ -16,10 +16,7 @@ use App\Http\Requests;
 
 class FirmaController extends Controller
 {
-    
-    
-    
-    
+  
     public function uploadImage(Request $request) {
         $file = $request->file('logo');
         $file = array('logo' => $request->file('logo'));
@@ -31,22 +28,22 @@ class FirmaController extends Controller
         else {
             if ($request->file('logo')->isValid()) {
                 $destinationPath = 'uploads'; // upload path
-                $extension = $request->file('logo')->getClientOriginalExtension(); // getting image extension
-                $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+                $extension = $request->file('logo')->getClientOriginalExtension();
+                $fileName = rand(11111, 99999) . '.' . $extension; 
                 
                 $firma = Firma::find($request->id);
                 $oldName=$firma->logo;
                 $firma->logo = $fileName; 
                 $firma->save();
                 
-                $request->file('logo')->move($destinationPath, $fileName); // uploading file to given path
-                // sending back with message
+                $request->file('logo')->move($destinationPath, $fileName);
+               
                 Session::flash('success', 'Upload successfully');
                 File::delete("uploads/$oldName");
                 return Redirect::to('firmaProfili/'.$firma->id);
             } 
             else {
-                // sending back with error message.
+              
                 Session::flash('error', 'uploaded file is not valid');
                 return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
             }
@@ -191,8 +188,7 @@ class FirmaController extends Controller
     }
     public function kaliteGuncelle(Request $request){        
         $firma = \App\Firma::find($request->id);
-        
-
+  
         
         $kalite->save();
         return redirect('firmaProfili/'.$kalite->firma_kalite_belgeleri->$firma_id);
