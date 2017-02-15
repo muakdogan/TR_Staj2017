@@ -36,6 +36,10 @@ class Firma extends Model
     {
         return $this->hasMany('App\FirmaReferans', 'firma_id', 'id');
     }
+     public function belirli_istekliler()
+    {
+        return $this->hasMany('App\BelirliIstekli', 'firma_id', 'id');
+    }
     public function firma_brosurler()
     {
         return $this->hasMany('App\FirmaBrosur', 'firma_id', 'id');

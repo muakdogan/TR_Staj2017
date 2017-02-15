@@ -11,6 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title></title>
+     
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
     <script src="{{asset('js/jquery.js')}}"></script>

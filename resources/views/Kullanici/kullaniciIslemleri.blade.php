@@ -6,8 +6,7 @@
          
            @include('layouts.alt_menu') 
            
-            <div class="col-sm-12">
-                              
+            <div class="col-sm-12">                
               <h3>Kullanıcılar &nbsp;&nbsp;&nbsp;</h3>
            <hr>
            <div id="mal"   class="panel panel-default">
@@ -16,7 +15,7 @@
                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Kullanici Listesi</a>
                      </h4>
                  </div>
-                 <div id="collapse4" class="panel-collapse collapse">
+                 <div id="collapse4">
                      <div class="panel-body">
                          <table class="table" >
                              <thead id="tasks-list" name="tasks-list">
