@@ -309,7 +309,7 @@
                 });
                 function silme(name){
                         $('li[name='+name+']').remove();
-                        if(name == "tarım" || name == "hizmet"){
+                        if(name == "Tarım" || name == "Hizmet"){
                             $('.checkboxClass[name='+name+']').prop("checked", false);
                             getIlanlar(1);
                         }
