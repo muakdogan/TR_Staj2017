@@ -3,7 +3,6 @@
     use App\Il;
     use App\Ilce;
     use App\Semt;
- 
 ?>
 @extends('layouts.app')
 @section('content')
@@ -12,12 +11,12 @@
  <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">             
         <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
-        <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
+        <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
+        
         <style>
             table {
             font-family: arial, sans-serif;
@@ -59,6 +58,7 @@
         </style>
 </head>
 <body>
+     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <div class="container">
         <br>
         <br>
@@ -66,1219 +66,1320 @@
        <h2>İlan Oluştur</h2>
     </div>
     <div class="container">
-         <div class="panel-group" id="accordion">
+        <div class="row">
+            <div class="col-sm-8" >
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"><strong>İlan Bilgilerim</strong></a>
+                                 <?php 
+                                  $kullanici_id= Auth::user()->kullanici_id;
+                                  $firma_id=$firma->id;
+                                    $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                                            ->where( 'firma_id', '=', $firma_id)
+                                            ->select('rol_id')->get();
+                                            $rol_id=$rol_id->toArray();
+                                    $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                                    ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                                    ->select('roller.adi as rolAdi')->get();
+                                    $querys=$querys->toArray();
+                                    $rol=$querys[0]['rolAdi'];
+                                ?>
+                                @if ( $rol === 'Yönetici')
 
-             <div class="panel panel-default">
-                 <div class="panel-heading">
-                     <h4 class="panel-title">
-                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">İlan Bilgilerim</a>
-                     </h4>
-                 </div>
-                 <div id="collapse2" class="panel-collapse collapse">
-                     <div class="panel-body">
-                         <table class="table" >
-                             <thead id="tasks-list" name="tasks-list">
-                                 <tr id="firma{{$firma->id}}">
-                                     <tr>
-                                     <td>Firma Adı:</td>
-                                     <?php
-                                     
-                                     $firma->firma_sektorler = new App\FirmaSektor();
-                                     $firma->firma_sektorler->sektorler = new App\Sektor();
-                                     
-                                     if($firma->goster=="Göster"){
-                                     ?>
-                                      <td>{{$firma->adi}}</td>
-                                     <?php
-                                     }
-                                     else if($firma->goster=="Gizle"){    
-                                     ?>
-                                     <td>{{$firma->adi}}(GİZLİ)</td>
-                                     <?php
-                                     }
-                                     ?>
-                                    
-                                 </tr>
-                                 
-                                 <tr>
-                                     <td>İlan Adı:</td>
+                                   <button style="float:right" id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
 
-                                     <?php
-                                     $firmaAdres = $firma->adresler()->first();
-                                     if (!$ilan)
-                                         $ilan = new App\Ilan();
+                                @elseif ($rol ==='Satın Alma')
 
-                                     if (!$firmaAdres) {
-                                         $firmaAdres = new Adres();
-                                         $firmaAdres->iller = new Il();
-                                         $firmaAdres->ilceler = new Ilce();
-                                         $firmaAdres->semtler = new Semt();
-                                     }
-                                    
-                                     ?>
-                                     <td>{{$ilan->adi}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>İlan Sektor:</td>
-                                      @foreach($sektorler as $ilanSektor)<?php
-                                   if($ilanSektor->id == $ilan->firma_sektor){
-                                       ?>
-                                          <td>{{$ilanSektor->adi}}</td>
-                                          <?php
-                                   }
-                                   ?>
-                                   @endforeach
-                                 </tr>
-                                 <tr>
-                                     <td>İlan Yayınlama Tarihi:</td>
-                                     <td>{{$ilan->yayin_tarihi}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>İlan Kapanma Tarihi:</td>
-                                     <td>{{$ilan->kapanma_tarihi}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>İlan Açıklaması:</td>
-                                     <td>{{$ilan->aciklama}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>ilan Türü:</td>
-                                     
-                                     @if($ilan->ilan_turu=="1")
-                                         <td>Mal</td>
-                                     @elseif ($ilan->ilan_turu=="2")
-                                        <td>Hizmet</td>
-                                     @elseif ($ilan->ilan_turu=="3")
-                                        <td>Yapım İşi</td>
-                                     @endif
-                                     
-                                     
-                                 </tr>
-                                 <tr>
-                                     <td>İlan Usulü:</td>
-                                     @if($ilan->usulu=="1")
-                                         <td>Tamrekabet</td>
-                                     @elseif ($ilan->usulu=="2")
-                                        <td>Belirli İstekliler Arasında</td>
-                                     @elseif ($ilan->usulu=="3")
-                                        <td>Sadece Başvuru</td>
-                                     @endif
-                                    
-                                 </tr>
-                                 <tr>
-                                     <td>Sözleşme Türü:</td>
-                                      @if($ilan->sozlesme_turu=="0")
-                                         <td>Birim Fiyatlı</td>
-                                     @elseif ($ilan->sozlesme_turu=="1")
-                                        <td>Götürü Bedel</td>
-                                     @endif
-                                    
-                                 </tr>
-                                 <tr>
-                                     <td>Teknik Şartname:</td>
-                                     <td>{{$ilan->teknik_sartname}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>Yaklaşık Maliyet:</td>
-                                     <td>{{$ilan->yaklasik_maliyet}}</td>
-                                 </tr>
-                                
-                                 <tr>
-                                     <td>Teslim Yeri:</td>
-                                     <?php
-                                     if ($ilan->teslim_yeri_satici_firma == NULL) {
-                                         ?>  
+                                    <button style="float:right"id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
 
+                                @elseif ($rol ==='Satın Alma / Satış')
 
-                                         <?php
-                                     } else {
-                                         ?>
-                                         <td>{{$ilan->teslim_yeri_satici_firma}}</td>
-                                         <?php
-                                     }
-                                     ?>
+                                   <button style="float:right" id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>    
+                                @else
 
-
-                                 </tr>
-                                 <tr>
-                                     <td>İşin Süresi:</td>
-                                     <td>{{$ilan->isin_suresi}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>İş Başlama Tarihi:</td>
-                                     <td>{{$ilan->is_baslama_tarihi}}</td>
-                                 </tr>
-                                 <tr>
-                                     <td>İş Bitiş Tarihi:</td>
-                                     <td>{{$ilan->is_bitis_tarihi}}</td>
-                                 </tr>
-                                 </tr>
-                             </thead>
-                         </table>
-
-
-                         <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                             <div class="modal-dialog">
-                                  <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
-                                  <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
-                                 <div class="modal-content">
-                                     <div class="modal-header">
-                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                         <h4 class="modal-title" id="myModalLabel">İlan Bilgileri</h4>
-                                     </div>
-                                     <div class="modal-body">
-                                         
-                                         
-                                         {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
-                                          
-                                           <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Firma Adı Göster</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="firma_adi_gizli" id="firma_adi_gizli" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="Göster">Göster</option>
-                                                     <option  value="Gizle">Gizle</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">İlan Adı</label>
-                                             <div class="col-sm-9">
-                                                 <input type="text" class="form-control" id="ilan_adi" name="ilan_adi" placeholder="İlan Adı" value="{{$ilan->adi}}" required>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">İlan Sektör</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="firma_sektor" id="firma_sektor" required>
-                                                     <option selected disabled>Seçiniz</option>
-                                                     @foreach($sektorler as $sektor)
-                                                     <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
-                                                     @endforeach
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Yayınlama Tarihi</label>
-                                             <div class="col-sm-9">
-                                                 <input type="date" class="form-control datepicker" id="yayinlama_tarihi" name="yayinlama_tarihi" placeholder="Yayınlama Tarihi" value="{{$ilan->yayin_tarihi}}" required>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Kapanma Tarihi</label>
-                                             <div class="col-sm-9">
-                                                 <input type="date" class="form-control datepicker" id="kapanma_tarihi" name="kapanma_tarihi" placeholder="Kapanma Tarihi" value="{{$ilan->kapanma_tarihi}}" required>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Açıklama</label>
-                                             <div class="col-sm-9">
-                                                 <!--input type="text" class="form-control " id="aciklama" name="aciklama" placeholder="Açıklama" value=""-->
-                                                 <textarea id="aciklama" name="aciklama" rows="5" class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.."  value="{{$ilan->aciklama}}" required></textarea>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">İlan Türü</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="ilan_turu" id="ilan_turu" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option  value="1">Mal</option>
-                                                     <option  value="2">Hizmet</option>
-                                                     <option  value="3">Yapım İşi</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Rekabet Şekli</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="rekabet_sekli" id="rekabet_sekli" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option  value="1">Tamrekabet</option>
-                                                     <option  value="2">Belirli İstekliler Arasında</option>
-                                                     <option  value="3"> Sadece Başvuru</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         
-                                          <div class="form-group"  id="belirli-istekliler">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Firma Seçiniz</label>
-                                            <div class="col-sm-9 ezgi">
-                                            
-                                             <select id='custom-headers' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" required >
-                                                    
-                                                
-                                             </select>
-                                            </div>
-                                         </div>
-                                       
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Sözleşme Türü</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="sozlesme_turu" id="sozlesme_turu" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="0">Birim Fiyatlı</option>
-                                                     <option  value="1">Götürü Bedel</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Teknik Şartname</label>
-                                             <div class="col-sm-9">
-
-                                                 <div class="control-group">
-                                                     <div class="controls">
-                                                         {!! Form::file('teknik') !!}
-                                                         <p class="errors">{!!$errors->first('image')!!}</p>
-                                                         @if(Session::has('error'))
-                                                         <p class="errors">{!! Session::get('error') !!}</p>
-                                                         @endif
-                                                     </div>
-                                                 </div>
-                                                 <div id="success"> 
-                                                 </div>
-
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Yaklaşık Maliyet</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="yaklasik_maliyet" id="yaklasik_maliyet" required>
-                                                     <option selected disabled>Seçiniz</option>
-                                                     @foreach($maliyetler as $maliyet)
-                                                     <option name="{{$maliyet->aralik}}" value="{{$maliyet->miktar}}" >{{$maliyet->aralik}}</option>
-                                                     
-                                                     @endforeach
-                                                 </select>
-                                                 <input type="hidden" id="maliyet" name="maliyet" value=""></input>
-                                             </div>
-                                         </div>
-                                       
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Teslim Yeri</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="teslim_yeri" id="teslim_yeri" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="Satıcı Firma">Satıcı Firma</option>
-                                                     <option  value="Adrese Teslim">Adrese Teslim</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                     
-                                         <div class="form-group error">
-                                             <label for="inputTask" class="col-sm-3 control-label">Teslim Yeri İl</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="il_id" id="il_id" required>
-                                                     <option selected disabled>Seçiniz</option>
-                                                     @foreach($iller as $il)
-                                                     <option  value="{{$il->id}}" >{{$il->adi}}</option>
-                                                     @endforeach
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group error">
-                                             <label for="inputTask" class="col-sm-3 control-label">Teslim Yeri İlçe</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="ilce_id" id="ilce_id" required>
-                                                     <option selected disabled>Seçiniz</option>
-
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">İşin Süresi</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="isin_suresi" id="isin_suresi" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="Tek Seferde">Tek Seferde</option>
-                                                     <option  value="Zamana Yayılarak">Zamana Yayılarak</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">İş Başlama Tarihi</label>
-                                             <div class="col-sm-9">
-                                                 <input type="date" class="form-control datepicker" id="is_baslama_tarihi" name="is_baslama_tarihi" placeholder="İş Başlama Tarihi" value="{{$ilan->is_baslama_tarihi}}" required>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">İş Bitiş Tarihi</label>
-                                             <div class="col-sm-9">
-                                                 <input type="date" class="form-control datepicker" id="is_bitis_tarihi" name="is_bitis_tarihi" placeholder="İş Bitiş Tarihi" value="{{$ilan->is_bitis_tarihi}}" required>
-                                             </div>
-                                         </div>
-
-
-
-                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'btn btn-danger')) !!}
-                                         {!! Form::close() !!}
-                                     </div>
-                                     <div class="modal-footer">                                                            
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                         
-                         
-                         <?php 
-                           $kullanici_id= Auth::user()->kullanici_id;
-                           $firma_id=$firma->id;
-
-                             $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
-                                     ->where( 'firma_id', '=', $firma_id)
-                                     ->select('rol_id')->get();
-                                     $rol_id=$rol_id->toArray();
-
-
-                             $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
-                             ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
-                             ->select('roller.adi as rolAdi')->get();
-                             $querys=$querys->toArray();
-
-                             $rol=$querys[0]['rolAdi'];
-
-                         
-                         ?>
-                         @if ( $rol === 'Yönetici')
-                    
-                            <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
-                            
-                         @elseif ($rol ==='Satın Alma')
-
-                             <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>
-                             
-                         @elseif ($rol ==='Satın Alma / Satış')
-                         
-                            <button id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="selectDD()">Ekle / Düzenle</button>    
-                         @else
-
-                         @endif
-                         
-                         
-                         
-                     </div>
-                 </div>
-             </div>
-             <div class="panel panel-default">
-                 <div class="panel-heading">
-                     <h4 class="panel-title">
-                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Fiyatlandırma Bigileri</a>
-                     </h4>
-                 </div>
-                 <div id="collapse3" class="panel-collapse collapse">
-                     <div class="panel-body">
-                         <table class="table" >
-                             <thead id="tasks-list" name="tasks-list">
-                                 <tr id="firma{{$firma->id}}">
-                                 <tr>
-                                     
-                                     <td>KDV:</td> 
+                                @endif
+                            </h4>
+                        </div>
+                        <div id="collapse2" >
+                            <div class="panel-body">
+                                <table class="table" >
+                                    <thead id="tasks-list" name="tasks-list">
+                                        <tr id="firma{{$firma->id}}">
+                                            <tr>
+                                                <td width="25%"><strong>Firma Adı</strong></td>
                                             <?php
-                                            if ($ilan->kdv_dahil == "on") {
-                                           ?>
-                                         <td>Kdv Dahil</td>
-                                         <?php
-                                     } else {
-                                         ?>
-                                         <td>Kdv Dahil Değil</td>
-                                         <?php
-                                     }
-                                     ?>
+                                            $firma->firma_sektorler = new App\FirmaSektor();
+                                            $firma->firma_sektorler->sektorler = new App\Sektor();
 
-                                 </tr>
-                                 <tr>
-                                     <td>Ödeme Türü:</td>
-                                     <?php if($ilan->odeme_turu_id != NULL)
-                                     {?>
-                                     <td>{{$ilan->odeme_turleri->adi}}</td>
-                                     <?php }?>
-                                 </tr>
-                                 <tr>
-                                     <td>Para Birimi:</td>
-                                      <?php if($ilan->para_birimi_id != NULL)
-                                     {
-                                     ?>
-                                     <td>{{$ilan->para_birimleri->adi}}</td>
-                                     <?php }?>
-                                 </tr>
-                                 <tr>
-                                     <td>Fiyatlandırma Şekli:</td>
-                                       @if($ilan->fiyatlandirma_sekli==1)
-                                        <td>Kısmş Fiyat Teklifine Açık</td>
-                                       @elseif($ilan->fiyatlandirma_sekli==0)
-                                         <td>Kısmi Fiyat Teklifine Kapalı</td>
-                                       @endif
-                                     
-                                     
-                                 </tr>
-                                 </tr>
-                             </thead>
-                         </table>
-                         <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                             <div class="modal-dialog">
-                                 
-                           
-                                  
-                                 <div class="modal-content">
-                                     <div class="modal-header">
-                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                         <h4 class="modal-title" id="myModalLabel">Fiyatlandırma Bilgileri</h4>
-                                     </div>
-                                     <div class="modal-body">
-                                         {!! Form::open(array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                            if($firma->goster=="Göster"){
+                                            ?>
+                                                <td width="75%"><strong>:</strong> {{$firma->adi}}</td>
+                                            <?php
+                                            }
+                                            else if($firma->goster=="Gizle"){    
+                                            ?>
+                                            <td width="75%"><strong>:</strong> {{$firma->adi}}(GİZLİ)</td>
+                                            <?php
+                                            }
+                                            ?>
 
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">KDV</label>
-                                             <div class="col-sm-9">
-                                                 <input type="checkbox" class="filled-in" id="filled-in-box" name="kdv" checked="checked"  required/>  
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Ödeme Türü</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="odeme_turu" id="odeme_turu" required>
-                                                     <option selected disabled>Seçiniz</option>
-                                                     @foreach($odeme_turleri as $odeme_turu)
-                                                     <option  value="{{$odeme_turu->id}}" >{{$odeme_turu->adi}}</option>
-                                                     @endforeach
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Para Birimi</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="para_birimi" id="para_birimi" required>
-                                                     <option selected disabled>Seçiniz</option>
-                                                     @foreach($para_birimleri as $para_birimi)
-                                                     <option  value="{{$para_birimi->id}}" >{{$para_birimi->adi}}</option>
-                                                     @endforeach
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-3 control-label">Fiyatlandırma Şekli</label>
-                                             <div class="col-sm-9">
-                                                 <select class="form-control" name="kismi_fiyat" id="kismi_fiyat" required>
-                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                     <option   value="1">Kısmi Fiyat Teklifine Açık</option>
-                                                     <option  value="0">Kısmi Fiyat Teklifine Kapalı</option>
-                                                 </select>
-                                             </div>
-                                         </div>
-                                         {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'btn btn-danger')) !!}
-                                         {!! Form::close() !!}
-                                     </div>
-                                     <div class="modal-footer">                                                            
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                         
-                         
-                         @if ( $rol === 'Yönetici')
-                    
-                           <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
-                         @elseif ($rol ==='Satın Alma')
+                                        </tr>
 
-                            <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
-                            
-                         @elseif ($rol ==='Satın Alma / Satış')
-                         
-                            <button id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>   
-                         @else
+                                        <tr>
+                                            <td><strong>İlan Adı</strong></td>
+                                            <?php
+                                            $firmaAdres = $firma->adresler()->first();
+                                            if (!$ilan)
+                                                $ilan = new App\Ilan();
 
-                         @endif
+                                            if (!$firmaAdres) {
+                                                $firmaAdres = new Adres();
+                                                $firmaAdres->iller = new Il();
+                                                $firmaAdres->ilceler = new Ilce();
+                                                $firmaAdres->semtler = new Semt();
+                                            }
+                                            ?>
+                                            <td><strong>:</strong> {{$ilan->adi}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İlan Sektor</strong></td>
+                                        
+                                             <td><strong>:</strong> @foreach($sektorler as $ilanSektor)<?php
+                                                if($ilanSektor->id == $ilan->firma_sektor){
+                                                    ?>{{$ilanSektor->adi}} <?php }?>
+                                                    @endforeach 
+                                             </td>
+                                                    
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İlan Yayınlama Tarihi</strong></td>
+                                            <td><strong>:</strong> {{$ilan->yayin_tarihi}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İlan Kapanma </strong></td>
+                                            <td><strong>:</strong> {{$ilan->kapanma_tarihi}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İlan Açıklaması</strong></td>
+                                            <td><strong>:</strong><?php echo $ilan->aciklama; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İlan Türü</strong></td>
+                                            <td><strong>:</strong>@if($ilan->ilan_turu=="1") Mal</td>
+                                            <td><strong>:</strong> @elseif ($ilan->ilan_turu=="2")Hizmet</td>
+                                            <td><strong>:</strong>@elseif ($ilan->ilan_turu=="3") Yapım İşi</td>
+                                            @endif
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İlan Usulü</strong></td>
+                                            <td><strong>:</strong>@if($ilan->usulu=="1") Tamrekabet</td>
+                                            <td><strong>:</strong> @elseif ($ilan->usulu=="2") Belirli İstekliler Arasında</td>
+                                            <td><strong>:</strong>@elseif ($ilan->usulu=="3") Sadece Başvuru</td>
+                                             @endif
 
-                     </div>
-                 </div>
-             </div>
-             
-             
-                    
-             
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Sözleşme Türü</strong></td>
+                                              <td><strong>:</strong> @if($ilan->sozlesme_turu=="0") Birim Fiyatlı</td>
+                                              <td><strong>:</strong>@elseif ($ilan->sozlesme_turu=="1") Götürü Bedel</td>
+                                            @endif
 
-             <div id="mal"   class="panel panel-default">
-                 <div class="panel-heading">
-                     <h4 class="panel-title">
-                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Fiyat İstenen Kalemler Listesi</a>
-                     </h4>
-                 </div>
-                 <div id="collapse4" class="panel-collapse collapse">
-                     <div class="panel-body">
-                         <table class="table" >
-                             <thead id="tasks-list" name="tasks-list">
-                                 <tr id="firma{{$firma->id}}">
-                                     <?php
-                                     if (!$ilan)
-                                         $ilan = new App\Ilan();
-                                     if (!$ilan->ilan_mallar)
-                                         $ilan->ilan_mallar = new App\IlanMal();
-                                     
-                                        $i=1;
-                                     ?>
-                                 <tr>
-                                     <th>Sıra:</th>
-                                     <th>Marka:</th>
-                                     <th>Model:</th>
-                                     <th>Adı:</th>
-                                     <th>Ambalaj:</th>
-                                     <th>Miktar:</th>
-                                     <th>Birim:</th>
-                                     <th></th>
-                                     <th></th>
-                                 </tr>
-                                 @foreach($ilan->ilan_mallar as $ilan_mal)
-                                 <tr>
-                                     <td>
-                                          {{$i}}
-                                     </td>
-                                     
-                                        <?php $i++?>
-                                     
-                                     <td>
-                                         {{$ilan_mal->marka}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_mal->model}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_mal->adi}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_mal->ambalaj}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_mal->miktar}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_mal->birimler->adi}}
-                                     </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Teknik Şartname</strong></td>
+                                            <td><strong>:</strong>  {{$ilan->teknik_sartname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Yaklaşık Maliyet</strong></td>
+                                            <td><strong>:</strong>  {{$ilan->yaklasik_maliyet}}</td>
+                                        </tr>
 
-                                     <td> <button name="open-modal-mal"  value="{{$ilan_mal->id}}" class="btn btn-primary btn-xs open-modal-mal" >Düzenle</button></td>
-                                     <td>
-                                                {{ Form::open(array('url'=>'mal/'.$ilan_mal->id,'method' => 'DELETE', 'files'=>true)) }}
-                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                             {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                            {{ Form::close() }}
-                                 </td>
-                                 <input type="hidden" name="ilan_mal_id"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
+                                        <tr>
+                                            <td><strong>Teslim Yeri</strong></td>
+                                            <?php
+                                            if ($ilan->teslim_yeri_satici_firma == NULL) {
+                                                ?>  
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <td><strong>:</strong>  {{$ilan->teslim_yeri_satici_firma}}</td>
+                                                <?php
+                                            }
+                                            ?>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İşin Süresi</strong></td>
+                                            <td><strong>:</strong> {{$ilan->isin_suresi}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İş Başlama Tarihi</strong></td>
+                                            <td><strong>:</strong> {{$ilan->is_baslama_tarihi}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>İş Bitiş Tarihi</strong></td>
+                                            <td><strong>:</strong> {{$ilan->is_bitis_tarihi}}</td>
+                                        </tr>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                         <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
+                                         <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
+                                         
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>İlan Bilgileri</strong></h4>
+                                                
+                                            </div>
+                                            <div class="modal-body">
+                                                {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                     </tr>
+                                                  <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Firma Adı Göster</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="firma_adi_gizli" id="firma_adi_gizli" data-validation="required" 
+                                                            data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option   value="Göster">Göster</option>
+                                                            <option  value="Gizle">Gizle</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">İlan Adı</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="ilan_adi" name="ilan_adi" placeholder="İlan Adı" value="{{$ilan->adi}}" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">İlan Sektör</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="firma_sektor" id="firma_sektor" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled>Seçiniz</option>
+                                                            @foreach($sektorler as $sektor)
+                                                            <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Yayınlama Tarihi</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                       <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="{{$ilan->yayinlanma_tarihi}}" placeholder="Yayinlanma Tarihi" type="text" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Kapanma Tarihi</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control date" id="kapanma_tarihi" name="kapanma_tarihi" placeholder="Kapanma Tarihi" value="{{$ilan->kapanma_tarihi}}" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Açıklama</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <!--input type="text" class="form-control " id="aciklama" name="aciklama" placeholder="Açıklama" value=""-->
+                                                        <textarea id="aciklama" name="aciklama" rows="5" class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.."  value="{{$ilan->aciklama}}" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                     <label for="inputEmail3" class="col-sm-2 control-label">İlan Türü</label>
+                                                     <label for="inputTask" style="text-align: right" class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="ilan_turu" id="ilan_turu" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option  value="1">Mal</option>
+                                                            <option  value="2">Hizmet</option>
+                                                            <option  value="3">Yapım İşi</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Rekabet Şekli</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="rekabet_sekli" id="rekabet_sekli" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option  value="1">Tamrekabet</option>
+                                                            <option  value="2">Belirli İstekliler Arasında</option>
+                                                            <option  value="3"> Sadece Başvuru</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 
-                                     <div class="modal fade" id="myModal-mal_birimfiyat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                 <div class="form-group"  id="belirli-istekliler">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Firma Seçiniz</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                   <div class="col-sm-9 ezgi">
+                                                    <select id='custom-headers' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" >
+                                                    </select>
+                                                   </div>
+                                                </div>
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Marka</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="marka" name="marka" placeholder="Marka" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Model</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="model" name="model" placeholder="Model" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value=""required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Ambalaj</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="ambalaj" name="ambalaj" placeholder="ambalaj" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Birim</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="birim" id="birim" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $birim)
-                                                                 <option  value="{{$birim->id}}" >{{$birim->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
-                                                     <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Sözleşme Türü</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="sozlesme_turu" id="sozlesme_turu" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option   value="0">Birim Fiyatlı</option>
+                                                            <option  value="1">Götürü Bedel</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Teknik Şartname</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'btn btn-danger')) !!}
-                                                         {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {!! Form::file('teknik',array('data-validation'=>'required' ,
+                                                                   'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                                                <p class="errors">{!!$errors->first('image')!!}</p>
+                                                                @if(Session::has('error'))
+                                                                <p class="errors">{!! Session::get('error') !!}</p>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div id="success"> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Yaklaşık Maliyet</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="yaklasik_maliyet" id="yaklasik_maliyet" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled>Seçiniz</option>
+                                                            @foreach($maliyetler as $maliyet)
+                                                            <option name="{{$maliyet->aralik}}" value="{{$maliyet->miktar}}" >{{$maliyet->aralik}}</option>
 
-                                     @endforeach
+                                                            @endforeach
+                                                        </select>
+                                                        <input type="hidden" id="maliyet" name="maliyet" value=""></input>
+                                                    </div>
+                                                </div>
 
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Teslim Yeri</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="teslim_yeri" id="teslim_yeri" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option   value="Satıcı Firma">Satıcı Firma</option>
+                                                            <option  value="Adrese Teslim">Adrese Teslim</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 
-                                     </thead>
-                                     </table>
-                                     <div class="modal fade" id="myModal-mal_birimfiyat_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                <div class="form-group error">
+                                                    <label for="inputTask" class="col-sm-2 control-label">Teslim Yeri İl</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="il_id" id="il_id" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled>Seçiniz</option>
+                                                            @foreach($iller as $il)
+                                                            <option  value="{{$il->id}}" >{{$il->adi}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group error">
+                                                    <label for="inputTask" class="col-sm-2 control-label">Teslim Yeri İlçe</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="ilce_id" id="ilce_id" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled>Seçiniz</option>
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Marka</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="marka" name="marka" placeholder="Marka" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Model</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="model" name="model" placeholder="Model" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Ambalaj</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="ambalaj" name="ambalaj" placeholder="ambalaj" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Birim</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="birim" id="birim" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $birimleri)
-                                                                 <option  value="{{$birimleri->id}}" >{{$birimleri->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">İşin Süresi</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="isin_suresi" id="isin_suresi" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option   value="Tek Seferde">Tek Seferde</option>
+                                                            <option  value="Zamana Yayılarak">Zamana Yayılarak</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                  
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">İş Başlama Tarihi</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control date" id="is_baslama_tarihi" name="is_baslama_tarihi" placeholder="İş Başlama Tarihi" value="{{$ilan->is_baslama_tarihi}}" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">İş Bitiş Tarihi</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control date" id="is_bitis_tarihi" name="is_bitis_tarihi" placeholder="İş Bitiş Tarihi" value="{{$ilan->is_bitis_tarihi}}" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                    </div>
+                                                </div>
+                                               
+                                                <button class="btn btn-danger" url="firmaIlanOlustur/ilanBilgileri/'.$firma->id" style="float:right" type="submit">Kaydet</button>
+                                                {!! Form::close() !!}
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <div class="modal-footer">                                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><strong>Fiyatlandırma Bigileri</strong></a>
+                                
+                                @if ( $rol === 'Yönetici')
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'btn btn-danger')) !!}
-                                                     {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
+                                  <button  style="float:right"id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
+                                @elseif ($rol ==='Satın Alma')
 
-                                     <button id="btn-add-mal" name="btn-add-mal" class="btn btn-primary btn-xs" >Ekle</button>
-                                     </div>
-                                     </div>
-                                     </div>
-             <div  id="hizmet"   class="panel panel-default ">
-                 <div class="panel-heading">
-                     <h4 class="panel-title">
-                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Fiyat İstenen Kalemler Listesi</a>
-                     </h4>
-                 </div>
-                 <div id="collapse5" class="panel-collapse collapse">
-                     <div class="panel-body">
-                         <table class="table" >
-                             <thead id="tasks-list" name="tasks-list">
-                                 <tr id="firma{{$firma->id}}">
-                                     <?php
-                                     if (!$ilan)
-                                         $ilan = new App\Ilan();
-                                     if (!$ilan->ilan_hizmetler)
-                                         $ilan->ilan_hizmetler = new App\IlanHizmet();
-                                     $j=0;
-                                     ?>
-                                 <tr>
-                                     <th>Sıra:</th>
-                                     <th>Adı:</th>
-                                     <th>Fiyat Standartı:</th>
-                                     <th>Fiyat Standartı Birimi:</th>
-                                     <th>Miktar:</th>
-                                     <th>Miktar Birimi:</th>
-                                     <th></th>
-                                     <th></th>
-                                 </tr>
-                                 @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
-                                 <tr>
-                                     <td>
-                                         {{$j}}
-                                     </td>
-                                     {{$j++}}
+                                   <button style="float:right" id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
 
-                                     <td>
-                                         {{$ilan_hizmet->adi}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_hizmet->fiyat_standardi}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_hizmet->fiyat_birimler->adi}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_hizmet->miktar}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_hizmet->miktar_birimler->adi}}
-                                     </td>
+                                @elseif ($rol ==='Satın Alma / Satış')
 
-                                     <td> <button name="open-modal-hizmet"  value="{{$ilan_hizmet->id}}" class="btn btn-primary btn-xs open-modal-hizmet" >Düzenle</button></td>
-                                     <td>
-                                         {{ Form::open(array('url'=>'hizmet/'.$ilan_hizmet->id,'method' => 'DELETE', 'files'=>true)) }}
-                             <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                 {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                 {{ Form::close() }}
-                                 </td>
-                                 <input type="hidden" name="ilan_hizmet_id"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}"> 
-                                     </tr>
+                                   <button style="float:right" id="btn-add-fiyatlandırmaBilgileri" name="btn-add-fiyatlandırmaBilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>   
+                                @else
 
+                                @endif
+                            </h4>
+                        </div>
+                        <div id="collapse3" >
+                            <div class="panel-body">
+                                <table class="table" >
+                                    <thead id="tasks-list" name="tasks-list">
+                                        <tr id="firma{{$firma->id}}">
+                                        <tr>
 
-                                     <div class="modal fade" id="myModal-hizmet_birimfiyat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                            <td width="25%"><strong>KDV</strong></td> 
+                                                   <?php
+                                                   if ($ilan->kdv_dahil == "on") {
+                                                  ?>
+                                                <td width="75%"><strong>:</strong> Kdv Dahil</td>
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <td><strong>:</strong> Kdv Dahil Değil</td>
+                                                <?php
+                                            }
+                                            ?>
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="{{$ilan_hizmet->adi}}" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Fiyat Standartı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="{{$ilan_hizmet->fiyat_standardi}}" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">F .S Birimi</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $fiyat_birimi)
-                                                                 <option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value=" {{$ilan_hizmet->miktar}}" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar Birimi</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="miktar_birim_id" id="miktar_birim_id" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $miktar_birim)
-                                                                 <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
-                                                     <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
-
-                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'btn btn-danger')) !!}
-                                                         {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-
-                                     @endforeach
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Ödeme Türü</strong></td>
+                                            
+                                            <td><strong>:</strong><?php if($ilan->odeme_turu_id != NULL)
+                                            {?> {{$ilan->odeme_turleri->adi}}<?php }?></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Para Birimi</strong></td>
+                                            
+                                            <td><strong>:</strong>  <?php if($ilan->para_birimi_id != NULL)
+                                            {
+                                            ?> {{$ilan->para_birimleri->adi}} <?php }?></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Fiyatlandırma Şekli</strong></td>
+                                            
+                                              @if($ilan->fiyatlandirma_sekli==1)
+                                               <td><strong>:</strong> Kısmş Fiyat Teklifine Açık</td>
+                                              @elseif($ilan->fiyatlandirma_sekli==0)
+                                              <td><strong>:</strong> Kısmi Fiyat Teklifine Kapalı</td>
+                                              @endif
 
 
-                                     </thead>
-                                     </table>
-                                     <div class="modal fade" id="myModal-hizmet_birimfiyat_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                        </tr>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <div class="modal fade" id="myModal-fiyatlandırmaBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Fiyatlandırma Bilgileri</strong></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                {!! Form::open(array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Fiyat Standartı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Fiyat Standartı Birimi</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" required >
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $fiyat_birimi)
-                                                                 <option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar Birimi</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="miktar_birim_id" id="miktar_birim_id" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $birimi)
-                                                                 <option  value="{{$birimi->id}}" >{{$birimi->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
-
-                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'btn btn-danger')) !!}
-                                                     {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-
-                                     <button id="btn-add-hizmet" name="btn-add-hizmet" class="btn btn-primary btn-xs" >Ekle</button>
-                                     </div>
-                                     </div>
-                                     </div>
-             <div  id="goturu" class="panel panel-default ">
-                 <div class="panel-heading">
-                     <h4 class="panel-title">
-                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">Fiyat İstenen Kalemler Listesi</a>
-                     </h4>
-                 </div>
-                 <div id="collapse6" class="panel-collapse collapse">
-                     <div class="panel-body">
-                         <table class="table" >
-                             <thead id="tasks-list" name="tasks-list">
-                                 <tr id="firma{{$firma->id}}">
-                                     <?php
-                                     if (!$ilan)
-                                         $ilan = new App\Ilan();
-                                     if (!$ilan->ilan_goturu_bedeller)
-                                         $ilan->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
-                                     
-                                     $k=0;
-                                     ?>
-                                 <tr>
-                                     <th>Sıra:</th>
-                                     <th>İşin Adı:</th>
-                                     <th>Miktar Türü:</th>
-                                     <th></th>
-                                     <th></th>
-                                 </tr>
-                                 @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
-                                 <tr>
-                                     <td>
-                                         {{$k}}
-                                     </td>
-                                     
-                                     {{$k++}}
-
-                                     <td>
-                                         {{$ilan_goturu_bedel->isin_adi}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_goturu_bedel->miktar_turu}}
-                                     </td>
-
-                                     <td> <button name="open-modal-goturu-bedel"  value="{{$ilan_goturu_bedel->id}}" class="btn btn-primary btn-xs open-modal-goturu-bedel" >Düzenle</button></td>
-                                     <td>
-                                         {{ Form::open(array('url'=>'goturu/'.$ilan_goturu_bedel->id,'method' => 'DELETE', 'files'=>true)) }}
-                             <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                 {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                 {{ Form::close() }}
-                                 </td>
-                                 <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
-                                     </tr>
-
-                                     <div class="modal fade" id="myModal-goturu_bedeller" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
-
-
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">İşin Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="isin_adi" name="isin_adi" placeholder=" İşin Adı" value="{{$ilan_goturu_bedel->isin_adi}}" required>
-                                                         </div>
-                                                     </div>
-
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar Türü</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar_turu" name="miktar_turu" placeholder="Miktar Türü" value="{{$ilan_goturu_bedel->miktar_turu}}" required>
-                                                         </div>
-                                                     </div>
-                                                     <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
-
-
-                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'btn btn-danger')) !!}
-                                                         {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-
-                                     @endforeach 
-
-
-                                     </thead>
-                                     </table>
-                                     <div class="modal fade" id="myModal-goturu_bedeller_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
-
-
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">İşin Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="isin_adi" name="isin_adi" placeholder=" İşin Adı" value="" required>
-                                                         </div>
-                                                     </div>
-
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar Türü</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar_turu" name="miktar_turu" placeholder="Miktar Türü" value="" required>
-                                                         </div>
-                                                     </div>
-
-
-                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'btn btn-danger')) !!}
-                                                     {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-
-                                     <button id="btn-add-goturu_bedeller" name="btn-add-goturu_bedeller" class="btn btn-primary btn-xs" >Ekle</button>
-                                     </div>
-                                     </div>
-                                     </div>
-             <div id="yapim"  class="panel panel-default ">
-                 <div class="panel-heading">
-                     <h4 class="panel-title">
-                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse7">Fiyat İstenen Kalemler Listesi</a>
-                     </h4>
-                 </div>
-                 <div id="collapse7" class="panel-collapse collapse">
-                     <div class="panel-body">
-                         <table class="table" >
-                             <thead id="tasks-list" name="tasks-list">
-                                 <tr id="firma{{$firma->id}}">
-                                     <?php
-                                     if (!$ilan)
-                                         $ilan = new App\Ilan();
-                                     if (!$ilan->ilan_yapim_isleri)
-                                         $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
-                                     $y=0;
-                                     ?>
-                                 <tr>
-                                     <th>Sıra:</th>
-                                     <th>Adı:</th>
-                                     <th>Miktar:</th>
-                                     <th>Birim:</th>
-                                     <th></th>
-                                     <th></th>
-                                 </tr>
-                                 @foreach($ilan->ilan_yapim_isleri as $ilan_yapim_isi)
-                                 <tr>
-                                     <td>
-                                         {{$y}}
-                                     </td>
-                                     {{$y++}}       
-
-                                     <td>
-                                         {{$ilan_yapim_isi->adi}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_yapim_isi->miktar}}
-                                     </td>
-                                     <td>
-                                         {{$ilan_yapim_isi->birimler->adi}}
-                                     </td>
-
-                                     <td> <button name="open-modal-yapim-isi"  value="{{$ilan_yapim_isi->id}}" class="btn btn-primary btn-xs open-modal-yapim-isi" >Düzenle</button></td>
-                                     <td>
-                                         {{ Form::open(array('url'=>'yapim/'.$ilan_yapim_isi->id,'method' => 'DELETE', 'files'=>true)) }}
-                             <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                 {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                 {{ Form::close() }}
-                                 </td>
-                                 <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}"> 
-                                     </tr>
-
-
-                                     <div class="modal fade" id="myModal-yapim_isleri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
-
+                                                <div class="form-group">
+                                                     
+                                                    <label for="inputTask" class="col-sm-2 control-label">KDV</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="checkbox" class="filled-in" id="filled-in-box" name="kdv" checked="checked"  data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>  
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                    
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Ödeme Türü</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="odeme_turu" id="odeme_turu" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled>Seçiniz</option>
+                                                            @foreach($odeme_turleri as $odeme_turu)
+                                                            <option  value="{{$odeme_turu->id}}" >{{$odeme_turu->adi}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                   
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Para Birimi</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="para_birimi" id="para_birimi" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled>Seçiniz</option>
+                                                            @foreach($para_birimleri as $para_birimi)
+                                                            <option  value="{{$para_birimi->id}}" >{{$para_birimi->adi}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Fiyatlandırma Şekli</label>
+                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="kismi_fiyat" id="kismi_fiyat" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                            <option selected disabled value="Seçiniz">Seçiniz</option>
+                                                            <option   value="1">Kısmi Fiyat Teklifine Açık</option>
+                                                            <option  value="0">Kısmi Fiyat Teklifine Kapalı</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                {!! Form::close() !!}
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <div class="modal-footer">                                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mal"   class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4"><strong>Fiyat İstenen Kalemler Listesi</strong></a>
+                                <button  style="float:right" id="btn-add-mal" name="btn-add-mal" class="btn btn-primary btn-xs" >Ekle</button>
+                            </h4>
+                        </div>
+                        <div id="collapse4" >
+                            <div class="panel-body">
+                                <table class="table" >
+                                    <thead id="tasks-list" name="tasks-list">
+                                        <tr id="firma{{$firma->id}}">
+                                            <?php
+                                            if (!$ilan)
+                                                $ilan = new App\Ilan();
+                                            if (!$ilan->ilan_mallar)
+                                                $ilan->ilan_mallar = new App\IlanMal();
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value=" {{$ilan_yapim_isi->adi}}" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value=" {{$ilan_yapim_isi->miktar}}" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Birim</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="birim" id="birim" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $birim)
-                                                                 <option  value="{{$birim->id}}" >{{$birim->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
-                                                     <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
+                                               $i=1;
+                                            ?>
+                                        <tr>
+                                            <th>Sıra</th>
+                                            <th>Marka</th>
+                                            <th>Model</th>
+                                            <th>Adı</th>
+                                            <th>Ambalaj</th>
+                                            <th>Miktar</th>
+                                            <th>Birim</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        @foreach($ilan->ilan_mallar as $ilan_mal)
+                                        <tr>
+                                            <td>
+                                                 {{$i}}
+                                            </td>
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'btn btn-danger')) !!}
-                                                         {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
+                                               <?php $i++?>
 
-                                     @endforeach  
+                                            <td>
+                                                {{$ilan_mal->marka}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_mal->model}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_mal->adi}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_mal->ambalaj}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_mal->miktar}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_mal->birimler->adi}}
+                                            </td>
+
+                                            <td> <button name="open-modal-mal"  value="{{$ilan_mal->id}}" class="btn btn-primary btn-xs open-modal-mal" >Düzenle</button></td>
+                                            <td>
+                                                       {{ Form::open(array('url'=>'mal/'.$ilan_mal->id,'method' => 'DELETE', 'files'=>true)) }}
+                                                       <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                    {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                                   {{ Form::close() }}
+                                        </td>
+                                        <input type="hidden" name="ilan_mal_id"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
+
+                                            </tr>
+
+                                            <div class="modal fade" id="myModal-mal_birimfiyat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Marka</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="marka" name="marka" placeholder="Marka" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Model</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="model" name="model" placeholder="Model" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Ambalaj</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="ambalaj" name="ambalaj" placeholder="ambalaj" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Miktar</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Birim</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="birim" id="birim" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $birim)
+                                                                        <option  value="{{$birim->id}}" >{{$birim->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
+
+                                                                {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                                {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @endforeach
+                                            </thead>
+                                            </table>
+                                            <div class="modal fade" id="myModal-mal_birimfiyat_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Marka</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="marka" name="marka" placeholder="Marka" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Model</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="model" name="model" placeholder="Model" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Ambalaj</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="ambalaj" name="ambalaj" placeholder="ambalaj" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Miktar</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputEmail3" class="col-sm-2 control-label">Birim</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="birim" id="birim" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $birimleri)
+                                                                        <option  value="{{$birimleri->id}}" >{{$birimleri->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiMal/'.$ilan->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                         <br>
+                                                         <br>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                          </div>
+                                    </div>
+                            </div>
+                    <div  id="hizmet"   class="panel panel-default ">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse5"><strong>Fiyat İstenen Kalemler Listesi</strong></a>
+                                 <button style="float:right" id="btn-add-hizmet" name="btn-add-hizmet" class="btn btn-primary btn-xs" >Ekle</button>
+                            </h4>
+                        </div>
+                        <div id="collapse5" >
+                            <div class="panel-body">
+                                <table class="table" >
+                                    <thead id="tasks-list" name="tasks-list">
+                                        <tr id="firma{{$firma->id}}">
+                                            <?php
+                                            if (!$ilan)
+                                                $ilan = new App\Ilan();
+                                            if (!$ilan->ilan_hizmetler)
+                                                $ilan->ilan_hizmetler = new App\IlanHizmet();
+                                            $j=0;
+                                            ?>
+                                        <tr>
+                                            <th>Sıra</th>
+                                            <th>Adı</th>
+                                            <th>Fiyat Standartı</th>
+                                            <th>Fiyat Standartı Birimi</th>
+                                            <th>Miktar</th>
+                                            <th>Miktar Birimi</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
+                                        <tr>
+                                            <td>
+                                                {{$j}}
+                                            </td>
+                                            {{$j++}}
+
+                                            <td>
+                                                {{$ilan_hizmet->adi}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_hizmet->fiyat_standardi}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_hizmet->fiyat_birimler->adi}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_hizmet->miktar}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_hizmet->miktar_birimler->adi}}
+                                            </td>
+
+                                            <td> <button name="open-modal-hizmet"  value="{{$ilan_hizmet->id}}" class="btn btn-primary btn-xs open-modal-hizmet" >Düzenle</button></td>
+                                            <td>
+                                                {{ Form::open(array('url'=>'hizmet/'.$ilan_hizmet->id,'method' => 'DELETE', 'files'=>true)) }}
+                                             <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                        {{ Form::close() }}
+                                        </td>
+                                        <input type="hidden" name="ilan_hizmet_id"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}"> 
+                                            </tr>
+                                            <div class="modal fade" id="myModal-hizmet_birimfiyat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+                                                            <div class="form-group">
+                                                                <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="{{$ilan_hizmet->adi}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Fiyat Standartı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="{{$ilan_hizmet->fiyat_standardi}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">F .S Birimi</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $fiyat_birimi)
+                                                                        <option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value=" {{$ilan_hizmet->miktar}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar Birimi</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $miktar_birim)
+                                                                        <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
+
+                                                                {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                                {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @endforeach
 
 
-                                     </thead>
-                                     </table>
-                                     <div class="modal fade" id="myModal-yapim_isleri_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                     <h4 class="modal-title" id="myModalLabel">Kalemler Listesi</h4>
-                                                 </div>
-                                                 <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                            </thead>
+                                            </table>
+                                            <div class="modal fade" id="myModal-hizmet_birimfiyat_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
 
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Miktar</label>
-                                                         <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" required>
-                                                         </div>
-                                                     </div>
-                                                     <div class="form-group">
-                                                         <label for="inputEmail3" class="col-sm-3 control-label">Birim</label>
-                                                         <div class="col-sm-9">
-                                                             <select class="form-control" name="birim" id="birim" required>
-                                                                 <option selected disabled>Seçiniz</option>
-                                                                 @foreach($birimler as $yapim_birim)
-                                                                 <option  value="{{$yapim_birim->id}}" >{{$yapim_birim->adi}}</option>
-                                                                 @endforeach
-                                                             </select>
-                                                         </div>
-                                                     </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Fiyat Standartı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Fiyat Standartı Birimi</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!" >
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $fiyat_birimi)
+                                                                        <option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar Birimi</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $birimi)
+                                                                        <option  value="{{$birimi->id}}" >{{$birimi->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
 
-                                                     {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'btn btn-danger')) !!}
-                                                     {!! Form::close() !!}
-                                                 </div>
-                                                 <div class="modal-footer">                                                            
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
+                                                            {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                     <button id="btn-add-yapim_isleri" name="btn-add-yapim_isleri" class="btn btn-primary btn-xs" >Ekle</button>
-                                     </div>
-                                     </div>
-                                     </div>
+                                           
+                                            </div>
+                                            </div>
+                                            </div>
+                    <div  id="goturu" class="panel panel-default ">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"><strong>Fiyat İstenen Kalemler Listesi</strong></a>
+                                 <button  style="float:right" id="btn-add-hizmet" name="btn-add-hizmet" class="btn btn-primary btn-xs" >Ekle</button>
+                            </h4>
+                        </div>
+                        <div id="collapse6" >
+                            <div class="panel-body">
+                                <table class="table" >
+                                    <thead id="tasks-list" name="tasks-list">
+                                        <tr id="firma{{$firma->id}}">
+                                            <?php
+                                            if (!$ilan)
+                                                $ilan = new App\Ilan();
+                                            if (!$ilan->ilan_goturu_bedeller)
+                                                $ilan->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
 
-         </div>
+                                            $k=0;
+                                            ?>
+                                        <tr>
+                                            <th>Sıra</th>
+                                            <th>İşin Adı</th>
+                                            <th>Miktar Türü</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
+                                        <tr>
+                                            <td>
+                                                {{$k}}
+                                            </td>
+
+                                            {{$k++}}
+
+                                            <td>
+                                                {{$ilan_goturu_bedel->isin_adi}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_goturu_bedel->miktar_turu}}
+                                            </td>
+
+                                            <td> <button name="open-modal-goturu-bedel"  value="{{$ilan_goturu_bedel->id}}" class="btn btn-primary btn-xs open-modal-goturu-bedel" >Düzenle</button></td>
+                                            <td>
+                                                {{ Form::open(array('url'=>'goturu/'.$ilan_goturu_bedel->id,'method' => 'DELETE', 'files'=>true)) }}
+                                    <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                        {{ Form::close() }}
+                                        </td>
+                                        <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
+                                            </tr>
+
+                                            <div class="modal fade" id="myModal-goturu_bedeller" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">İşin Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="isin_adi" name="isin_adi" placeholder=" İşin Adı" value="{{$ilan_goturu_bedel->isin_adi}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar Türü</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar_turu" name="miktar_turu" placeholder="Miktar Türü" value="{{$ilan_goturu_bedel->miktar_turu}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
+
+
+                                                                {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                                {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @endforeach 
+
+
+                                            </thead>
+                                            </table>
+                                            <div class="modal fade" id="myModal-goturu_bedeller_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">İşin Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="isin_adi" name="isin_adi" placeholder=" İşin Adı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar Türü</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar_turu" name="miktar_turu" placeholder="Miktar Türü" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+
+
+                                                            {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                    <div id="yapim"  class="panel panel-default ">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse7"><strong>Fiyat İstenen Kalemler Listesi</strong></a>
+                                 <button style="float:right" id="btn-add-yapim_isleri" name="btn-add-yapim_isleri" class="btn btn-primary btn-xs" >Ekle</button>
+                            </h4>
+                        </div>
+                        <div id="collapse7" >
+                            <div class="panel-body">
+                                <table class="table" >
+                                    <thead id="tasks-list" name="tasks-list">
+                                        <tr id="firma{{$firma->id}}">
+                                            <?php
+                                            if (!$ilan)
+                                                $ilan = new App\Ilan();
+                                            if (!$ilan->ilan_yapim_isleri)
+                                                $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+                                            $y=0;
+                                            ?>
+                                        <tr>
+                                            <th>Sıra:</th>
+                                            <th>Adı:</th>
+                                            <th>Miktar:</th>
+                                            <th>Birim:</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        @foreach($ilan->ilan_yapim_isleri as $ilan_yapim_isi)
+                                        <tr>
+                                            <td>
+                                                {{$y}}
+                                            </td>
+                                            {{$y++}}       
+
+                                            <td>
+                                                {{$ilan_yapim_isi->adi}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_yapim_isi->miktar}}
+                                            </td>
+                                            <td>
+                                                {{$ilan_yapim_isi->birimler->adi}}
+                                            </td>
+
+                                            <td> <button name="open-modal-yapim-isi"  value="{{$ilan_yapim_isi->id}}" class="btn btn-primary btn-xs open-modal-yapim-isi" >Düzenle</button></td>
+                                            <td>
+                                                {{ Form::open(array('url'=>'yapim/'.$ilan_yapim_isi->id,'method' => 'DELETE', 'files'=>true)) }}
+                                    <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                        {{ Form::close() }}
+                                        </td>
+                                        <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}"> 
+                                            </tr>
+
+
+                                            <div class="modal fade" id="myModal-yapim_isleri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+
+
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value=" {{$ilan_yapim_isi->adi}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value=" {{$ilan_yapim_isi->miktar}}" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Birim</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="birim" id="birim" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $birim)
+                                                                        <option  value="{{$birim->id}}" >{{$birim->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
+
+                                                                {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                                {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @endforeach  
+
+
+                                            </thead>
+                                            </table>
+                                            <div class="modal fade" id="myModal-yapim_isleri_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {!! Form::open(array('url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+
+
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Adı</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="adi" name="adi" placeholder="Adı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Miktar</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                                <label for="inputEmail3" class="col-sm-1 control-label">Birim</label>
+                                                                 <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                                <div class="col-sm-9">
+                                                                    <select class="form-control" name="birim" id="birim" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                        <option selected disabled>Seçiniz</option>
+                                                                        @foreach($birimler as $yapim_birim)
+                                                                        <option  value="{{$yapim_birim->id}}" >{{$yapim_birim->adi}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            {!! Form::submit('Kaydet', array('url'=>'kalemlerListesiYapim/'.$ilan->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="modal-footer">                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                           
+                                            </div>
+                                            </div>
+                                            </div>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                
+            </div>
+        </div>
     </div>
 
-<script charset="utf-8">  
-  
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+<script charset="utf-8"> 
+ $(document).ready(function(){
+		var date_input=$('input[class="form-control date"]'); //our date input has the name "date"
+		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+		date_input.datepicker({
+			format: 'mm/dd/yyyy',
+			container: container,
+			todayHighlight: true,
+			autoclose: true,
+		})
+	})
+
+
+ $.validate({
+    modules : 'location, date, security, file',
+    onModulesLoaded : function() {
+      $('#country').suggestCountry();
+    }
+  });
+  $('#presentation').restrictLength( $('#pres-max-length') );
+   
+    
+    
+    
+
 var sektor;
     
 $(function() {
@@ -1293,7 +1394,7 @@ $(function() {
       sektor = $('option:selected', this).attr('value');
     });
 });
-function funcBelirli(){             
+function funcBelirliEzgi(){             
     $.ajax({
         type:"GET",
         url: "/tamrekabet/public/belirli",
@@ -1318,7 +1419,7 @@ $(function() {
     
         if(option==="2"){
             $('#belirli-istekliler').show();
-            funcBelirli();
+            funcBelirliEzgi();
         }
         else
         {
