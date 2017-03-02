@@ -133,9 +133,9 @@ Route::get('/firmaOnay/{id}', function ($id) {
            $firma = Firma::find($id);
            
           $kullanici= App\Kullanici::find($kul_id);
-          $kullanici->adi = $request->adi;
-          $kullanici->soyadi = $request->soyadi;
-          $kullanici->unvani = $request->unvani;
+          $kullanici->adi = Str::title(strtolower($request->adi));
+          $kullanici->soyadi = Str::title(strtolower($request->soyadi));
+          $kullanici->unvani =Str::title(strtolower( $request->unvani));
           $kullanici->email = $request->email;
           $kullanici->telefon = $request->telefon;
           $kullanici->save();
@@ -167,8 +167,8 @@ Route::get('/firmaOnay/{id}', function ($id) {
             
         
           $kullanici= new App\Kullanici();
-          $kullanici->adi = $request->adi;
-          $kullanici->soyadi = $request->soyadi;
+          $kullanici->adi = Str::title(strtolower($request->adi));
+          $kullanici->soyadi = Str::title(strtolower($request->soyadi));
           $kullanici->email = $request->email;
           $kullanici->save();
           
@@ -318,7 +318,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
 
             $firma= new Firma();
 
-            $firma->adi=$request->firma_adi;
+            $firma->adi=Str::title(strtolower($request->firma_adi));
             $now = new \DateTime();
             $firma->olusturmaTarihi=$now;
             $firma->save();
@@ -331,7 +331,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
             $adres->il_id = $request->il_id;
             $adres->ilce_id = $request->ilce_id;
             $adres->semt_id = $request->semt_id;
-            $adres->adres = $request->adres;
+            $adres->adres =Str::title(strtolower( $request->adres));
             $tur = 1;
             $adres->tur_id = $tur;
             $firma->adresler()->save($adres);
@@ -340,17 +340,17 @@ Route::get('/firmaOnay/{id}', function ($id) {
 
 
           $kullanici= new App\Kullanici();
-          $kullanici->adi = $request->adi;
-          $kullanici->soyadi = $request->soyadi;
+          $kullanici->adi = Str::title(strtolower($request->adi));
+          $kullanici->soyadi =Str::title(strtolower( $request->soyadi));
           $kullanici->email = $request->email;
-          $kullanici->unvani = $request->unvan;
+          $kullanici->unvani = Str::title(strtolower($request->unvan));
           $kullanici->telefon = $request->telefonkisisel;
           $kullanici->save(); 
          
 
             $user = $kullanici->user ?: new App\User();
-            $user->name = $request->kullanici_adi;
-            $user->email = $request->email;
+            $user->name = Str::title(strtolower($request->kullanici_adi));
+            $user->email = $request->email_giris;
             $user->password =Hash::make( $request->password);
 
         $kullanici->users()->save($user);
@@ -375,7 +375,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
             $kullanici= App\Kullanici::find($id);
             
             $firma= new Firma();
-            $firma->adi=$request->adi;
+            $firma->adi=Str::title(strtolower($request->adi));
             $now = new \DateTime();
             $firma->olusturmaTarihi=$now;
             $firma->save();
@@ -388,7 +388,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
             $adres->il_id = $request->il_id;
             $adres->ilce_id = $request->ilce_id;
             $adres->semt_id = $request->semt_id;
-            $adres->adres = $request->adres;
+            $adres->adres =Str::title(strtolower( $request->adres));
             $tur = 1;
             $adres->tur_id = $tur;
             $firma->adresler()->save($adres);
