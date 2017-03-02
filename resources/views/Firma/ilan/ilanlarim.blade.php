@@ -216,6 +216,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                     <div class="panel-body">
                         <?php $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
                             $i=0;
+                            $kullanici_id=Auth::user()->kullanici_id;
+                            $firma_id = session()->get('firma_id');
                         ?>
                         <hr>
                         @foreach($ilanlarım as $ilan)
@@ -228,40 +230,41 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                   <a><button style="float:right" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
                                   <div class="dialog" id="dialog{{$i++}}" style="display:none">
                                     <div class="title">Puanla/Yorum Yap</div>
-                                    <form method="post">
+                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                       <div class="row col-lg-12">
                                         <div class="col-lg-3">
                                             <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
                                           <div id="puanlama">
-                                              <div class="sliders" id="k1"></div>
-                                              <div class="value" ></div>
+                                              <div class="sliders" id="k{{$i}}"></div>
+                                              <input type="hidden" id="puan1" name="puan1" value="5"/>
                                           </div>
                                         </div>  
                                         <div class="col-lg-3" style="border-color:#ddd">
                                             <label1 name="kriter2" type="text"><br>Teslimat</label1>
                                           <div id="puanlama">
-                                              <div class="sliders" id="k2"></div>
-                                              <div class="value" ></div>
+                                              <div class="sliders" id="k{{$i+1}}"></div>
+                                              <input type="hidden" id="puan2" name="puan2" value="5"/>
                                           </div>
                                         </div> 
                                         <div class="col-lg-3">
                                             <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
                                           <div id="puanlama">
-                                              <div class="sliders" id="k3"></div>
-                                              <div class="value" ></div>
+                                              <div class="sliders" id="k{{$i+2}}"></div>
+                                              <input type="hidden" id="puan3" name="puan3" value="5"/>
                                           </div>
                                         </div>
                                         <div class="col-lg-3">
                                             <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
                                           <div id="puanlama">
-                                              <div class="sliders" id="k4"></div>
-                                              <div class="value" ></div>
+                                              <div class="sliders" id="k{{$i+3}}"></div>
+                                              <input type="hidden" id="puan4" name="puan4" value="5"/>
                                           </div>
                                         </div> 
                                       </div>
+                                        <?php $i=$i+3; ?>
                                       <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
                                       <input type="submit" value="Ok"/>
-                                    </form>
+                                    {{ Form::close() }}
                                 </div>
                                 </li>
 
@@ -325,12 +328,24 @@ $(document).ready( function() {
 
         });
         var deneme;
-        sliders[i].noUiSlider.on('change', function( values, handle ,e){
+        sliders[i].noUiSlider.on('slide', function( values, handle ,e){
             var idCount=$(this.target.id).selector;
             idCount=idCount.substring(1);
             console.log($(this));
             deneme = values[handle];
             deneme = parseInt(deneme);
+            if(idCount % 5 === 1){
+                $("#puan1").val(deneme);
+            }
+            else if(idCount % 5 === 2){
+                $("#puan2").val(deneme);
+            }
+            else if(idCount % 5 === 3){
+                $("#puan3").val(deneme);
+            }
+            else if(idCount % 5 === 4){
+                $("#puan4").val(deneme);
+            }
             idCount = parseInt(idCount)-1;
             if(deneme <= 4){
                 connect[idCount].style.backgroundColor = "#e65100";
