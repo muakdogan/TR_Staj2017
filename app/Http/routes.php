@@ -11,7 +11,7 @@ use App\FirmaReferans;
 use App\iletisim_bilgileri;
 use App\Ilan;
 use App\Teklif;
-
+Use Carbon\Carbon;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -672,6 +672,34 @@ Route::get('/firmaOnay/{id}', function ($id) {
     
     return;
     });
+//////////////////////////////////////Puan Yorum //////////////////////
+    Route::post('/yorumPuan/{yorum_firma_id}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$ilan_id,$kullanici_id,Request $request) {
+        $now = new \DateTime();
+        $ilan= App\Ilan::find($ilan_id);
+        
+        $puan = new App\Puanlama();
+        $puan->firma_id=$ilan->firmalar->id;
+        $puan->ilan_id=$ilan_id;
+        $puan->yorum_yapan_firma_id=$yorum_firma_id;
+        $puan->yorum_yapan_kullanici_id=$kullanici_id;
+        $puan->kriter1 = $request->puan1;
+        $puan->kriter2=$request->puan2;
+        $puan->kriter3=$request->puan3;
+        $puan->kriter4=$request->puan4;
+        $puan->tarih=$now;
+        $puan->save();
+        
+        $yorum = new App\Yorum();
+        $yorum->firma_id=$ilan->firmalar->id;
+        $yorum->ilan_id=$ilan_id;
+        $yorum->yorum_yapan_firma_id=$yorum_firma_id;
+        $yorum->yorum_yapan_kullanici_id=$kullanici_id;
+        $yorum->yorum = $request->yorum;
+        $yorum->tarih=$now;
+        $yorum->save();
+        return Redirect::back()->with($yorum_firma_id);
+        
+    });
     
  
 //////////////////////////////////////teklifGor//////////////////////
@@ -684,10 +712,11 @@ Route::get('/firmaOnay/{id}', function ($id) {
 /////////////////////////////////////teklif Gönder /////////////////////////////////
     Route::post('/teklifGonder/{firma_id}/{ilan_id}/{kullanici_id}' ,function ($firma_id,$ilan_id,$kullanici_id,Request $request) {
         
-        $now = new \DateTime();
+        
+        $now = new Carbon();
         
         $ilan=  Ilan::find($ilan_id);
-        $teklifExist = Teklif::where('firma_id',$firma_id)->get();
+        $teklifExist = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan_id)->get();
         $teklifExist=$teklifExist->toArray();
         if($teklifExist != null ){
             $id = $teklifExist[0]['id'];
@@ -719,6 +748,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_mal_teklifler = new App\MalTeklif;
                 $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
                 $ilan_mal_teklifler-> teklif_id = $teklif->id;
+                
                 $ilan_mal_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_mal_teklifler->kdv_haric_fiyat = $arrayFiyat[$i];
                 $ilan_mal_teklifler->tarih= $now;
@@ -735,9 +765,11 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_hizmet_teklifler = new App\HizmetTeklif;
                 $ilan_hizmet_teklifler-> ilan_hizmet_id = $ilan_hizmet->id;
                 $ilan_hizmet_teklifler-> teklif_id = $teklif->id;
+                if($arrayKdv[i] == -1){
+                    continue;
+                }
                 $ilan_hizmet_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_hizmet_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-                $ilan_hizmet_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_hizmet_teklifler->tarih= $now;
                 $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
                 $ilan_hizmet_teklifler->kullanici_id=$kullanici_id;
@@ -755,7 +787,6 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_goturu_teklifler-> teklif_id = $teklif->id;
                 $ilan_goturu_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_goturu_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-                $ilan_goturu_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_goturu_teklifler->tarih= $now;
                 $ilan_goturu_teklifler->para_birimleri_id=$ilan->para_birimi_id;
                 $ilan_goturu_teklifler->kullanici_id=$kullanici_id;
@@ -773,7 +804,6 @@ Route::get('/firmaOnay/{id}', function ($id) {
                 $ilan_yapim_teklifler-> teklif_id = $teklif->id;
                 $ilan_yapim_teklifler->kdv_orani = $arrayKdv[$i];
                 $ilan_yapim_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-                $ilan_yapim_teklifler->kdv_dahil_fiyat=$array[$i];
                 $ilan_yapim_teklifler->tarih= $now;
                 $ilan_yapim_teklifler->para_birimleri_id=$ilan->para_birimi_id;
                 $ilan_yapim_teklifler->kullanici_id=$kullanici_id;
@@ -790,6 +820,9 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
         $teklifHareket->tarih = $now;
         $teklifHareket->kullanici_id=$kullanici_id;
+        $teklifHareket->iskonto_orani=$request->iskontoVal;
+        $teklifHareket->iskontolu_kdvli_fiyat=$request->iskontoluToplamFiyatKdvli;
+        $teklifHareket->iskontolu_kdvsiz_fiyat=$request->iskontoluToplamFiyatKdvsiz;
         $teklif->teklif_hareketler()->save($teklifHareket);
         
        return Redirect::to('firmaIslemleri/'.$firma_id);

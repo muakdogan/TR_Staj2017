@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+<?php use Carbon\Carbon;
+    $dt = Carbon::today();
+    $time = Carbon::parse($dt);
+    $dt = $time->format('Y-m-d');
+    ?>
 <style>
     table {
         font-family: arial, sans-serif;
@@ -61,15 +66,19 @@
     .highlight{
         background:#faebcc;
     }
+    .minFiyat{
+        background: yellow;
+    }
 </style>
 <body>
+    
     <div class="container">
        <br>
        <br>
-        <div class="panel panel-warning col-lg-12">
+        <div class="panel panel-warning">
             <div class="panel-heading"><h4><strong>{{$ilan->adi}}</strong> ilanı </h4></div>
-            <div class="panel-body" style="height:95px">
-                <div id="exTab2" class="col-lg-10">	
+            <div class="panel-body">
+                <div id="exTab2" class="col-lg-9">	
                     <ul class="nav nav-tabs">
                         <li class="active"><a  href="#1" data-toggle="tab">İlan Bilgileri</a>
                         </li>
@@ -208,8 +217,6 @@
                                      <?php
                                  }
                                  ?>
-
-
                              </tr>
                              <tr>
                                  <td>İşin Süresi:</td>
@@ -229,82 +236,50 @@
                         </div>
                         <div class="tab-pane" id="2">
                             <?php $firma=$ilan->firmalar;?>
-                                      
+
 
                                       <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
                                         <hr>
                                 <div class="panel-group" id="accordion">
-                                           @include('Firma.ilan.malTeklif')  
+                                           @include('Firma.ilan.malTeklif')
+                                           @include('Firma.ilan.hizmetTeklif')
+                                           @include('Firma.ilan.yapimIsiTeklif')
+                                           @include('Firma.ilan.goturuBedelTeklif')
                                 </div>    
                         </div>
+                         <?php $teklifler= App\Teklif::where('ilan_id',$ilan->id)->get();
+                                  if(count($teklifler) != 0){
+                                        $tekliflerCount = App\Teklif::where('ilan_id',$ilan->id)->count();
+                                  }
+                                  else {
+                                        $tekliflerCount = 0;
+                                    }
+                                  $i=0; $j=0; $ilanSahibi=0;?>
                         
-                        <div class="tab-pane" id="3">
-                              <?php $teklifler= App\Teklif::where('ilan_id',$ilan->id)->get();
-                                    $tekliflerCount = App\Teklif::where('ilan_id',$ilan->id)->count();    
-                              $i=0; $j=0; $ilanSahibi=0;?>
-                            
-                            <table class="table"> 
-                                <thead>
-                                    
-                                    <tr>
-                                        <td  width="10%">Sıra</td>
-                                        <td  width="20%">Firma Adı</td>
-                                        <td  width="20%">Verilen Fiyat({{$ilan->para_birimleri->adi}})</td>
-                                        <td  width="50%"></td>
-                                    </tr>
-                                </thead>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel panel-warning kismiDiv">
+                        <div class="panel-heading">Rekabet</div>
+                        <div class="panel-body">
+                            @include('Firma.ilan.rekabet')
+                        </div>
+                    </div>
+                    <div class="panel panel-warning" >
+                        <div class="panel-heading">{{$ilan->firmalar->adi}} Profili</div>
+                        <div class="panel-body">
+                            <div class="" ><img src="/22.11.2016tamrekabet/public/uploads/{{$ilan->firmalar->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
+                            <div>
                                 <br>
-                                
-                                <tbody>
-                                    @foreach($teklifler as $teklif)
-                                        <?php $firmaAdi = App\Firma::find($teklif->firma_id);?>
-                                        <?php $j++; ?>
-                                        <tr>
-                                            <?php $verilenFiyat = $teklif->teklif_hareketler()->orderBy('tarih','desc')->limit(1)->get();?>
-                                            
-                                            @if(session()->get('firma_id') == $firmaAdi->id)
-                                                <td class="highlight">{{$j}}</td>
-                                                <td class="highlight">{{$firmaAdi->adi}}:</td>
-                                                <td class="highlight" style="text-align: right"><strong>{{$verilenFiyat[0]['kdv_dahil_fiyat']}}</strong></td>
-                                                <td class="highlight"></td>
-                                            <?php $sessionF= session()->get('firma_id'); $sahibF=$ilan->firmalar->id; ?>
-                                            @elseif(session()->get('firma_id') == $ilan->firmalar->id)
-                                                <?php $ilanSahibi= 1;?>
-                                                <td>{{$j}}</td>
-                                                <td>{{$firmaAdi->adi}}:</td>
-                                                <td  style="text-align: right"><strong>{{$verilenFiyat[0]['kdv_dahil_fiyat']}}</strong></td>
-                                                <td><button name="kazanan" style="float:right" type="button" class="btn btn-info">Kazanan</button></td>
-                                                
-                                            @else
-                                                <?php $i++; ?>
-                                                <td>{{$j}}</td>
-                                                <td>X Firması :</td>
-                                                <td style="text-align: right"><strong>{{$verilenFiyat[0]['kdv_dahil_fiyat']}}</strong></td>
-                                                <td></td>
-                                            @endif    
-                                           
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>    
-                           
-                           
+                                <Strong>Firmaya ait ilan sayısı:</strong> {{$ilan->firmalar->ilanlar()->count()}}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel panel-warning col-lg-2">
-                    <div class="panel-heading">{{$ilan->firmalar->adi}} Profili</div>
-                    <div class="panel-body">
-                        <div class="" ><img src="/22.11.2016tamrekabet/public/uploads/{{$ilan->firmalar->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
-                        <div>
-                            <br>
-                            <Strong>Firmaya ait ilan sayısı:</strong> {{$ilan->firmalar->ilanlar()->count()}}
-                        </div>
-                    </div>
-                </div>
-                </div>
+                </div>    
             </div>
         </div>
+    </div>
+
      <?php $j=0;$k=0;
           $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
       ?>
@@ -335,20 +310,23 @@
        <hr>     
         
 </body>
+<script src="{{asset('js/sortAnimation.js')}}"></script>
 <script>
     var fiyat;
     var temp=0;
     var count=0;
     var toplamFiyat;
     var kdvsizToplamFiyat;
-
     $('.kdv').on('input', function() {
         var kdv=parseFloat(this.value);
         var result;
         if($(this).parent().next().children().val() !== '')
         {
             var miktar = parseFloat($(this).parent().prev().prev().text());
-            fiyat=parseFloat($(this).parent().next().children().val()); 
+            fiyat=parseFloat($(this).parent().next().children().val());
+            if(isNaN(fiyat)) {
+                fiyat = 0;
+            }
             result=((fiyat+(fiyat*kdv)/100)*miktar).toFixed(2);
             $(this).parent().next().next().next().children().html(result);
             toplamFiyat=0;
@@ -357,12 +335,29 @@
                 toplamFiyat += n;
             });
             kdvsizToplamFiyat=0;
+            var y = 0;
             $(".kdvsizFiyat").each(function(){
+                var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
                 var n = new Number($(this).val());
+                if(n == 0){
+                    y = 1
+                }
                 parseFloat(n);
-                alert(n.toFixed(2));
-                kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
+                kdvsizToplamFiyat += ((n.toFixed(2))*miktarI);
             });
+            if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
+                $('#iskontoLabel').text(" İskonto Ver");
+                $('#iskonto').prop("type", "checkbox");
+            }
+            else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
+                $('#iskontoLabel').text("");
+                $('#iskonto').prop("type", "hidden");
+                $('#iskonto').attr('checked', false);
+                canselIskontoVal();
+            }
+            if($('#iskonto').is(":checked")) {
+                $('#iskontoVal').trigger('input');
+            }
             
             $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2));
             $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2));
@@ -373,6 +368,9 @@
 
     $('.fiyat').on('input', function() {
         var fiyat=parseFloat(this.value);
+        if(isNaN(fiyat)) {
+            fiyat = 0;
+        }
         var result;
         if($(this).parent().prev().children().val() !== null)
         {
@@ -386,12 +384,50 @@
                 var n = new Number($(this).html());
                 toplamFiyat += n;
             });
-            $("#toplamFiyatLabel").text("Toplam Fiyat: " + toplamFiyat);
-            $("#toplamFiyatL").text(toplamFiyat);
-            $("#toplamFiyat").val(toplamFiyat);
+            kdvsizToplamFiyat=0;
+            var y = 0;
+            $(".kdvsizFiyat").each(function(){
+                var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
+                var n = new Number($(this).val());
+                if(n == 0){
+                    y = 1
+                }
+                parseFloat(n);
+                kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
+            });
+            if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
+                $('#iskontoLabel').text(" İskonto Ver");
+                $('#iskonto').prop("type", "checkbox");
+            }
+            else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
+                $('#iskontoLabel').text("");
+                $('#iskonto').prop("type", "hidden");
+                $('#iskonto').attr('checked', false);
+                canselIskontoVal();
+            }
+            if($('#iskonto').is(":checked")) {
+                $('#iskontoVal').trigger('input');
+            }
+            
+            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2));
+            $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2));
+            $("#toplamFiyat").val(toplamFiyat.toFixed(2));
+            $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
         }
     });
-
+    $('#iskontoVal').on('input',function(){
+        var iskontoOrani = parseInt($(this).val());
+        if(isNaN(iskontoOrani)) {
+            iskontoOrani = 0;
+        }
+        var iskontoluToplamFiyatKdvsiz = kdvsizToplamFiyat.toFixed(2)- (kdvsizToplamFiyat.toFixed(2)* iskontoOrani)/100;
+        var iskontoluToplamFiyatKdvli = toplamFiyat.toFixed(2)- (toplamFiyat.toFixed(2)* iskontoOrani)/100;
+        $("#iskontoluToplamFiyatLabel").text("İskontolu KDV Dahil Toplam Fiyat: " + iskontoluToplamFiyatKdvli.toFixed(2));
+        $("#iskontoluToplamFiyatL").text("İskontolu KDV Hariç Toplam Fiyat: "+iskontoluToplamFiyatKdvsiz.toFixed(2));
+        $("#iskontoluToplamFiyatKdvli").val(iskontoluToplamFiyatKdvli.toFixed(2));
+        $("#iskontoluToplamFiyatKdvsiz").val(iskontoluToplamFiyatKdvsiz.toFixed(2));
+    });
+    
     $('.teklifGonder').on('click', function() {
         alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
     });
@@ -408,6 +444,27 @@
                 alert('Yüklenemiyor !!!  ');
             });
     });
+    (function($) {
+        var element = $('.kismiDiv'),
+            originalY = element.offset().top;
+
+        // Space between element and top of screen (when scrolling)
+        var topMargin = 20;
+
+        // Should probably be set in CSS; but here just for emphasis
+        element.css('position', 'relative');
+        element.css('z-index', '4');
+        $(window).on('scroll', function(event) {
+            var scrollTop = $(window).scrollTop()+80;
+
+            element.stop(false, false).animate({
+                top: scrollTop < originalY
+                        ? 0
+                        : scrollTop - originalY + topMargin
+            }, 300);
+        });
+    })(jQuery);
+    
     $(document).ready(function() {
         var firmaId = "{{session()->get('firma_id')}}";
         if(firmaId === ""){
@@ -459,9 +516,21 @@
             $("#kdv"+k).trigger('input');
             k++;
         });
-        
+        $("#iskonto").click(function() {
+            if($(this).is(":checked")) {
+                $('#iskontoVal').prop("type", "text");
+            }
+            else{
+                canselIskontoVal();
+            }
+        });
     });
-    
+    function canselIskontoVal(){
+        $('#iskontoVal').prop("type", "hidden");
+        $('#iskontoVal').val(null);
+        $("#iskontoluToplamFiyatLabel").text("");
+        $("#iskontoluToplamFiyatL").text("");
+    }
     
     
 </script>
