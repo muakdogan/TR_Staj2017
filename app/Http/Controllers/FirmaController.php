@@ -13,10 +13,19 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Str;
+
+
 
 class FirmaController extends Controller
 {
-  
+    /*public function properFunc($string){
+        
+        $proper=Str::title(strtolower($string));
+        return response($proper);
+        
+    }*/
+
     public function uploadImage(Request $request) {
         $file = $request->file('logo');
         $file = array('logo' => $request->file('logo'));
@@ -61,8 +70,8 @@ class FirmaController extends Controller
         $firma = Firma::find($request->id);
         
         $iletisim = $firma->iletisim_bilgileri ?: new IletisimBilgisi();
-        $iletisim->telefon = $request->telefon;
-        $iletisim->fax = $request->fax;
+        $iletisim->telefon =Str::title(strtolower( $request->telefon));
+        $iletisim->fax =Str::title(strtolower( $request->fax));
         $iletisim->web_sayfasi = $request->web_sayfasi;
         $firma->iletisim_bilgileri()->save($iletisim);        
 
@@ -70,7 +79,7 @@ class FirmaController extends Controller
         $adres->il_id = $request->il_id;
         $adres->ilce_id = $request->ilce_id;
         $adres->semt_id = $request->semt_id;
-        $adres->adres = $request->adres;
+        $adres->adres = Str::title(strtolower($request->adres));
         $tur = 1;
         $adres->tur_id = $tur;
         $firma->adresler()->save($adres);
@@ -79,22 +88,21 @@ class FirmaController extends Controller
     }
     public function tanitimAdd(Request $request){
         $firma = Firma::find($request->id);
-        
-        $firma->tanitim_yazisi = $request->tanitim_yazisi;
+        $firma->tanitim_yazisi = Str::title(strtolower($request->tanitim_yazisi));
         $firma->save();        
         return redirect('firmaProfili/'.$firma->id);
     }
     public function maliBilgiAdd(Request $request){
         $firma = Firma::find($request->id);
-        $firma->sirket_turu = $request->sirket_turu;
+        $firma->sirket_turu =Str::title(strtolower( $request->sirket_turu));
         $firma->save();
         
         $maliBilgi = $firma->mali_bilgiler ?: new \App\MaliBilgi();
-        $maliBilgi->unvani = $request->unvani;
-        $maliBilgi->vergi_numarasi = $request->vergi_numarasi;
+        $maliBilgi->unvani =Str::title(strtolower( $request->unvani));
+        $maliBilgi->vergi_numarasi =Str::title(strtolower( $request->vergi_numarasi));
         $maliBilgi->vergi_dairesi_id = $request->vergi_dairesi_id;
-        $maliBilgi->sermayesi = $request ->sermayesi;
-        $maliBilgi->yillik_cirosu = $request ->yillik_cirosu;
+        $maliBilgi->sermayesi = Str::title(strtolower($request ->sermayesi));
+        $maliBilgi->yillik_cirosu = Str::title(strtolower($request ->yillik_cirosu));
         $maliBilgi->ciro_goster = $request ->ciro_goster;
         $maliBilgi->sermaye_goster = $request ->sermaye_goster;
         $firma->mali_bilgiler()->save($maliBilgi);        
@@ -104,7 +112,7 @@ class FirmaController extends Controller
         $adres->il_id = $request->mali_il_id;
         $adres->ilce_id = $request->mali_ilce_id;
         $adres->semt_id = $request->mali_semt_id;
-        $adres->adres = $request->fatura_adres;
+        $adres->adres =Str::title(strtolower( $request->fatura_adres));
         $tur = 2;
         $adres->tur_id = $tur;
         $firma->adresler()->save($adres);
@@ -159,30 +167,30 @@ class FirmaController extends Controller
                 $firmaReferans = $firma->firma_referanslar()->where('ref_turu', '=', '$request->ref_turu')->first() ? : new \App\FirmaReferans();
             }
 
-        $firmaReferans->ref_turu=$request->ref_turu;
-        $firmaReferans->adi=$request->ref_firma_adi;
-        $firmaReferans->is_adi=$request->yapılan_isin_adi;
+        $firmaReferans->ref_turu=Str::title(strtolower($request->ref_turu));
+        $firmaReferans->adi=Str::title(strtolower($request->ref_firma_adi));
+        $firmaReferans->is_adi=Str::title(strtolower($request->yapılan_isin_adi));
         $firmaReferans->is_turu=$request->isin_turu;
         $firmaReferans->is_yili=$request->is_yili;
-        $firmaReferans->calisma_suresi=$request->calısma_suresi;
-        $firmaReferans->yetkili_adi=$request->yetkili_kisi_adi;
+        $firmaReferans->calisma_suresi=Str::title(strtolower($request->calısma_suresi));
+        $firmaReferans->yetkili_adi=Str::title(strtolower($request->yetkili_kisi_adi));
         $firmaReferans->yetkili_email=$request->yetkili_kisi_email;
-        $firmaReferans->yetkili_telefon=$request->yetkili_kisi_telefon;
+        $firmaReferans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
         $firma->firma_referanslar()->save( $firmaReferans);
         return redirect('firmaProfili/'.$firma->id);
     }
     public function referansUpdate(Request $request){        
         $referans = \App\FirmaReferans::find($request->ref_id);
        
-        $referans->ref_turu=$request->ref_turu;
-        $referans->adi=$request->ref_firma_adi;
-        $referans->is_adi=$request->yapılan_isin_adi;
+        $referans->ref_turu=Str::title(strtolower($request->ref_turu));
+        $referans->adi=Str::title(strtolower($request->ref_firma_adi));
+        $referans->is_adi=Str::title(strtolower($request->yapılan_isin_adi));
         $referans->is_turu=$request->isin_turu;
         $referans->is_yili=$request->is_yili;
-        $referans->calisma_suresi=$request->calısma_suresi;
-        $referans->yetkili_adi=$request->yetkili_kisi_adi;
+        $referans->calisma_suresi=Str::title(strtolower($request->calısma_suresi));
+        $referans->yetkili_adi=Str::title(strtolower($request->yetkili_kisi_adi));
         $referans->yetkili_email=$request->yetkili_kisi_email;
-        $referans->yetkili_telefon=$request->yetkili_kisi_telefon;
+        $referans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
         $referans->save( );
         return redirect('firmaProfili/'.$referans->firma_id);
     }
@@ -215,7 +223,7 @@ class FirmaController extends Controller
                 $brosur = \App\FirmaBrosur::find(1);
                 $oldName = $brosur->yolu;
                 $brosur->yolu=$fileName;
-                $brosur->adi=$request->brosur_adi;
+                $brosur->adi=Str::title(strtolower($request->brosur_adi));
 
                 $brosur->save( );
                  $request->file('yolu')->move($destinationPath, $fileName); // uploading file to given path
@@ -252,23 +260,22 @@ class FirmaController extends Controller
         $firma = Firma::find($request->id);
         $firma_calisan = $firma->firma_calisma_bilgileri ?: new \App\FirmaCalismaBilgisi();
         $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
-        $firma_calisan->calisma_saatleri=$request->calisma_saatleri;
-        $firma_calisan->calisan_profili=$request->calisma_profili;
-        $firma_calisan->calisan_sayisi=$request->calisma_sayisi;
+        $firma_calisan->calisma_saatleri=Str::title(strtolower($request->calisma_saatleri));
+        $firma_calisan->calisan_profili=Str::title(strtolower($request->calisma_profili));
+        $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
        
       $firma->firma_calisma_bilgileri()->save( $firma_calisan);
         return redirect('firmaProfili/'.$firma->id);
     }
     public function bilgilendirmeTercihiAdd(Request $request){
         $firma = Firma::find($request->id);
-        $firma->bilgilendirme_tercihi=$request->bilgilendirme_tercihi;
+        $firma->bilgilendirme_tercihi=Str::title(strtolower($request->bilgilendirme_tercihi));
         $firma->save();
         
         return redirect('firmaProfili/'.$firma->id);
     }
     public function uploadPdf(Request $request){
          $file = $request->file('yolu');
-        
         // getting all of the post data
         $file = array('yolu' => $request->file('yolu'));
         // setting up rules
@@ -294,7 +301,7 @@ class FirmaController extends Controller
                 }*/
                 
                 $firma_brosur->yolu = $fileName;
-                $firma_brosur->adi=$request->brosur_adi;
+                $firma_brosur->adi=Str::title(strtolower($request->brosur_adi));
                 $firma->firma_brosurler()->save($firma_brosur);
 
                 $request->file('yolu')->move($destinationPath, $fileName); // uploading file to given path

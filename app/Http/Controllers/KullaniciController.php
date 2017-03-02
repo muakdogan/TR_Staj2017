@@ -32,8 +32,8 @@ class KullaniciController extends Controller
             
         
           $kullanici= new App\Kullanici();
-          $kullanici->adi = $request->adi;
-          $kullanici->soyadi = $request->soyadi;
+          $kullanici->adi = Str::title(strtolower($request->adi));
+          $kullanici->soyadi = Str::title(strtolower($request->soyadi));
           $kullanici->email = $request->email;
           $kullanici->save();
           

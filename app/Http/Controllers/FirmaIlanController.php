@@ -51,7 +51,7 @@ class FirmaIlanController extends Controller
      public function firmaBilgilerimAdd(Request $request,$id){
         $firma = Firma::find($request->id);
           
-        $firma->adi = $request->firma_adi;
+        $firma->adi = Str::title(strtolower($request->firma_adi));
         $firma->goster = $request->firma_adi_gizli;
         $firma->save();
         
@@ -112,11 +112,11 @@ class FirmaIlanController extends Controller
                 
                 
                 $ilan=  new \App\Ilan();
-                    $ilan->adi= $request->ilan_adi;
+                    $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
                     $ilan->yayin_tarihi= $request->yayinlama_tarihi;
                     $ilan->kapanma_tarihi= $request->kapanma_tarihi;
-                    $ilan->aciklama = $request->aciklama;
+                    $ilan->aciklama =Str::title(strtolower( $request->aciklama));
                     $ilan->ilan_turu= $request->ilan_turu;
                     $ilan->usulu= $request->rekabet_sekli;
                     $ilan->sozlesme_turu= $request->sozlesme_turu;
@@ -131,14 +131,15 @@ class FirmaIlanController extends Controller
                     $ilan->is_bitis_tarihi= $request->is_bitis_tarihi;
                     $ilan->adi= $request->ilan_adi;
                     $firma->ilanlar()->save($ilan);
-                
-                 foreach($request->belirli_istekli as $belirli){
-                     $belirli_istekliler= new \App\BelirlIstekli();
-                     $belirli_istekliler->ilan_id = $ilan->id;
-                     $belirli_istekliler->firma_id=$belirli;
-                     $belirli_istekliler->save();
-                     
-                 }
+                if($request->belirli_istekli!=null){
+                    foreach($request->belirli_istekli as $belirli){
+                        $belirli_istekliler= new \App\BelirlIstekli();
+                        $belirli_istekliler->ilan_id = $ilan->id;
+                        $belirli_istekliler->firma_id=$belirli;
+                        $belirli_istekliler->save();
+
+                    }
+                }
 
                 $request->file('teknik')->move($destinationPath, $fileName); 
                 Session::flash('success', 'Upload successfully');
@@ -179,11 +180,11 @@ class FirmaIlanController extends Controller
                 $firma->goster = $request->firma_adi_gizli;
                 $firma->save();
                 $ilan=  $firma->ilanlar ?:new \App\Ilan();
-                    $ilan->adi= $request->ilan_adi;
+                    $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
                     $ilan->yayin_tarihi= $request->yayinlama_tarihi;
                     $ilan->kapanma_tarihi= $request->kapanma_tarihi;
-                    $ilan->aciklama = $request->aciklama;
+                    $ilan->aciklama =Str::title(strtolower( $request->aciklama));
                     $ilan->ilan_turu= $request->ilan_turu;
                     $ilan->usulu= $request->rekabet_sekli;
                     $ilan->sozlesme_turu= $request->sozlesme_turu;
@@ -199,7 +200,7 @@ class FirmaIlanController extends Controller
                     $ilan->isin_suresi= $request->isin_suresi;
                     $ilan->is_baslama_tarihi= $request->is_baslama_tarihi;
                     $ilan->is_bitis_tarihi= $request->is_bitis_tarihi;
-                    $ilan->adi= $request->ilan_adi;
+                    $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $firma->ilanlar()->save($ilan);
                 
                 
@@ -227,10 +228,10 @@ class FirmaIlanController extends Controller
         
          $mallar = \App\IlanMal::find($id);
          //$mallar->sira=$request->sira;
-         $mallar->marka=$request->marka;
-         $mallar->model=$request->model;
-         $mallar->adi=$request->adi;
-         $mallar->ambalaj=$request->ambalaj;
+         $mallar->marka=Str::title(strtolower($request->marka));
+         $mallar->model=Str::title(strtolower($request->model));
+         $mallar->adi=Str::title(strtolower($request->adi));
+         $mallar->ambalaj=Str::title(strtolower($request->ambalaj));
          $mallar->miktar=$request->miktar;
          $mallar->birim_id=$request->birim; 
          $mallar->save();
@@ -243,7 +244,7 @@ class FirmaIlanController extends Controller
          $hizmetler = \App\IlanHizmet::find($id);
          
          //$hizmetler->sira=$request->sira;
-         $hizmetler->adi=$request->adi;
+         $hizmetler->adi=Str::title(strtolower($request->adi));
          $hizmetler->fiyat_standardi=$request->fiyat_standardi;
          $hizmetler->fiyat_standardi_birim_id=$request->fiyat_standardi_birimi;
          $hizmetler->miktar=$request->miktar;   
@@ -257,7 +258,7 @@ class FirmaIlanController extends Controller
          $goturuler = \App\IlanGoturuBedel::find($id);
          
          //$goturuler->sira=$request->sira;
-         $goturuler->isin_adi=$request->isin_adi;
+         $goturuler->isin_adi=Str::title(strtolower($request->isin_adi));
          $goturuler->miktar_turu=$request->miktar_turu;
          $goturuler->save();
          return Redirect::back()->with($request->firma_id,$goturuler->ilan_id);
@@ -269,7 +270,7 @@ class FirmaIlanController extends Controller
          $yapimlar = \App\IlanYapimIsi::find($id);
          
          //$yapimlar->sira=$request->sira;
-         $yapimlar->adi=$request->adi;
+         $yapimlar->adi=Str::title(strtolower($request->adi));
          $yapimlar->miktar=$request->miktar;
          $yapimlar->birim_id=$request->birim;
          $yapimlar->save();
@@ -316,10 +317,10 @@ class FirmaIlanController extends Controller
          $ilan = Ilan::find($request->id);
           $mal= new \App\IlanMal();
          
-         $mal->marka=$request->marka;
-         $mal->model=$request->model;
-         $mal->adi=$request->adi;
-         $mal->ambalaj=$request->ambalaj;
+         $mal->marka=Str::title(strtolower($request->marka));
+         $mal->model=Str::title(strtolower($request->model));
+         $mal->adi=Str::title(strtolower($request->adi));
+         $mal->ambalaj=Str::title(strtolower($request->ambalaj));
          $mal->miktar=$request->miktar;
          $mal->birim_id=$request->birim;   
          
@@ -334,7 +335,7 @@ class FirmaIlanController extends Controller
          $ilan = Ilan::find($request->id);
          $goturu= new \App\IlanGoturuBedel();
         
-         $goturu->isin_adi=$request->isin_adi;
+         $goturu->isin_adi=Str::title(strtolower($request->isin_adi));
          $goturu->miktar_turu=$request->miktar_turu;
          $ilan->ilan_goturu_bedeller()->save($goturu);
          
@@ -346,7 +347,7 @@ class FirmaIlanController extends Controller
          $ilan = Ilan::find($request->id);
          $hizmet=  new \App\IlanHizmet();
        
-         $hizmet->adi=$request->adi;
+         $hizmet->adi=Str::title(strtolower($request->adi));
          $hizmet->fiyat_standardi=$request->fiyat_standardi;
          $hizmet->fiyat_standardi_birim_id=$request->fiyat_standardi_birimi;
          $hizmet->miktar=$request->miktar;   
@@ -361,7 +362,7 @@ class FirmaIlanController extends Controller
          $ilan = Ilan::find($request->id);
          $yapim=  new \App\IlanYapimIsi();
        
-         $yapim->adi=$request->adi;
+         $yapim->adi=Str::title(strtolower($request->adi));
          $yapim->miktar=$request->miktar;
          $yapim->birim_id=$request->birim;
          $ilan->ilan_yapim_isleri()->save($yapim);
