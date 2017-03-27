@@ -300,11 +300,7 @@
                 @endforeach
             @endif    
             <script type="text/javascript">
-                
-              
-                
                 $("#temizleButton").click(function(){
-                    
                    $(".silmeButton").each(function(){
                        $(this).click();
                    });
@@ -613,7 +609,6 @@
                         $('.ilanlar').html(data);
                         location.hash = page;
                         window.scrollTo(0, 0);
-                        
                         $('.ajax-loader').css("visibility", "hidden");
                     }).fail(function(){ 
                         alert('İlanlar Yüklenemiyor !!!  ');

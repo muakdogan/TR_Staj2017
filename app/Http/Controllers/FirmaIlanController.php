@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Session;
 use Gate;
 use File;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 class FirmaIlanController extends Controller
 {
@@ -114,7 +115,7 @@ class FirmaIlanController extends Controller
                 $ilan=  new \App\Ilan();
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
-                    $ilan->yayin_tarihi= $request->yayinlama_tarihi;
+                    $ilan->yayin_tarihi= $request->yayinlanma_tarihi;
                     $ilan->kapanma_tarihi= $request->kapanma_tarihi;
                     $ilan->aciklama =Str::title(strtolower( $request->aciklama));
                     $ilan->ilan_turu= $request->ilan_turu;

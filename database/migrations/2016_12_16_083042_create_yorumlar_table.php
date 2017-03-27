@@ -26,6 +26,7 @@ class CreateYorumlarTable extends Migration
             $table->foreign('yorum_yapan_kullanici_id')->references('id')->on('kullanicilar')->onDelete('cascade');
             $table->string('yorum',500);
             $table->date('tarih');
+            $table->string('onay');
         });
     }
 

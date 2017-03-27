@@ -275,7 +275,7 @@
                                                     <label for="inputEmail3" class="col-sm-2 control-label">Yayınlama Tarihi</label>
                                                      <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                     <div class="col-sm-9">
-                                                       <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="{{$ilan->yayinlanma_tarihi}}" placeholder="Yayinlanma Tarihi" type="text" data-validation="required" 
+                                                       <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="{{$ilan->yayin_tarihi}}" placeholder="Yayinlanma Tarihi" type="text" data-validation="required" 
                                                       data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
                                                     </div>
                                                 </div>
@@ -409,8 +409,7 @@
                                                     <label for="inputTask" class="col-sm-2 control-label">Teslim Yeri İlçe</label>
                                                      <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="ilce_id" id="ilce_id" data-validation="required" 
-                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                        <select class="form-control" name="ilce_id" id="ilce_id" >
                                                             <option selected disabled>Seçiniz</option>
 
                                                         </select>
@@ -1038,7 +1037,7 @@
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"><strong>Fiyat İstenen Kalemler Listesi</strong></a>
-                                 <button  style="float:right" id="btn-add-hizmet" name="btn-add-hizmet" class="btn btn-primary btn-xs" >Ekle</button>
+                                <button  style="float:right" id="btn-add-goturu_bedeller" name="btn-add-goturu_bedeller" class="btn btn-primary btn-xs" >Ekle</button>
                             </h4>
                         </div>
                         <div id="collapse6" >
@@ -1079,10 +1078,10 @@
                                             <td> <button name="open-modal-goturu-bedel"  value="{{$ilan_goturu_bedel->id}}" class="btn btn-primary btn-xs open-modal-goturu-bedel" >Düzenle</button></td>
                                             <td>
                                                 {{ Form::open(array('url'=>'goturu/'.$ilan_goturu_bedel->id,'method' => 'DELETE', 'files'=>true)) }}
-                                    <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                        {{ Form::close() }}
-                                        </td>
+                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                                {{ Form::close() }}
+                                            </td>
                                         <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
                                             </tr>
 
@@ -1360,7 +1359,7 @@
 		var date_input=$('input[class="form-control date"]'); //our date input has the name "date"
 		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
 		date_input.datepicker({
-			format: 'mm/dd/yyyy',
+			format: 'yyyy/mm/dd/',
 			container: container,
 			todayHighlight: true,
 			autoclose: true,
