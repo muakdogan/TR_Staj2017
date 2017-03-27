@@ -4,7 +4,7 @@
             $kullanici_id=Auth::user()->kullanici_id;
             $count=0;
     ?>
-            {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST', 'files'=>true)) }}  
+            {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'post')) }}  
             <table class="table" >
                 <thead>
                     <tr>
@@ -14,7 +14,6 @@
                             if (!$firma->ilanlar->ilan_mallar)
                                 $firma->ilanlar->ilan_mallar = new App\IlanMal();
                             $i=1;
-                            $kdvArray = array();
                             $teklif= App\Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();
                         ?>
                         <th width="6%" >Sıra:</th>
@@ -109,6 +108,7 @@
                         </td>
                         <td>
                             <span align="right" class="kalem_toplam" name="kalem_toplam" class="col-sm-3"></span>
+                            <input type="hidden" name="kalem_toplam[]"  id="kalem_toplam" value="">
                         </td>
                                                                  
                         <input type="hidden" name="ilan_mal_id[]"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
@@ -127,7 +127,7 @@
                             <input style="width: 60px" type="hidden" name="iskontoVal" id="iskontoVal" value="" placeholder="rakam">   
                         </td> 
                         <td colspan="3" style="text-align:right">
-                            <label for="toplamFiyatLabel" id="toplamFiyatLabel" class="control-label toplam" ></label>
+                            <label for="toplamFiyatLabel" id="toplamFiyatLabel" name="toplamFiyatLabel" class="control-label toplam" ></label>
                             <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
                         </td>
                     </tr>
@@ -144,8 +144,11 @@
                     </tr>
             </table>
             <div align="right">
-                
-                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
+                    {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                @else
+                    {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                @endif
                 {!! Form::close() !!}
             </div>
 </div>

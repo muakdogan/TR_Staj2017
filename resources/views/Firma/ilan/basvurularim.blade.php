@@ -74,16 +74,16 @@ tr:nth-child(even) {
               
               <?php
               
-                        $querys = DB::table('teklif_hareketler')
-                        ->join('firma_kullanicilar', 'firma_kullanicilar.kullanici_id', '=', 'teklif_hareketler.kullanici_id')
-                        ->join('users', 'users.kullanici_id', '=', 'firma_kullanicilar.kullanici_id')
-                        ->join('teklifler', 'teklif_hareketler.teklif_id', '=', 'teklifler.id')
-                        ->join('ilanlar', 'teklifler.ilan_id', '=', 'ilanlar.id')
-                        ->join('firmalar', 'teklifler.firma_id', '=', 'firmalar.id')
-                        ->where( 'teklifler.firma_id', '=', $firma->id)  
-                        ->select('firmalar.adi as firmaadi','ilanlar.adi as ilanadi','ilanlar.id as ilanid','teklif_hareketler.*')        
-                        ->orderBy('tarih','desc');
-                        $querys=$querys->get();
+                        $querys = DB::select(DB::raw("SELECT * 
+                        FROM teklif_hareketler th1
+                        JOIN (
+                        SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
+                        FROM teklifler t, teklif_hareketler th
+                        WHERE t.id = th.teklif_id
+                        AND t.firma_id ='$firma->id'
+                        GROUP BY th.teklif_id
+                        )th2 ON th1.teklif_id = th2.teklif_id
+                        AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
                   
               ?>                   
              <h3>Başvurularım</h3>
@@ -91,7 +91,7 @@ tr:nth-child(even) {
              @foreach($querys as $sonuc)
                   <hr>
                   <?php  
-                    $ilan= App\Ilan::find($sonuc->ilanid);
+                    $ilan= App\Ilan::find($sonuc->ilanId);
                     $kullanici_id= Auth::user()->kullanici_id;
                     $firma_id=$firma->id;
                     $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
@@ -109,84 +109,17 @@ tr:nth-child(even) {
                   
                    ?>
                   <p><strong>Firma Adı:</strong>&nbsp;{{$ilan->firmalar->adi}}</p>
-                  <p><strong>İlan Adı:</strong>&nbsp;{{$sonuc->ilanadi}}</p>
+                  <p><strong>İlan Adı:</strong>&nbsp;{{$ilan->adi}}</p>
                   <p><strong>Başvuru Tarihi:</strong>&nbsp;{{$sonuc->tarih}}</p>
-                  <p><strong>Kaçıncı Sıradayım:</strong>&nbsp;{{$sonuc->teklif_id}}</p>
+                  <p><strong>Kaçıncı Sıradayım:</strong>&nbsp;</p>
                   
                   
-                    @if ( $rol === 'Yönetici')
-                    
-                        <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
+                    @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
                         <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button></a>
-
-                    @elseif ($rol ==='Satış')
-                    
-                        <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
-                        <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
-
-                    @elseif ($rol ==='Satın Alma / Satış')
-                    
-                        <button id="{{$sonuc->teklif_id}}" name="{{$sonuc->teklif_id}}" style="float:right" type="button" class="btn btn-info detay">Detayları Gör</button>
-                        <button id="btn-add-düzenle" name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button>
-
-                    @else
-                        
                     @endif
                   <br>
                @endforeach
-                <div class="modal fade" id="myModal-detay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                         <h4 class="modal-title" id="myModalLabel">DETAYLAR</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                    @foreach($teklifler as $teklif)
-                                    @endforeach
-                                         @if($teklif->ilanlar->ilan_turu==2)
-
-                                                 <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
-                                                 <p id="adi"><strong>Adı:</strong>&nbsp;</p>
-                                                 <p id="fiyat_standart"><strong>Fiyat Standartı:</strong>&nbsp;</p>
-                                                 <p id="fiyat_standart_birim"><strong>Fiyat Standartı Birimi:</strong>&nbsp;</p>
-                                                 <p id="miktar"><strong>Miktar:</strong>&nbsp;</p>
-                                                 <p id="miktar_birimi"><strong>Miktar Birimi:</strong>&nbsp;</p>
-                                                 <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
-                                               
-                                        @elseif($teklif->ilanlar->ilan_turu==1)  
-                                                 <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
-                                                 <p id="marka"><strong>Marka:</strong>&nbsp;</p>
-                                                 <p id="model"><strong>Model:</strong>&nbsp;</p>
-                                                 <p id="adi"><strong>Adı:</strong>&nbsp;</p>
-                                                 <p id="ambalaj"><strong>Ambalaj:</strong>&nbsp;</p>
-                                                 <p id="miktar"><strong>Miktar:</strong>&nbsp;</p>
-                                                 <p id="birim"><strong>Birim:</strong>&nbsp;</p>
-                                                 <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
-                                        
-                                        @elseif($teklif->ilanlar->ilan_turu=='Götürü Bedel')
-                                                 <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
-                                                 <p id="isin_adi"><strong>İşin Adı:</strong>&nbsp;</p>
-                                                 <p id="miktar_turu"><strong>Miktar Türü:</strong>&nbsp;</p>
-                                                 <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
-                                      
-                                        @elseif($teklif->ilanlar->ilan_turu==3)
-                                        
-                                                 <p id="sira"><strong>Sıra:</strong>&nbsp;</p>
-                                                 <p id="adi"><strong>Adı:</strong>&nbsp;</p>
-                                                 <p id="miktar"><strong>Miktar :</strong>&nbsp;</p>
-                                                 <p id="birim_id"><strong>Birim :</strong>&nbsp;</p>
-                                                 <p id="ilan_adi"><strong>İlan Adı:</strong>&nbsp;</p>
-                                        
-                                        @endif
-                                  
-                                    <div class="modal-footer">                                                            
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-          </div>
+                
            <!--div class="modal fade" id="myModal-düzenle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -215,115 +148,6 @@ tr:nth-child(even) {
             </div-->
              
     </div>
-<script >
-    var detay=0;
-    var control='{{$teklif->ilanlar->ilan_turu}}';
-    alert(control);
-
-    $(".detay").click(function(){
-        detay=$(this).attr("name");
-        basvuruDetay();
-    });
-       
-    function basvuruDetay(){
-           $.ajax({
-            type:"GET",
-            url:"/tamrekabet/public/basvuruDetay",
-            data:{teklif_id:detay
-            },
-            cache: false,
-            success: function(data){
-            console.log(data);
-            if(control==2){                                       
-                    $("#sira").empty();
-                    $("#adi").empty();
-                    $("#fiyat_standart").empty();
-                    $("#fiyat_standart_birim").empty();
-                    $("#miktar").empty();
-                    $("#miktar_birimi").empty();
-                    $("#ilan_adi").empty();
-                    
-                }
-                else if(control==1){
-                    $("#sira").empty();
-                    $("#marka").empty();
-                    $("#model").empty();
-                    $("#adi").empty();
-                    $("#ambalaj").empty();
-                    $("#miktar").empty();
-                    $("#birim").empty();
-                    $("#ilan_adi").empty();
-                    
-                }
-                 else  if(control=='Gotürü Bedel'){
-                     
-                                                             
-                    $("#sira").empty();
-                    $("#isin_adi").empty();
-                    $("#miktar_turu").empty();
-                    $("#ilan_adi").empty();
-                    
-                    
-                }
-                else  if(control==3){
-                     
-                     $("#sira").empty;
-                    $("#adi").empty();
-                    $("#miktar").empty();
-                    $("#birim_id").empty();
-                    $("#ilan_adi").empty();
-                }
-            
-            
-            for(var key=0; key <Object.keys(data).length;key++)
-             {
-                if(control==2){
-                                                         
-                    $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
-                    $("#adi").append("<strong>Adı:</strong> "+data[key].adi);
-                    $("#fiyat_standart").append("<strong>Fiyat Standartı:</strong> "+data[key].fiyat_standardi);
-                    $("#fiyat_standart_birim").append("<strong>Fiyat Standartı Birimi:</strong> "+data[key].adi);
-                    $("#miktar").append("<strong>Miktar:</strong> "+data[key].miktar);
-                    $("#miktar_birimi").append("<strong>Miktar Birimi: </strong>"+data[key].birimadi);
-                    $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
-                    
-                }
-                else if(control==1){
-                    $("#sira").append("<strong>Sıra: </strong>"+data[key].sira);
-                    $("#marka").append("<strong>Marka:</strong> "+data[key].marka);
-                    $("#model").append("<strong>Model:</strong> "+data[key].model);
-                    $("#adi").append("<strong>Adı:</strong> "+data[key].adi);
-                    $("#ambalaj").append("<strong>Ambalaj:</strong> "+data[key].ambalaj);
-                    $("#miktar").append("<strong>Miktar:</strong> "+data[key].miktar);
-                    $("#birim").append("<strong>Birim:</strong> "+data[key].birimadi);
-                    $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
-                    
-                }
-                 else  if(control=='Gotürü Bedel'){                                         
-                    $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
-                    $("#isin_adi").append("<strong>İşin Adı:</strong> "+data[key].isin_adi);
-                    $("#miktar_turu").append("<strong>Miktar Türü: </strong>"+data[key].miktar_turu);
-                    $("#ilan_adi").append("<strong>İlan Adı:</strong> "+data[key].ilanadi);
-                    
-                    
-                }
-                else  if(control==3){
-                     
-                    $("#sira").append("<strong>Sıra:</strong> "+data[key].sira);
-                    $("#adi").append("<strong>Adı: </strong>"+data[key].adi);
-                    $("#miktar").append("<strong>Miktar: </strong>"+data[key].miktar);
-                    $("#birim_id").append("<strong>Birimi:</strong> "+data[key].birimadi);
-                    $("#ilan_adi").append("<strong>İlan Adı: </strong>"+data[key].ilanadi);
-                }
-               
-             }
-         }
-
-        });
-        
-    };
-    
- </script>
 @endsection
 
 

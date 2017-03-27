@@ -280,348 +280,424 @@
                         <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
                     </div>
                 </div>
+                @if(Auth::guest())
+                    <?php $sektor_id = 0; ?>
+                @else
+                    <?php $id = session()->get('firma_id');
+                                    $firma = App\Firma::find($id);
+                                    ?>
+                    @foreach($firma->sektorler as $sektor)
+                        <?php $sektor_id = $sektor->id ?>
+                    @endforeach
+                @endif   
+                <div class="col-sm-9" >
+                            <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$id)->get(); ?>
+                                @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
+                                    <?php $dIlan = App\Ilan::find($davetEdildigimIlan->ilan_id); ?>
+                                    <?php $sektorAdi = App\Sektor::find($dIlan->firma_sektor); 
+                                        if($dIlan->ilan_turu == 1){
+                                            $ilan_turu="Mal";
+                                        }
+                                        else if($dIlan->ilan_turu == 2){
+                                            $ilan_turu="Hizmet";
+                                        }
+                                        else{
+                                            $ilan_turu  = "Yapım İşi";
+                                        }
 
+                                        if($dIlan->usulu == 1){
+                                            $usulu = "Tamrekabet";
+                                        }
+                                        else if($dIlan->usulu == 2){
+                                            $usulu ="Belirli İstekliler Arasında";
+                                        }
+                                        else{
+                                            $usulu = "Sadece Başvuru";
+                                        }
+                                    ?>
+                                <div class="ilanDetayPop davetEdil" name="{{$dIlan->id}}">
+                                    <div class="pop-up"  style="display: none;
+                                                            position: absolute;
+                                                            left: 200px;
+                                                            width: 280px;
+                                                            padding: 10px;
+                                                            background: #eeeeee;
+                                                            color: #000000;
+                                                            border: 1px solid #1a1a1a;
+                                                            font-size: 90%;
+                                                            z-index: 1000;">
+                                            <p id="popIlanAdi">İlan Adı : {{$dIlan->adi}}</p>
+                                            <p id="popIlanTuru">İlan Türü: {{$ilan_turu}}</p>
+                                            <p id="popIlanUsulu">Usulü: {{$usulu}}</p>
+                                            <p id="popIlanSektoru">İlan Sektörü: {{$sektorAdi->adi}}</p>
+                                            <p id="popIlanAciklama">Açıklama: {{$dIlan->aciklama}}</p>
+                                            <p id="popIlanIsinSuresi">İşin Süresi: {{$dIlan->isin_suresi}}</p>
+                                            <p id="popIlanSözlesmeTuru">Sözleşme Türü: {{$dIlan->sozlesme_turu}}</p>                                
+                                    </div>
+                                    <?php $puan = App\Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                                                    ->where('firma_id',$dIlan->firmaid)
+                                                    ->get();
+                                           $puan = $puan->toArray();
+
+                                    ?>
+                                    <p><b>İlan Adı: {{$dIlan->adi}}</b></p>
+                                    @if(number_format($puan[0]['ortalama'],1)> 0)
+                                        <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
+                                        <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                    @else
+                                        <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" style="padding: 0px" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                    @endif
+
+                                    <p>{{$dIlan->adi}}</p>
+                                    <p>{{$dIlan->yayin_tarihi}}</p>
+                                   
+
+                                @if(Auth::guest())
+                                @else
+                                    <a href="#"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+                                @endif
+                                <hr>
+                            </div>
+                        <hr>
+                    @endforeach
+                </div>
                 <div class="col-sm-9 ilanlar" id="auto_load_div">
-                   @include('Firma.ilan.ilanlar')                                               
+                    @include('Firma.ilan.ilanlar')                                               
                </div>
                 <div class="ajax-loader">
                     <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
                 </div>
             </div>
             
-            @if(Auth::guest())
-                <?php $sektor_id = 0; ?>
-            @else
-                <?php $id = session()->get('firma_id');
-                                $firma = App\Firma::find($id);
-                                ?>
-                @foreach($firma->sektorler as $sektor)
-                    <?php $sektor_id = $sektor->id ?>
-                @endforeach
-            @endif    
-            <script type="text/javascript">
-                
-              
-                
-                $("#temizleButton").click(function(){
-                    
-                   $(".silmeButton").each(function(){
-                       $(this).click();
-                   });
-                   return false;
+            
+<script type="text/javascript">
+
+    $('.ilanDetayPop').mouseenter(function(){
+        $(this).children("div.pop-up").show();
+    });
+    $('.ilanDetayPop').mouseleave(function () {
+        $('div.pop-up').hide();
+    });
+
+    $("#temizleButton").click(function(){
+
+       $(".silmeButton").each(function(){
+           $(this).click();
+       });
+       return false;
+    });
+    function silme(name){
+            $('li[name='+name+']').remove();
+            if(name == "Tarım" || name == "Hizmet"){
+                $('.checkboxClass[name='+name+']').prop("checked", false);
+                getIlanlar(1);
+            }
+            if(name == "Nakit" || name == "Kredi Kartı" || name == "Havale" || name == "Çek" || name == "Senet"){
+                $('.checkboxClass2[name='+name+']').prop("checked", false);
+                getIlanlar(1);
+            }
+            if(name == "Mal" || name == "Hizmet" || name == "Yapım İşi"){
+
+                $("#radioDiv input[type='radio']").each(function(){
+
+                    $(this).prop('checked', false);
                 });
-                function silme(name){
-                        $('li[name='+name+']').remove();
-                        if(name == "Tarım" || name == "Hizmet"){
-                            $('.checkboxClass[name='+name+']').prop("checked", false);
-                            getIlanlar(1);
-                        }
-                        if(name == "Nakit" || name == "Kredi Kartı" || name == "Havale" || name == "Çek" || name == "Senet"){
-                            $('.checkboxClass2[name='+name+']').prop("checked", false);
-                            getIlanlar(1);
-                        }
-                        if(name == "Mal" || name == "Hizmet" || name == "Yapım İşi"){
-                            
-                            $("#radioDiv input[type='radio']").each(function(){
-                                
-                                $(this).prop('checked', false);
-                            });
-                            getIlanlar(1);
-                        }
-                        if(name == "Açık" || name == "Belirli İstekler Arasında" || name == "Başvuru"){
-                            
-                            $("#radioDiv2 input[type='radio']").each(function(){
-                              
-                                $(this).prop('checked', false);
-                                
-                            });
-                            getIlanlar(1);
-                        }
-                        if(name == "Birim Fiyatlı" || name == "Götürü Bedel"){
-                            alert("ozge");
-                            $("#radioDiv4 input[type='radio']").each(function(){
-                              
-                                $(this).prop('checked', false);
-                                
-                            });
-                            getIlanlar(1);
-                        }
-                        if(name.indexOf("başlangıç") != -1){
-                            $(' input[type=date]').each( function resetDate(){
-                                if(name.indexOf(this.value) != -1){
-                                    this.value = this.defaultValue;
-                                }
-                            } );
-                            getIlanlar(1);    
-                        }
-                        if($('#search').val() != null){
-                            $("#radioDiv3 input[type='radio']").each(function(){
-                                $(this).prop('checked', false);
-                            });
-                            $('#search').val(null);
-                        }
-                        if(name.indexOf("bitiş") != -1){
-                            $(' input[type=date]').each( function resetDate(){
-                                if(name.indexOf(this.value) != -1){
-                                    this.value = this.defaultValue;
-                                }
-                            } );
-                            getIlanlar(1);
-                                            
-                        }
-                        else{
-                            $('.mutliSelect input[type="checkbox"]').each(function(){
-                                var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
-                                title = $(this).attr('name');
-                                if(name == title){
-                                    $(this).prop('checked', false);
-                                }
-                            });
-                             getIlanlar(1);
-                        }
+                getIlanlar(1);
+            }
+            if(name == "Açık" || name == "Belirli İstekler Arasında" || name == "Başvuru"){
+
+                $("#radioDiv2 input[type='radio']").each(function(){
+
+                    $(this).prop('checked', false);
+
+                });
+                getIlanlar(1);
+            }
+            if(name == "Birim Fiyatlı" || name == "Götürü Bedel"){
+                alert("ozge");
+                $("#radioDiv4 input[type='radio']").each(function(){
+
+                    $(this).prop('checked', false);
+
+                });
+                getIlanlar(1);
+            }
+            if(name.indexOf("başlangıç") != -1){
+                $(' input[type=date]').each( function resetDate(){
+                    if(name.indexOf(this.value) != -1){
+                        this.value = this.defaultValue;
                     }
-                function doldurma(name){
-                        var key=0;          
-                        $("#multisel"+key).empty();
-                        var valName="'"+name+"'";
-                        var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+name+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
-                        
-                        $("#multiSel"+key).append(html);                                     
-                }
-                $('#button').click(function(){
-                    doldurma($('#search').val());
-                    getIlanlar(1);
+                } );
+                getIlanlar(1);    
+            }
+            if($('#search').val() != null){
+                $("#radioDiv3 input[type='radio']").each(function(){
+                    $(this).prop('checked', false);
                 });
-                $('#il_id').change(function(){
-                    var il = new Array();
-                    var n = jQuery('.mutliSelect input[type="checkbox"]').length;
-                    if (n > 0){
-                        jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
-                        il.push($(this).val());
-                        });
+                $('#search').val(null);
+            }
+            if(name.indexOf("bitiş") != -1){
+                $(' input[type=date]').each( function resetDate(){
+                    if(name.indexOf(this.value) != -1){
+                        this.value = this.defaultValue;
                     }
-                    getIlanlar(1);
-                    doldurma(il);
-                });
-                $('#baslangic_tarihi').change(function(){
-                    var bas=$('#baslangic_tarihi').val()+"başlangıç";
-                    getIlanlar(1);
-                    doldurma(bas);
-                    });
-                $('#bitis_tarihi').change(function(){
-                    var bit=$('#bitis_tarihi').val()+"bitiş";
-                    getIlanlar(1);
-                    doldurma(bit);
-                });
-                $('.tur').click(function(){
-                    var tur=$("#radioDiv input[type='radio']:checked").val();
-                    getIlanlar(1);
-                    doldurma(tur);
-                });
-                $('.usul').click(function(){
-                    var usul=$("#radioDiv2 input[type='radio']:checked").val();
-                    getIlanlar(1);
-                    doldurma(usul);
-                });
-                $('.sozlesme').click(function(){
-                    var sozlesme=$("#radioDiv4 input[type='radio']:checked").val();
-                    getIlanlar(1);
-                    doldurma(sozlesme);
-                });
-                var odeme = new Array();
-                $('.checkboxClass2').click(function(){
-                    var sonSecilen;
-                    var n = jQuery('.checkboxClass2:checked').length;
-                    if (n > 0){
-                        jQuery('.checkboxClass2:checked').each(function(){
-                            sonSecilen = $(this).attr('name');
-                            if(jQuery.inArray(sonSecilen, odeme) === -1){
-                            console.log(sonSecilen);
-                            odeme.push(sonSecilen);
-                            return false;
-                            }
-                        });
+                } );
+                getIlanlar(1);
 
-                    }
-                    getIlanlar(1);
-                    doldurma(sonSecilen);
-                });
-                var sektor = new Array();
-                $('.checkboxClass').click(function(){
-                    var sonSecilen;
-                    var n = jQuery('.checkboxClass:checked').length;
-                        if (n > 0){
-                            jQuery('.checkboxClass:checked').each(function(){
-                            sonSecilen = $(this).attr('name');
-                            if(jQuery.inArray(sonSecilen, sektor) === -1){
-                                sektor.push(sonSecilen);
-                                return false;
-                            }
-                            });
-                        console.log(sonSecilen);
-                    }
-                    getIlanlar(1);
-                    doldurma(sonSecilen);
-                });
-                $(".dropdown dt a").on('click', function() {
-                    $(".dropdown dd ul").slideToggle('fast');
-                });
-
-                $(".dropdown dd ul li a").on('click', function() {
-                    $(".dropdown dd ul").hide();
-                });
-
-                function getSelectedValue(id) {
-                    return $("#" + id).find("dt a span.value").html();
-                }
-
-                $(document).bind('click', function(e) {
-                    var $clicked = $(e.target);
-                    if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
-                });
-
-                $('.mutliSelect input[type="checkbox"]').on('click', function() {
+            }
+            else{
+                $('.mutliSelect input[type="checkbox"]').each(function(){
                     var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
-                      title = $(this).attr('name');
+                    title = $(this).attr('name');
+                    if(name == title){
+                        $(this).prop('checked', false);
+                    }
+                });
+                 getIlanlar(1);
+            }
+        }
+    function doldurma(name){
+            var key=0;          
+            $("#multisel"+key).empty();
+            var valName="'"+name+"'";
+            var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+name+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
 
-                    if ($(this).is(':checked')) {
-                      var html = '<span title="' + title + '">' + title + '</span>';
-                      $('.multiSel').append(html);
-                      $(".hida").hide();
-                      getIlanlar(1);
-                      doldurma(title);
-                    } else {
-                      $('span[title="' + title + '"]').remove();
-                      var ret = $(".hida");
-                      $('.dropdown dt a').append(ret);
-                    }
-                });
-                
-                $(document).ready(function(){
-                    
-                    $(document).on('click', '.pagination a', function (e){
-                        getIlanlar($(this).attr('href').split('page=')[1]);
-                        e.preventDefault();
-                    });
-                    var sehirId = "{{$ilId}}";
-                    var keyword = "{{$keyword}}";
-                    var sektorID = "{{$sektor_id}}";
-                    
-                    if(sehirId != ""){
-                        jQuery('.mutliSelect input[type="checkbox"]').each(function(){
-                            if($(this).val() == sehirId ){
-                                var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
-                                    title = $(this).attr('name');
-                                var html = '<span title="' + title + '">' + title + '</span>';
-                                $(".hida").append(title+",");
-                                $(this).prop( "checked", true );
-                                doldurma(title);
-                            }
-                        });
-                    }
-                    if(keyword != ""){
-                        $("#search").val(keyword);
-                        doldurma(keyword);
-                        $("#radioDiv3 input[type='radio']").each(function(){
-                            if($(this).val() == "tum"){
-                                $(this).prop("checked",true);
-                            }
-                        });
-                    }
-                    if(sektorID != ""){
-                        jQuery(".checkboxClass").each(function(){
-                            if($(this).val() == sektorID){
-                                $(this).prop("checked",true);
-                            }
-                        });
-                        var sonSecilen;
-                        var n = jQuery('.checkboxClass:checked').length;
-                            if (n > 0){
-                                jQuery('.checkboxClass:checked').each(function(){
-                                sonSecilen = $(this).attr('name');
-                                if(jQuery.inArray(sonSecilen, sektor) === -1){
-                                    sektor.push(sonSecilen);
-                                    return false;
-                                }
-                                });
-                            console.log(sonSecilen);
-                        }
-                        getIlanlar(1);
-                        doldurma(sonSecilen);
-                    }
-                });
-                
-                function getIlanlar(page) {
-                    var il_id=$('#il_id').val();
-                    var basTar=$('#baslangic_tarihi').val();
-                    var bitTar=$('#bitis_tarihi').val();
-                    var selectedSektor = new Array();
-                    var n = jQuery(".checkboxClass:checked").length;
-                    if (n > 0){
-                        jQuery(".checkboxClass:checked").each(function(){
-                                selectedSektor.push($(this).val());
-                                var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
-                            });
-                    }
-                    var selectedIl = new Array();
-                    var n = jQuery('.mutliSelect input[type="checkbox"]').length;
-                    if (n > 0){
-                        jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
-                                selectedIl.push($(this).val());
-                        });
-                    }
-                    var selectedOdeme = new Array();
-                    var n = jQuery('.checkboxClass2:checked').length;
-                    if (n > 0){
-                        jQuery('.checkboxClass2:checked').each(function(){
-                            selectedOdeme.push($(this).val());
-                        });
-                    }
-                    var selectedTur = "";
-                    var selected = $("#radioDiv input[type='radio']:checked");
-                    if (selected.length > 0) {
-                        selectedTur = selected.val();
-                    }
-                    var selectedUsul = "";
-                    var selected2 = $("#radioDiv2 input[type='radio']:checked");
-                    if (selected2.length > 0) {
-                        selectedUsul = selected2.val();
-                    }
-                    var selectedSearch = "";
-                    var inputSearch = "";
-                    var selected3 = $("#radioDiv3 input[type='radio']:checked");
-                    if (selected3.length > 0) {
-                        selectedSearch = selected3.val();
-                        inputSearch=$('#search').val();
-                    }
-                    var selectedSozlesme = "";
-                    var selected4 = $("#radioDiv4 input[type='radio']:checked");
-                    if (selected4.length > 0) {
-                        selectedSozlesme = selected4.val();
-                    }
-                    $.ajax({
-                        beforeSend: function(){
-                            $('.ajax-loader').css("visibility", "visible");
-                        },
-                        url : '?page='+page,
-                        dataType: 'json',
-                        data:{il:selectedIl,bas_tar:basTar,bit_tar:bitTar,sektor:selectedSektor,tur:selectedTur,
-                                    usul:selectedUsul,radSearch:selectedSearch,input:inputSearch,odeme:selectedOdeme,
-                                    sozles:selectedSozlesme
-                        },
-                    }).done(function(data){
-                        $('.ilanlar').html(data);
-                        location.hash = page;
-                        window.scrollTo(0, 0);
-                        
-                        $('.ajax-loader').css("visibility", "hidden");
-                    }).fail(function(){ 
-                        alert('İlanlar Yüklenemiyor !!!  ');
-                    });
+            $("#multiSel"+key).append(html);                                     
+    }
+    $('#button').click(function(){
+        doldurma($('#search').val());
+        getIlanlar(1);
+    });
+    $('#il_id').change(function(){
+        var il = new Array();
+        var n = jQuery('.mutliSelect input[type="checkbox"]').length;
+        if (n > 0){
+            jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
+            il.push($(this).val());
+            });
+        }
+        getIlanlar(1);
+        doldurma(il);
+    });
+    $('#baslangic_tarihi').change(function(){
+        var bas=$('#baslangic_tarihi').val()+"başlangıç";
+        getIlanlar(1);
+        doldurma(bas);
+        });
+    $('#bitis_tarihi').change(function(){
+        var bit=$('#bitis_tarihi').val()+"bitiş";
+        getIlanlar(1);
+        doldurma(bit);
+    });
+    $('.tur').click(function(){
+        var tur=$("#radioDiv input[type='radio']:checked").val();
+        getIlanlar(1);
+        doldurma(tur);
+    });
+    $('.usul').click(function(){
+        var usul=$("#radioDiv2 input[type='radio']:checked").val();
+        getIlanlar(1);
+        doldurma(usul);
+    });
+    $('.sozlesme').click(function(){
+        var sozlesme=$("#radioDiv4 input[type='radio']:checked").val();
+        getIlanlar(1);
+        doldurma(sozlesme);
+    });
+    var odeme = new Array();
+    $('.checkboxClass2').click(function(){
+        var sonSecilen;
+        var n = jQuery('.checkboxClass2:checked').length;
+        if (n > 0){
+            jQuery('.checkboxClass2:checked').each(function(){
+                sonSecilen = $(this).attr('name');
+                if(jQuery.inArray(sonSecilen, odeme) === -1){
+                console.log(sonSecilen);
+                odeme.push(sonSecilen);
+                return false;
                 }
-     
+            });
 
-            </script>
+        }
+        getIlanlar(1);
+        doldurma(sonSecilen);
+    });
+    var sektor = new Array();
+    $('.checkboxClass').click(function(){
+        var sonSecilen;
+        var n = jQuery('.checkboxClass:checked').length;
+            if (n > 0){
+                jQuery('.checkboxClass:checked').each(function(){
+                sonSecilen = $(this).attr('name');
+                if(jQuery.inArray(sonSecilen, sektor) === -1){
+                    sektor.push(sonSecilen);
+                    return false;
+                }
+                });
+            console.log(sonSecilen);
+        }
+        getIlanlar(1);
+        doldurma(sonSecilen);
+    });
+    $(".dropdown dt a").on('click', function() {
+        $(".dropdown dd ul").slideToggle('fast');
+    });
+
+    $(".dropdown dd ul li a").on('click', function() {
+        $(".dropdown dd ul").hide();
+    });
+
+    function getSelectedValue(id) {
+        return $("#" + id).find("dt a span.value").html();
+    }
+
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+    });
+
+    $('.mutliSelect input[type="checkbox"]').on('click', function() {
+        var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
+          title = $(this).attr('name');
+
+        if ($(this).is(':checked')) {
+          var html = '<span title="' + title + '">' + title + '</span>';
+          $('.multiSel').append(html);
+          $(".hida").hide();
+          getIlanlar(1);
+          doldurma(title);
+        } else {
+          $('span[title="' + title + '"]').remove();
+          var ret = $(".hida");
+          $('.dropdown dt a').append(ret);
+        }
+    });
+
+    $(document).ready(function(){
+
+        $(document).on('click', '.pagination a', function (e){
+            getIlanlar($(this).attr('href').split('page=')[1]);
+            e.preventDefault();
+        });
+        var sehirId = "{{$ilId}}";
+        var keyword = "{{$keyword}}";
+        var sektorID = "{{$sektor_id}}";
+
+        if(sehirId != ""){
+            jQuery('.mutliSelect input[type="checkbox"]').each(function(){
+                if($(this).val() == sehirId ){
+                    var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
+                        title = $(this).attr('name');
+                    var html = '<span title="' + title + '">' + title + '</span>';
+                    $(".hida").append(title+",");
+                    $(this).prop( "checked", true );
+                    doldurma(title);
+                }
+            });
+        }
+        if(keyword != ""){
+            $("#search").val(keyword);
+            doldurma(keyword);
+            $("#radioDiv3 input[type='radio']").each(function(){
+                if($(this).val() == "tum"){
+                    $(this).prop("checked",true);
+                }
+            });
+        }
+        if(sektorID != ""){
+            jQuery(".checkboxClass").each(function(){
+                if($(this).val() == sektorID){
+                    $(this).prop("checked",true);
+                }
+            });
+            var sonSecilen;
+            var n = jQuery('.checkboxClass:checked').length;
+                if (n > 0){
+                    jQuery('.checkboxClass:checked').each(function(){
+                    sonSecilen = $(this).attr('name');
+                    if(jQuery.inArray(sonSecilen, sektor) === -1){
+                        sektor.push(sonSecilen);
+                        return false;
+                    }
+                    });
+                console.log(sonSecilen);
+            }
+            getIlanlar(1);
+            doldurma(sonSecilen);
+        }
+    });
+
+    function getIlanlar(page) {
+        var il_id=$('#il_id').val();
+        var basTar=$('#baslangic_tarihi').val();
+        var bitTar=$('#bitis_tarihi').val();
+        var selectedSektor = new Array();
+        var n = jQuery(".checkboxClass:checked").length;
+        if (n > 0){
+            jQuery(".checkboxClass:checked").each(function(){
+                    selectedSektor.push($(this).val());
+                    var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
+                });
+        }
+        var selectedIl = new Array();
+        var n = jQuery('.mutliSelect input[type="checkbox"]').length;
+        if (n > 0){
+            jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
+                    selectedIl.push($(this).val());
+            });
+        }
+        var selectedOdeme = new Array();
+        var n = jQuery('.checkboxClass2:checked').length;
+        if (n > 0){
+            jQuery('.checkboxClass2:checked').each(function(){
+                selectedOdeme.push($(this).val());
+            });
+        }
+        var selectedTur = "";
+        var selected = $("#radioDiv input[type='radio']:checked");
+        if (selected.length > 0) {
+            selectedTur = selected.val();
+        }
+        var selectedUsul = "";
+        var selected2 = $("#radioDiv2 input[type='radio']:checked");
+        if (selected2.length > 0) {
+            selectedUsul = selected2.val();
+        }
+        var selectedSearch = "";
+        var inputSearch = "";
+        var selected3 = $("#radioDiv3 input[type='radio']:checked");
+        if (selected3.length > 0) {
+            selectedSearch = selected3.val();
+            inputSearch=$('#search').val();
+        }
+        var selectedSozlesme = "";
+        var selected4 = $("#radioDiv4 input[type='radio']:checked");
+        if (selected4.length > 0) {
+            selectedSozlesme = selected4.val();
+        }
+        $.ajax({
+            beforeSend: function(){
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            url : '?page='+page,
+            dataType: 'json',
+            data:{il:selectedIl,bas_tar:basTar,bit_tar:bitTar,sektor:selectedSektor,tur:selectedTur,
+                        usul:selectedUsul,radSearch:selectedSearch,input:inputSearch,odeme:selectedOdeme,
+                        sozles:selectedSozlesme
+            },
+        }).done(function(data){
+            $('.ilanlar').html(data);
+            location.hash = page;
+            window.scrollTo(0, 0);
+
+            $('.ajax-loader').css("visibility", "hidden");
+        }).fail(function(){ 
+            alert('İlanlar Yüklenemiyor !!!  ');
+        });
+    }
+
+
+</script>
                   
         <hr>
     </div>

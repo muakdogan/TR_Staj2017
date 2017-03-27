@@ -69,12 +69,32 @@
     .minFiyat{
         background: yellow;
     }
+    .kismiKazanan{
+        background: #1cff00;
+    }
+    .ajax-loader {
+        visibility: hidden;
+        background-color: rgba(255,255,255,0.7);
+        position: absolute;
+        z-index: +100 !important;
+        width: 100%;
+        height:100%;
+    }
+
+    .ajax-loader img {
+        position: relative;
+        top:50%;
+        left:32%;
+    }
 </style>
 <body>
     
     <div class="container">
        <br>
        <br>
+        <div class="ajax-loader">
+            <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+        </div>
         <div class="panel panel-warning">
             <div class="panel-heading"><h4><strong>{{$ilan->adi}}</strong> ilanı </h4></div>
             <div class="panel-body">
@@ -175,7 +195,7 @@
                                  <?php if($ilan->usulu == 1){
                                             $ilanusulu="Tamrekabet";
                                         }
-                                        else if($ilan->ilan_turu == 2){
+                                        else if($ilan->usulu == 2){
                                             $ilanusulu="Belirli İstekliler Arasında";
                                         }
                                         else{
@@ -186,10 +206,10 @@
                              </tr>
                              <tr>
                                  <td>Sözleşme Türü:</td>
-                                 <?php if($ilan->usulu == 0){
+                                 <?php if($ilan->sozlesme_turu == 0){
                                             $ilansozlesme="Birim Fiyatlı";
                                         }
-                                        else if($ilan->ilan_turu == 1){
+                                        else if($ilan->sozlesme_turu == 1){
                                             $ilansozlesme="Götürü Bedel";
                                         }
                                  ?>
@@ -236,35 +256,27 @@
                         </div>
                         <div class="tab-pane" id="2">
                             <?php $firma=$ilan->firmalar;?>
-
-
-                                      <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
-                                        <hr>
-                                <div class="panel-group" id="accordion">
-                                           @include('Firma.ilan.malTeklif')
-                                           @include('Firma.ilan.hizmetTeklif')
-                                           @include('Firma.ilan.yapimIsiTeklif')
-                                           @include('Firma.ilan.goturuBedelTeklif')
-                                </div>    
+                                <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
+                                <hr>
+                            @if(session()->get('firma_id') != $firma->id ) 
+                                @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
+                                       @include('Firma.ilan.malTeklif')
+                                @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)       
+                                       @include('Firma.ilan.hizmetTeklif')
+                                @elseif($ilan->ilan_turu == 3)
+                                       @include('Firma.ilan.yapimIsiTeklif')
+                                @else
+                                       @include('Firma.ilan.goturuBedelTeklif')
+                                @endif       
+                            @endif     
+                        </div> 
+                        <div class="tab-pane kismiRekabet" id="3">
+                            @include('Firma.ilan.kismiRekabet')
                         </div>
-                         <?php $teklifler= App\Teklif::where('ilan_id',$ilan->id)->get();
-                                  if(count($teklifler) != 0){
-                                        $tekliflerCount = App\Teklif::where('ilan_id',$ilan->id)->count();
-                                  }
-                                  else {
-                                        $tekliflerCount = 0;
-                                    }
-                                  $i=0; $j=0; $ilanSahibi=0;?>
                         
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <div class="panel panel-warning kismiDiv">
-                        <div class="panel-heading">Rekabet</div>
-                        <div class="panel-body">
-                            @include('Firma.ilan.rekabet')
-                        </div>
-                    </div>
                     <div class="panel panel-warning" >
                         <div class="panel-heading">{{$ilan->firmalar->adi}} Profili</div>
                         <div class="panel-body">
@@ -275,11 +287,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="panel panel-warning kismiDiv">
+                        <div class="panel-heading">Rekabet</div>
+                        <div class="panel-body rekabet">
+                            @include('Firma.ilan.rekabet')
+                        </div>
+                    </div>
                 </div>    
             </div>
         </div>
     </div>
-
+    
      <?php $j=0;$k=0;
           $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
       ?>
@@ -312,17 +330,179 @@
 </body>
 <script src="{{asset('js/sortAnimation.js')}}"></script>
 <script>
+    $(function() {
+    var updating = false;
+    $("#toplamFiyatLabel").on('fnLabelChanged', function(){
+        console.log('changed');
+    });
+    function voteClick(table) {
+    		if (!updating) {
+            updating = true;
+            $("html").trigger('startUpdate');
+            
+           sortTable(table, function() {
+                updating = false;
+                $("html").trigger('stopUpdate');
+            }); //callback
+        }
+    }
+
+    function makeClickable(table) {
+        $('.up', table).each(function() {
+            $(this).css('cursor', 'pointer').click(function() {
+                voteClick(table);
+            });
+        });
+        $('.down', table).each(function() {
+            $(this).css('cursor', 'pointer').click(function() {
+                voteClick(table);
+            });
+        });
+        $('thead tr th').each(function() {
+            $(this).css('cursor', 'pointer').click(function() {
+                updating = true;
+                $("html").trigger('startUpdate');
+
+                //Current sort
+                $(".anim\\:sort", $(this).parent()).removeClass("anim:sort");
+                $(this).addClass("anim:sort");
+
+                sortTable(table, function() {
+                    updating = false;
+                    $("html").trigger('stopUpdate');
+                }); //callback
+            })
+        });
+    }
+
+    function isNumber(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    var inverse = false;
+
+    function compareCells(a, b) {
+    
+        var b = $.text([b]);
+        var a = $.text([a]);
+       
+        var arrA = a.split(' ');
+        var arrB = b.split(' ');
+	
+            a = arrA[0];
+            b = arrB[0];
+     
+        if (isNumber(a) && isNumber(b)) {
+            return parseInt(b) - parseInt(a);
+        } else {
+            return a.localeCompare(b);
+        }
+    }
+
+    /**
+     * Update the ranks (1-n) of a table
+     * @param table A jQuery table object
+     * @param index The row index to put the positions in
+     */
+
+    function updateRank(table, index) {
+        var position = 1;
+        if (!index) index = 1;
+
+        $("tbody tr", table).each(function() {
+            var cell = $("td:nth-child(" + index + ")", this);
+            if (parseInt(cell.text()) != position) cell.text(position); //only change if needed
+            position++;
+        });
+    }
+
+    /**
+     * jQuery compare arrays
+     */
+    jQuery.fn.compare = function(t) {
+        if (this.length != t.length) {
+            return false;
+        }
+        var a = this,
+            b = t;
+        for (var i = 0; t[i]; i++) {
+            if (a[i] !== b[i]) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    /**
+     * Sort a provided table by a row
+     * @param currentTable A jQuery table object
+     * @param index The row index to sort on
+     */
+
+    function sortTable(currentTable, callback) {
+        var newTable = currentTable.clone();
+        newTable.hide();
+        $('.demo').append(newTable);
+
+        //What one are we ordering on?
+        var sortIndex = $(newTable).find(".anim\\:sort").index();
+
+        //Old table order
+        var idIndex = $(newTable).find(".anim\\:id").index();
+        var startList = newTable.find('td').filter(function() {
+            return $(this).index() === idIndex;
+        });
+
+        //Sort the list
+        newTable.find('td').filter(function() {
+            return $(this).index() === sortIndex;
+        }).sortElements(compareCells, function() { // parentNode is the element we want to move
+            return this.parentNode;
+        });
+
+        //New table order
+        var idIndex = $(newTable).find(".anim\\:id").index();
+        var endList = newTable.find('td').filter(function() {
+            return $(this).index() === idIndex;
+        });
+
+        if (!$(startList).compare(endList)) { //has the order actually changed?        
+            makeClickable(newTable);
+            updateRank(newTable);
+            if (!callback) currentTable.rankingTableUpdate(newTable);
+            else {
+                currentTable.rankingTableUpdate(newTable, {
+                    onComplete: callback
+                });
+            }
+        } else {
+            callback(); //we're done
+        }
+    }
+
+    // Do the work!
     var fiyat;
     var temp=0;
     var count=0;
     var toplamFiyat;
     var kdvsizToplamFiyat;
+    var ilan_turu={{$ilan->ilan_turu}};
+    var sozlesme_turu={{$ilan->sozlesme_turu}};
     $('.kdv').on('input', function() {
         var kdv=parseFloat(this.value);
         var result;
         if($(this).parent().next().children().val() !== '')
         {
-            var miktar = parseFloat($(this).parent().prev().prev().text());
+            var miktar = 1;
+            if(ilan_turu === 1 && sozlesme_turu == 0){  /// mal
+                miktar = parseFloat($(this).parent().prev().prev().text());
+            }else if(ilan_turu === 2 && sozlesme_turu == 0){  ///hizmet
+                miktar = parseFloat($(this).parent().prev().prev().text());
+            }else if(ilan_turu === 3){     //yapim işi 
+                miktar = parseFloat($(this).parent().prev().prev().text());
+            }else{
+                
+            }
             fiyat=parseFloat($(this).parent().next().children().val());
             if(isNaN(fiyat)) {
                 fiyat = 0;
@@ -337,13 +517,12 @@
             kdvsizToplamFiyat=0;
             var y = 0;
             $(".kdvsizFiyat").each(function(){
-                var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
                 var n = new Number($(this).val());
                 if(n == 0){
                     y = 1
                 }
                 parseFloat(n);
-                kdvsizToplamFiyat += ((n.toFixed(2))*miktarI);
+                kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
             });
             if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
                 $('#iskontoLabel').text(" İskonto Ver");
@@ -359,7 +538,7 @@
                 $('#iskontoVal').trigger('input');
             }
             
-            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2));
+            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2)).trigger("fnLabelChanged");
             $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2));
             $("#toplamFiyat").val(toplamFiyat.toFixed(2));
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
@@ -374,8 +553,21 @@
         var result;
         if($(this).parent().prev().children().val() !== null)
         {
-            var miktar = parseFloat($(this).parent().prev().prev().prev().text());
+            var miktar = 1;
+            if(ilan_turu === 1 && sozlesme_turu == 0){  /// mal
+                miktar = parseFloat($(this).parent().prev().prev().prev().text());
+                alert(miktar);
+            }else if(ilan_turu === 2 && sozlesme_turu == 0){  ///hizmet
+                miktar = parseFloat($(this).parent().prev().prev().prev().text());
+            }else if(ilan_turu === 3){     //yapim işi 
+                miktar = parseFloat($(this).parent().prev().prev().prev().text());
+            }else{
+                
+            }
             kdv=parseFloat($(this).parent().prev().children().val());
+            if(isNaN(fiyat)) {
+                fiyat = 0;
+            }
             result=((fiyat+(fiyat*kdv)/100)*miktar).toFixed(2);
             toplamFiyat += result;
             $(this).parent().next().next().children().html(result);
@@ -387,6 +579,7 @@
             kdvsizToplamFiyat=0;
             var y = 0;
             $(".kdvsizFiyat").each(function(){
+                
                 var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
                 var n = new Number($(this).val());
                 if(n == 0){
@@ -410,11 +603,17 @@
             }
             
             $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2));
+            $(".firmaFiyat").html("<strong>"+toplamFiyat.toFixed(2)+"</strong>"+" "+String.fromCharCode(8378));
+            voteClick($('#table'));
             $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2));
             $("#toplamFiyat").val(toplamFiyat.toFixed(2));
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
         }
     });
+    
+});
+    
+    
     $('#iskontoVal').on('input',function(){
         var iskontoOrani = parseInt($(this).val());
         if(isNaN(iskontoOrani)) {
@@ -466,50 +665,12 @@
     })(jQuery);
     
     $(document).ready(function() {
+        
         var firmaId = "{{session()->get('firma_id')}}";
         if(firmaId === ""){
             $('#myModalSirketListe').modal({
                 show: 'true'
             });
-        }
-        var ilan_turu={{$ilan->ilan_turu}};
-        var sozlesme_turu={{$ilan->sozlesme_turu}};    
-        if(ilan_turu === "") 
-        {
-            $('#hizmet').hide();
-            $('#mal').hide();
-            $('#goturu').hide();
-            $('#yapim').hide();
-        }
-        else if(ilan_turu === 1 && sozlesme_turu === 0)
-            {
-               $('#hizmet').hide();
-               $('#goturu').hide();
-               $('#yapim').hide();
-            }
-         else if(ilan_turu === 2 && sozlesme_turu === 0)
-            {
-               $('#mal').hide();
-               $('#goturu').hide();
-               $('#yapim').hide();
-            }
-         else if(sozlesme_turu === 1)
-            {
-               $('#hizmet').hide();
-               $('#mal').hide();
-               $('#yapim').hide();
-            }
-        else if(ilan_turu=== 3)
-            {
-               $('#hizmet').hide();
-               $('#goturu').hide();
-               $('#mal').hide();
-            } 
-        var tcount ={{$tekliflerCount}};
-        var i = {{$i}};
-        var ilanSahibi = {{$ilanSahibi}};
-        if(tcount === i && ilanSahibi !== 1) {
-            $('#3').hide();
         }
         var k=0;
         $('.kdv').each( function() {
@@ -523,6 +684,50 @@
             else{
                 canselIskontoVal();
             }
+        });
+        
+        $("#teklifForm").submit(function(e)
+        {
+            var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            var ilan_id = {{$ilan->id}};
+            alert(postData);
+            alert(formURL);
+            //console.log($(this).attr("url"));
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    alert('success');
+                    $.ajax(
+                        {
+                            url : "/22.11.2016tamrekabet/public/rekabet/" + ilan_id,
+                            type: "GET",
+                            success:function(data, textStatus, jqXHR) 
+                            {
+                                alert('success');
+                                $('.rekabet').html(data);
+                                $('.ajax-loader').css("visibility", "hidden");
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) 
+                            {
+                                alert(textStatus + "," + errorThrown);     
+                            }
+                        });
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault(); //STOP default action
         });
     });
     function canselIskontoVal(){

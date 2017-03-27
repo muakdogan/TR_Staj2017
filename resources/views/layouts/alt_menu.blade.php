@@ -26,6 +26,7 @@
                              
                          </ul>
                      </li>
+                     <li class=""><a href="{{ URL::to('davetEdildigim', array($firma->id), false)}}">Davet Edildiğim İlanlar</a></li>
                      <li><a href="#">Mesajlar</a></li>
                        <li><a href="{{ URL::to('kullaniciBilgileri', array($firma->id), false)}}">Bilgilerim</a></li>
                      <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanici İşlemleri</a></li>
