@@ -163,7 +163,7 @@
    </head>
    <body>
        
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
    <div class="container">
        <br>
        <br>
@@ -174,7 +174,6 @@
    <div class="container"> 
     <div class="row">
      <div class="col-sm-8" >
-      
            <div  class="form-group">
                <div class="row">
                    <div class="col-sm-4" ><img id="logo1" value="azaz" src="../../public/uploads/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"> 
@@ -645,7 +644,7 @@
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
                                            <input type="text" class="form-control" id="yillik_cirosu" name="yillik_cirosu" placeholder="Yıllık Cirosu" value="{{$firma->mali_bilgiler->yillik_cirosu}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                               <input type="checkbox" class="form-control" id="ciro_goster" name="ciro_goster" >Göster<br></input>
+                                               <input type="checkbox" id="ciro_goster" name="ciro_goster" >YıllıkGöster<br></input>
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -654,7 +653,7 @@
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
                                            <input type="text" class="form-control" id="sermayesi" name="sermayesi" placeholder="Sermayesi" value="{{$firma->mali_bilgiler->sermayesi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                           <input type="checkbox" class="form-control" id="sermaye_goster" name="sermaye_goster" >Göster<br></input>
+                                           <input type="checkbox" id="sermaye_goster" name="sermaye_goster" >Yıllık Sermayesini Göster</input>
                                        </div>
                                    </div>
                                    {!! Form::submit('Kaydet', array('url'=>'firmaProfili/malibilgi/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
@@ -1382,7 +1381,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                          <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                         <label for="inputTask" class="col-sm-1 control-label"></label>
                                                         <label for="inputEmail3" class="col-sm-1 control-label">Broşür PDF</label>
                                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                         <div class="col-sm-9">
