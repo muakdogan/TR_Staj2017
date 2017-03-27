@@ -369,15 +369,19 @@
                 </div>
             </div>
             
+            @if(Auth::guest())
+                <?php $sektor_id = 0; ?>
+            @else
+                <?php $id = session()->get('firma_id');
+                                $firma = App\Firma::find($id);
+                                ?>
+                @foreach($firma->sektorler as $sektor)
+                    <?php $sektor_id = $sektor->id ?>
+                @endforeach
+            @endif    
+            
             
 <script type="text/javascript">
-
-    $('.ilanDetayPop').mouseenter(function(){
-        $(this).children("div.pop-up").show();
-    });
-    $('.ilanDetayPop').mouseleave(function () {
-        $('div.pop-up').hide();
-    });
 
     $("#temizleButton").click(function(){
 
@@ -462,6 +466,7 @@
             var valName="'"+name+"'";
             var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+name+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
 
+<<<<<<< HEAD (5dc19d2) - Kismi Teklifler kontrol
             $("#multiSel"+key).append(html);                                     
     }
     $('#button').click(function(){
@@ -515,6 +520,141 @@
                 console.log(sonSecilen);
                 odeme.push(sonSecilen);
                 return false;
+=======
+                    if ($(this).is(':checked')) {
+                      var html = '<span title="' + title + '">' + title + '</span>';
+                      $('.multiSel').append(html);
+                      $(".hida").hide();
+                      getIlanlar(1);
+                      doldurma(title);
+                    } else {
+                      $('span[title="' + title + '"]').remove();
+                      var ret = $(".hida");
+                      $('.dropdown dt a').append(ret);
+                    }
+                });
+                
+                $(document).ready(function(){
+                    
+                    $(document).on('click', '.pagination a', function (e){
+                        getIlanlar($(this).attr('href').split('page=')[1]);
+                        e.preventDefault();
+                    });
+                    var sehirId = "{{$ilId}}";
+                    var keyword = "{{$keyword}}";
+                    var sektorID = "{{$sektor_id}}";
+                    
+                    if(sehirId != ""){
+                        jQuery('.mutliSelect input[type="checkbox"]').each(function(){
+                            if($(this).val() == sehirId ){
+                                var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
+                                    title = $(this).attr('name');
+                                var html = '<span title="' + title + '">' + title + '</span>';
+                                $(".hida").append(title+",");
+                                $(this).prop( "checked", true );
+                                doldurma(title);
+                            }
+                        });
+                    }
+                    if(keyword != ""){
+                        $("#search").val(keyword);
+                        doldurma(keyword);
+                        $("#radioDiv3 input[type='radio']").each(function(){
+                            if($(this).val() == "tum"){
+                                $(this).prop("checked",true);
+                            }
+                        });
+                    }
+                    if(sektorID != ""){
+                        jQuery(".checkboxClass").each(function(){
+                            if($(this).val() == sektorID){
+                                $(this).prop("checked",true);
+                            }
+                        });
+                        var sonSecilen;
+                        var n = jQuery('.checkboxClass:checked').length;
+                            if (n > 0){
+                                jQuery('.checkboxClass:checked').each(function(){
+                                sonSecilen = $(this).attr('name');
+                                if(jQuery.inArray(sonSecilen, sektor) === -1){
+                                    sektor.push(sonSecilen);
+                                    return false;
+                                }
+                                });
+                            console.log(sonSecilen);
+                        }
+                        getIlanlar(1);
+                        doldurma(sonSecilen);
+                    }
+                });
+                
+                function getIlanlar(page) {
+                    var il_id=$('#il_id').val();
+                    var basTar=$('#baslangic_tarihi').val();
+                    var bitTar=$('#bitis_tarihi').val();
+                    var selectedSektor = new Array();
+                    var n = jQuery(".checkboxClass:checked").length;
+                    if (n > 0){
+                        jQuery(".checkboxClass:checked").each(function(){
+                                selectedSektor.push($(this).val());
+                                var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
+                            });
+                    }
+                    var selectedIl = new Array();
+                    var n = jQuery('.mutliSelect input[type="checkbox"]').length;
+                    if (n > 0){
+                        jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
+                                selectedIl.push($(this).val());
+                        });
+                    }
+                    var selectedOdeme = new Array();
+                    var n = jQuery('.checkboxClass2:checked').length;
+                    if (n > 0){
+                        jQuery('.checkboxClass2:checked').each(function(){
+                            selectedOdeme.push($(this).val());
+                        });
+                    }
+                    var selectedTur = "";
+                    var selected = $("#radioDiv input[type='radio']:checked");
+                    if (selected.length > 0) {
+                        selectedTur = selected.val();
+                    }
+                    var selectedUsul = "";
+                    var selected2 = $("#radioDiv2 input[type='radio']:checked");
+                    if (selected2.length > 0) {
+                        selectedUsul = selected2.val();
+                    }
+                    var selectedSearch = "";
+                    var inputSearch = "";
+                    var selected3 = $("#radioDiv3 input[type='radio']:checked");
+                    if (selected3.length > 0) {
+                        selectedSearch = selected3.val();
+                        inputSearch=$('#search').val();
+                    }
+                    var selectedSozlesme = "";
+                    var selected4 = $("#radioDiv4 input[type='radio']:checked");
+                    if (selected4.length > 0) {
+                        selectedSozlesme = selected4.val();
+                    }
+                    $.ajax({
+                        beforeSend: function(){
+                            $('.ajax-loader').css("visibility", "visible");
+                        },
+                        url : '?page='+page,
+                        dataType: 'json',
+                        data:{il:selectedIl,bas_tar:basTar,bit_tar:bitTar,sektor:selectedSektor,tur:selectedTur,
+                                    usul:selectedUsul,radSearch:selectedSearch,input:inputSearch,odeme:selectedOdeme,
+                                    sozles:selectedSozlesme
+                        },
+                    }).done(function(data){
+                        $('.ilanlar').html(data);
+                        location.hash = page;
+                        window.scrollTo(0, 0);
+                        $('.ajax-loader').css("visibility", "hidden");
+                    }).fail(function(){ 
+                        alert('İlanlar Yüklenemiyor !!!  ');
+                    });
+>>>>>>> origin/master (0836267) - Merge pull req
                 }
             });
 

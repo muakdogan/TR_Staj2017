@@ -186,15 +186,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
     </nav>
 
     @yield('content')
-    <div class="container">
-     <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; 2016</p>
-                </div>
-            </div>
-    </footer>
-    </div>
+    @include('layouts.footer_menu')
     <!-- JavaScripts -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}

@@ -1078,10 +1078,10 @@
                                             <td> <button name="open-modal-goturu-bedel"  value="{{$ilan_goturu_bedel->id}}" class="btn btn-primary btn-xs open-modal-goturu-bedel" >Düzenle</button></td>
                                             <td>
                                                 {{ Form::open(array('url'=>'goturu/'.$ilan_goturu_bedel->id,'method' => 'DELETE', 'files'=>true)) }}
-                                    <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                        {{ Form::close() }}
-                                        </td>
+                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                                {{ Form::close() }}
+                                            </td>
                                         <input type="hidden" name="ilan_goturu_bedel_id"  id="ilan_goturu_bedel_id" value="{{$ilan_goturu_bedel->id}}"> 
                                             </tr>
 

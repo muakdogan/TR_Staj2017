@@ -149,6 +149,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         'Collective\Html\HtmlServiceProvider',
         Yajra\Datatables\DatatablesServiceProvider::class,
+        'Spatie\Activitylog\ActivitylogServiceProvider',
 
         /*
          * Application Service Providers...
@@ -157,6 +158,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
 
     ],
 
@@ -207,6 +209,7 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
         'Datatables'=> Yajra\Datatables\Datatables::class,
+        'Activity' => 'Spatie\Activitylog\ActivitylogFacade',
 
     ],
 

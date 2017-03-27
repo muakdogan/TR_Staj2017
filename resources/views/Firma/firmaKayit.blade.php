@@ -13,7 +13,6 @@ use App\Il;?>
                     width: 100%;
                     height:100%;
         }
-
         .ajax-loader img {
                     position: relative;
                     top:50%;

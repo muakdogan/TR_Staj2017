@@ -9,7 +9,9 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "~5.0",
          "illuminate/html": "5.*",
-        "yajra/laravel-datatables-oracle": "^6.21"
+        "yajra/laravel-datatables-oracle": "^6.21",
+        "spatie/activitylog": "^2.4",
+        "google/apiclient": "2.0"
     },
     
     "require-dev": {
@@ -21,7 +23,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "app/src"
         ],
         "psr-4": {
             "App\\": "app/"

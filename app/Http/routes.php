@@ -11,10 +11,11 @@ use App\FirmaReferans;
 use App\iletisim_bilgileri;
 use App\Ilan;
 use App\Teklif;
-Use Carbon\Carbon;
-
+use Carbon\Carbon;
+ use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
@@ -52,8 +53,12 @@ Route::group(['middleware' => ['web']], function () {
 
   }]);
 
-
-
+Route::resource('kullaniciLog', 'ActivityController');
+ /*Route::get('/kullaniciLog', function () {
+      
+  $latestActivities = Activity::with('user')->latest()->limit(100)->get();
+    return view('admin.kullaniciLog', array('latestActivities' => $latestActivities));
+ });*/
 Route::post('/updateTree', function () {
     $id = Input::get('id');
     $value = Input::get('value');
@@ -104,19 +109,76 @@ Route::get('/', function () {
 
  Route::get('/firmaList', function () {
       
-  return view('admin.firmaList');
+          $onay = DB::table('firmalar')
+           ->where('onay', '')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
+          
+          $onayli = DB::table('firmalar')
+           ->where('onay', 'onay')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination'); 
+       
+         return View::make('admin.firmaList')-> with('onay',$onay)-> with('onayli',$onayli);
+       
+ });
+  Route::get('/firmaListeleme',function (){
+        
+            $onay = DB::table('firmalar')
+           ->where('onay', '')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
+        
+           return Response::json(View::make('admin.firmaListTable',array('onay'=> $onay))->render());
+           
+});
+ Route::get('/firmaListeOnaylı',function (){
+        
+             $onayli = DB::table('firmalar')
+             ->where('onay', 'onay')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination'); 
+        
+           return Response::json(View::make('admin.firmaListOnayli',array('onayli'=> $onayli))->render());
+});
+ Route::get('/yorumList', function () {
+      
+  return view('admin.yorumList');
  });
  
- 
+
 Route::get('/firmaOnay/{id}', function ($id) {
  
     $firmas = Firma::find($id);
     $firmas->onay="onay";
-    $firmas->save();
+    $firma_kul = DB::table('firma_kullanicilar')
+            ->where( 'firma_kullanicilar.firma_id', '=',  $id)
+            ->select('firma_kullanicilar.kullanici_id as kulId')->get();
     
+    $firmaOnay=  \App\Kullanici::find($firma_kul->kulId);
+    
+    $data = ['ad' => $firmaOnay->adi, 'soyad' => $firmaOnay->soyadi];
+
+                Mail::send('auth.emails.yorum_mesaj', $data, function($message) use($data,$firmaOnay) 
+                {
+                    $message->to($firmaOnay->email, $data['ad'])
+                    ->subject('FİRMANIZ ONAYLANDI!');
+                   
+                });
+    $firmas->save();
   return view('admin.firmaList');
- });    
+ });
  
+ Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
+ 
+    $yorumlar = App\Yorum::find($id);
+    $yorumlar->onay="onay";
+    
+    $yorum_kul = App\Kullanici::find($yorum_kul_id);
+    
+    $data = ['ad' => $yorum_kul->adi, 'soyad' => $yorum_kul->soyadi];
+
+                Mail::send('auth.emails.yorum_mesaj', $data, function($message) use($data,$yorum_kul) 
+                {
+                    $message->to($yorum_kul->email, $data['ad'])
+                    ->subject('YORUMUNUZ YAYINLANDI!');
+                   
+                });
+    $yorumlar->save();
+  return view('admin.yorumList');
+ });
    Route::get('/kullaniciIslemleri/{id}', function ($id) {
            $firma = Firma::find($id);
            $roller=  App\Rol::all();
@@ -500,6 +562,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
            
         return Response::json($sektorControl);
      });
+     
      
      Route::get('/basvuruControl/',function (){
           
