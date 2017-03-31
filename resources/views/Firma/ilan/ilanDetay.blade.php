@@ -5,6 +5,9 @@
     $time = Carbon::parse($dt);
     $dt = $time->format('Y-m-d');
     ?>
+    <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
+    <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
+    <script src="{{asset('js/wNumb.js')}}"></script>
 <style>
     table {
         font-family: arial, sans-serif;
@@ -271,7 +274,9 @@
                             @endif     
                         </div> 
                         <div class="tab-pane kismiRekabet" id="3">
-                            @include('Firma.ilan.kismiRekabet')
+                            @if($ilan->kismi_fiyat == 1)
+                                @include('Firma.ilan.kismiRekabet')
+                            @endif    
                         </div>
                         
                     </div>
@@ -665,7 +670,6 @@
     })(jQuery);
     
     $(document).ready(function() {
-        
         var firmaId = "{{session()->get('firma_id')}}";
         if(firmaId === ""){
             $('#myModalSirketListe').modal({

@@ -1,10 +1,19 @@
 @extends('layouts.app')
+<?php use Carbon\Carbon;
+    $dt = Carbon::today();
+    $time = Carbon::parse($dt);
+    $dt = $time->format('Y-m-d');
+    ?>
 <br>
  <br>
  @section('content')
     <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
     <script src="{{asset('js/wNumb.js')}}"></script>
     <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css"></link>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+    
  <style>
 table {
     font-family: arial, sans-serif;
@@ -78,11 +87,8 @@ nav ul li a.active {
   position: relative;
   text-align: center;
   background: #fff;
-  border-radius: 8px;
   margin: 13px 0 4px 4px;
   display: inline-block;
-  width: 600px;
-  box-shadow: 0px 0px 8px rgba(68, 140, 160, 0.5);
 }
 .dialog:after,
 .dialog:before {
@@ -174,112 +180,394 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
   	color:#555;
 }
+    .blink_text {
+
+    animation:2s blinker linear infinite;
+    -webkit-animation:2s blinker linear infinite;
+    -moz-animation:2s blinker linear infinite;
+    }
+
+    @-moz-keyframes blinker {  
+     0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+     }
+
+    @-webkit-keyframes blinker {  
+     0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+     }
+
+    @keyframes blinker {  
+     0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+     }
+    .test + .tooltip > .tooltip-inner {
+        background-color: #73AD21; 
+        color: #FFFFFF; 
+        border: 1px solid green; 
+        padding: 10px;
+        font-size: 12px;
+     }
+     .test + .tooltip.bottom > .tooltip-arrow {
+            border-bottom: 5px solid green;
+     }
 
 
 </style>
      <div class="container">
-           @include('layouts.alt_menu') 
-           
-            <div class="panel-group">
-                         <?php $ilanlarFirma = $firma->ilanlar()->
-                                orderBy('yayin_tarihi','desc')->limit('5')->get();
-                               ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Aktif İlanlarım</div>
-                    <div class="panel-body">
-                        <?php $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();?>
-                        <hr>
-                        @foreach($ilanlarım as $ilan)
-                            <p>{{$ilan->adi}}</p>
-                            <p>{{$ilan->kapanma_tarihi}}</p>
-                            
-                            
-                            @if($ilan->yayinlanma_tarihi > time())
-                              <a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Düzenle</button></a>
-                              
-                             @else
-                             
-                              <a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Gör</button></a>
-                             
-                            @endif
-                            
+           @include('layouts.alt_menu')
+                         <?php 
+                           $ilanlarFirma = $firma->ilanlar()->
+                           orderBy('yayin_tarihi','desc')->limit('5')->get();
                            
+                          $aktif_ilanlar= DB::select(DB::raw("SELECT *,i.id as ilan_id , i.adi as ilan_adi
+                                FROM ilanlar i, firmalar f
+                                WHERE f.id = i.firma_id
+                                AND f.id ='$firma->id'
+                                AND NOT 
+                                EXISTS (
 
-                            <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right" type="button" class="btn btn-info">Teklif Gör</button></a>
-                             <br>
-                            <hr>
-                        @endforeach
+                                SELECT * 
+                                FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
+                                WHERE ka.ilan_id = i.id
+                                OR kk.ilan_id = i.id
+                                )
+                                ORDER BY i.kapanma_tarihi ASC"));
+                           $aktif_count= DB::select(DB::raw("SELECT COUNT( i.id ) AS count
+                                FROM ilanlar i, firmalar f
+                                WHERE f.id = i.firma_id
+                                AND f.id =7
+                                AND NOT 
+                                EXISTS (
+                                SELECT * 
+                                FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
+                                WHERE ka.ilan_id = i.id
+                                OR kk.ilan_id = i.id
+                                )"));
+                        ?>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="panel panel-default">
+                     @foreach($aktif_count as $count)
+                     <div class="panel-heading"><strong>Aktif İlanlarım &nbsp;({{$count->count}} İlan)</strong></div>
+                    @endforeach
+                    <div class="panel-body">
+                        <table  id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead style=" font-size: 12px;">
+                            <tr>
+                                <th>Sıra</th>
+                                <th>İlan Adı</th>
+                                <th>Kapanma Tarihi</th>
+                                <th>Verilen Teklif Sayısı</th>
+                                <th></th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody style="font_size:12px">
+                            <?php 
+                                $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+                                $i=1;
+                            ?>
+                            @foreach($aktif_ilanlar as $aktif_ilan)
+                            <?php  
+                                $aIlan=  \App\Ilan::find($aktif_ilan->ilan_id);
+                                $ilanTeklifsayısı = $aIlan->teklifler()->count();
+                            ?>
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td>{{$aktif_ilan->ilan_adi}}</td>
+                                <td>{{$aktif_ilan->kapanma_tarihi}}</td>
+                                <td>{{$ilanTeklifsayısı}}</td>
+                                @if($aktif_ilan->kapanma_tarihi > $dt)
+                                   <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
+                                @else
+                                <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info"><span class="blink_text">Kazananı İlan Et</span></button></a></td>
+
+                                @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Sonuçlanmış İlanlarım</div>
-                    <div class="panel-body">
-                        <?php $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+                
+                <?php 
+                           $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+                           $sonuc_ilanlar=DB::select(DB::raw("SELECT * , i.id AS ilan_id, i.adi AS ilan_adi
+                            FROM ilanlar i, firmalar f
+                            WHERE f.id = i.firma_id
+                            AND f.id ='$firma->id'
+                            AND 
+                            EXISTS (
+
+                            SELECT * 
+                            FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
+                            WHERE ka.ilan_id = i.id
+                            OR kk.ilan_id = i.id
+                            )"));
+                           $sonuc_kapali=DB::select(DB::raw("SELECT count(i.id) as count
+                            FROM ilanlar i, firmalar f
+                            WHERE f.id = i.firma_id
+                            AND f.id ='$firma->id'
+                            AND 
+                            EXISTS (
+
+                            SELECT * 
+                            FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
+                            WHERE ka.ilan_id = i.id
+                            OR kk.ilan_id = i.id
+                            )"));
+                           
                             $i=0;
                             $kullanici_id=Auth::user()->kullanici_id;
                             $firma_id = session()->get('firma_id');
-                        ?>
-                        <hr>
-                        @foreach($ilanlarım as $ilan)
-                            <p>{{$ilan->adi}}</p>
-                            <p>{{$ilan->kapanma_tarihi}}</p>
-                           
-                            
-                                <ul>
-                                <li>
-                                  <a><button style="float:right" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
-                                  <div class="dialog" id="dialog{{$i++}}" style="display:none">
-                                    <div class="title">Puanla/Yorum Yap</div>
-                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
-                                      <div class="row col-lg-12">
-                                        <div class="col-lg-3">
-                                            <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
-                                          <div id="puanlama">
-                                              <div class="sliders" id="k{{$i}}"></div>
-                                              <input type="hidden" id="puan1" name="puan1" value="5"/>
-                                          </div>
-                                        </div>  
-                                        <div class="col-lg-3" style="border-color:#ddd">
-                                            <label1 name="kriter2" type="text"><br>Teslimat</label1>
-                                          <div id="puanlama">
-                                              <div class="sliders" id="k{{$i+1}}"></div>
-                                              <input type="hidden" id="puan2" name="puan2" value="5"/>
-                                          </div>
-                                        </div> 
-                                        <div class="col-lg-3">
-                                            <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
-                                          <div id="puanlama">
-                                              <div class="sliders" id="k{{$i+2}}"></div>
-                                              <input type="hidden" id="puan3" name="puan3" value="5"/>
-                                          </div>
+                            $j=1;
+                ?>
+                
+            
+                <div class="panel panel-default">
+                    @foreach($sonuc_kapali as $count)
+                     <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$count->count}} İlan)</strong></div>
+                    @endforeach
+                    <div class="panel-body">
+                        <table id="sonuc" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead style=" font-size:12px">
+                            <tr>
+                                <th>Sıra</th>
+                                <th>İlan Adı</th>
+                                <th>Tarihi Sonuclanma </th>
+                                <th>Verilen Teklif Sayısı</th>
+                                <th>Kazanan Fiyat</th>
+                                <th>Kazanan Firma</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($sonuc_ilanlar as $ilan)
+                            <tr>
+                                <?php 
+                                    $sIlan=  \App\Ilan::find($ilan->ilan_id);
+                                    if(count($sIlan)!= 0){
+                                        $ilanTeklif= $sIlan->teklifler()->count();
+                                    }
+                                    else
+                                    {
+                                        $ilanTeklif=0;
+                                    }
+                                ?>
+                                <td>{{ $j++}}</td>
+                                <td>{{$ilan->ilan_adi}}</td>
+                                @if($ilan->kismi_fiyat == 1 ) <!--Kismi Açık -->
+                                    <?php 
+                                        $kazananFiyat=0;
+                                        $sonucTarihi = App\KismiAcikKazanan::where('ilan_id',$ilan->ilan_id)->get();
+                                    ?>
+                                    @foreach($sonucTarihi as $sonuclanma)
+                                        <?php $kazananFiyat+=$sonuclanma->kazanan_fiyat?>
+                                    @endforeach
+                                     <td>{{$sonuclanma->sonuclanma_tarihi}}</td>
+                                    <?php 
+                                         if(count($sonucTarihi)!= 0){
+                                          $sonucFirma=  App\Firma::find($sonuclanma->kazanan_firma_id); 
+                                         }
+                                         else{
+                                             $sonucTarihi=" ";
+                                         }
+                                    ?>
+                                @else<!--Kismi Kapali -->
+                                    <?php 
+                                       $sonucTarihiKapali = App\KismiKapaliKazanan::where('ilan_id',$ilan->ilan_id)->get();
+                                       $kontrol=$sonucTarihiKapali->count();
+                                       if(count($sonucTarihiKapali)!=0)
+                                       {
+                                           foreach ($sonucTarihiKapali as $sonucKapali){
+                                            $sonucFirma=  App\Firma::find($sonucKapali->kazanan_firma_id); 
+                                           }
+                                       }
+                                       else
+                                       {
+                                          $sonucTarihiKapali=" "; 
+                                       }
+                                    ?>
+                                    @foreach($sonucTarihiKapali as $sonucKapali)
+                                    <td>{{$sonucKapali->sonuclanma_tarihi}}</td>
+                                    @endforeach
+                                @endif
+                                <td>{{$ilanTeklif}}</td>
+                               
+                                @if($ilan->kismi_fiyat == 1 )
+                                    <td><strong> {{number_format($kazananFiyat,2,'.','')}}</strong> &#8378;</td>
+                                    <td>Optimum Fiyat</td>
+                                @else
+                                    <td><strong> {{number_format($sonucKapali->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
+                                    <td>{{$sonucFirma->adi}}</td>
+                                @endif
+                                
+                                <td>
+                                  <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
+                                  <div class="modal fade" id="myModal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div style="background-color: #fcf8e3;" class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                <h4 style="font-size:14px" class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Puanla/Yorum Yap</strong></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="dialog" id="dialog{{$i++}}" style="display:none">
+                                                    
+                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                      <div class="row col-lg-12">
+                                                        <div class="col-lg-3">
+                                                            <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$i}}"></div>
+                                                              <input type="hidden" id="puan1" name="puan1" value="5"/>
+                                                          </div>
+                                                        </div>  
+                                                        <div class="col-lg-3" style="border-color:#ddd">
+                                                            <label1 name="kriter2" type="text"><br>Teslimat</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$i+1}}"></div>
+                                                              <input type="hidden" id="puan2" name="puan2" value="5"/>
+                                                          </div>
+                                                        </div> 
+                                                        <div class="col-lg-3">
+                                                            <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$i+2}}"></div>
+                                                              <input type="hidden" id="puan3" name="puan3" value="5"/>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$i+3}}"></div>
+                                                              <input type="hidden" id="puan4" name="puan4" value="5"/>
+                                                          </div>
+                                                        </div> 
+                                                      </div>
+                                                        <?php $i=$i+3; ?>
+                                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
+                                                      <input type="submit" value="Ok"/>
+                                                    {{ Form::close() }}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">                                                            
+                                            </div>
                                         </div>
-                                        <div class="col-lg-3">
-                                            <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
-                                          <div id="puanlama">
-                                              <div class="sliders" id="k{{$i+3}}"></div>
-                                              <input type="hidden" id="puan4" name="puan4" value="5"/>
-                                          </div>
-                                        </div> 
-                                      </div>
-                                        <?php $i=$i+3; ?>
-                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
-                                      <input type="submit" value="Ok"/>
-                                    {{ Form::close() }}
-                                </div>
-                                </li>
-
-                                </ul>
-
-                            <br>
-                            <hr>
-                        @endforeach
+                                    </div>
+                                 </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                     </table>
                     </div>
                 </div>
-            </div>    
-             
+            </div>
+            <div class="col-sm-3">
+                    <div class="panel panel-default">
+                        <div  style="background-color:00ff00;text-align:center;color:#fff" class="panel-heading"><strong>KAZANANI BELİRLE</strong><span id="blinker"><img src="{{asset('images/unlem.png')}}"> <img src="{{asset('images/unlem.png')}}"><img src="{{asset('images/unlem.png')}}"></span></div>
+                        <div style="background-color:#ccffb3" class="panel-body">
+                            <table style="font-size:12px">
+                                  <tr>
+                                   
+                                    <th>İlan Adı</th>
+                                  </tr>
+                                @foreach($aktif_ilanlar as $aktif_ilan)
+                                  @if($aktif_ilan->kapanma_tarihi < $dt)
+                                      <tr>
+                                        <td><a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}" class="test" data-toggle="tooltip" data-placement="bottom" title="Bu ilanın henüz kazananını belirlemediniz lütfen ilanın kazananını belirlemek için tıklayınız!">{{$aktif_ilan->ilan_adi}}</a></td>
+                                      </tr>
+                                  @else 
+                                  @endif
+                                @endforeach
+                         </table>
+                        </div>
+                    </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>İstatistik</strong></div>
+                        <div  class="panel-body">
+                            @foreach($aktif_count as $count)
+                                <p><strong>Aktif İlan Sayısı:</strong>&nbsp;{{$count->count}}</p>
+                            @endforeach
+                            @foreach($sonuc_kapali as $count)
+                                <p><strong>Sonuçlanmış İlan Sayısı:</strong>&nbsp;{{$count->count}}</p>
+                            @endforeach
+                            <?php $toplamIlan=$firma->ilanlar()->count(); ?>
+                            <p><strong>Toplam İlan Sayısı:</strong>&nbsp;{{$toplamIlan}}</p>
+                        </div>
+                </div>
+            </div>
+        </div>
     </div>
 <script>
 $(document).ready( function() {
+       
+    $('[data-toggle="tooltip"]').tooltip();   
+
+      
+    
+    $('#example').DataTable({  
+        "language": {
+	"sDecimal":        ",",
+	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+	"sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+	"sInfoEmpty":      "Kayıt yok",
+	"sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+	"sInfoPostFix":    "",
+	"sInfoThousands":  ".",
+	"sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+	"sLoadingRecords": "Yükleniyor...",
+	"sProcessing":     "İşleniyor...",
+	"sSearch":         "Ara:",
+	"sZeroRecords":    "Eşleşen kayıt bulunamadı",
+	"oPaginate": {
+		"sFirst":    "İlk",
+		"sLast":     "Son",
+		"sNext":     "Sonraki",
+		"sPrevious": "Önceki"
+	},
+	"oAria": {
+		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+		"sSortDescending": ": azalan sütun soralamasını aktifleştir"
+	}
+    }
+});
+$('#sonuc').DataTable({  
+        "language": {
+	"sDecimal":        ",",
+	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+	"sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+	"sInfoEmpty":      "Kayıt yok",
+	"sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+	"sInfoPostFix":    "",
+	"sInfoThousands":  ".",
+	"sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+	"sLoadingRecords": "Yükleniyor...",
+	"sProcessing":     "İşleniyor...",
+	"sSearch":         "Ara:",
+	"sZeroRecords":    "Eşleşen kayıt bulunamadı",
+	"oPaginate": {
+		"sFirst":    "İlk",
+		"sLast":     "Son",
+		"sNext":     "Sonraki",
+		"sPrevious": "Önceki"
+	},
+	"oAria": {
+		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+		"sSortDescending": ": azalan sütun soralamasını aktifleştir"
+	}
+    }
+});
+
+var blink_speed = 1500;
+var t = setInterval(function () { var ele = document.getElementById("blinker"); ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden'); }, blink_speed);
+
+    
     var changeNumber="";
     var length={{$i}};
     for(var key=0; key<{{$i}}; key++){
@@ -287,9 +575,11 @@ $(document).ready( function() {
             var j = $(this).attr('id');
           e.stopPropagation();
          if ($(this).hasClass('active')){
+             alert("girdi");
             $('#dialog'+j).fadeOut(200);
             $(this).removeClass('active');
          } else {
+            $('#modalForm'+j).modal('show');
             $('#dialog'+j).delay(300).fadeIn(200);
             $(this).addClass('active');
          }
