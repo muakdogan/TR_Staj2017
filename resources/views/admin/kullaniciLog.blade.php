@@ -23,7 +23,6 @@
                                 <th>Time</th>
                                 <th>Delete</th>
                                 <th>Deneme</th>
-                                
                             </tr>
                         </thead>
                         <tbody>

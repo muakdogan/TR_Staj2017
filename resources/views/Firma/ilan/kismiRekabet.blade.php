@@ -1,4 +1,4 @@
-@if($ilan->kismi_fiyat == 1)
+
     @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
     <h3>Fiyat İstenen Kalemler Rekabet Listesi</h3>
        <table class="table table-condensed" style="border-collapse:collapse;" >
@@ -14,7 +14,11 @@
                         <th width="9%">Birim:</th>
                     </tr>
                 </thead>
-                    <?php $kismiCount =1;?>
+                    <?php 
+                    $kismiCount =1;
+                    $kullanici_id=Auth::user()->kullanici_id;
+                    $firma_id = session()->get('firma_id');?>
+                    <?php $puanCount=0; ?>
                     @foreach($ilan->ilan_mallar as $ilan_mal)
 
                     <tr style="background-color:#e6e0d4 "data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
@@ -58,6 +62,7 @@
                                     )
                                     ORDER BY kdv_dahil_fiyat ASC  "));
                                     $malIdCount=1;
+                                    $puanNumber = 0;
                                 ?>
                                 
                                 <table>
@@ -70,7 +75,7 @@
                                             <th >Toplam:</th>
                                         </tr>
                                     </thead>
-                                    
+                                        
                                         @foreach($malIdTeklifler as $malIdTeklif)
                                         <?php 
                                             $firmaMalId = App\Teklif::find($malIdTeklif->teklif_id);
@@ -119,6 +124,7 @@
                                                 <td>
                                                     {{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
+                                                
                                                 @if($ilan->kapanma_tarihi > $dt)
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
@@ -126,6 +132,63 @@
                                                         <td><button  style="float:right" name="{{$malIdTeklif->ilan_mal_id}}_{{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaMal->id}}" type="button" class="btn btn-info kazanan kazan{{$malIdTeklif->ilan_mal_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaMal->id)
                                                         <td>KAZANDI</td>
+                                                        
+                                                        <td>
+                                                           <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$puanNumber}}">Puan Ver/Yorum Yap</button></a>
+                                                            <div class="modal fade" id="myModalForm{{$puanNumber}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div style="background-color: #fcf8e3;" class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                <h4 style="font-size:14px" class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Puanla/Yorum Yap</strong></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
+                                                    
+                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                      <div class="row col-lg-12">
+                                                        <div class="col-lg-3">
+                                                            <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$puanNumber}}"></div>
+                                                              <input type="hidden" id="puan1" name="puan1" value="5"/>
+                                                          </div>
+                                                        </div>  
+                                                        <div class="col-lg-3" style="border-color:#ddd">
+                                                            <label1 name="kriter2" type="text"><br>Teslimat</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$puanNumber+1}}"></div>
+                                                              <input type="hidden" id="puan2" name="puan2" value="5"/>
+                                                          </div>
+                                                        </div> 
+                                                        <div class="col-lg-3">
+                                                            <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$puanNumber+2}}"></div>
+                                                              <input type="hidden" id="puan3" name="puan3" value="5"/>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
+                                                          <div id="puanlama">
+                                                              <div class="sliders" id="k{{$puanNumber+3}}"></div>
+                                                              <input type="hidden" id="puan4" name="puan4" value="5"/>
+                                                          </div>
+                                                        </div> 
+                                                      </div>
+                                                   
+                                                        <?php $puanNumber=$puanNumber+3; ?>
+                                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
+                                                      <input type="submit" value="Ok"/>
+                                                    {{ Form::close() }}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">                                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                                                        </td>
                                                     @endif
                                                 @endif
                                             @else
@@ -168,6 +231,8 @@
                     </tr>
                 </thead>
                     <?php $kismiCount =1;?>
+                    <?php $puanCount=0; 
+                    $i = 0;?>
                     @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
 
                     <tr style="background-color:#e6e0d4 "data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
@@ -318,6 +383,7 @@
                     </tr>
                 </thead>
                     <?php $kismiCount =1;?>
+                    <?php $puanCount=0; $i = 0;?>
                     @foreach($ilan->ilan_yapim_isleri as $ilan_yapim_isi)
 
                     <tr style="background-color:#e6e0d4 "data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
@@ -449,7 +515,7 @@
                 @endforeach
         </table>   
     @endif 
-@endif    
+    
 <script>
     $(".kazanan").click(function(){
        var name=$(this).attr("name");
@@ -482,4 +548,118 @@
             return false;
         }
     });
+    
+     $(document).ready(function() {
+    
+    $('.add').click(function(){
+          $('#myModal-add').modal('show');
+        });
+        
+         var length={{$puanNumber}};
+        for(var key=0; key<{{$puanNumber}}; key++){
+            $('#'+key).click(function(e){
+                var j = $(this).attr('id');
+              e.stopPropagation();
+             if ($(this).hasClass('active')){
+                $('#dialog'+j).fadeOut(200);
+                $(this).removeClass('active');
+             } else {
+                $('#modalForm'+j).modal('show');
+                $('#dialog'+j).delay(300).fadeIn(200);
+                $(this).addClass('active');
+             }
+           });
+        }   
+        function closeMenu(){
+          $('.dialog').fadeOut(200);
+          $('.add').removeClass('active');  
+        }
+
+        $(document.body).click( function(e) {
+             closeMenu();
+        });
+
+        $(".dialog").click( function(e) {
+            e.stopPropagation();
+        });
+        var sliders = document.getElementsByClassName('sliders');
+        var connect = document.getElementsByClassName('noUi-connect');
+        var tooltip = document.getElementsByClassName('noUi-tooltip');
+        console.log(tooltip);
+        var value = document.getElementsByClassName('value');
+        for ( var i = 0; i < sliders.length; i++ ) {
+            noUiSlider.create(sliders[i], {
+                    start: 5,
+                    step:1,
+                    connect: [true, false],
+                    range: {
+                            'min':[1],
+                            'max':[10]
+                    },
+                    format: wNumb({
+                        decimals:0
+                    }),
+                    tooltips:true
+
+            });
+            var deneme;
+            sliders[i].noUiSlider.on('slide', function( values, handle ,e){
+                var idCount=$(this.target.id).selector;
+                idCount=idCount.substring(1);
+                console.log($(this));
+                deneme = values[handle];
+                deneme = parseInt(deneme);
+                if(idCount % 5 === 1){
+                    $("#puan1").val(deneme);
+                }
+                else if(idCount % 5 === 2){
+                    $("#puan2").val(deneme);
+                }
+                else if(idCount % 5 === 3){
+                    $("#puan3").val(deneme);
+                }
+                else if(idCount % 5 === 4){
+                    $("#puan4").val(deneme);
+                }
+                idCount = parseInt(idCount)-1;
+                if(deneme <= 4){
+                    connect[idCount].style.backgroundColor = "#e65100";
+                    tooltip[idCount].style.backgroundColor = "#e65100";
+                    tooltip[idCount].style.border = "1px solid #e65100";
+                }
+                else if(deneme === 5){
+                    connect[idCount].style.backgroundColor = "#e54100";
+                    tooltip[idCount].style.backgroundColor = "#e54100";
+                    tooltip[idCount].style.backgroundColor = "#e54100";
+                }
+                else if(deneme === 6){
+                    connect[idCount].style.backgroundColor = "#f46f02";
+                    tooltip[idCount].style.backgroundColor = "#f46f02";
+                    tooltip[idCount].style.border = "1px solid #f46f02";
+                }
+                else if(deneme === 7){
+                    connect[idCount].style.backgroundColor = "#ffba04";
+                    tooltip[idCount].style.backgroundColor = "#ffba04";
+                    tooltip[idCount].style.border = "1px solid #ffba04";
+                }
+                else if(deneme === 8){
+                    connect[idCount].style.backgroundColor = "#d6d036";
+                    tooltip[idCount].style.backgroundColor = "#d6d036";
+                    tooltip[idCount].style.border = "1px solid #d6d036";
+                }
+                else if(deneme === 9){
+                    connect[idCount].style.backgroundColor = "#a5c530";
+                    tooltip[idCount].style.backgroundColor = "#a5c530";
+                    tooltip[idCount].style.border = "1px solid #a5c530";
+                }
+                else if(deneme === 10){
+                    connect[idCount].style.backgroundColor = "#45c538";
+                    tooltip[idCount].style.backgroundColor = "#45c538";
+                    tooltip[idCount].style.border = "1px solid #45c538";
+                }
+
+
+            });
+        }
+        });
 </script>

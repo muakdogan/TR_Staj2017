@@ -12,6 +12,7 @@ use App\iletisim_bilgileri;
 use App\Ilan;
 use App\Teklif;
 use Carbon\Carbon;
+use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -136,7 +137,30 @@ Route::get('/', function () {
       
   return view('admin.yorumList');
  });
- 
+Route::POST('/firmaDavet', function () {
+    
+    $davetEdilenFirma = Input::get('isim');
+    
+    $mail_adres = Input::get('mailAdres');
+    $kontrol = App\Kullanici::where('email',$mail_adres);
+    $firma_id = Input::get('firma_id');
+    $firma = Firma::find($firma_id);
+    
+    if(count($kontrol) == 0){
+        $data = ['firma_adi' => $davetEdilenFirma, 'davet_eden_firma' => $firma->adi];
+        Mail::send('auth.emails.firmaDavet', $data, function($message) use($data,$mail_adres) 
+        {
+            $message->to($mail_adres, $data['davet_eden_firma'])
+            ->subject('FİRMANIZ DAVET EDİLDİ!');
+
+        });
+        $mesaj = "Başarıyla Davet Edildi";
+    }
+    else{
+        $mesaj =  "Bu Firma Sistemimizde Kayıtlıdır.";
+    }
+    return Response::json($mesaj);
+ }); 
 
 Route::get('/firmaOnay/{id}', function ($id) {
  

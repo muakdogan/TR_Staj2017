@@ -2,7 +2,9 @@
 <br>
 <br>
  @section('content')
-  
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css"></link>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
  <style>
 table {
     font-family: arial, sans-serif;
@@ -42,39 +44,23 @@ tr:nth-child(even) {
 </style>
      <div class="container">
          
-             <nav class="navbar navbar-inverse">
-             <div class="container-fluid">
-                 <div class="navbar-header">
-                     <a class="navbar-brand" href="#"><img src='{{asset('images/anasayfa.png')}}'></a>
-                 </div>
-                 <ul class="nav navbar-nav">
-                     
-                     <li class=""><a href="{{ URL::to('firmaProfili', array($firma->id), false)}}">Firma Profili</a></li>
-                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
-                         <ul class="dropdown-menu">
-                             <li><a href="{{ URL::to('ilanlarim', array($firma->id), false)}}">İlanlarım</a></li>
-                             
-                             <li><a href="{{ URL::to('ilanEkle', array($firma->id,'0'), false)}}">İlan Oluştur</a></li>
-                         </ul>
-                     </li>
-                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
-                         <ul class="dropdown-menu">
-                             <li><a href="{{ URL::to('basvurularim', array($firma->id), false)}}">Başvurularım</a></li>
-                             <li><a href="{{url('ilanAra/')}}">Başvur</a></li>
-                             
-                         </ul>
-                     </li>
-                     <li><a href="#">Mesajlar</a></li>
-                     <li><a href="#">Kullanici İşlemleri</a></li>
-                 </ul>
-             </div>
-        </nav>
+             @include('layouts.alt_menu')
               
-          <div class="col-sm-12">
               
               <?php
               
-                        $querys = DB::select(DB::raw("SELECT * 
+                        $basvurular = DB::select(DB::raw("SELECT * 
+                        FROM teklif_hareketler th1
+                        JOIN (
+                        SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
+                        FROM teklifler t, teklif_hareketler th
+                        WHERE t.id = th.teklif_id
+                        AND t.firma_id ='$firma->id'
+                        GROUP BY th.teklif_id
+                        )th2 ON th1.teklif_id = th2.teklif_id
+                        AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
+                        $i=1;
+                        $basvurular_count = DB::select(DB::raw("SELECT count(th1.id) as count
                         FROM teklif_hareketler th1
                         JOIN (
                         SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
@@ -86,68 +72,216 @@ tr:nth-child(even) {
                         AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
                   
               ?>                   
-             <h3>Başvurularım</h3>
-            
-             @foreach($querys as $sonuc)
-                  <hr>
-                  <?php  
-                    $ilan= App\Ilan::find($sonuc->ilanId);
-                    $kullanici_id= Auth::user()->kullanici_id;
-                    $firma_id=$firma->id;
-                    $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
-                            ->where( 'firma_id', '=', $firma_id)
-                            ->select('rol_id')->get();
-                            $rol_id=$rol_id->toArray();              
-                    $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
-                    ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
-                    ->select('roller.adi as rolAdi')->get();
-                    $querys=$querys->toArray();
-                    if($querys != null){
-                        $rol=$querys[0]['rolAdi'];
-                    }   
-                  
-                  
-                   ?>
-                  <p><strong>Firma Adı:</strong>&nbsp;{{$ilan->firmalar->adi}}</p>
-                  <p><strong>İlan Adı:</strong>&nbsp;{{$ilan->adi}}</p>
-                  <p><strong>Başvuru Tarihi:</strong>&nbsp;{{$sonuc->tarih}}</p>
-                  <p><strong>Kaçıncı Sıradayım:</strong>&nbsp;</p>
-                  
-                  
-                    @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
-                        <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button></a>
-                    @endif
-                  <br>
-               @endforeach
-                
-           <!--div class="modal fade" id="myModal-düzenle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title" id="myModalLabel">DÜZENLE</h4>
-                        </div>
-                        <div class="modal-body">
-                            {!! Form::open(array('url'=>'firmaProfili/tanitim/'.$firma->id,'method'=>'POST', 'files'=>true)) !!}
-
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">DENEME</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="tanıtım_yazısı" name="tanıtım_yazısı" placeholder="Tanıtım Yazısı" value="">
-
-                                </div>
-                            </div>
-
-                            {!! Form::submit('Kaydet', array('url'=>'firmaProfili/tanitim/'.$firma->id,'class'=>'btn btn-danger')) !!}
-                            {!! Form::close() !!}
-                        </div>
-                        <div class="modal-footer">                                                            
-                        </div>
-                    </div>
-                </div>
-            </div-->
              
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="panel panel-default">
+                    @foreach($basvurular_count as $count)
+                     <div class="panel-heading"><strong>Başvurularım &nbsp;({{$count->count}} İlan)</strong></div>
+                    @endforeach 
+                    <div class="panel-body">
+            
+                        <table  id="basvurularım" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead style=" font-size: 12px;">
+                                <tr>
+                                    <th>Sıra</th>
+                                    <th>Firma Adı</th>
+                                    <th>İlan Adı</th>
+                                    <th>Başvuru Tarihi</th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+                            <tbody style="font_size:12px">
+                                @foreach($basvurular as $sonuc)
+                                    <?php  
+                                        $ilan= App\Ilan::find($sonuc->ilanId);
+                                        $kullanici_id= Auth::user()->kullanici_id;
+                                        $firma_id=$firma->id;
+                                        $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                                                ->where( 'firma_id', '=', $firma_id)
+                                                ->select('rol_id')->get();
+                                                $rol_id=$rol_id->toArray();              
+                                        $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                                        ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                                        ->select('roller.adi as rolAdi')->get();
+                                        $querys=$querys->toArray();
+                                        if($querys != null){
+                                            $rol=$querys[0]['rolAdi'];
+                                        }   
+                                    ?>
+                                    <tr>
+                                        <td>{{$i++}}</td>
+                                        <td>{{$ilan->firmalar->adi}}</td>
+                                        <td>{{$ilan->adi}}</td>
+                                        <td>{{$sonuc->tarih}}</td>
+                                        <td>
+                                            @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
+                                                <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+            </div> 
+            <?php   $kazananKismi = App\KismiAcikKazanan::where('kazanan_firma_id',$firma->id)->get();
+                    $kazananKismiCount= $kazananKismi->count();
+                    
+                    $kazananKapali = App\KismiKapaliKazanan::where('kazanan_firma_id',$firma->id)->get();
+                    $kazananKismiCount = $kazananKismiCount +($kazananKapali->count());
+                    $i=1;
+            ?>    
+            <div class="panel panel-default">
+                     <div class="panel-heading"><strong>Kazandığım Başvurularım &nbsp;({{$kazananKismiCount}} İlan)</strong></div>
+                  
+                    <div class="panel-body">
+            
+                        <table  id="kazandıgımBasvuru" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead style=" font-size: 12px;">
+                                <tr>
+                                    <th>Sıra</th>
+                                    <th>İlan Adı</th>
+                                    <th>Tarihi Sonuclanma </th>
+                                    <th>Kazanılan Fiyat</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="font_size:12px">
+                                @foreach($kazananKismi as $sonucAcik)
+                                    <?php  
+                                        $ilan= App\Ilan::find($sonucAcik->ilan_id);
+                                        $kullanici_id= Auth::user()->kullanici_id;
+                                        $firma_id=$firma->id;
+                                        $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                                                ->where( 'firma_id', '=', $firma_id)
+                                                ->select('rol_id')->get();
+                                                $rol_id=$rol_id->toArray();              
+                                        $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                                        ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                                        ->select('roller.adi as rolAdi')->get();
+                                        $querys=$querys->toArray();
+                                        if($querys != null){
+                                            $rol=$querys[0]['rolAdi'];
+                                        }   
+                                    ?>
+                                    <tr>
+                                        <td>{{$i++}}</td>
+                                        <td>{{$ilan->adi}}</td>
+                                        <td>{{$sonucAcik->sonuclanma_tarihi}}</td>
+                                        <td><strong> {{number_format($sonucAcik->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
+                                        <td>
+                                            @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
+                                                <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Detay Görüntele</button></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @foreach($kazananKapali as $sonucKapali)
+                                    <?php  
+                                        $ilan= App\Ilan::find($sonucKapali->ilan_id);
+                                        $kullanici_id= Auth::user()->kullanici_id;
+                                        $firma_id=$firma->id;
+                                        $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                                                ->where( 'firma_id', '=', $firma_id)
+                                                ->select('rol_id')->get();
+                                                $rol_id=$rol_id->toArray();              
+                                        $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                                        ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
+                                        ->select('roller.adi as rolAdi')->get();
+                                        $querys=$querys->toArray();
+                                        if($querys != null){
+                                            $rol=$querys[0]['rolAdi'];
+                                        }   
+                                    ?>
+                                    <tr>
+                                        <td>{{$i++}}</td>
+                                        <td>{{$ilan->adi}}</td>
+                                        <td>{{$sonucKapali->sonuclanma_tarihi}}</td>
+                                        <td><strong> {{number_format($sonucKapali->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
+                                        <td>
+                                            @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
+                                                <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Detay Görüntele</button></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+            </div> 
+        </div>
+        <div class="col-sm-3">    
+            <div class="panel panel-default">
+                    <div class="panel-heading"><strong>İstatistik</strong></div>
+                        <div  class="panel-body">
+                            @foreach($basvurular_count as $count)
+                                 <p><strong>Başvurulan İlan Sayısı:</strong>&nbsp;{{$count->count}}</p>
+                            @endforeach 
+                                <p><strong>Kazanılan İlan Sayısı:</strong>&nbsp;{{$kazananKismiCount}}</p>
+                           
+                        </div>
+                </div>
+            
+        </div>    
+     </div>
     </div>
+<script>
+$('#basvurularım').DataTable({  
+        "language": {
+	"sDecimal":        ",",
+	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+	"sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+	"sInfoEmpty":      "Kayıt yok",
+	"sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+	"sInfoPostFix":    "",
+	"sInfoThousands":  ".",
+	"sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+	"sLoadingRecords": "Yükleniyor...",
+	"sProcessing":     "İşleniyor...",
+	"sSearch":         "Ara:",
+	"sZeroRecords":    "Eşleşen kayıt bulunamadı",
+	"oPaginate": {
+		"sFirst":    "İlk",
+		"sLast":     "Son",
+		"sNext":     "Sonraki",
+		"sPrevious": "Önceki"
+	},
+	"oAria": {
+		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+		"sSortDescending": ": azalan sütun soralamasını aktifleştir"
+	}
+    }
+});
+$('#kazandıgımBasvuru').DataTable({  
+       "language": {
+	"sDecimal":        ",",
+	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+	"sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+	"sInfoEmpty":      "Kayıt yok",
+	"sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+	"sInfoPostFix":    "",
+	"sInfoThousands":  ".",
+	"sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+	"sLoadingRecords": "Yükleniyor...",
+	"sProcessing":     "İşleniyor...",
+	"sSearch":         "Ara:",
+	"sZeroRecords":    "Eşleşen kayıt bulunamadı",
+	"oPaginate": {
+		"sFirst":    "İlk",
+		"sLast":     "Son",
+		"sNext":     "Sonraki",
+		"sPrevious": "Önceki"
+	},
+	"oAria": {
+		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+		"sSortDescending": ": azalan sütun soralamasını aktifleştir"
+	}
+    }
+});
+
+</script>
 @endsection
 
 
