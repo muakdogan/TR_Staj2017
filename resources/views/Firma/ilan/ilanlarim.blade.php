@@ -223,8 +223,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                         @foreach($ilanlarım as $ilan)
                             <p>{{$ilan->adi}}</p>
                             <p>{{$ilan->kapanma_tarihi}}</p>
-                           
-                            
                                 <ul>
                                 <li>
                                   <a><button style="float:right" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
@@ -264,19 +262,16 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                         <?php $i=$i+3; ?>
                                       <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
                                       <input type="submit" value="Ok"/>
-                                    {{ Form::close() }}
+                                    {{ Form::close()}}
                                 </div>
                                 </li>
-
-                                </ul>
-
+                               </ul>
                             <br>
                             <hr>
                         @endforeach
                     </div>
                 </div>
-            </div>    
-             
+            </div>
     </div>
 <script>
 $(document).ready( function() {
@@ -299,7 +294,6 @@ $(document).ready( function() {
       $('.dialog').fadeOut(200);
       $('.add').removeClass('active');  
     }
-
     $(document.body).click( function(e) {
          closeMenu();
     });

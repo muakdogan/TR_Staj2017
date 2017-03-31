@@ -57,7 +57,7 @@
                                 <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                             @else
                                 @if($kisKazanCount == 0)
-                                    <td><button name="{{$firmaAdi->id}}" style="float:right" type="button" class="btn btn-info KapaliKazanan">Kazanan</button></td>
+                                    <td><button name="{{$firmaAdi->id}}" id="{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}" style="float:right" type="button" class="btn btn-info KapaliKazanan">Kazanan</button></td>
                                 @elseif($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $firmaAdi->id)
                                     <td>KAZANDI</td>
                                 @endif
@@ -171,7 +171,7 @@
                                         <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                     @else
                                         @if($kisKazanCount == 0)
-                                            <td><button name="{{$firmaAdi->id}}" style="float:right" type="button" class="btn btn-info KapaliAcikRekabetKazanan">Kazanan</button></td>
+                                            <td><button name="{{$firmaAdi->id}}" id="{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}" style="float:right" type="button" class="btn btn-info KapaliAcikRekabetKazanan">Kazanan</button></td>
                                         @elseif($kisKazanCount == 1)
                                             <td></td>
                                         @endif
@@ -276,13 +276,14 @@
     }
     $(".KapaliKazanan").click(function(){
        var kazananFirmaId=$(this).attr("name");
+       var kazananFiyat=$(this).attr("id");
        var ilanID={{$ilan->id}};
        var successValue = $(this);
        if(confirm("Bu firmayı kazanan ilan etmek istediğinize emin misiniz ?")){
             $.ajax({
                 type:"POST",
                 url:"http://localhost:8080/22.11.2016tamrekabet/public/KismiKapaliKazanan",
-                data:{ilan_id:ilanID, kazananFirmaId:kazananFirmaId},
+                data:{ilan_id:ilanID, kazananFirmaId:kazananFirmaId,kazananFiyat:kazananFiyat},
                 cache: false,
                 success: function(data){
                     console.log(data);

@@ -90,8 +90,9 @@
 <body>
     
     <div class="container">
-       <br>
-       <br>
+        <br>
+        <br>
+        @include('layouts.alt_menu') 
         <div class="ajax-loader">
             <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
         </div>
