@@ -13,7 +13,7 @@ use Gate;
 use File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Str;
+
 class FirmaIlanController extends Controller
 {
     //

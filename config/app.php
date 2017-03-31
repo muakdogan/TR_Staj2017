@@ -149,8 +149,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         'Collective\Html\HtmlServiceProvider',
         Yajra\Datatables\DatatablesServiceProvider::class,
-        'Spatie\Activitylog\ActivitylogServiceProvider',
-
         /*
          * Application Service Providers...
          */

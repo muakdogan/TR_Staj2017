@@ -129,7 +129,7 @@
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
                                                     @if($kisKazanCount == 0)
-                                                        <td><button  style="float:right" name="{{$malIdTeklif->ilan_mal_id}}" id="{{$firmaMal->id}}" type="button" class="btn btn-info kazanan kazan{{$malIdTeklif->ilan_mal_id}}">Kazanan</button></td>
+                                                        <td><button  style="float:right" name="{{$malIdTeklif->ilan_mal_id}}_{{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaMal->id}}" type="button" class="btn btn-info kazanan kazan{{$malIdTeklif->ilan_mal_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaMal->id)
                                                         <td>KAZANDI</td>
                                                         
@@ -340,7 +340,7 @@
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
                                                     @if($kisKazanCount == 0)
-                                                        <td><button  style="float:right" name="{{$hizmetIdTeklif->ilan_hizmet_id}}" id="{{$firmaHizmet->id}}" type="button" class="btn btn-info kazanan kazan{{$hizmetIdTeklif->ilan_hizmet_id}}">Kazanan</button></td>
+                                                        <td><button  style="float:right" name="{{$hizmetIdTeklif->ilan_hizmet_id}}_{{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaHizmet->id}}" type="button" class="btn btn-info kazanan kazan{{$hizmetIdTeklif->ilan_hizmet_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaHizmet->id)
                                                         <td>KAZANDI</td>
                                                     @endif
@@ -483,7 +483,7 @@
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
                                                     @if($kisKazanCount == 0)
-                                                        <td><button  style="float:right" name="{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}" id="{{$firmaYapimIsi->id}}" type="button" class="btn btn-info kazanan kazan{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}">Kazanan</button></td>
+                                                        <td><button  style="float:right" name="{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}_{{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaYapimIsi->id}}" type="button" class="btn btn-info kazanan kazan{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaYapimIsi->id)
                                                         <td>KAZANDI</td>
                                                     @endif
@@ -518,7 +518,12 @@
     
 <script>
     $(".kazanan").click(function(){
-       var kalemId=$(this).attr("name");
+       var name=$(this).attr("name");
+       var nameArray = name.split('_');
+       var kalemId = nameArray[0];
+       var kazananFiyat = nameArray[1];
+       alert(kalemId);
+       alert(kazananFiyat);
        var kazananFirmaId=$(this).attr("id");
        var ilanID={{$ilan->id}};
        var successValue = $(this);
@@ -526,7 +531,7 @@
             $.ajax({
                 type:"POST",
                 url:"http://localhost:8080/22.11.2016tamrekabet/public/KismiAcikKazanan",
-                data:{ilan_id:ilanID, kazananFirmaId:kazananFirmaId, kalem_id:kalemId},
+                data:{ilan_id:ilanID, kazananFirmaId:kazananFirmaId, kalem_id:kalemId ,kazanan_fiyat:kazananFiyat},
                 cache: false,
                 success: function(data){
                     console.log(data);

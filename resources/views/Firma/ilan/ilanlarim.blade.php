@@ -589,7 +589,6 @@ var t = setInterval(function () { var ele = document.getElementById("blinker"); 
       $('.dialog').fadeOut(200);
       $('.add').removeClass('active');  
     }
-
     $(document.body).click( function(e) {
          closeMenu();
     });

@@ -53,7 +53,7 @@ Route::group(['middleware' => ['web']], function () {
 
   }]);
 
-Route::resource('kullaniciLog', 'ActivityController');
+//Route::resource('kullaniciLog', 'ActivityController');
  /*Route::get('/kullaniciLog', function () {
       
   $latestActivities = Activity::with('user')->latest()->limit(100)->get();
@@ -841,10 +841,48 @@ Route::get('/firmaOnay/{id}', function ($id) {
         }
         $kalemIdArray = Array();
         foreach ($kalemler as $kalem){
+            if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){
+                $kazanan_fiyat = DB::select(DB::raw("SELECT * 
+                    FROM teklifler t, mal_teklifler mt
+                    WHERE t.id = mt.teklif_id
+                    AND t.firma_id ='$kazanan_firma_id'
+                    AND t.ilan_id ='$ilan_id'
+                    AND mt.ilan_mal_id = '$kalem->id';
+                    ORDER BY tarih DESC 
+                    LIMIT 1"));
+                foreach($kazanan_fiyat as $kznFiyat){
+                    
+                }
+            }elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0){    
+                $kazanan_fiyat = DB::select(DB::raw("SELECT * 
+                    FROM teklifler t, hizmet_teklifler ht
+                    WHERE t.id = ht.teklif_id
+                    AND t.firma_id ='$kazanan_firma_id'
+                    AND t.ilan_id ='$ilan_id'
+                    AND ht.ilan_hizmet_id = '$kalem->id';
+                    ORDER BY tarih DESC 
+                    LIMIT 1"));
+                foreach($kazanan_fiyat as $kznFiyat){
+                    
+                }
+            }elseif($ilan->ilan_turu == 3){
+                $kazanan_fiyat = DB::select(DB::raw("SELECT * 
+                    FROM teklifler t, yapim_isi_teklifler yt
+                    WHERE t.id = yt.teklif_id
+                    AND t.firma_id ='$kazanan_firma_id'
+                    AND t.ilan_id ='$ilan_id'
+                    AND yt.ilan_yapim_isleri_id = '$kalem->id';
+                    ORDER BY tarih DESC 
+                    LIMIT 1"));
+                foreach($kazanan_fiyat as $kznFiyat){
+                    
+                }
+            } 
             $kalemIdArray[]=$kalem->id;
             $kismiKazanan = new App\KismiAcikKazanan();
             $kismiKazanan->ilan_id =$ilan_id ;
             $kismiKazanan->kalem_id = $kalem->id;
+            $kismiKazanan->kazanan_fiyat = $kznFiyat->kdv_dahil_fiyat;
             $kismiKazanan->kazanan_firma_id = $kazanan_firma_id;
             $kismiKazanan->save();
         }
@@ -857,11 +895,13 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $ilan_id = Input::get('ilan_id');
         $ilan = App\Ilan::find($ilan_id);
         $kazanan_firma_id = Input::get('kazananFirmaId');
+        $kazanan_fiyat = Input::get('kazanan_fiyat');
         $kalem_id = Input::get('kalem_id');
         
         $kismiKazanan = new App\KismiAcikKazanan();
         $kismiKazanan->ilan_id =$ilan_id ;
         $kismiKazanan->kalem_id = $kalem_id;
+        $kismiKazanan->kazanan_fiyat = $kazanan_fiyat;
         $kismiKazanan->kazanan_firma_id = $kazanan_firma_id;
         
         $kismiKazanan->save();
@@ -872,9 +912,11 @@ Route::get('/firmaOnay/{id}', function ($id) {
         
         $ilan_id = Input::get('ilan_id');
         $kazanan_firma_id = Input::get('kazananFirmaId');
+        $kazanan_fiyat = Input::get('kazananFiyat');
         
         $kismiKazanan = new App\KismiKapaliKazanan();
         $kismiKazanan->ilan_id =$ilan_id ;
+        $kismiKazanan->kazanan_fiyat =  $kazanan_fiyat;
         $kismiKazanan->kazanan_firma_id = $kazanan_firma_id;
         
         $kismiKazanan->save();
