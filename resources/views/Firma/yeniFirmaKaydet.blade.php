@@ -96,7 +96,8 @@ $('#il_id').on('change', function (e) {
     var il_id = e.target.value;
     
     //ajax
-    $.get('/tamrekabet/public/index.php/ajax-subcat?il_id=' + il_id, function (data) {
+    
+    $.get("{{asset('ajax-subcat?il_id=')}}" + il_id, function (data) {
         //success data
         //console.log(data);
         
@@ -124,7 +125,8 @@ $('#ilce_id').on('change', function (e) {
     var ilce_id = e.target.value;
 
     //ajax
-    $.get('/tamrekabet/public/index.php/ajax-subcatt?ilce_id=' + ilce_id, function (data) {
+     
+    $.get("{{asset('ajax-subcatt?ilce_id=')}}" + ilce_id, function (data) {
         
         beforeSend:( function(){
             $('.ajax-loader').css("visibility", "visible");
@@ -149,7 +151,8 @@ $('#semt_id').on('change', function (e) {
     var semt_id = e.target.value;
 
     //ajax
-    $.get('/tamrekabet/public/index.php/ajax-subcattt?semt_id=' + semt_id, function (data) {
+   
+    $.get("{{asset('ajax-subcattt?semt_id=')}}" + semt_id, function (data) {
         
           beforeSend:( function(){
             $('.ajax-loader').css("visibility", "visible");
@@ -165,10 +168,5 @@ $('#semt_id').on('change', function (e) {
            
         });
 });
-
-
-
-    </script>
-
-
+</script>
 @endsection

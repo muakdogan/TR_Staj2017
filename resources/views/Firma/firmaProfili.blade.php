@@ -158,25 +158,25 @@
                 .progress-pie-chart {
                 margin: 50px auto 0;
                 }
+              
                            
         </style>
    </head>
    <body>
-       
-   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+  
    <div class="container">
        <br>
        <br>
          @include('layouts.alt_menu') 
        <h2>Firma Profili</h2>
-    
    </div>
    <div class="container"> 
     <div class="row">
      <div class="col-sm-8" >
            <div  class="form-group">
                <div class="row">
-                   <div class="col-sm-4" ><img id="logo1" value="azaz" src="../../public/uploads/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"> 
+                   <div class="col-sm-4" ><img id="logo1" value="" src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"> 
                    </div>
                    <div class="col-sm-4"><h3>{{$firma->adi}}</h3></div>
                </div>
@@ -191,8 +191,6 @@
                            </div>
                            <div class="modal-body">
                                <div class="span7 offset1">
-                                  
-                                   
                                    {!! Form::open(array('url'=>'firmaProfili/uploadImage/'.$firma->id,'method'=>'POST', 'files'=>true)) !!}
                                    <div class="control-group">
                                        <div class="controls">
@@ -202,7 +200,7 @@
                                                         <div class="secure"><strong>Mevcut Logonuz</strong></div>
                                                             <br>
                                                             <div style="width:128px;height:128px;"class="image-wrapper">
-                                                                 <img src="../../public/uploads/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;">
+                                                                 <img src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;">
                                                         </div> 
                                                     </div>
                                                     <div class="col-sm-8" >
@@ -1641,7 +1639,7 @@
     </div>
      <div class="col-sm-4" >
               <div  class="panel-group">
-
+                       
                          <div    class="panel panel-default">
                              <div style="background-color: #e5e5e5" class="panel-heading"><img src="{{asset('images/ayar.png')}}">&nbsp;Firma Profil Görünüm Ayarları</div>
                              <div class="panel-body">
@@ -1649,26 +1647,25 @@
                              </div>
                          </div>
                          <div class="panel panel-default">
-                             <div  style="background-color: #e5e5e5;" class="panel-heading"><img src="{{asset('images/doluluk.png')}}">&nbsp;Firma Profili Doluluk Oranı</div>
-                             <div class="panel-body">
-                                 <div class="bar_container">
-                                     <div id="main_container">
-                                         <div id="pbar" class="progress-pie-chart" data-percent="0">
-                                             <div class="ppc-progress">
-                                                 <div class="ppc-progress-fill"></div>
-                                             </div>
-                                             <div class="ppc-percents">
-                                                 <div class="pcc-percents-wrapper">
-                                                     <span>%</span>
-                                                 </div>
-                                             </div>
-                                         </div>
-
-                                         <progress style="display: none" id="progress_bar" value="0" max="1" >
-                                         </progress>
-                                     </div>
-                                 </div>
-                             </div>
+                                <div  style="background-color: #e5e5e5;" class="panel-heading"><img src="{{asset('images/doluluk.png')}}">&nbsp;Firma Profili Doluluk Oranı</div>
+                                <div class="panel-body">
+                                    <div class="bar_container">
+                                        <div id="main_container">
+                                            <div id="pbar" class="progress-pie-chart" data-percent="0">
+                                                <div class="ppc-progress">
+                                                    <div class="ppc-progress-fill"></div>
+                                                </div>
+                                                <div class="ppc-percents">
+                                                    <div class="pcc-percents-wrapper">
+                                                        <span>%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <progress style="display: none" id="progress_bar" value="0" max="1" >
+                                            </progress>
+                                        </div>
+                                    </div>
+                                </div>
                          </div>
                          <div class="panel panel-default">
                              <div  style="background-color: #e5e5e5;" class="panel-heading"><img src="{{asset('images/islem.png')}}">&nbsp;Firma Profili İşlemleri</div>
@@ -1681,9 +1678,7 @@
      </div>
    </div>       
 <script> 
-  
-   
-    $.validate({
+  $.validate({
     modules : 'location, date, security, file',
     onModulesLoaded : function() {
       $('#country').suggestCountry();
@@ -1692,8 +1687,7 @@
   
   $('#presentation').restrictLength( $('#pres-max-length') );
     
-    
-     var total_yuzde=0;
+   
     $( document ).ready(function() {
         
         var max_fields      = 10; //maximum input boxes allowed
@@ -1790,112 +1784,13 @@
         var animate = setInterval(function() {
         loading();
         }, time);
-        
-        
-        
+       
+
     });
-    function GetIlce(il_id) {
-        if (il_id > 0) {
-            $("#ilce_id").get(0).options.length = 0;
-            $("#ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
-
-            $.ajax({
-                type: "GET",
-                url: "/tamrekabet/public/index.php/ajax-subcat?il_id="+il_id,
-
-                contentType: "application/json; charset=utf-8",
-
-                success: function(msg) {
-                    $("#ilce_id").get(0).options.length = 0;
-                    $("#ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
-
-                    $.each(msg, function(index, ilce) {
-                        $("#ilce_id").get(0).options[$("#ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
-                    });
-                },
-                async: false,
-                error: function() {
-                    $("#ilce_id").get(0).options.length = 0;
-                    alert("İlçeler yükelenemedi!!!");
-                }
-            });
-        }
-        else {
-            $("#ilce_id").get(0).options.length = 0;
-        }
-    }
-    
-    function GetSemt(ilce_id) {
-        if (ilce_id > 0) {
-            $("#semt_id").get(0).options.length = 0;
-            $("#semt_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
-
-            $.ajax({
-                type: "GET",
-                url: "/tamrekabet/public/index.php/ajax-subcatt?ilce_id="+ilce_id,
-
-                contentType: "application/json; charset=utf-8",
-
-                success: function(msg) {
-                    $("#semt_id").get(0).options.length = 0;
-                    $("#semt_id").get(0).options[0] = new Option("Seçiniz", "-1");
-
-                    $.each(msg, function(index, semt) {
-                        $("#semt_id").get(0).options[$("#semt_id").get(0).options.length] = new Option(semt.adi, semt.id);
-                    });
-                },
-                async: false,
-                error: function() {
-                    $("#semt_id").get(0).options.length = 0;
-                    alert("Semtler yükelenemedi!!!");
-                }
-            });
-        }
-        else {
-            $("#semt_id").get(0).options.length = 0;
-        }
-    }
-
-    function populateDD(){
-        GetIlce({{$firmaAdres->iller->id}});
-        GetSemt({{$firmaAdres->ilceler->id}});
-        $("#il_id").val({{$firmaAdres->iller->id}});
-        $("#ilce_id").val({{$firmaAdres->ilceler->id}});
-        $("#semt_id").val({{$firmaAdres->semtler->id}});
-    }
-    $('#addImage').on('change', function(evt) {
-    var selectedImage = evt.currentTarget.files[0];
-    var imageWrapper = document.querySelector('.image-wrapper');
-    var theImage = document.createElement('img');
-    imageWrapper.innerHTML = '';
-
-    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
-    if (regex.test(selectedImage.name.toLowerCase())) {
-      if (typeof(FileReader) != 'undefined') {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            theImage.id = 'new-selected-image';
-            theImage.src = e.target.result;
-            imageWrapper.appendChild(theImage);
-          }
-          //
-        reader.readAsDataURL(selectedImage);
-      } else {
-        //-- Let the user knwo they cannot peform this as browser out of date
-        console.log('browser support issue');
-      }
-    } else {
-      //-- no image so let the user knwo we need one...
-      $(this).prop('value', null);
-      console.log('please select and image file');
-    }
-
-  });
-  
-    var total_row=44; 
-    var dolu_row=0;
-    
-    function dolulukForm(){
+        var total_row=44; 
+        var dolu_row=0;
+        var total_yuzde=0; 
+        function dolulukForm(){
      
         var logo1 = document.getElementById("logo1").src;
         
@@ -2001,8 +1896,6 @@
         var calisma_sayisi=$('#calisma_sayisi').val(); 
         
         var bilgilendirme_tercihi=$('#bilgilendirme_tercihi').val(); 
-        
-        
         
         if(logo1 != null ){
              dolu_row++
@@ -2143,12 +2036,122 @@
        var total_dolu_row=dolu_row;
        var hesaplama=(total_dolu_row/total_row)*100;
        total_yuzde=hesaplama.toFixed(0);
+       funcDolulukKayıt()
        
     }
-  
-  
-</script>
+   function funcDolulukKayıt(){             
+    $.ajax({
+        type:"POST",
+        url: "{{asset('doluluk_orani')}}"+"/"+{{$firma->id}},
+        data:{doluluk_orani:total_yuzde},
+        cache: false,
+        success: function(data){
+           console.log(data);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        }
+    });
+    }
 
+    
+    function GetIlce(il_id) {
+        if (il_id > 0) {
+            $("#ilce_id").get(0).options.length = 0;
+            $("#ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+
+            $.ajax({
+                type: "GET",
+                url: "{{asset('ajax-subcat?il_id=')}}"+il_id,
+
+                contentType: "application/json; charset=utf-8",
+
+                success: function(msg) {
+                    $("#ilce_id").get(0).options.length = 0;
+                    $("#ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
+
+                    $.each(msg, function(index, ilce) {
+                        $("#ilce_id").get(0).options[$("#ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
+                    });
+                },
+                async: false,
+                error: function() {
+                    $("#ilce_id").get(0).options.length = 0;
+                    alert("İlçeler yükelenemedi!!!");
+                }
+            });
+        }
+        else {
+            $("#ilce_id").get(0).options.length = 0;
+        }
+    }
+    
+    function GetSemt(ilce_id) {
+        if (ilce_id > 0) {
+            $("#semt_id").get(0).options.length = 0;
+            $("#semt_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+
+            $.ajax({
+                type: "GET",
+                url: "{{asset('ajax-subcatt?ilce_id=')}}"+ilce_id,
+
+                contentType: "application/json; charset=utf-8",
+
+                success: function(msg) {
+                    $("#semt_id").get(0).options.length = 0;
+                    $("#semt_id").get(0).options[0] = new Option("Seçiniz", "-1");
+
+                    $.each(msg, function(index, semt) {
+                        $("#semt_id").get(0).options[$("#semt_id").get(0).options.length] = new Option(semt.adi, semt.id);
+                    });
+                },
+                async: false,
+                error: function() {
+                    $("#semt_id").get(0).options.length = 0;
+                    alert("Semtler yükelenemedi!!!");
+                }
+            });
+        }
+        else {
+            $("#semt_id").get(0).options.length = 0;
+        }
+    }
+
+    function populateDD(){
+        GetIlce({{$firmaAdres->iller->id}});
+        GetSemt({{$firmaAdres->ilceler->id}});
+        $("#il_id").val({{$firmaAdres->iller->id}});
+        $("#ilce_id").val({{$firmaAdres->ilceler->id}});
+        $("#semt_id").val({{$firmaAdres->semtler->id}});
+    }
+    $('#addImage').on('change', function(evt) {
+    var selectedImage = evt.currentTarget.files[0];
+    var imageWrapper = document.querySelector('.image-wrapper');
+    var theImage = document.createElement('img');
+    imageWrapper.innerHTML = '';
+
+    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+    if (regex.test(selectedImage.name.toLowerCase())) {
+      if (typeof(FileReader) != 'undefined') {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            theImage.id = 'new-selected-image';
+            theImage.src = e.target.result;
+            imageWrapper.appendChild(theImage);
+          }
+          //
+        reader.readAsDataURL(selectedImage);
+      } else {
+        //-- Let the user knwo they cannot peform this as browser out of date
+        console.log('browser support issue');
+      }
+    } else {
+      //-- no image so let the user knwo we need one...
+      $(this).prop('value', null);
+      console.log('please select and image file');
+    }
+  });
+</script>
 </body>
 </html>
 @endsection

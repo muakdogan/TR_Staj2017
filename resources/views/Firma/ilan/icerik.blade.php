@@ -22,7 +22,7 @@
        
       $.ajax({      
           type:"GET",
-          url: "ilanAraFiltre",
+          url: "{{asset('ilanAraFiltre')}}",
           data:{"il":il_id},
           cache: false,
           success: function(){

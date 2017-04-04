@@ -114,7 +114,7 @@ tr:nth-child(even) {
                                         <td>{{$i++}}</td>
                                         <td>{{$ilan->firmalar->adi}}</td>
                                         <td>{{$ilan->adi}}</td>
-                                        <td>{{$sonuc->tarih}}</td>
+                                        <td>{{date('d-m-Y', strtotime($sonuc->tarih))}}</td>
                                         <td>
                                             @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
                                                 <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Düzenle</button></a>
@@ -143,7 +143,7 @@ tr:nth-child(even) {
                                 <tr>
                                     <th>Sıra</th>
                                     <th>İlan Adı</th>
-                                    <th>Tarihi Sonuclanma </th>
+                                    <th>Sonuclanma Tarihi</th>
                                     <th>Kazanılan Fiyat</th>
                                     <th></th>
                                 </tr>
@@ -179,7 +179,7 @@ tr:nth-child(even) {
                                     <tr>
                                         <td>{{$i++}}</td>
                                         <td>{{$ilan->adi}} ilanının {{$kalem->marka}} kalemi</td>
-                                        <td>{{$sonucAcik->sonuclanma_tarihi}}</td>
+                                        <td>{{date('d-m-Y', strtotime($sonucAcik->sonuclanma_tarihi))}}</td>
                                         <td><strong> {{number_format($sonucAcik->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
                                         <td>
                                             @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')

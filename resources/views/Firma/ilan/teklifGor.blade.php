@@ -90,8 +90,6 @@ tr:nth-child(even) {
                                         Kdv hariç fiyat {{$teklifhareket->kdv_haric_fiyat}}
                                       </p>
                                       <h5>Daha önce verilen teklifler</h5>
-                                        
-                                         
                                     </div>
                                 </td>
                             </tr>

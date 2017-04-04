@@ -214,6 +214,18 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
      .test + .tooltip.bottom > .tooltip-arrow {
             border-bottom: 5px solid green;
      }
+     @keyframes fontbulger {
+        0%, 100% {
+          font-size: 10px;
+        }
+        50% {
+          font-size: 12px;
+        }
+    }
+    #box {
+       animation: fontbulger 2s infinite;
+        font-weight: bold;
+    }
 
 
 </style>
@@ -285,12 +297,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             <tr>
                                 <td>{{$i++}}</td>
                                 <td>{{$aktif_ilan->ilan_adi}}</td>
-                                <td>{{$aktif_ilan->kapanma_tarihi}}</td>
+                                
+                                <td>{{date('d- m -Y', strtotime($aktif_ilan->kapanma_tarihi))}}</td>
                                 <td>{{$ilanTeklifsayısı}}</td>
                                 @if($aktif_ilan->kapanma_tarihi > $dt)
                                    <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
                                 @else
-                                <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info"><span class="">Kazananı İlan Et</span></button></a></td>
+                                <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
 
                                 @endif
                             </tr>
@@ -365,7 +378,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                     @foreach($sonucTarihi as $sonuclanma)
                                         <?php $kazananFiyat+=$sonuclanma->kazanan_fiyat?>
                                     @endforeach
-                                     <td>{{$sonuclanma->sonuclanma_tarihi}}</td>
+                                    
+                                     <td>{{date('d-m-Y', strtotime($sonuclanma->sonuclanma_tarihi))}}</td>
                                     <?php 
                                          if(count($sonucTarihi)!= 0){
                                           $sonucFirma=  App\Firma::find($sonuclanma->kazanan_firma_id); 
@@ -390,7 +404,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                        }
                                     ?>
                                     @foreach($sonucTarihiKapali as $sonucKapali)
-                                    <td>{{$sonucKapali->sonuclanma_tarihi}}</td>
+                                    
+                                    <td>{{date('d-m-Y', strtotime($sonucKapali->sonuclanma_tarihi))}}</td>
                                     @endforeach
                                 @endif
                                 <td>{{$ilanTeklif}}</td>

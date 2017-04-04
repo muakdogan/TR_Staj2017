@@ -336,11 +336,11 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                              </tr>
                              <tr>
                                  <td>İlan Yayınlama Tarihi:</td>
-                                 <td>{{$ilan->yayin_tarihi}}</td>
+                                 <td>{{date('d-m-Y', strtotime($ilan->yayin_tarihi))}}</td>
                              </tr>
                              <tr>
                                  <td>İlan Kapanma Tarihi:</td>
-                                 <td>{{$ilan->kapanma_tarihi}}</td>
+                                 <td>{{date('d-m-Y', strtotime($ilan->kapanma_tarihi))}}</td>
                              </tr>
                              <tr>
                                  <td>İlan Açıklaması:</td>
@@ -414,11 +414,11 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                              </tr>
                              <tr>
                                  <td>İş Başlama Tarihi:</td>
-                                 <td>{{$ilan->is_baslama_tarihi}}</td>
+                                 <td>{{date('d-m-Y', strtotime($ilan->is_baslama_tarihi))}}</td>
                              </tr>
                              <tr>
                                  <td>İş Bitiş Tarihi:</td>
-                                 <td>{{$ilan->is_bitis_tarihi}}</td>
+                                 <td>{{date('d-m-Y', strtotime($ilan->is_bitis_tarihi))}}</td>
                              </tr>
                       
                                 
@@ -452,7 +452,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                     <div class="panel panel-warning" >
                         <div class="panel-heading">{{$ilan->firmalar->adi}} Profili</div>
                         <div class="panel-body">
-                            <div class="" ><img src="/22.11.2016tamrekabet/public/uploads/{{$ilan->firmalar->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
+                            <div class="" ><img src="{{asset('uploads')}}/{{$ilan->firmalar->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
                             <div>
                                 <br>
                                 <Strong>Firmaya ait ilan sayısı:</strong> {{$ilan->firmalar->ilanlar()->count()}}
@@ -806,7 +806,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
        var selected = $("#radioDiv input[type='radio']:checked").val();
         $.ajax({
             type:"GET",
-            url: "../set_session",
+            url: "{{asset('set_session')}}",
             data: { role: selected },
             }).done(function(data){
                 $('#myModalSirketListe').modal('toggle');
@@ -878,7 +878,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                     alert('success');
                     $.ajax(
                         {
-                            url : "/22.11.2016tamrekabet/public/rekabet/" + ilan_id,
+                           
+                            url : "{{asset('rekabet')}}" + ilan_id,
                             type: "GET",
                             success:function(data, textStatus, jqXHR) 
                             {
