@@ -1,4 +1,4 @@
-
+<?php $puanNumber = 0;?>
     @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
     <h3>Fiyat İstenen Kalemler Rekabet Listesi</h3>
        <table class="table table-condensed" style="border-collapse:collapse;" >
@@ -18,7 +18,7 @@
                     $kismiCount =1;
                     $kullanici_id=Auth::user()->kullanici_id;
                     $firma_id = session()->get('firma_id');?>
-                    <?php $puanCount=0; ?>
+                    
                     @foreach($ilan->ilan_mallar as $ilan_mal)
 
                     <tr style="background-color:#e6e0d4 "data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
@@ -48,21 +48,23 @@
                     <tr>
                         <td colspan="8" class="hiddenRow">
                             <div class="accordian-body collapse" id="kalem{{$kismiCount}}">
-                                <!--Mal kalemleri çekme sorgusu -->
+                                                                                        <!--Mal kalemleri çekme sorgusu -->
                                 <?php 
                                 $malIdTeklifler= DB::select(DB::raw("SELECT * 
-                                    FROM mal_teklifler
+                                    FROM mal_teklifler mt, teklifler t
                                     WHERE ilan_mal_id ='$ilan_mal->id'
-                                    AND id
+                                    AND t.id = mt.teklif_id
+                                    AND t.ilan_id ='$ilan->id'
+                                    AND mt.id
                                     IN (
-                                        
+
                                     SELECT MAX( id ) 
                                     FROM mal_teklifler
                                     GROUP BY teklif_id, ilan_mal_id
                                     )
-                                    ORDER BY kdv_dahil_fiyat ASC  "));
+                                    ORDER BY kdv_dahil_fiyat ASC "));
                                     $malIdCount=1;
-                                    $puanNumber = 0;
+                                    
                                 ?>
                                 
                                 <table>
@@ -132,65 +134,70 @@
                                                         <td><button  style="float:right" name="{{$malIdTeklif->ilan_mal_id}}_{{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaMal->id}}" type="button" class="btn btn-info kazanan kazan{{$malIdTeklif->ilan_mal_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaMal->id)
                                                         <td>KAZANDI</td>
-                                                        
-                                                        <td>
+                                                        <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->id)->where('firma_id',$firmaMal->id)->get();  ///////////// Daha önce yorum
+                                                              $existPuan = \App\Puanlama::where('ilan_id',$ilan->id)->where('firma_id',$firmaMal->id)->get(); ///////yapılmış mı onun kontrolü
+                                                        ?>
+                                                        @if(count($existPuan) != 0 || count($existYorum) != 0)
+                                                            <td>
                                                            <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$puanNumber}}">Puan Ver/Yorum Yap</button></a>
+                                                        @endif    
                                                             <div class="modal fade" id="myModalForm{{$puanNumber}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div style="background-color: #fcf8e3;" class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                <h4 style="font-size:14px" class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Puanla/Yorum Yap</strong></h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
-                                                    
-                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
-                                                      <div class="row col-lg-12">
-                                                        <div class="col-lg-3">
-                                                            <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
-                                                          <div id="puanlama">
-                                                              <div class="sliders" id="k{{$puanNumber}}"></div>
-                                                              <input type="hidden" id="puan1" name="puan1" value="5"/>
-                                                          </div>
-                                                        </div>  
-                                                        <div class="col-lg-3" style="border-color:#ddd">
-                                                            <label1 name="kriter2" type="text"><br>Teslimat</label1>
-                                                          <div id="puanlama">
-                                                              <div class="sliders" id="k{{$puanNumber+1}}"></div>
-                                                              <input type="hidden" id="puan2" name="puan2" value="5"/>
-                                                          </div>
-                                                        </div> 
-                                                        <div class="col-lg-3">
-                                                            <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
-                                                          <div id="puanlama">
-                                                              <div class="sliders" id="k{{$puanNumber+2}}"></div>
-                                                              <input type="hidden" id="puan3" name="puan3" value="5"/>
-                                                          </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
-                                                          <div id="puanlama">
-                                                              <div class="sliders" id="k{{$puanNumber+3}}"></div>
-                                                              <input type="hidden" id="puan4" name="puan4" value="5"/>
-                                                          </div>
-                                                        </div> 
-                                                      </div>
-                                                   
-                                                        <?php $puanNumber=$puanNumber+3; ?>
-                                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
-                                                      <input type="submit" value="Ok"/>
-                                                    {{ Form::close() }}
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">                                                            
-                                            </div>
-                                        </div>
-                                    </div>
-                                 </div>
-                                                        </td>
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div style="background-color: #fcf8e3;" class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                                            <h4 style="font-size:14px" class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Puanla/Yorum Yap</strong></h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
+
+                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$firmaMal->id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                                                  <div class="row col-lg-12">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber}}"></div>
+                                                                                          <input type="hidden" id="puan1" name="puan1" value="5"/>
+                                                                                      </div>
+                                                                                    </div>  
+                                                                                    <div class="col-lg-3" style="border-color:#ddd">
+                                                                                        <label1 name="kriter2" type="text"><br>Teslimat</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+1}}"></div>
+                                                                                          <input type="hidden" id="puan2" name="puan2" value="5"/>
+                                                                                      </div>
+                                                                                    </div> 
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+2}}"></div>
+                                                                                          <input type="hidden" id="puan3" name="puan3" value="5"/>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+3}}"></div>
+                                                                                          <input type="hidden" id="puan4" name="puan4" value="5"/>
+                                                                                      </div>
+                                                                                    </div> 
+                                                                                  </div>
+
+
+                                                                                  <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
+                                                                                  <input type="submit" value="Ok"/>
+                                                                                {{ Form::close() }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td><?php $puanNumber=$puanNumber+3;?>
+                                                        @endif
                                                     @endif
-                                                @endif
+                                                
                                             @else
                                                 <td>
                                                     {{$malIdCount++}}
@@ -261,9 +268,11 @@
                                 <!--Hizmet kalemleri çekme sorgusu -->
                                 <?php 
                                 $hizmetIdTeklifler= DB::select(DB::raw("SELECT * 
-                                    FROM hizmet_teklifler
+                                    FROM hizmet_teklifler ht , teklifler t
                                     WHERE ilan_hizmet_id ='$ilan_hizmet->id'
-                                    AND id
+                                    AND ht.teklif_id = t.id 
+                                    AND t.ilan_id = '$ilan->id'
+                                    AND ht.id
                                     IN (
                                         
                                     SELECT MAX( id ) 
@@ -343,6 +352,67 @@
                                                         <td><button  style="float:right" name="{{$hizmetIdTeklif->ilan_hizmet_id}}_{{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaHizmet->id}}" type="button" class="btn btn-info kazanan kazan{{$hizmetIdTeklif->ilan_hizmet_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaHizmet->id)
                                                         <td>KAZANDI</td>
+                                                        <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->id)->where('firma_id',$firmaHizmet->id)->get();  ///////////// Daha önce yorum
+                                                              $existPuan = \App\Puanlama::where('ilan_id',$ilan->id)->where('firma_id',$firmaHizmet->id)->get(); ///////yapılmış mı onun kontrolü
+                                                        ?>
+                                                        @if(count($existPuan) != 0 || count($existYorum) != 0)
+                                                            <td>
+                                                           <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$puanNumber}}">Puan Ver/Yorum Yap</button></a>
+                                                        @endif 
+                                                            <div class="modal fade" id="myModalForm{{$puanNumber}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div style="background-color: #fcf8e3;" class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                                            <h4 style="font-size:14px" class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Puanla/Yorum Yap</strong></h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
+
+                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$firmaHizmet->id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                                                  <div class="row col-lg-12">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber}}"></div>
+                                                                                          <input type="hidden" id="puan1" name="puan1" value="5"/>
+                                                                                      </div>
+                                                                                    </div>  
+                                                                                    <div class="col-lg-3" style="border-color:#ddd">
+                                                                                        <label1 name="kriter2" type="text"><br>Teslimat</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+1}}"></div>
+                                                                                          <input type="hidden" id="puan2" name="puan2" value="5"/>
+                                                                                      </div>
+                                                                                    </div> 
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+2}}"></div>
+                                                                                          <input type="hidden" id="puan3" name="puan3" value="5"/>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+3}}"></div>
+                                                                                          <input type="hidden" id="puan4" name="puan4" value="5"/>
+                                                                                      </div>
+                                                                                    </div> 
+                                                                                  </div>
+
+
+                                                                                  <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
+                                                                                  <input type="submit" value="Ok"/>
+                                                                                {{ Form::close() }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                             </div>
+                                                        </td><?php $puanNumber=$puanNumber+3;?>
                                                     @endif
                                                 @endif
                                             @else
@@ -406,9 +476,11 @@
                                 <!--Hizmet kalemleri çekme sorgusu -->
                                 <?php 
                                 $yapimIsiIdTeklifler= DB::select(DB::raw("SELECT * 
-                                    FROM yapim_isi_teklifler
+                                    FROM yapim_isi_teklifler yt, teklifler t
                                     WHERE ilan_yapim_isleri_id ='$ilan_yapim_isi->id'
-                                    AND id
+                                    AND t.id = yt.teklif_id
+                                    AND t.ilan_id = '$ilan->id'
+                                    AND yt.id
                                     IN (
                                         
                                     SELECT MAX( id ) 
@@ -486,6 +558,66 @@
                                                         <td><button  style="float:right" name="{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}_{{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaYapimIsi->id}}" type="button" class="btn btn-info kazanan kazan{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}">Kazanan</button></td>
                                                     @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaYapimIsi->id)
                                                         <td>KAZANDI</td>
+                                                        <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->id)->where('firma_id',$firmaYapimIsi->id)->get();  ///////////// Daha önce yorum
+                                                              $existPuan = \App\Puanlama::where('ilan_id',$ilan->id)->where('firma_id',$firmaYapimIsi->id)->get(); ///////yapılmış mı onun kontrolü
+                                                        ?>
+                                                        @if(count($existPuan) != 0 || count($existYorum) != 0)
+                                                            <td>
+                                                                <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$puanNumber}}">Puan Ver/Yorum Yap</button></a>
+                                                        @endif <div class="modal fade" id="myModalForm{{$puanNumber}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div style="background-color: #fcf8e3;" class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                                            <h4 style="font-size:14px" class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Puanla/Yorum Yap</strong></h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
+
+                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$firmaYapimIsi->id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                                                  <div class="row col-lg-12">
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber}}"></div>
+                                                                                          <input type="hidden" id="puan1" name="puan1" value="5"/>
+                                                                                      </div>
+                                                                                    </div>  
+                                                                                    <div class="col-lg-3" style="border-color:#ddd">
+                                                                                        <label1 name="kriter2" type="text"><br>Teslimat</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+1}}"></div>
+                                                                                          <input type="hidden" id="puan2" name="puan2" value="5"/>
+                                                                                      </div>
+                                                                                    </div> 
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+2}}"></div>
+                                                                                          <input type="hidden" id="puan3" name="puan3" value="5"/>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-3">
+                                                                                        <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
+                                                                                      <div id="puanlama">
+                                                                                          <div class="sliders" id="k{{$puanNumber+3}}"></div>
+                                                                                          <input type="hidden" id="puan4" name="puan4" value="5"/>
+                                                                                      </div>
+                                                                                    </div> 
+                                                                                  </div>
+
+
+                                                                                  <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
+                                                                                  <input type="submit" value="Ok"/>
+                                                                                {{ Form::close() }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                             </div>
+                                                        </td><?php $puanNumber=$puanNumber+3;?>
                                                     @endif
                                                 @endif
                                             @else
@@ -551,12 +683,9 @@
     
      $(document).ready(function() {
     
-    $('.add').click(function(){
-          $('#myModal-add').modal('show');
-        });
+    
         
-         var length={{$puanNumber}};
-        for(var key=0; key<{{$puanNumber}}; key++){
+        for(var key=0; key<{{$puanNumber}}; key=key+4){
             $('#'+key).click(function(e){
                 var j = $(this).attr('id');
               e.stopPropagation();
@@ -564,7 +693,7 @@
                 $('#dialog'+j).fadeOut(200);
                 $(this).removeClass('active');
              } else {
-                $('#modalForm'+j).modal('show');
+                $('#myModalForm'+j).modal('show');
                 $('#dialog'+j).delay(300).fadeIn(200);
                 $(this).addClass('active');
              }

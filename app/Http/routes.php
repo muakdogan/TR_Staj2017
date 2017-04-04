@@ -509,12 +509,17 @@ Route::get('/firmaOnay/{id}', function ($id) {
     
    Route::get('ilanlarim/{id}' ,function ($id) {
         $firma = Firma::find($id);
-     
+        if (Gate::denies('show', $firma)) {
+              return Redirect::to('/');
+        }
         return view('Firma.ilan.ilanlarim')->with('firma', $firma);
         
     });
      Route::get('basvurularim/{id}' ,function ($id) {
         $firma = Firma::find($id);
+        if (Gate::denies('show', $firma)) {
+              return Redirect::to('/');
+        }
         $teklifler=  \App\Teklif::all();
         //$kullanici = App\Kullanici::find($kul_id); 
         $detaylar = App\MalTeklif::all();
@@ -780,12 +785,11 @@ Route::get('/firmaOnay/{id}', function ($id) {
     return;
     });
 //////////////////////////////////////Puan Yorum //////////////////////
-    Route::post('/yorumPuan/{yorum_firma_id}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$ilan_id,$kullanici_id,Request $request) {
+    Route::post('/yorumPuan/{yorum_firma_id}/{yorum_yapilan_firma}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$yorum_yapilan_firma,$ilan_id,$kullanici_id,Request $request) {
         $now = new \DateTime();
-        $ilan= App\Ilan::find($ilan_id);
         
         $puan = new App\Puanlama();
-        $puan->firma_id=$ilan->firmalar->id;
+        $puan->firma_id=$yorum_yapilan_firma;
         $puan->ilan_id=$ilan_id;
         $puan->yorum_yapan_firma_id=$yorum_firma_id;
         $puan->yorum_yapan_kullanici_id=$kullanici_id;
@@ -797,7 +801,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
         $puan->save();
         
         $yorum = new App\Yorum();
-        $yorum->firma_id=$ilan->firmalar->id;
+        $yorum->firma_id=$yorum_yapilan_firma;
         $yorum->ilan_id=$ilan_id;
         $yorum->yorum_yapan_firma_id=$yorum_firma_id;
         $yorum->yorum_yapan_kullanici_id=$kullanici_id;

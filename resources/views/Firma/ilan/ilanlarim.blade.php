@@ -235,19 +235,25 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                            $ilanlarFirma = $firma->ilanlar()->
                            orderBy('yayin_tarihi','desc')->limit('5')->get();
                            
-                          $aktif_ilanlar= DB::select(DB::raw("SELECT *,i.id as ilan_id , i.adi as ilan_adi
-                                FROM ilanlar i, firmalar f
-                                WHERE f.id = i.firma_id
-                                AND f.id ='$firma->id'
-                                AND NOT 
-                                EXISTS (
+                          $aktif_ilanlar= DB::select(DB::raw("SELECT * , i.id AS ilan_id, i.adi AS ilan_adi
+                            FROM ilanlar i, firmalar f
+                            WHERE f.id = i.firma_id
+                            AND f.id ='$firma->id'
+                            AND NOT 
+                            EXISTS (
 
-                                SELECT * 
-                                FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
-                                WHERE ka.ilan_id = i.id
-                                OR kk.ilan_id = i.id
-                                )
-                                ORDER BY i.kapanma_tarihi ASC"));
+                            SELECT * 
+                            FROM kismi_kapali_kazananlar kk
+                            WHERE kk.ilan_id = i.id
+                            )
+                            AND NOT 
+                            EXISTS (
+
+                            SELECT * 
+                            FROM kismi_acik_kazananlar ka
+                            WHERE ka.ilan_id = i.id
+                            )
+                            ORDER BY i.kapanma_tarihi ASC "));
                            $aktif_count= DB::select(DB::raw("SELECT COUNT( i.id ) AS count
                                 FROM ilanlar i, firmalar f
                                 WHERE f.id = i.firma_id
@@ -309,30 +315,23 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 
                 <?php 
                            $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
-                           $sonuc_ilanlar=DB::select(DB::raw("SELECT * , i.id AS ilan_id, i.adi AS ilan_adi
-                            FROM ilanlar i, firmalar f
+                           $sonuc_ilanlar=DB::select(DB::raw("SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
+                            FROM ilanlar i, firmalar f, kismi_kapali_kazananlar kk
                             WHERE f.id = i.firma_id
+                            AND kk.ilan_id = i.id
                             AND f.id ='$firma->id'
-                            AND 
-                            EXISTS (
-
-                            SELECT * 
-                            FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
-                            WHERE ka.ilan_id = i.id
-                            OR kk.ilan_id = i.id
-                            )"));
-                           $sonuc_kapali=DB::select(DB::raw("SELECT count(i.id) as count
-                            FROM ilanlar i, firmalar f
+                            UNION 
+                            SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
+                            FROM ilanlar i, firmalar f, kismi_acik_kazananlar ka
                             WHERE f.id = i.firma_id
+                            AND ka.ilan_id = i.id
                             AND f.id ='$firma->id'
-                            AND 
-                            EXISTS (
-
-                            SELECT * 
-                            FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
-                            WHERE ka.ilan_id = i.id
-                            OR kk.ilan_id = i.id
-                            )"));
+                            ORDER BY kapanma_tarihi ASC "));
+                           
+                            $sonuc_kapali = 0;
+                            foreach($sonuc_ilanlar as $sonucIla){
+                             $sonuc_kapali++;
+                            }
                            
                             $i=0;
                             $kullanici_id=Auth::user()->kullanici_id;
@@ -342,9 +341,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 
             
                 <div class="panel panel-default">
-                    @foreach($sonuc_kapali as $count)
-                     <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$count->count}} İlan)</strong></div>
-                    @endforeach
+                    <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$sonuc_kapali}} İlan)</strong></div>
                     <div class="panel-body">
                         <table id="sonuc" class="table table-striped table-bordered" cellspacing="0" width="100%">
                         <thead style=" font-size:12px">
@@ -362,7 +359,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             @foreach($sonuc_ilanlar as $ilan)
                             <tr>
                                 <?php 
-                                    $sIlan=  \App\Ilan::find($ilan->ilan_id);
+                                    $sIlan =  \App\Ilan::find($ilan->ilan_id);
                                     if(count($sIlan)!= 0){
                                         $ilanTeklif= $sIlan->teklifler()->count();
                                     }
@@ -373,7 +370,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                 ?>
                                 <td>{{ $j++}}</td>
                                 <td>{{$ilan->ilan_adi}}</td>
-                                @if($ilan->kismi_fiyat == 1 ) <!--Kismi Açık -->
+                                @if($sIlan->kismi_fiyat == 1 ) <!--Kismi Açık -->
                                     <?php 
                                         $kazananFiyat=0;
                                         $sonucTarihi = App\KismiAcikKazanan::where('ilan_id',$ilan->ilan_id)->get();
@@ -413,17 +410,25 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                 @endif
                                 <td>{{$ilanTeklif}}</td>
                                
-                                @if($ilan->kismi_fiyat == 1 )
+                                @if($sIlan->kismi_fiyat == 1 )
                                     <td><strong> {{number_format($kazananFiyat,2,'.','')}}</strong> &#8378;</td>
                                     <td>Optimum Fiyat</td>
                                 @else
                                     <td><strong> {{number_format($sonucKapali->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
                                     <td>{{$sonucFirma->adi}}</td>
                                 @endif
-                                
+                                <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->ilan_id)->where('firma_id',$sonucFirma)->get();  ///////////// Daha önce yorum
+                                        $existPuan = \App\Puanlama::where('ilan_id',$ilan->ilan_id)->where('firma_id',$sonucFirma)->get(); ///////yapılmış mı onun kontrolü
+                                  ?>
                                 <td>
-                                  <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
-                                  <div class="modal fade" id="myModal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    @if(count($existPuan) != 0 || count($existYorum) != 0)
+                                        @if($sIlan->kismi_fiyat == 1 )
+                                          <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
+                                        @else
+                                          <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
+                                        @endif
+                                    @endif
+                                <div class="modal fade" id="modalForm{{$i}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div style="background-color: #fcf8e3;" class="modal-header">
@@ -433,7 +438,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                             <div class="modal-body">
                                                 <div class="dialog" id="dialog{{$i++}}" style="display:none">
                                                     
-                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$sonucFirma.'/'.$ilan->ilan_id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                                       <div class="row col-lg-12">
                                                         <div class="col-lg-3">
                                                             <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
@@ -509,9 +514,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             @foreach($aktif_count as $count)
                                 <p><strong>Aktif İlan Sayısı:</strong>&nbsp;{{$count->count}}</p>
                             @endforeach
-                            @foreach($sonuc_kapali as $count)
-                                <p><strong>Sonuçlanmış İlan Sayısı:</strong>&nbsp;{{$count->count}}</p>
-                            @endforeach
+                                <p><strong>Sonuçlanmış İlan Sayısı:</strong>&nbsp;{{$sonuc_kapali}}</p>
                             <?php $toplamIlan=$firma->ilanlar()->count(); ?>
                             <p><strong>Toplam İlan Sayısı:</strong>&nbsp;{{$toplamIlan}}</p>
                         </div>
@@ -521,7 +524,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     </div>
 <script>
 $(document).ready( function() {
-       
+
     $('[data-toggle="tooltip"]').tooltip();   
 
       
@@ -604,6 +607,7 @@ var t = setInterval(function () { var ele = document.getElementById("blinker"); 
       $('.dialog').fadeOut(200);
       $('.add').removeClass('active');  
     }
+
     $(document.body).click( function(e) {
          closeMenu();
     });
