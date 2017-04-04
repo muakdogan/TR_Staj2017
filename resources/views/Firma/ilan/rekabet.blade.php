@@ -25,11 +25,12 @@
                 @foreach($teklifler as $teklif)
                     <?php $teklifFirma = App\Teklif::find($teklif->teklif_id);
                             $firmaAdi = App\Firma::find($teklifFirma->firma_id);?>
-                    <?php $j++; $i++; ?>
+                    <?php $j++;  ?>
                     <?php $verilenFiyat = $teklifFirma->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
                         
+                    
                     ?>
-                    <?php $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get();
+                    <?php $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
                                             $kisKazanCount=0;
                                             foreach($kazananKapali as $kazanK){
                                                 $kisKazanCount=1;
@@ -37,7 +38,7 @@
                                         ?>
                                           
                     @if(count($verilenFiyat) != 0)
-                        @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $firmaAdi->id)
+                        @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $firmaAdi->id) <!--Kazanan firma kontrolü -->
                             <tr  class="kismiKazanan">
                         @else
                             <tr>
@@ -75,7 +76,7 @@
             </tbody>
         </table>
     </div>
-@elseif($ilan->sozlesme_turu == 0 && $ilan->kismi_fiyat == 1)
+@elseif($ilan->sozlesme_turu == 0 && $ilan->kismi_fiyat == 1) <!--Kısmi teklife açık -->
     <div class="tab-pane" id="3">
         <table class="table" id="table"> 
             <thead>

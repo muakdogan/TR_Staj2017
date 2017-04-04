@@ -165,10 +165,20 @@ tr:nth-child(even) {
                                         if($querys != null){
                                             $rol=$querys[0]['rolAdi'];
                                         }   
+                                        if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){
+                                            $kalem = \App\IlanMal::find($sonucAcik->kalem_id);
+                                        }elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)  {
+                                            $kalem = App\IlanHizmet::find($sonucAcik->kalem_id);
+                                        }elseif($ilan->ilan_turu == 3){
+                                            $kalem = App\IlanYapimIsi::find($sonucAcik->kalem_id);
+                                        }else{
+                                            $kalem = \App\IlanGoturuBedel::find($sonucAcik->kalem_id);
+                                        }  
                                     ?>
+                                
                                     <tr>
                                         <td>{{$i++}}</td>
-                                        <td>{{$ilan->adi}}</td>
+                                        <td>{{$ilan->adi}} ilanının {{$kalem->marka}} kalemi</td>
                                         <td>{{$sonucAcik->sonuclanma_tarihi}}</td>
                                         <td><strong> {{number_format($sonucAcik->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
                                         <td>

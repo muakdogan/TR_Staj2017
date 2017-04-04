@@ -144,11 +144,14 @@
                     </tr>
             </table>
             <div align="right">
-                @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
-                    {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
-                @else
-                    {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                @if($ilan->kapanma_tarihi > $dt)
+                    @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
+                        {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                    @else
+                        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                    @endif
                 @endif
+                
                 {!! Form::close() !!}
             </div>
 </div>
