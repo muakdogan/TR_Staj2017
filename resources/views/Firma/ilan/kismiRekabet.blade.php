@@ -530,7 +530,7 @@
        if(confirm("Bu firmayı kazanan ilan etmek istediğinize emin misiniz ?")){
             $.ajax({
                 type:"POST",
-                url:"http://localhost:8080/22.11.2016tamrekabet/public/KismiAcikKazanan",
+                url:"{{asset('KismiAcikKazanan')}}",
                 data:{ilan_id:ilanID, kazananFirmaId:kazananFirmaId, kalem_id:kalemId ,kazanan_fiyat:kazananFiyat},
                 cache: false,
                 success: function(data){

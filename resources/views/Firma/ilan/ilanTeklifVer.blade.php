@@ -146,7 +146,7 @@ tr:nth-child(even) {
        var selected = $("#radioDiv input[type='radio']:checked").val();
         $.ajax({
             type:"GET",
-            url: "../set_session",
+            url: "{{asset('set_session')}}",
             data: { role: selected },
             }).done(function(data){
                 $('#myModalSirketListe').modal('toggle');
