@@ -224,13 +224,15 @@ $('.firmaSec').on('click', function() {
         if(session_value === "" || click === 1){
             $.ajax({
                 type:"GET",
-                 url: "./set_session",
+                
+                 url: "{{asset('set_session')}}",
                  data: { role: selected },
                  }).done(function(data){
                             console.log(data); 
 
                             if(click==1 ){
-                              location.href="firmaIslemleri/"+selected;
+                               
+                              location.href=" {{asset('firmaIslemleri')}}"+"/"+selected;
                             }
                             }).fail(function(){ 
                                 alert('Yüklenemiyor !!!  ');

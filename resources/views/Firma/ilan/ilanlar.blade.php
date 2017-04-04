@@ -114,7 +114,7 @@ a{
         @endif
         
         <p>{{$ilan->iladi}}</p>
-        <p>{{$ilan->yayin_tarihi}}</p>
+        <p>{{date('d-m-Y', strtotime($ilan->yayin_tarihi))}}</p>
         <?php $belirliFirmalar = App\BelirlIstekli::where('ilan_id',$ilan->ilan_id)->get();
                 $belirliFirma= 0;
                 foreach ($belirliFirmalar as $belirliIstekli){
@@ -157,7 +157,7 @@ a{
     function func(){          
            $.ajax({
             type:"GET",
-            url:"basvuruControl",
+            url:"{{asset('basvuruControl')}}",
             data:{ilan_id:ilan_id
             },
             cache: false,
@@ -165,7 +165,7 @@ a{
                 console.log(data);
                     if(data==0){ 
                         
-                        window.location.href="ilanTeklifVer/"+ilan_id;    
+                        window.location.href="{{asset('ilanTeklifVer')}}"+"/"+ilan_id;    
                     }
                     else{
 
@@ -178,7 +178,7 @@ a{
     function funcIlanFirma(){          
         $.ajax({
         type:"GET",
-        url:"IlanFirmaControl",
+        url:"{{asset('IlanFirmaControl')}}",
         data:{ilan_id:ilan_id},
         cache: false,
         success: function(data){

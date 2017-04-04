@@ -293,7 +293,7 @@ function emailControl(){
 function emailGet(){
             $.ajax({
             type:"GET",
-            url:"/tamrekabet/public/emailControl",
+            url:"{{asset('emailControl')}}",
             data:{email:email},
             cache: false,
             success: function(data){
@@ -310,7 +310,8 @@ $('#il_id').on('change', function (e) {
 
     var il_id = e.target.value;
     //ajax
-    $.get('/tamrekabet/public/index.php/ajax-subcat?il_id=' + il_id, function (data) {
+    
+    $.get("{{asset('ajax-subcat?il_id=')}}"+il_id, function (data) {
         //success data
         //console.log(data);
         
@@ -337,7 +338,8 @@ $('#ilce_id').on('change', function (e) {
     var ilce_id = e.target.value;
 
     //ajax
-    $.get('/tamrekabet/public/index.php/ajax-subcatt?ilce_id=' + ilce_id, function (data) {
+   
+    $.get("{{asset('ajax-subcatt?ilce_id=')}}"+ ilce_id, function (data) {
         
         beforeSend:( function(){
             $('.ajax-loader').css("visibility", "visible");

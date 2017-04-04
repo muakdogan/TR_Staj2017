@@ -106,7 +106,7 @@
             <br>
             <br>
             <div class="row" align="center">
-                  <img src="../../public/uploads/{{$firma->logo}}" alt="HTML5 Icon" style="width: 128px;height:128px">
+                  <img src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width: 128px;height:128px">
             </div>
             <br>
             <div   class="row" align="center">  
@@ -149,8 +149,6 @@
             <div class="tab-content ">
                 <div class="tab-pane active" id="1">
                     <br>
-                   
-                   
                                 <div  class="panel-group" id="accordion">
                                     <div class="panel panel-default">
                                         <div style="padding: 0px;" class="panel-body">
@@ -650,7 +648,8 @@
                                         <div class="row">
                                              <div class="col-sm-4">
                                                 <div class="col-sm-12" >
-                                                    <img src="../../public/uploads/{{$yorumYapanFirma->logo}}" alt="HTML5 Icon" style="width:50px;height:50px;">
+                                                    
+                                                    <img src="{{asset('uploads')}}/{{$yorumYapanFirma->logo}}" alt="HTML5 Icon" style="width:50px;height:50px;">
                                                     <strong>{{$yorumYapanFirma->adi}}</strong>
                                                 </div>
                                             </div>
@@ -670,25 +669,19 @@
                                     </div>
                                 </div>
                                     @endforeach
-                                  
-                                
-                                    
-                                    
                                 </div>
-                     
                    </div> 
             </div>
         </div>
       </div> 
     </div>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  
 </body>
 </html>
 <script>         
     $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
-});
+     $('[data-toggle="tooltip"]').tooltip();   
+    });
 
     $(".puanlama").each(function(){
         
