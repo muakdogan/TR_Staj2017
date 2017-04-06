@@ -208,7 +208,7 @@
                             <br>
                              <dl class="dropdown">
                                <dt>
-                               <a href="#">
+                                   <a href="#" style="padding:2px">
                                  <span class="hida">Seçiniz<span class="caret"></span></span>    
 
                                </a>
@@ -265,6 +265,7 @@
                         <input type="radio" name="gender[]" class="usul" value="Belirli İstekliler Arasında">Belirli İstekler Arasında<br>
                         <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
                     </div>
+                </div>
 
                 @if(Auth::guest())
                 <?php $sektor_id = 0; ?>
