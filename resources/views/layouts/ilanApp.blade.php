@@ -1,9 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    
+<head>   
      <meta name="csrf-token" content="{{ csrf_token() }}" />
      <meta charset="utf-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,35 +13,30 @@
      <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-     <style>
-
-
-
-div#header{
-  width: 100%;
-  height: 100px;
-  background: rgba(99,184,255,1);
-  margin: 0;
-  padding: 5px;
-  z-index:1080;
-}
-
-
-div#contentarea{
-  padding: 10px;
-}
-
-body.sticky div#header{
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-}
-
-
-</style>
-
-
+  <style>
+    div#header{
+      width: 100%;
+      height: 100px;
+      background-image:url("{{asset('images/header.jpg')}}");
+      margin: 0;
+      padding: 5px;
+      z-index:1080;
+    }
+    div#contentarea{
+      padding: 10px;
+    }
+    body.sticky div#header{
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    }
+    .yazi{
+      font-family:"Times New Roman";
+      background-color: #ccc;
+                
+     }
+ </style>
 <script>
 
 window.requestAnimationFrame = window.requestAnimationFrame
@@ -98,30 +90,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
 	})
 
 })(jQuery)
-
-
-
 </script>
-
-   
-      
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
-    
-    <style>
-        .yazi{
-            font-family:"Times New Roman";
-            
-            background-color: #ccc;
-                
-        }
-        
-    </style>
-    
-
 </head>
 <body id="app-layout">
- 
       <nav  class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="position: relative;top:-69px;margin-bottom:-69px" >
         <div class="container">
             <div class="navbar-header">
@@ -157,16 +128,16 @@ window.requestAnimationFrame = window.requestAnimationFrame
                            
                             <ul class="dropdown-menu">
                                 <li class="dropdown"><a class="dropdown-toggle yazi" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Firma İşlemleri</a>
-                                    <?php 
-                                   
-                                     $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);                   
+                                    <?php                                   
+                                        $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                        $kullaniciF=$kullanici->firmalar()->where('onay','onay')->get();
                                     ?>
-                                    @foreach($kullanici->firmalar as $kullanicifirma)
+                                    @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
-                                        <li  ><a href="{{ URL::to('firmaIslemleri', array($kullanicifirma->id), false)}}">{{$kullanicifirma->adi}}</a></li>
+                                            <li ><a  style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                         </ul>
                                     @endforeach
-                                   
+                                <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
                                 <li><a href="{{ url('/sessionKill') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>
@@ -182,8 +153,6 @@ window.requestAnimationFrame = window.requestAnimationFrame
                     <li>
                         <a href="{{url('ilanAra/')}}">İLAN ARA</a>
                     </li>
-                   
-                    
                 </ul>
             </div>
          
@@ -203,7 +172,59 @@ window.requestAnimationFrame = window.requestAnimationFrame
     </div>
     <!-- JavaScripts -->
     
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+     
+ <script>
+    var selected;
+    var count;
+    var click=0;
+    var session_value;
+         
+    $( document ).ready(function() {
+
+        @if(Auth::guest())
+
+        @else
+
+            count = '{{$kullanici->firmalar()->count()}}';
+            session_value = "{{$firmaAdi}}";
+            if(count==1){
+                   selected='{{$kullanicifirma->id}}';
+                 
+                   funcLocations();
+            }
+
+        @endif
+    }); 
+         
+    $('.firmaSec').on('click', function() {
+
+        selected = $(this).attr('name');
+        funcLocations();
+        click=1;
+
+    });
+    function funcLocations(){
+
+            if(session_value === "" || click === 1){
+                $.ajax({
+                    type:"GET",
+                     url: "{{asset('set_session')}}",
+                     data: { role: selected },
+                     }).done(function(data){
+                                console.log(data); 
+
+                                if(click==1 ){  
+                                  location.href="{{asset('firmaIslemleri')}}"+"/"+selected;
+                                }
+                                }).fail(function(){ 
+                                    alert('Yüklenemiyor !!!  ');
+                                });
+
+            }
+     }
+
+    </script>
 </body>
 </html>

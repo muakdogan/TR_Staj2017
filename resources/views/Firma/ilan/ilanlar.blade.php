@@ -14,6 +14,7 @@ a{
 .davetEdil {
     background-image:url("{{asset('images/gray_background.png')}}");
 }
+
 </style>
     <h3>İlanlar</h3> 
     <hr>
@@ -76,42 +77,47 @@ a{
             else{
                 $usulu = "Sadece Başvuru";
             }
+            if($ilan->sozlesme_turu == 0){
+                $sozlesme_turu="Birim Fiyatlı";
+            }
+            else{
+                $sozlesme_turu  = "Götürü Bedel";
+            }
     ?>
     <div class="ilanDetayPop" name="{{$ilan->ilan_id}}">
         <div class="pop-up"  style="display: none;
                                         position: absolute;
                                         left: 200px;
-                                        width: 280px;
+                                        width: 300px;
                                         padding: 10px;
-                                        background: #eeeeee;
-                                        color: #000000;
+                                        background: #006c90;
+                                        color: #fff;
                                         border: 1px solid #1a1a1a;
                                         font-size: 90%;
+                                        border-radius: 5px;
                                         z-index: 1000;">
-                        <p id="popIlanAdi">İlan Adı : {{$ilan->ilanadi}}</p>
-                        <p id="popIlanTuru">İlan Türü: {{$ilan_turu}}</p>
-                        <p id="popIlanUsulu">Usulü: {{$usulu}}</p>
-                        <p id="popIlanSektoru">İlan Sektörü: {{$sektorAdi->adi}}</p>
-                        <p id="popIlanAciklama">Açıklama: {{$ilan->aciklama}}</p>
-                        <p id="popIlanIsinSuresi">İşin Süresi: {{$ilan->isin_suresi}}</p>
-                        <p id="popIlanSözlesmeTuru">Sözleşme Türü: {{$ilan->sozlesme_turu}}</p>                                
+                        <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$ilan->ilanadi}}</p>
+                        <p id="popIlanTuru"><img src="{{asset('images/ok.png')}}"><strong>İlan Türü :</strong> {{$ilan_turu}}</p>
+                        <p id="popIlanUsulu"><img src="{{asset('images/ok.png')}}"><strong>Usulü : </strong>{{$usulu}}</p>
+                        <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$sektorAdi->adi}}</p>
+                        <p id="popIlanAciklama"><img src="{{asset('images/ok.png')}}"><strong>Açıklama : </strong>{{$ilan->aciklama}}</p>
+                        <p id="popIlanIsinSuresi"><img src="{{asset('images/ok.png')}}"><strong>İşin Süresi:</strong> {{$ilan->isin_suresi}}</p>
+                        <p id="popIlanSözlesmeTuru"><img src="{{asset('images/ok.png')}}"><strong>Sözleşme Türü : </strong>{{$sozlesme_turu}}</p>                                
         </div>
         <?php $puan = App\Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
                         ->where('firma_id',$ilan->firmaid)
                         ->get();
                $puan = $puan->toArray();
-           
         ?>
-        <p><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
+        <p style="font-size: 17px; color: #333"><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
         @if(number_format($puan[0]['ortalama'],1)> 0)
             <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
-            <p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
+            <p style="font-size:15px; color:#666"><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >Firma: {{$ilan->adi}}</a></p>
         @else
-            <p><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" style="padding: 0px" >Firma: {{$ilan->adi}}</a></p>
+            <p style="font-size:15px ; color:#666" ><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" style="padding: 0px" >Firma: {{$ilan->adi}}</a></p>
         @endif
-        
         <p>{{$ilan->iladi}}</p>
-        <p>{{date('d-m-Y', strtotime($ilan->yayin_tarihi))}}</p>
+        <p style="font-size: 13px;color: #999">{{date('d-m-Y', strtotime($ilan->yayin_tarihi))}}</p>
         <?php $belirliFirmalar = App\BelirlIstekli::where('ilan_id',$ilan->ilan_id)->get();
                 $belirliFirma= 0;
                 foreach ($belirliFirmalar as $belirliIstekli){
@@ -120,9 +126,6 @@ a{
                     }
                 }
         ?>
-        
-        <script>    
-        </script>
         @if(Auth::guest())
         @else
             @if(($ilan->usulu == 2 && $belirliFirma == 1) || $ilan->usulu == 1)
@@ -134,9 +137,7 @@ a{
         <hr>
     </div>
     @endforeach
-    
 {{$ilanlar->links()}}
-
 <script>
     $('.ilanDetayPop').mouseenter(function(){
         $(this).children("div.pop-up").show();
@@ -220,6 +221,6 @@ a{
         }
         
     });
-    $('#ilanCount').children().html("Arama kriterlerinize uyan <img src='{{asset('images/sol.png')}}'> {{$count}} ilan");
+    $('#ilanCount').children().html("<strong>Arama kriterlerinize uyan</strong><img src='{{asset('images/sol.png')}}'><strong style='font-size:36px'> {{$count}} </strong>ilan");
 
 </script>

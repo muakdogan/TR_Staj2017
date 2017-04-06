@@ -1,6 +1,5 @@
 @extends('layouts.ilanApp')
  @section('content')
- 
     <style>
            input[type=text] {
                width: 200px;
@@ -18,7 +17,7 @@
            }
 
            input[type=button] {
-               background-color: #63b8ff;
+               background-color: #004f70;
                border: 2px solid #ccc;
                color: white;
                border-radius: 4px;
@@ -32,7 +31,7 @@
                width: 270px;
                box-sizing: border-box;
                border: 1px solid #ccc;
-               border-radius: 4px;
+               border-radius: 0px;
                font-size: 12px;
                background-color:#C0C0C0;
                padding: 12px 8px 12px 8px;
@@ -42,19 +41,13 @@
                 width: 270px;
                box-sizing: border-box;
                border: 1px solid #ccc;
-               border-radius: 4px;
+               border-radius: 0px;
                font-size: 12px;
-               background-color: #f5f5f5;
+               background-color: #ddd;
                padding: 12px 8px 12px 8px;
                
            }
           
-
-            .dropdown {
-
-
-
-            }
 
             a {
               color: #000;
@@ -74,13 +67,6 @@
               position: relative;
             }
 
-            .dropdown a,
-            .dropdown a:visited {
-              color: #333;
-              text-decoration: none;
-              outline: none;
-              font-size: 12px;
-            }
 
             .dropdown dt a {
               background-color: #FFF;
@@ -115,7 +101,7 @@
               height: 170px;
               overflow: auto;
             }
-
+            
             .dropdown span.value {
               display: none;
             }
@@ -130,25 +116,22 @@
             }
 
             button {
-              background-color: #1e90ff;
-              border-radius: 15px; 
+              background-color: #fff;
+              border-radius: 3px; 
               border: 0;
-              margin: 5px 0;
+              font: 13px/18px roboto;
               text-align: center;
-              color: #fff;
-              font-weight: bold;
+              color: #003151;
+              
             }
             .pclass {
-                color: rgb(255, 255, 255);
-                border-top-right-radius: 15px;
-                border-bottom-right-radius: 15px;
-                border-bottom-left-radius: 15px;
-                border-top-left-radius: 15px;
+                color:#003151;
+               border-radius: 3px; 
                 display: inline-block;
                 zoom: 1;
                 font: 13px/18px roboto;
-                background:	#1E90FF;
-                padding: 5px;
+                background:#fff;
+                padding: 2px;
             }
             .li {
                    position: relative;
@@ -171,12 +154,14 @@
             }
    </style>
   
-       <div  class="container-fuild">
+    <div  class="container-fuild">
            <div id ="header" class="row content ">
                <div class="container">
-                   <div class="col-sm-3" id="ilanCount">
+                   <div class="col-sm-4" id="ilanCount">
+                       
                         <?php $ilanCount = DB::table('ilanlar')->count();?>
-                        <h4>Arama kriterlerinize uyan <img src="{{asset('images/sol.png')}}">  </h4>
+                       <h4 style="color:#fff"><strong>Arama kriterlerinize uyan</strong> <img src="{{asset('images/sol.png')}}"> </h4>
+                        
                    </div>
                     <div class="col-sm-6">
                         <ul style="list-style: none outside none;">
@@ -186,16 +171,17 @@
                             </li>                            
                         </ul>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div style="float:right">
-                            <button id="temizleButton">
-                                <img  src="{{asset('images/sil1.png')}}">&nbsp;Temizle</img>
-                            </button>
+                            <br>
+                            <a  style="color:#fff" href="#" id="temizleButton">
+                                <img  src="{{asset('images/whiteDelete.png')}}">&nbsp;Temizle</img>
+                            </a>
                         </div>
                     </div>
                </div>
            </div>
-       </div>   
+    </div>   
    
    <br>
    <br>
@@ -279,7 +265,6 @@
                         <input type="radio" name="gender[]" class="usul" value="Belirli İstekliler Arasında">Belirli İstekler Arasında<br>
                         <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
                     </div>
-                </div>
 
                 @if(Auth::guest())
                 <?php $sektor_id = 0; ?>
@@ -377,7 +362,7 @@
             
             <script type="text/javascript">
                 $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
-                    
+
                    $(".silmeButton").each(function(){
                        $(this).click();
                    });
@@ -723,11 +708,5 @@
                         alert('İlanlar Yüklenemiyor !!!  ');
                     });
                 }
-     
-
             </script>
-                  
-        <hr>
-    </div>
-  
 @endsection
