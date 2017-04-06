@@ -166,8 +166,7 @@
                     <div class="col-sm-6">
                         <ul style="list-style: none outside none;">
                             <?php $j=0; ?>
-                            <li class="li" id="multiSel{{$j}}">
-                              
+                            <li class="li" id="multiSel{{$j}}"> 
                             </li>                            
                         </ul>
                     </div>
