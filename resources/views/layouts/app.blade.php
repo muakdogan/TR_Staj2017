@@ -17,41 +17,33 @@
     <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
    
     <style>
-          .yazi{
-            font-family:"Times New Roman";
-            
-            background-color: #ccc;
+         div#header{
+      width: 100%;
+      height: 100px;
+      background-image:url("{{asset('images/header.jpg')}}");
+      margin: 0;
+      padding: 5px;
+      z-index:1080;
+    }
+    div#contentarea{
+      padding: 10px;
+    }
+    body.sticky div#header{
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    }
+    .yazi{
+      font-family:"Times New Roman";
+      background-color: #ccc;
                 
-        }
-
-
-
-div#header{
-  width: 100%;
-  height: 100px;
-  background: rgba(99,184,255,1);
-  margin: 0;
-  padding: 5px;
-  z-index:1080;
-}
-
-
-div#contentarea{
-  padding: 10px;
-}
-
-body.sticky div#header{
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-}
-
+     }
 
 </style>
 <script>
@@ -157,7 +149,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">
-                                            <li ><a href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
+                                            <li ><a style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                         </ul>
                                     @endforeach
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
@@ -188,56 +180,56 @@ window.requestAnimationFrame = window.requestAnimationFrame
     @yield('content')
     @include('layouts.footer_menu')
     <!-- JavaScripts -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script-->
    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-     <script>
-          var selected;
-          var count;
-          var click=0;
-          var session_value;
+<script>
+      var selected;
+      var count;
+      var click=0;
+      var session_value;
          
-$( document ).ready(function() {
-    
-    @if(Auth::guest())
- 
-    @else
-       
-        count = '{{$kullanici->firmalar()->count()}}';
-        session_value = "{{$firmaAdi}}";
-        if(count==1){
-               selected='{{$kullanicifirma->id}}';
-               func();
-        }
-        
-    @endif
-}); 
-         
-$('.firmaSec').on('click', function() {
-         
-    selected = $(this).attr('name');
-    func();
-    click=1;
+    $( document ).ready(function() {
 
-});
- function func(){
-        
-        if(session_value === "" || click === 1){
-            $.ajax({
-                type:"GET",
-                 url: "{{asset('set_session')}}",
-                 data: { role: selected },
-                 }).done(function(data){
-                            console.log(data); 
+        @if(Auth::guest())
 
-                            if(click==1 ){  
-                              location.href="{{asset('firmaIslemleri')}}"+"/"+selected;
-                            }
-                            }).fail(function(){ 
-                                alert('Yüklenemiyor !!!  ');
-                            });
-                            
-        }
- }
+        @else
+
+            count = '{{$kullanici->firmalar()->count()}}';
+            session_value = "{{$firmaAdi}}";
+            if(count==1){
+                   selected='{{$kullanicifirma->id}}';
+                   funcLocations();
+            }
+
+        @endif
+    }); 
+         
+    $('.firmaSec').on('click', function() {
+
+        selected = $(this).attr('name');
+        funcLocations();
+        click=1;
+
+    });
+    function funcLocations(){
+
+           if(session_value === "" || click === 1){
+               $.ajax({
+                   type:"GET",
+                    url: "{{asset('set_session')}}",
+                    data: { role: selected },
+                    }).done(function(data){
+                               console.log(data); 
+
+                               if(click==1 ){  
+                                 location.href="{{asset('firmaIslemleri')}}"+"/"+selected;
+                               }
+                               }).fail(function(){ 
+                                   alert('Yüklenemiyor !!!  ');
+                               });
+
+           }
+    }
 
     </script>
 </body>
