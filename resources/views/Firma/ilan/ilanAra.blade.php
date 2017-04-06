@@ -300,25 +300,32 @@
                                         else{
                                             $usulu = "Sadece Başvuru";
                                         }
+                                         if($dIlan->sozlesme_turu == 0){
+                                            $sozlesme_turu="Birim Fiyatlı";
+                                        }
+                                        else{
+                                            $sozlesme_turu  = "Götürü Bedel";
+                                        }
                                     ?>
                                 <div class="ilanDetayPop davetEdil" name="{{$dIlan->id}}">
                                     <div class="pop-up"  style="display: none;
-                                                            position: absolute;
-                                                            left: 200px;
-                                                            width: 280px;
-                                                            padding: 10px;
-                                                            background: #eeeeee;
-                                                            color: #000000;
-                                                            border: 1px solid #1a1a1a;
-                                                            font-size: 90%;
-                                                            z-index: 1000;">
-                                            <p id="popIlanAdi">İlan Adı : {{$dIlan->adi}}</p>
-                                            <p id="popIlanTuru">İlan Türü: {{$ilan_turu}}</p>
-                                            <p id="popIlanUsulu">Usulü: {{$usulu}}</p>
-                                            <p id="popIlanSektoru">İlan Sektörü: {{$sektorAdi->adi}}</p>
-                                            <p id="popIlanAciklama">Açıklama: {{$dIlan->aciklama}}</p>
-                                            <p id="popIlanIsinSuresi">İşin Süresi: {{$dIlan->isin_suresi}}</p>
-                                            <p id="popIlanSözlesmeTuru">Sözleşme Türü: {{$dIlan->sozlesme_turu}}</p>                                
+                                                                position: absolute;
+                                                                left: 200px;
+                                                                width: 300px;
+                                                                padding: 10px;
+                                                                background: #006c90;
+                                                                color: #fff;
+                                                                border: 1px solid #1a1a1a;
+                                                                font-size: 90%;
+                                                                border-radius: 5px;
+                                                                z-index: 1000;">
+                                            <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$dIlan->ilanadi}}</p>
+                                            <p id="popIlanTuru"><img src="{{asset('images/ok.png')}}"><strong>İlan Türü :</strong> {{$ilan_turu}}</p>
+                                            <p id="popIlanUsulu"><img src="{{asset('images/ok.png')}}"><strong>Usulü : </strong>{{$usulu}}</p>
+                                            <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$sektorAdi->adi}}</p>
+                                            <p id="popIlanAciklama"><img src="{{asset('images/ok.png')}}"><strong>Açıklama : </strong>{{$dIlan->aciklama}}</p>
+                                            <p id="popIlanIsinSuresi"><img src="{{asset('images/ok.png')}}"><strong>İşin Süresi:</strong> {{$dIlan->isin_suresi}}</p>
+                                            <p id="popIlanSözlesmeTuru"><img src="{{asset('images/ok.png')}}"><strong>Sözleşme Türü : </strong>{{$sozlesme_turu}}</p>                                  
                                     </div>
                                     <?php $puan = App\Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
                                                     ->where('firma_id',$dIlan->firmaid)
@@ -442,7 +449,7 @@
                         var key=0;
                         var birlesmisName;
                         $("#multisel"+key).empty();
-                        alert(name);
+                        
                         var name1 = name.split(" ");
                         if(name1.length === 1){
                             birlesmisName = name1[0];
@@ -453,7 +460,7 @@
                         else if(name1.length === 3){
                             birlesmisName=name1[0]+name1[1]+name1[2];
                         }
-                        alert(name);
+                        
                         var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
                         
                         $("#multiSel"+key).append(html);                                     
