@@ -187,99 +187,183 @@
    <br>
    <br>
       
-   <div  class="container">
-       <div id="FilterSection" class="row content">
-           <div class="col-sm-3">
-               <div class="search" id="radioDiv3">
-                       <input type="text" name="search" id="search" placeholder="Anahtar Kelime"><input type="button" id="button"  value="ARA">
-                       <input type="radio" name="searchBox" value="tum"> Tüm İlanda<br>
-                       <input type="radio" name="searchBox" value="ilan_baslık"> Sadece İlan Başlığında<br>
-                       <input type="radio" name="searchBox" value="firma"> Sadece Firma Adında Ara
-                                              
-                </div>
-               <br>
-               <div class="soldivler">
-                   <form>
-                       <h4>İllerde Arama</h4>
-                       
-                       <dl class="dropdown">
-                           <dt>
-                               <a style ="padding:2px" href="#"><span class="hida">Seçiniz<span class="caret"></span></span></a>
-                           </dt>
-                           <dd>
-                           <div class="mutliSelect">
-                               <ul>
-                                   @foreach($iller as $il)
-                                   <li><input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
-                                   @endforeach
-                               </ul>
-                           </div>
-                           </dd>
-                       </dl>
-                   </form>
-               </div>
-               <div class="soldivler">
-                   <h4>İlan Tarihi Aralığı</h4>
-                   <p>Başlangıç Tarihi</p>
-                   <input type="date" class="form-control datepicker" id="baslangic_tarihi" name="baslangic_tarihi" placeholder="" value="">
-                   <br>
-                   <p>Bitiş Tarihi</p>
-                   <input type="date" class="form-control datepicker" id="bitis_tarihi" name="bitis_tarihi" placeholder="" value="">
-               </div>
-               <div class="soldivler">
-                   <h4>İlan Sektörü</h4>
-                   @foreach($sektorler as $sektor)
-                        <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
-                   @endforeach
-               </div>
-               <div class="soldivler" id="radioDiv">
-                   <h4>İlan Türü</h4>
-                   <input type="radio" name="ilanTuru[]" class="tur" value="Mal"><span class="lever"></span>Mal<br>
-                   <input type="radio" name="ilanTuru[]" class="tur" value="Hizmet"><span class="lever"></span>Hizmet<br>
-                   <input type="radio" name="ilanTuru[]" class="tur" value="Yapım İşi"><span class="lever"></span>Yapım İşi
-                </div>
-               <div class="soldivler" id="radioDiv4"> 
-                   <h4>Sözleşme Türü</h4>
-                   <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Birim Fiyatlı"><span class="lever"></span>Birim Fiyatlı<br>
-                   <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Götürü Bedel"><span class="lever"></span>Götürü Bedel<br>
-                </div>
-               <div class="soldivler">
-                   <h4>Ödeme Türleri</h4>
-                   @foreach($odeme_turleri as $odeme)
-                         <input type="checkbox" class="checkboxClass2" value="{{$odeme->id}}" name="{{$odeme->adi}}"> {{$odeme->adi}}<br>
-                   @endforeach
-                </div>
-               <div class="soldivler" id="radioDiv2">
-                   <h4>İlan Usulü</h4>
-                   <input type="radio" name="gender[]" class="usul" value="Açık"> Açık<br>
-                   <input type="radio" name="gender[]" class="usul" value="Belirli İstekler Arasında">Belirli İstekler Arasında<br>
-                   <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
-               </div>
-           </div>
-           <div class="col-sm-9 ilanlar" id="auto_load_div">
-               @include('Firma.ilan.ilanlar')                                               
-           </div>
-           <div class="ajax-loader">
-               <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
-           </div>
-        </div>
+        <div  class="container">
+            <div id="FilterSection" class="row content">
+                <div class="col-sm-3">
+                    <div class="search" id="radioDiv3">
+                       <div>
+                           <input type="text" name="search" id="search" placeholder="Anahtar Kelime"><input type="button" id="button"  value="ARA">
+                       </div>
+                       <div>
+                          <input type="radio" name="searchBox" value="tum"> Tüm İlanda<br>
+                          <input type="radio" name="searchBox" value="ilan_baslık"> Sadece İlan Başlığında<br>
+                          <input type="radio" name="searchBox" value="firma"> Sadece Firma Adında Ara
+                       </div>
+                    </div>
+                    <br>
+                    <div class="soldivler">
+                        <form  >
+                            <h4>İllerde Arama</h4>
+                            <br>
+                            <br>
+                             <dl class="dropdown">
+                               <dt>
+                                   <a href="#" style="padding:2px">
+                                 <span class="hida">Seçiniz<span class="caret"></span></span>    
 
-       @if(Auth::guest())
-            <?php $sektor_id = 0; ?>
-       @else
-            <?php
-            $id = session()->get('firma_id');
-            $firma = App\Firma::find($id);
-            ?>
-            @foreach($firma->sektorler as $sektor)
-                 <?php $sektor_id = $sektor->id ?>
-            @endforeach
-       @endif       
-       <hr>
-    </div>
-   <script type="text/javascript">
-                $("#temizleButton").click(function(){
-                    
+                               </a>
+                               </dt>
+
+                               <dd>
+                                   <div class="mutliSelect">
+                                       <ul>
+                                           @foreach($iller as $il)
+                                           <li>
+                                               <input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
+                                           @endforeach
+
+                                       </ul>
+                                   </div>
+                               </dd>
+                           </dl>
+                        </form>
+                    </div>
+                    <div class="soldivler">
+                        <h4>İlan Tarihi Aralığı</h4>
+                        <p>Başlangıç Tarihi</p>
+                        <input type="date" class="form-control datepicker" id="baslangic_tarihi" name="baslangic_tarihi" placeholder="" value="">
+                        <br>
+                        <p>Bitiş Tarihi</p>
+                        <input type="date" class="form-control datepicker" id="bitis_tarihi" name="bitis_tarihi" placeholder="" value="">
+                    </div>
+                    <div class="soldivler">
+                        <h4>İlan Sektörü</h4>
+                        @foreach($sektorler as $sektor)
+                         <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
+                        @endforeach
+                    </div>
+                    <div class="soldivler" id="radioDiv">
+                        <h4>İlan Türü</h4>
+                        <input type="radio" name="ilanTuru[]" class="tur" value="Mal"><span class="lever"></span>Mal<br>
+                        <input type="radio" name="ilanTuru[]" class="tur" value="Hizmet"><span class="lever"></span>Hizmet<br>
+                        <input type="radio" name="ilanTuru[]" class="tur" value="Yapım İşi"><span class="lever"></span>Yapım İşi
+                    </div>
+                     <div class="soldivler" id="radioDiv4"> 
+                        <h4>Sözleşme Türü</h4>
+                        <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Birim Fiyatlı"><span class="lever"></span>Birim Fiyatlı<br>
+                        <input type="radio" name="sozlesmeTuru[]" class="sozlesme" value="Götürü Bedel"><span class="lever"></span>Götürü Bedel<br>
+                     </div>
+                     <div class="soldivler">
+                        <h4>Ödeme Türleri</h4>
+                        @foreach($odeme_turleri as $odeme)
+                         <input type="checkbox" class="checkboxClass2" value="{{$odeme->id}}" name="{{$odeme->adi}}"> {{$odeme->adi}}<br>
+                        @endforeach
+                    </div>
+                    <div class="soldivler" id="radioDiv2">
+                        <h4>İlan Usulü</h4>
+                        <input type="radio" name="gender[]" class="usul" value="Açık"> Açık<br>
+                        <input type="radio" name="gender[]" class="usul" value="Belirli İstekliler Arasında">Belirli İstekler Arasında<br>
+                        <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
+                    </div>
+                </div>
+
+                @if(Auth::guest())
+                <?php $sektor_id = 0; ?>
+            @else
+                <?php $id = session()->get('firma_id');
+                                $firma = App\Firma::find($id);
+                                ?>
+                @foreach($firma->sektorler as $sektor)
+                    <?php $sektor_id = $sektor->id ?>
+                @endforeach
+            @endif    
+                <div class="col-sm-9">
+                            <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); ?>
+                            
+                            @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
+                                    <?php $dIlan = App\Ilan::find($davetEdildigimIlan->ilan_id); ?>
+                                    <?php $sektorAdi = App\Sektor::find($dIlan->firma_sektor); 
+                                        if($dIlan->ilan_turu == 1){
+                                            $ilan_turu="Mal";
+                                        }
+                                        else if($dIlan->ilan_turu == 2){
+                                            $ilan_turu="Hizmet";
+                                        }
+                                        else{
+                                            $ilan_turu  = "Yapım İşi";
+                                        }
+                                        if($dIlan->usulu == 1){
+                                            $usulu = "Tamrekabet";
+                                        }
+                                        else if($dIlan->usulu == 2){
+                                            $usulu ="Belirli İstekliler Arasında";
+                                        }
+                                        else{
+                                            $usulu = "Sadece Başvuru";
+                                        }
+                                    ?>
+                                <div class="ilanDetayPop davetEdil" name="{{$dIlan->id}}">
+                                    <div class="pop-up"  style="display: none;
+                                                            position: absolute;
+                                                            left: 200px;
+                                                            width: 280px;
+                                                            padding: 10px;
+                                                            background: #eeeeee;
+                                                            color: #000000;
+                                                            border: 1px solid #1a1a1a;
+                                                            font-size: 90%;
+                                                            z-index: 1000;">
+                                            <p id="popIlanAdi">İlan Adı : {{$dIlan->adi}}</p>
+                                            <p id="popIlanTuru">İlan Türü: {{$ilan_turu}}</p>
+                                            <p id="popIlanUsulu">Usulü: {{$usulu}}</p>
+                                            <p id="popIlanSektoru">İlan Sektörü: {{$sektorAdi->adi}}</p>
+                                            <p id="popIlanAciklama">Açıklama: {{$dIlan->aciklama}}</p>
+                                            <p id="popIlanIsinSuresi">İşin Süresi: {{$dIlan->isin_suresi}}</p>
+                                            <p id="popIlanSözlesmeTuru">Sözleşme Türü: {{$dIlan->sozlesme_turu}}</p>                                
+                                    </div>
+                                    <?php $puan = App\Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                                                    ->where('firma_id',$dIlan->firmaid)
+                                                    ->get();
+                                           $puan = $puan->toArray();
+
+                                    ?>
+                                    <p><b>İlan Adı: {{$dIlan->adi}}</b></p>
+                                    @if(number_format($puan[0]['ortalama'],1)> 0)
+                                        <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
+                                        <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                    @else
+                                        <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" style="padding: 0px" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                    @endif
+
+                                    <p>{{$dIlan->adi}}</p>
+                                    <p>{{$dIlan->yayin_tarihi}}</p>
+                                   
+
+                                @if(Auth::guest())
+                                @else
+                                    <a href="#"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
+                                @endif
+                                <hr>
+                            </div>
+                        <hr>
+                    @endforeach
+                </div>
+                <div class="col-sm-9 ilanlar" id="auto_load_div">
+                   @include('Firma.ilan.ilanlar')                                               
+               </div>
+                <div class="ajax-loader">
+                    <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+                </div>
+            </div>
+            
+            
+                
+        </div>
+            
+            
+            <script type="text/javascript">
+                $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
+
                    $(".silmeButton").each(function(){
                        $(this).click();
                    });
@@ -287,15 +371,15 @@
                 });
                 function silme(name){
                         $('li[name='+name+']').remove();
-                        if(name == "Tarım" || name == "Hizmet"){
+                        if(name === "Tarım" || name === "Hizmet"){
                             $('.checkboxClass[name='+name+']').prop("checked", false);
                             getIlanlar(1);
                         }
-                        if(name == "Nakit" || name == "Kredi Kartı" || name == "Havale" || name == "Çek" || name == "Senet"){
+                        if(name === "Nakit" || name === "KrediKartı" || name === "Havale" || name === "Çek" || name === "Senet"){
                             $('.checkboxClass2[name='+name+']').prop("checked", false);
                             getIlanlar(1);
                         }
-                        if(name == "Mal" || name == "Hizmet" || name == "Yapım İşi"){
+                        if(name === "Mal" || name === "Hizmet" || name === "Yapımİşi"){
                             
                             $("#radioDiv input[type='radio']").each(function(){
                                 
@@ -303,7 +387,7 @@
                             });
                             getIlanlar(1);
                         }
-                        if(name == "Açık" || name == "Belirli İstekler Arasında" || name == "Başvuru"){
+                        if(name === "Açık" || name === "BelirliİsteklilerArasında" || name === "Başvuru"){
                             
                             $("#radioDiv2 input[type='radio']").each(function(){
                               
@@ -312,7 +396,7 @@
                             });
                             getIlanlar(1);
                         }
-                        if(name == "Birim Fiyatlı" || name == "Götürü Bedel"){
+                        if(name === "BirimFiyatlı" || name === "GötürüBedel"){
                             alert("ozge");
                             $("#radioDiv4 input[type='radio']").each(function(){
                               
@@ -321,23 +405,23 @@
                             });
                             getIlanlar(1);
                         }
-                        if(name.indexOf("başlangıç") != -1){
+                        if(name.indexOf("başlangıç") !== -1){
                             $(' input[type=date]').each( function resetDate(){
-                                if(name.indexOf(this.value) != -1){
+                                if(name.indexOf(this.value) !== -1){
                                     this.value = this.defaultValue;
                                 }
                             } );
                             getIlanlar(1);    
                         }
-                        if($('#search').val() != null){
+                        if($('#search').val() !== null){
                             $("#radioDiv3 input[type='radio']").each(function(){
                                 $(this).prop('checked', false);
                             });
                             $('#search').val(null);
                         }
-                        if(name.indexOf("bitiş") != -1){
+                        if(name.indexOf("bitiş") !== -1){
                             $(' input[type=date]').each( function resetDate(){
-                                if(name.indexOf(this.value) != -1){
+                                if(name.indexOf(this.value) !== -1){
                                     this.value = this.defaultValue;
                                 }
                             } );
@@ -356,10 +440,22 @@
                         }
                     }
                 function doldurma(name){
-                        var key=0;          
+                        var key=0;
+                        var birlesmisName;
                         $("#multisel"+key).empty();
-                        var valName="'"+name+"'";
-                        var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+name+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
+                        alert(name);
+                        var name1 = name.split(" ");
+                        if(name1.length === 1){
+                            birlesmisName = name1[0];
+                        }
+                        else if(name1.length === 2){
+                            birlesmisName=name1[0]+name1[1];
+                        }
+                        else if(name1.length === 3){
+                            birlesmisName=name1[0]+name1[1]+name1[2];
+                        }
+                        alert(name);
+                        var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
                         
                         $("#multiSel"+key).append(html);                                     
                 }
@@ -404,7 +500,7 @@
                     doldurma(sozlesme);
                 });
                 var odeme = new Array();
-                $('.checkboxClass2').click(function(){
+                $('.checkboxClass2').click(function(){ ///////////odeme turu /////////////////
                     var sonSecilen;
                     var n = jQuery('.checkboxClass2:checked').length;
                     if (n > 0){
@@ -422,7 +518,7 @@
                     doldurma(sonSecilen);
                 });
                 var sektor = new Array();
-                $('.checkboxClass').click(function(){
+                $('.checkboxClass').click(function(){  ////////////////////sektor //////////////
                     var sonSecilen;
                     var n = jQuery('.checkboxClass:checked').length;
                         if (n > 0){
@@ -531,21 +627,21 @@
                     var basTar=$('#baslangic_tarihi').val();
                     var bitTar=$('#bitis_tarihi').val();
                     var selectedSektor = new Array();
-                    var n = jQuery(".checkboxClass:checked").length;
+                    var n = jQuery(".checkboxClass:checked").length;  ///////////sektor /////////////
                     if (n > 0){
                         jQuery(".checkboxClass:checked").each(function(){
                                 selectedSektor.push($(this).val());
                                 var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
                             });
                     }
-                    var selectedIl = new Array();
+                    var selectedIl = new Array(); /////////// iller //////////////
                     var n = jQuery('.mutliSelect input[type="checkbox"]').length;
                     if (n > 0){
                         jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
                                 selectedIl.push($(this).val());
                         });
                     }
-                    var selectedOdeme = new Array();
+                    var selectedOdeme = new Array(); /////////// odeme Turu ////////////
                     var n = jQuery('.checkboxClass2:checked').length;
                     if (n > 0){
                         jQuery('.checkboxClass2:checked').each(function(){
@@ -556,23 +652,42 @@
                     var selected = $("#radioDiv input[type='radio']:checked");
                     if (selected.length > 0) {
                         selectedTur = selected.val();
+                        if(selectedTur === "Mal"){
+                            selectedTur = 1;
+                        }else if(selectedTur === "Hizmet"){
+                            selectedTur = 2;
+                        }else{
+                            selectedTur = 3;
+                        }
                     }
-                    var selectedUsul = "";
+                    var selectedUsul = "";   //////////////////////////////İlan Usulü ///////////
                     var selected2 = $("#radioDiv2 input[type='radio']:checked");
                     if (selected2.length > 0) {
                         selectedUsul = selected2.val();
+                        if(selectedUsul === "Açık"){
+                            selectedUsul = 1;
+                        }else if(selectedUsul === "Belirli İstekliler Arasında"){
+                            selectedUsul = 2;
+                        }else{
+                            selectedUsul = 3;
+                        }
                     }
-                    var selectedSearch = "";
+                    var selectedSearch = "";    /////////////////////////// search button /////////////////////
                     var inputSearch = "";
                     var selected3 = $("#radioDiv3 input[type='radio']:checked");
                     if (selected3.length > 0) {
                         selectedSearch = selected3.val();
                         inputSearch=$('#search').val();
                     }
-                    var selectedSozlesme = "";
+                    var selectedSozlesme = ""; //////////////////////Sözleşme Türü //////////////////////////
                     var selected4 = $("#radioDiv4 input[type='radio']:checked");
                     if (selected4.length > 0) {
                         selectedSozlesme = selected4.val();
+                        if(selectedSozlesme === "Birim Fiyatlı"){
+                            selectedSozlesme = 0;
+                        }else if(selectedSozlesme === "Götürü Bedel"){
+                            selectedSozlesme = 1;
+                        }
                     }
                     $.ajax({
                         beforeSend: function(){
