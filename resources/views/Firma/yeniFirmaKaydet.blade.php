@@ -4,7 +4,7 @@
 use App\Il;?>
 
 @section('content')
-
+ <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
 <style>
     
      .ajax-loader {
@@ -22,74 +22,133 @@ use App\Il;?>
                 left:32%;
             }
 </style>
-    <div class="container">
-        <div class="col-lg-6">
-            {!! Form::open(array('url'=>'yeniFirma/'.$kullanici_id->id ,'method' => 'POST','files'=>true))!!}
-            <div class="form-group">
-                <h1>Firma Bilgileri</h1>
-                <div class="form-group">
-                    {!! Form::label('Firma adı') !!}
-                    {!! Form::text('adi', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Firma adı')) !!}
+ <div class="container">     
+        <h1>YENİ FİRMA OLUŞTUR</h1>
+        <br>
+        <div class="row">
+            <div  class="col-lg-6">
+                <div  class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        {!! Form::open(array('url'=>'yeniFirma/'.$kullanici_id->id ,'method' => 'POST','files'=>true))!!}
+                         <div class="row">
+                                <h5><strong>Firma Bilgileri</strong></h5>
+                                    <hr>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                        {!! Form::label('Firma adı') !!}
+                                        </div> 
+                                        <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-8">
+                                        {!! Form::text('firma_adi', null, 
+                                        array('class'=>'form-control', 
+                                        'placeholder'=>'Firma adı',
+                                        'data-validation'=>'length alphanumeric', 
+                                        'data-validation-length'=>'3-12', 
+                                        'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <div class="col-sm-3">
+                                        {!! Form::label('Sektorler') !!}
+                                        </div> 
+                                        <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="sektor_id" id="sektor_id" data-validation="required" 
+                                                  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >
+                                                <option selected disabled>Seçiniz</option>
+                                                @foreach($sektorler as $sektor)
+                                                <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                          <div class="col-sm-3">
+                                        {!! Form::label('Telefon') !!}
+                                          </div>
+                                        <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-8">
+                                        {!! Form::text('telefon', null, 
+                                        array('class'=>'form-control', 
+                                        'placeholder'=>'Telefonunuz',
+                                        'data-validation'=>'length alphanumeric', 
+                                        'data-validation-length'=>'3-12', 
+                                        'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                        <label for="">İl</label>
+                                        </div>
+                                        <div class="col-sm-1">:</div> 
+                                            <div class="col-sm-8">
+                                                <select class="form-control input-sm" name="il_id" id="il_id" data-validation="required" 
+                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!" >
+                                                    <option  value="Seçiniz" selected disabled>Seçiniz</option>
+                                                    @foreach($iller as $il)
+                                                    <option value="{{$il->id}}">{{$il->adi}}</option>
+                                                    @endforeach
+                                                </select>
+                                            <div class="ajax-loader">
+                                                <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+                                           </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">İlçe</label>
+                                    </div>
+                                    <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-8">
+                                            <select class="form-control input-sm" name="ilce_id" id="ilce_id" data-validation="required" 
+                                                                            data-validation-error-msg="Lütfen bu alanı dolduurnuz!">
+                                              <option selected disabled>Seçiniz</option>
+                                            </select> 
+                                    </div>
+                                </div>
+                                    <div class="form-group">
+                                 <div class="col-sm-3">   
+                                    <label for="">Semt</label>
+                                 </div>
+                                  <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-8">
+                                            <select class="form-control input-sm" name="semt_id" id="semt_id"  data-validation="required" 
+                                                   data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                <option selected disabled>Seçiniz</option>   
+                                            </select> 
+                                        </div>
+                                </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div style="float:right" class="row">
+                            <div class="form-group">
+                                 <button class="btn btn-primary" type="submit">Kaydet!</button>
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
+                      </div>
+                    </div> 
                 </div>
-                <div class="form-group ">
-                    {!! Form::label('Sektorler') !!}
-                    
-                        <select class="form-control" name="sektor_id" id="sektor_id" required>
-                            <option selected disabled>Seçiniz</option>
-                            @foreach($sektorler as $sektor)
-                            <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
-                            @endforeach
-                        </select>
-                  
-                </div>
-                <div class="form-group">
-                    {!! Form::label('Telefon') !!}
-                    {!! Form::text('telefon', null, 
-                    array('required', 
-                    'class'=>'form-control', 
-                    'placeholder'=>'Telefonunuz')) !!}
-                </div>
-                
-                <label for="">Şehir</label>
-                <select class="form-control input-sm" name="il_id" id="il_id" required>
-                    <option selected disabled>Seçiniz</option>
-                    @foreach($iller as $il)
-                    <option value="{{$il->id}}">{{$il->adi}}</option>
-                    @endforeach
-                </select>
-                <div class="ajax-loader">
-                    <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
-               </div>
             </div>
-
-            <div class="form-group">
-                <label for="">İlçe</label>
-                <select class="form-control input-sm" name="ilce_id" id="ilce_id" required>
-                  <option selected disabled>Seçiniz</option>
-                </select> 
-            </div>
-            <div class="form-group">
-                <label for="">Semt</label>
-                <select class="form-control input-sm" name="semt_id" id="semt_id" required>
-                    <option selected disabled>Seçiniz</option>   
-                </select>     
-            </div>
-            <br>
-            
-            
-            <div class="form-group">
-                {!! Form::submit('Kaydet!', 
-                array('class'=>'btn btn-primary')) !!}
-            </div>
-      
-            {!! Form::close() !!}
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+            <div class="col-lg-6">
+            </div> 
         </div>
-    </div>
-
-    <script>
+  </div>
+<script>
+        
+  $.validate({
+    modules : 'location, date, security, file',
+    onModulesLoaded : function() {
+      $('#country').suggestCountry();
+    }
+  });
+  $('#presentation').restrictLength( $('#pres-max-length') );      
+        
+        
+        
 $('#il_id').on('change', function (e) {
     console.log(e);
 
