@@ -25,7 +25,7 @@
                 <th>KDV Oranı:</th>
                 <th>Birim Fiyat:</th>
                 <th>Para Birimi</th>
-                <th>Toplam:</th>
+                <th>Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
             </tr>
             @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
               <?php if(count($teklif) != 0){
@@ -53,7 +53,7 @@
                       {{$ilan_hizmet->miktar_birimler->adi}}
                   </td>
                   <td>
-                    <select class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
+                    <select style="margin-top: 0px" class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
                         <option value="-1" selected hidden>Seçiniz</option>
                         @if(count($teklif)!=0 && count($hizmetTeklif) != 0 && $hizmetTeklif[0]['kdv_orani'] == 0)
                              <option  value="0"  selected>%0</option>
@@ -83,21 +83,19 @@
                   <td>
                       @if($ilan->kismi_fiyat == 0)
                           @if(count($teklif)!=0 && count($hizmetTeklif) != 0)
-                              <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$hizmetTeklif[0]['kdv_haric_fiyat']}}" required>
+                              <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$hizmetTeklif[0]['kdv_haric_fiyat']}}" required>
                           @else
-                              <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
+                              <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
                           @endif
                       @else
                           @if(count($teklif)!=0 && count($hizmetTeklif) != 0)
-                              <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$hizmetTeklif[0]['kdv_haric_fiyat']}}">
+                              <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$hizmetTeklif[0]['kdv_haric_fiyat']}}">
                           @else
-                              <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
+                              <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
                           @endif
                       @endif  
                   </td>
-                  <td>
-                      {{$firma->ilanlar->para_birimleri->adi}}
-                  </td>
+                  <td></td><!-- Fiyat hesaplaması için gerekli -->
                   <td>
                       <span align="right" class="kalem_toplam" name="kalem_toplam" class="col-sm-3"></span>
                   </td>                                        

@@ -268,7 +268,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         <div class="panel panel-warning">
             <div class="panel-heading"><h4><strong>{{$ilan->adi}}</strong> ilanı </h4></div>
             <div class="panel-body">
-                <div id="exTab2" class="col-lg-9">	
+                <div id="exTab2" class="col-lg-8">	
                     <ul class="nav nav-tabs">
                         <li class="active"><a  href="#1" data-toggle="tab">İlan Bilgileri</a>
                         </li>
@@ -448,12 +448,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                         
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="panel panel-warning" >
                         <div class="panel-heading">{{$ilan->firmalar->adi}} Profili</div>
                         <div class="panel-body">
-                            <div class="" ><img src="{{asset('uploads')}}/{{$ilan->firmalar->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
-                            <div>
+                            <div class="" align="center"><img src="{{asset('uploads')}}/{{$ilan->firmalar->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"></div>
+                            <div align="center">
                                 <br>
                                 <Strong>Firmaya ait ilan sayısı:</strong> {{$ilan->firmalar->ilanlar()->count()}}
                             </div>
@@ -709,9 +709,22 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             if($('#iskonto').is(":checked")) {
                 $('#iskontoVal').trigger('input');
             }
-            
-            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2)).trigger("fnLabelChanged");
-            $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2));
+            var parabirimi = "{{$ilan->para_birimleri->adi}}";
+            var symbolP;
+            console.log(parabirimi);
+            if(parabirimi.indexOf("Lirası") !== -1){  
+                symbolP = String.fromCharCode(8378);
+            }
+            else if(parabirimi === "Dolar"){
+                symbolP= String.fromCharCode(36);
+            }
+            else{
+                symbolP= String.fromCharCode(8364);
+            }
+            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2)+" "+symbolP);
+            $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2)+" "+symbolP);
+            $(".firmaFiyat").html("<strong>"+toplamFiyat.toFixed(2)+"</strong>"+" "+symbolP);
+            voteClick($('#table'));
             $("#toplamFiyat").val(toplamFiyat.toFixed(2));
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
         }  
@@ -728,7 +741,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             var miktar = 1;
             if(ilan_turu === 1 && sozlesme_turu == 0){  /// mal
                 miktar = parseFloat($(this).parent().prev().prev().prev().text());
-                alert(miktar);
             }else if(ilan_turu === 2 && sozlesme_turu == 0){  ///hizmet
                 miktar = parseFloat($(this).parent().prev().prev().prev().text());
             }else if(ilan_turu === 3){     //yapim işi 
@@ -773,11 +785,21 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             if($('#iskonto').is(":checked")) {
                 $('#iskontoVal').trigger('input');
             }
-            
-            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2));
-            $(".firmaFiyat").html("<strong>"+toplamFiyat.toFixed(2)+"</strong>"+" "+String.fromCharCode(8378));
+            var parabirimi = "{{$ilan->para_birimleri->adi}}";
+            var symbolP;
+            if(parabirimi.indexOf("Lirası") !== -1){  
+                symbolP = String.fromCharCode(8378);
+            }
+            else if(parabirimi === "Dolar"){
+                symbolP= String.fromCharCode(36);
+            }
+            else{
+                symbolP= String.fromCharCode(8364);
+            }
+            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.toFixed(2)+" "+symbolP);
+            $(".firmaFiyat").html("<strong>"+toplamFiyat.toFixed(2)+"</strong>"+" "+symbolP);
             voteClick($('#table'));
-            $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2));
+            $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.toFixed(2)+" "+symbolP);
             $("#toplamFiyat").val(toplamFiyat.toFixed(2));
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
         }
@@ -862,8 +884,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             var postData = $(this).serialize();
             var formURL = $(this).attr('action');
             var ilan_id = {{$ilan->id}};
-            alert(postData);
-            alert(formURL);
             //console.log($(this).attr("url"));
             $.ajax(
             {
@@ -875,15 +895,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 data : postData,
                 success:function(data, textStatus, jqXHR) 
                 {
-                    alert('success');
                     $.ajax(
                         {
-                           
                             url : "{{asset('rekabet')}}" + ilan_id,
                             type: "GET",
                             success:function(data, textStatus, jqXHR) 
                             {
-                                alert('success');
                                 $('.rekabet').html(data);
                                 $('.ajax-loader').css("visibility", "hidden");
                             },
