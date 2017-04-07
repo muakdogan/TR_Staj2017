@@ -16,7 +16,7 @@
                             $i=1;
                             $teklif= App\Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();
                         ?>
-                        <th width="6%" >Sıra:</th>
+                        <th width="4%" >Sıra:</th>
                         <th width="9%">Marka:</th>
                         <th width="9%">Model:</th>
                         <th width="9%">Adı:</th>
@@ -25,8 +25,8 @@
                         <th width="9%">Birim:</th>
                         <th width="13%">KDV Oranı:</th>
                         <th width="11%">Birim Fiyat:</th>
-                        <th width="12%">Para Birimi</th>
-                        <th width="9%">Toplam:</th>
+                        <th width="1%"></th><!--Fiyat hesaplaması için gerekli -->
+                        <th width="11%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
 
                     </tr>
                 </thead>
@@ -61,7 +61,7 @@
                         </td>
 
                         <td>
-                            <select class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
+                            <select style="margin-top: 0px" class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
                                                <option value="-1" selected hidden>Seçiniz</option>
                                                @if(count($teklif)!=0 && count($malTeklif) != 0 && $malTeklif[0]['kdv_orani'] == 0)
                                                     <option  value="0"  selected>%0</option>
@@ -91,20 +91,20 @@
                         <td>
                             @if($ilan->kismi_fiyat == 0)
                                 @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                    <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}" required>
+                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}" required>
                                 @else
-                                    <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
+                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
                                 @endif
                             @else
                                 @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                    <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}">
+                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}">
                                 @else
-                                    <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
+                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
                                 @endif
                             @endif    
                         </td>
                         <td>
-                            {{$firma->ilanlar->para_birimleri->adi}}
+                            
                         </td>
                         <td>
                             <span align="right" class="kalem_toplam" name="kalem_toplam" class="col-sm-3"></span>

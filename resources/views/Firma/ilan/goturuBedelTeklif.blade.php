@@ -22,7 +22,7 @@
                             <th>KDV Oranı:</th>
                             <th>Fiyat:</th>
                             <th>Para Birimi</th>
-                            <th>Toplam:</th>
+                            <th>Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
                       </tr>
                       @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
                         <?php if(count($teklif) != 0){
@@ -71,21 +71,19 @@
                             <td>
                                 @if($ilan->kismi_fiyat == 0)
                                     @if(count($teklif)!=0 && count($goturuBedelTeklif) != 0)
-                                        <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$goturuBedelTeklif[0]['kdv_haric_fiyat']}}" required>
+                                        <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$goturuBedelTeklif[0]['kdv_haric_fiyat']}}" required>
                                     @else
-                                        <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
+                                        <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
                                     @endif
                                 @else
                                     @if(count($teklif)!=0 && count($goturuBedelTeklif) != 0)
-                                        <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$goturuBedelTeklif[0]['kdv_haric_fiyat']}}">
+                                        <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$goturuBedelTeklif[0]['kdv_haric_fiyat']}}">
                                     @else
-                                        <input align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
+                                        <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
                                     @endif
                                 @endif    
                             </td>
-                            <td>
-                                {{$firma->ilanlar->para_birimleri->adi}}
-                            </td>
+                            <td></td> <!--Fiyat hesaplaması için gerekli -->
                             <td>
                                 <span align="right" class="kalem_toplam" name="kalem_toplam" class="col-sm-3"></span>
                             </td> 

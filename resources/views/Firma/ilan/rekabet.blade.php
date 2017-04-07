@@ -8,7 +8,7 @@
     $i=0; $j=0; $ilanSahibi=0;
 ?>
 @if(($ilan->sozlesme_turu == 0 || $ilan->sozlesme_turu == 1 )  && $ilan->kismi_fiyat == 0) <!--Kismi Teklife Kapalı -->
-    <div class="tab-pane demo" id="3">
+    <div class="demo">
         <table class="table" id="table"> 
             <thead>
 
@@ -53,7 +53,15 @@
                             <?php $ilanSahibi= 1;?>
                             <td>{{$j}}</td>
                             <td>{{$firmaAdi->adi}}</td>
-                            <td  style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> &#8378;</td>
+                            <td  style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong>
+                                @if($ilan->para_birimleri->adi == "Türk Lirası")
+                                    &#8378;
+                                @elseif($ilan->para_birimleri->adi == "Dolar")
+                                    $
+                                @else
+                                    &#8364;
+                                @endif   
+                            </td>
                             @if($ilan->kapanma_tarihi > $dt)
                                 <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                             @else
@@ -66,7 +74,15 @@
                         @else  <!-- Diğer teklif veren firmalar -->
                             <td>{{$j}}</td>
                             <td>X Firması</td>
-                            <td style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> &#8378;</td>                            
+                            <td style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong>
+                                @if($ilan->para_birimleri->adi == "Türk Lirası")
+                                    &#8378;
+                                @elseif($ilan->para_birimleri->adi == "Dolar")
+                                    $
+                                @else
+                                    &#8364;
+                                @endif    
+                            </td>                            
                             <td></td>
                         @endif
                         </tr>
@@ -77,8 +93,7 @@
         </table>
     </div>
 @elseif($ilan->sozlesme_turu == 0 && $ilan->kismi_fiyat == 1) <!--Kısmi teklife açık -->
-    <div class="tab-pane" id="3">
-        <table class="table" id="table"> 
+    <table class="table" id="table"> 
             <thead>
 
                 <tr>
@@ -88,8 +103,6 @@
                     <th   width="50%"></th>
                 </tr>
             </thead>
-            <br>
-
             <tbody>
                 @foreach($teklifler as $teklif)
                     <?php    $teklifFirma = App\Teklif::find($teklif->teklif_id);
@@ -159,15 +172,31 @@
                             @if(count($verilenFiyat) != 0)
                                 @if(session()->get('firma_id') == $firmaAdi->id)
                                     <td class="highlight">{{$j}}</td>
-                                    <td class="highlight" style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> &#8378;</td>
                                     <td class="highlight">{{$firmaAdi->adi}}</td>
+                                    <td class="highlight" style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong>
+                                        @if($ilan->para_birimleri->adi == "Türk Lirası")
+                                            &#8378;
+                                        @elseif($ilan->para_birimleri->adi == "Dolar")
+                                            $
+                                        @else
+                                            &#8364;
+                                        @endif   
+                                    </td>
                                     <td class="highlight"></td>
                                 <?php $sessionF= session()->get('firma_id'); $sahibF=$ilan->firmalar->id; ?>
                                 @elseif(session()->get('firma_id') == $ilan->firmalar->id)
                                     <?php $ilanSahibi= 1;?>
                                     <td>{{$j}}</td>
-                                    <td  style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong></td>
                                     <td>{{$firmaAdi->adi}}:</td>
+                                    <td  style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong>
+                                        @if($ilan->para_birimleri->adi == "Türk Lirası")
+                                            &#8378;
+                                        @elseif($ilan->para_birimleri->adi == "Dolar")
+                                            $
+                                        @else
+                                            &#8364;
+                                        @endif   
+                                    </td>
                                     @if($ilan->kapanma_tarihi > $dt)
                                         <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                     @else
@@ -179,8 +208,16 @@
                                     @endif
                                 @else
                                     <td>{{$j}}</td>
-                                    <td style="text-align: right"><strong> {{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> &#8378;</td>
                                     <td>X Firması</td>
+                                    <td style="text-align: right"><strong> {{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> 
+                                        @if($ilan->para_birimleri->adi == "Türk Lirası")
+                                            &#8378;
+                                        @elseif($ilan->para_birimleri->adi == "Dolar")
+                                            $
+                                        @else
+                                            &#8364;
+                                        @endif    
+                                    </td>
                                     <td></td>
                                 @endif
                             @endif
@@ -264,7 +301,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
 @endif
 <script>
     var tcount ={{$tekliflerCount}};
