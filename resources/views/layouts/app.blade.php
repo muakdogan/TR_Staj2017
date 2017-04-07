@@ -22,7 +22,7 @@
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
    
     <style>
-         div#header{
+      div#header{
       width: 100%;
       height: 100px;
       background-image:url("{{asset('images/header.jpg')}}");
@@ -176,7 +176,6 @@ window.requestAnimationFrame = window.requestAnimationFrame
         </div>
     
     </nav>
-
     @yield('content')
     @include('layouts.footer_menu')
     <!-- JavaScripts -->

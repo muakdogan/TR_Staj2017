@@ -47,12 +47,9 @@
                padding: 12px 8px 12px 8px;
                
            }
-          
-
             a {
               color: #000;
             }
-
             .dropdown dd,
             .dropdown dt {
               margin: 0px;
@@ -129,7 +126,7 @@
                border-radius: 3px; 
                 display: inline-block;
                 zoom: 1;
-                font: 13px/18px roboto;
+                font: 13px/18px ;
                 background:#fff;
                 padding: 2px;
             }
@@ -152,7 +149,15 @@
                 top:50%;
                 left:32%;
             }
+            .hr{
+                    margin-top: 0px;
+                    margin-bottom: 10px;
+                    border: 0;
+                    border-top: 1px solid #ddd;
+                
+            }
    </style>
+<body style="overflow-x:hidden">
   
     <div  class="container-fuild">
            <div id ="header" class="row content ">
@@ -201,26 +206,18 @@
                     </div>
                     <br>
                     <div class="soldivler">
-                        <form  >
+                        <form>
                             <h4>İllerde Arama</h4>
-                            <br>
-                            <br>
-                             <dl class="dropdown">
+                             <dl style="margin-bottom:0px" class="dropdown">
                                <dt>
-                                   <a href="#" style="padding:2px">
-                                 <span class="hida">Seçiniz<span class="caret"></span></span>    
-
-                               </a>
+                                   <a href="#" style="padding:2px"><span class="hida">Seçiniz<span class="caret"></span></span></a>
                                </dt>
-
                                <dd>
                                    <div class="mutliSelect">
                                        <ul>
                                            @foreach($iller as $il)
-                                           <li>
-                                               <input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
+                                           <li><input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
                                            @endforeach
-
                                        </ul>
                                    </div>
                                </dd>
@@ -267,16 +264,19 @@
                 </div>
 
                 @if(Auth::guest())
-                <?php $sektor_id = 0; ?>
-            @else
-                <?php $id = session()->get('firma_id');
-                                $firma = App\Firma::find($id);
-                                ?>
-                @foreach($firma->sektorler as $sektor)
-                    <?php $sektor_id = $sektor->id ?>
-                @endforeach
-            @endif    
-                <div class="col-sm-9">
+                    <?php $sektor_id = 0; ?>
+                @else
+                    <?php 
+                        $id = session()->get('firma_id');
+                        $firma = App\Firma::find($id);
+                    ?>
+                    @foreach($firma->sektorler as $sektor)
+                        <?php $sektor_id = $sektor->id ?>
+                    @endforeach
+                @endif
+                 <h3 style="text-shadow: 2px 2px 4px #fff">Davet Edildiğiniz İlanlar</h3>
+                 <hr class="hr">
+                <div class="col-sm-9 davetEdil">
                             <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); ?>
                             
                             @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
@@ -307,7 +307,8 @@
                                             $sozlesme_turu  = "Götürü Bedel";
                                         }
                                     ?>
-                                <div class="ilanDetayPop davetEdil" name="{{$dIlan->id}}">
+                            
+                                <div class="ilanDetayPop " name="{{$dIlan->id}}">
                                     <div class="pop-up"  style="display: none;
                                                                 position: absolute;
                                                                 left: 200px;
@@ -333,387 +334,389 @@
                                            $puan = $puan->toArray();
 
                                     ?>
-                                    <p><b>İlan Adı: {{$dIlan->adi}}</b></p>
-                                    @if(number_format($puan[0]['ortalama'],1)> 0)
-                                        <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
-                                        <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" >Firma: {{$dIlan->firmalar->adi}}</a></p>
-                                    @else
-                                        <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" style="padding: 0px" >Firma: {{$dIlan->firmalar->adi}}</a></p>
-                                    @endif
-
-                                    <p>{{$dIlan->adi}}</p>
-                                    <p>{{$dIlan->yayin_tarihi}}</p>
                                    
+                                    
+                                   
+                                    <div class="col-sm-10">
+                                        <p><b>İlan Adı: {{$dIlan->adi}}</b></p>
+                                        @if(number_format($puan[0]['ortalama'],1)> 0)
+                                            <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
+                                            <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                        @else
+                                            <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" style="padding: 0px" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                        @endif
+                                        <p>{{$dIlan->adi}}</p>
 
-                                @if(Auth::guest())
-                                @else
-                                    <a href="#"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br>
-                                @endif
-                                <hr>
-                            </div>
-                        <hr>
-                    @endforeach
+                                        <p style="font-size: 13px;color: #999">{{date('d-m-Y', strtotime($dIlan->yayin_tarihi))}}</p>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        @if(Auth::guest())
+                                        @else
+                                            <a href="#"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right;margin-top:60px'>Başvur</button></a><br><br>
+                                        @endif
+                                    </div>
+                                   
+                                </div>
+                                  
+                            @endforeach
                 </div>
                 <div class="col-sm-9 ilanlar" id="auto_load_div">
-                   @include('Firma.ilan.ilanlar')                                               
+                   @include('Firma.ilan.ilanlar')   
+                  
                </div>
                 <div class="ajax-loader">
                     <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
                 </div>
-            </div>
-            
-            
-                
+            </div> 
         </div>
-            
-            
-            <script type="text/javascript">
-                $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
+</body>           
+<script type="text/javascript">
+    $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
 
-                   $(".silmeButton").each(function(){
-                       $(this).click();
-                   });
-                   return false;
+       $(".silmeButton").each(function(){
+           $(this).click();
+       });
+       return false;
+    });
+    function silme(name){
+            $('li[name='+name+']').remove();
+            if(name === "Tarım" || name === "Hizmet"){
+                $('.checkboxClass[name='+name+']').prop("checked", false);
+                getIlanlar(1);
+            }
+            if(name === "Nakit" || name === "KrediKartı" || name === "Havale" || name === "Çek" || name === "Senet"){
+                $('.checkboxClass2[name='+name+']').prop("checked", false);
+                getIlanlar(1);
+            }
+            if(name === "Mal" || name === "Hizmet" || name === "Yapımİşi"){
+
+                $("#radioDiv input[type='radio']").each(function(){
+
+                    $(this).prop('checked', false);
                 });
-                function silme(name){
-                        $('li[name='+name+']').remove();
-                        if(name === "Tarım" || name === "Hizmet"){
-                            $('.checkboxClass[name='+name+']').prop("checked", false);
-                            getIlanlar(1);
-                        }
-                        if(name === "Nakit" || name === "KrediKartı" || name === "Havale" || name === "Çek" || name === "Senet"){
-                            $('.checkboxClass2[name='+name+']').prop("checked", false);
-                            getIlanlar(1);
-                        }
-                        if(name === "Mal" || name === "Hizmet" || name === "Yapımİşi"){
-                            
-                            $("#radioDiv input[type='radio']").each(function(){
-                                
-                                $(this).prop('checked', false);
-                            });
-                            getIlanlar(1);
-                        }
-                        if(name === "Açık" || name === "BelirliİsteklilerArasında" || name === "Başvuru"){
-                            
-                            $("#radioDiv2 input[type='radio']").each(function(){
-                              
-                                $(this).prop('checked', false);
-                                
-                            });
-                            getIlanlar(1);
-                        }
-                        if(name === "BirimFiyatlı" || name === "GötürüBedel"){
-                            alert("ozge");
-                            $("#radioDiv4 input[type='radio']").each(function(){
-                              
-                                $(this).prop('checked', false);
-                                
-                            });
-                            getIlanlar(1);
-                        }
-                        if(name.indexOf("başlangıç") !== -1){
-                            $(' input[type=date]').each( function resetDate(){
-                                if(name.indexOf(this.value) !== -1){
-                                    this.value = this.defaultValue;
-                                }
-                            } );
-                            getIlanlar(1);    
-                        }
-                        if($('#search').val() !== null){
-                            $("#radioDiv3 input[type='radio']").each(function(){
-                                $(this).prop('checked', false);
-                            });
-                            $('#search').val(null);
-                        }
-                        if(name.indexOf("bitiş") !== -1){
-                            $(' input[type=date]').each( function resetDate(){
-                                if(name.indexOf(this.value) !== -1){
-                                    this.value = this.defaultValue;
-                                }
-                            } );
-                            getIlanlar(1);
-                                            
-                        }
-                        else{
-                            $('.mutliSelect input[type="checkbox"]').each(function(){
-                                var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
-                                title = $(this).attr('name');
-                                if(name == title){
-                                    $(this).prop('checked', false);
-                                }
-                            });
-                             getIlanlar(1);
-                        }
+                getIlanlar(1);
+            }
+            if(name === "Açık" || name === "BelirliİsteklilerArasında" || name === "Başvuru"){
+
+                $("#radioDiv2 input[type='radio']").each(function(){
+
+                    $(this).prop('checked', false);
+
+                });
+                getIlanlar(1);
+            }
+            if(name === "BirimFiyatlı" || name === "GötürüBedel"){
+                alert("ozge");
+                $("#radioDiv4 input[type='radio']").each(function(){
+
+                    $(this).prop('checked', false);
+
+                });
+                getIlanlar(1);
+            }
+            if(name.indexOf("başlangıç") !== -1){
+                $(' input[type=date]').each( function resetDate(){
+                    if(name.indexOf(this.value) !== -1){
+                        this.value = this.defaultValue;
                     }
-                function doldurma(name){
-                        var key=0;
-                        var birlesmisName;
-                        $("#multisel"+key).empty();
-                        
-                        var name1 = name.split(" ");
-                        if(name1.length === 1){
-                            birlesmisName = name1[0];
-                        }
-                        else if(name1.length === 2){
-                            birlesmisName=name1[0]+name1[1];
-                        }
-                        else if(name1.length === 3){
-                            birlesmisName=name1[0]+name1[1]+name1[2];
-                        }
-                        
-                        var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
-                        
-                        $("#multiSel"+key).append(html);                                     
-                }
-                $('#button').click(function(){
-                    doldurma($('#search').val());
-                    getIlanlar(1);
+                } );
+                getIlanlar(1);    
+            }
+            if($('#search').val() !== null){
+                $("#radioDiv3 input[type='radio']").each(function(){
+                    $(this).prop('checked', false);
                 });
-                $('#il_id').change(function(){
-                    var il = new Array();
-                    var n = jQuery('.mutliSelect input[type="checkbox"]').length;
-                    if (n > 0){
-                        jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
-                        il.push($(this).val());
-                        });
+                $('#search').val(null);
+            }
+            if(name.indexOf("bitiş") !== -1){
+                $(' input[type=date]').each( function resetDate(){
+                    if(name.indexOf(this.value) !== -1){
+                        this.value = this.defaultValue;
                     }
-                    getIlanlar(1);
-                    doldurma(il);
-                });
-                $('#baslangic_tarihi').change(function(){
-                    var bas=$('#baslangic_tarihi').val()+"başlangıç";
-                    getIlanlar(1);
-                    doldurma(bas);
-                    });
-                $('#bitis_tarihi').change(function(){
-                    var bit=$('#bitis_tarihi').val()+"bitiş";
-                    getIlanlar(1);
-                    doldurma(bit);
-                });
-                $('.tur').click(function(){
-                    var tur=$("#radioDiv input[type='radio']:checked").val();
-                    getIlanlar(1);
-                    doldurma(tur);
-                });
-                $('.usul').click(function(){
-                    var usul=$("#radioDiv2 input[type='radio']:checked").val();
-                    getIlanlar(1);
-                    doldurma(usul);
-                });
-                $('.sozlesme').click(function(){
-                    var sozlesme=$("#radioDiv4 input[type='radio']:checked").val();
-                    getIlanlar(1);
-                    doldurma(sozlesme);
-                });
-                var odeme = new Array();
-                $('.checkboxClass2').click(function(){ ///////////odeme turu /////////////////
-                    var sonSecilen;
-                    var n = jQuery('.checkboxClass2:checked').length;
-                    if (n > 0){
-                        jQuery('.checkboxClass2:checked').each(function(){
-                            sonSecilen = $(this).attr('name');
-                            if(jQuery.inArray(sonSecilen, odeme) === -1){
-                            console.log(sonSecilen);
-                            odeme.push(sonSecilen);
-                            return false;
-                            }
-                        });
+                } );
+                getIlanlar(1);
 
-                    }
-                    getIlanlar(1);
-                    doldurma(sonSecilen);
-                });
-                var sektor = new Array();
-                $('.checkboxClass').click(function(){  ////////////////////sektor //////////////
-                    var sonSecilen;
-                    var n = jQuery('.checkboxClass:checked').length;
-                        if (n > 0){
-                            jQuery('.checkboxClass:checked').each(function(){
-                            sonSecilen = $(this).attr('name');
-                            if(jQuery.inArray(sonSecilen, sektor) === -1){
-                                sektor.push(sonSecilen);
-                                return false;
-                            }
-                            });
-                        console.log(sonSecilen);
-                    }
-                    getIlanlar(1);
-                    doldurma(sonSecilen);
-                });
-                $(".dropdown dt a").on('click', function() {
-                    $(".dropdown dd ul").slideToggle('fast');
-                });
-
-                $(".dropdown dd ul li a").on('click', function() {
-                    $(".dropdown dd ul").hide();
-                });
-
-                function getSelectedValue(id) {
-                    return $("#" + id).find("dt a span.value").html();
-                }
-
-                $(document).bind('click', function(e) {
-                    var $clicked = $(e.target);
-                    if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
-                });
-
-                $('.mutliSelect input[type="checkbox"]').on('click', function() {
+            }
+            else{
+                $('.mutliSelect input[type="checkbox"]').each(function(){
                     var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
-                      title = $(this).attr('name');
+                    title = $(this).attr('name');
+                    if(name == title){
+                        $(this).prop('checked', false);
+                    }
+                });
+                 getIlanlar(1);
+            }
+        }
+    function doldurma(name){
+            var key=0;
+            var birlesmisName;
+            $("#multisel"+key).empty();
 
-                    if ($(this).is(':checked')) {
-                      var html = '<span title="' + title + '">' + title + '</span>';
-                      $('.multiSel').append(html);
-                      $(".hida").hide();
-                      getIlanlar(1);
-                      doldurma(title);
-                    } else {
-                      $('span[title="' + title + '"]').remove();
-                      var ret = $(".hida");
-                      $('.dropdown dt a').append(ret);
-                    }
-                });
-                
-                $(document).ready(function(){
-                    
-                    $(document).on('click', '.pagination a', function (e){
-                        getIlanlar($(this).attr('href').split('page=')[1]);
-                        e.preventDefault();
-                    });
-                    var sehirId = "{{$ilId}}";
-                    var keyword = "{{$keyword}}";
-                    var sektorID = "{{$sektor_id}}";
-                    
-                    if(sehirId != ""){
-                        jQuery('.mutliSelect input[type="checkbox"]').each(function(){
-                            if($(this).val() == sehirId ){
-                                var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
-                                    title = $(this).attr('name');
-                                var html = '<span title="' + title + '">' + title + '</span>';
-                                $(".hida").append(title+",");
-                                $(this).prop( "checked", true );
-                                doldurma(title);
-                            }
-                        });
-                    }
-                    if(keyword != ""){
-                        $("#search").val(keyword);
-                        doldurma(keyword);
-                        $("#radioDiv3 input[type='radio']").each(function(){
-                            if($(this).val() == "tum"){
-                                $(this).prop("checked",true);
-                            }
-                        });
-                    }
-                    if(sektorID != ""){
-                        jQuery(".checkboxClass").each(function(){
-                            if($(this).val() == sektorID){
-                                $(this).prop("checked",true);
-                            }
-                        });
-                        var sonSecilen;
-                        var n = jQuery('.checkboxClass:checked').length;
-                            if (n > 0){
-                                jQuery('.checkboxClass:checked').each(function(){
-                                sonSecilen = $(this).attr('name');
-                                if(jQuery.inArray(sonSecilen, sektor) === -1){
-                                    sektor.push(sonSecilen);
-                                    return false;
-                                }
-                                });
-                            console.log(sonSecilen);
-                        }
-                        getIlanlar(1);
-                        doldurma(sonSecilen);
-                    }
-                });
-                
-                function getIlanlar(page) {
-                    var il_id=$('#il_id').val();
-                    var basTar=$('#baslangic_tarihi').val();
-                    var bitTar=$('#bitis_tarihi').val();
-                    var selectedSektor = new Array();
-                    var n = jQuery(".checkboxClass:checked").length;  ///////////sektor /////////////
-                    if (n > 0){
-                        jQuery(".checkboxClass:checked").each(function(){
-                                selectedSektor.push($(this).val());
-                                var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
-                            });
-                    }
-                    var selectedIl = new Array(); /////////// iller //////////////
-                    var n = jQuery('.mutliSelect input[type="checkbox"]').length;
-                    if (n > 0){
-                        jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
-                                selectedIl.push($(this).val());
-                        });
-                    }
-                    var selectedOdeme = new Array(); /////////// odeme Turu ////////////
-                    var n = jQuery('.checkboxClass2:checked').length;
-                    if (n > 0){
-                        jQuery('.checkboxClass2:checked').each(function(){
-                            selectedOdeme.push($(this).val());
-                        });
-                    }
-                    var selectedTur = "";
-                    var selected = $("#radioDiv input[type='radio']:checked");
-                    if (selected.length > 0) {
-                        selectedTur = selected.val();
-                        if(selectedTur === "Mal"){
-                            selectedTur = 1;
-                        }else if(selectedTur === "Hizmet"){
-                            selectedTur = 2;
-                        }else{
-                            selectedTur = 3;
-                        }
-                    }
-                    var selectedUsul = "";   //////////////////////////////İlan Usulü ///////////
-                    var selected2 = $("#radioDiv2 input[type='radio']:checked");
-                    if (selected2.length > 0) {
-                        selectedUsul = selected2.val();
-                        if(selectedUsul === "Açık"){
-                            selectedUsul = 1;
-                        }else if(selectedUsul === "Belirli İstekliler Arasında"){
-                            selectedUsul = 2;
-                        }else{
-                            selectedUsul = 3;
-                        }
-                    }
-                    var selectedSearch = "";    /////////////////////////// search button /////////////////////
-                    var inputSearch = "";
-                    var selected3 = $("#radioDiv3 input[type='radio']:checked");
-                    if (selected3.length > 0) {
-                        selectedSearch = selected3.val();
-                        inputSearch=$('#search').val();
-                    }
-                    var selectedSozlesme = ""; //////////////////////Sözleşme Türü //////////////////////////
-                    var selected4 = $("#radioDiv4 input[type='radio']:checked");
-                    if (selected4.length > 0) {
-                        selectedSozlesme = selected4.val();
-                        if(selectedSozlesme === "Birim Fiyatlı"){
-                            selectedSozlesme = 0;
-                        }else if(selectedSozlesme === "Götürü Bedel"){
-                            selectedSozlesme = 1;
-                        }
-                    }
-                    $.ajax({
-                        beforeSend: function(){
-                            $('.ajax-loader').css("visibility", "visible");
-                        },
-                        url : '?page='+page,
-                        dataType: 'json',
-                        data:{il:selectedIl,bas_tar:basTar,bit_tar:bitTar,sektor:selectedSektor,tur:selectedTur,
-                                    usul:selectedUsul,radSearch:selectedSearch,input:inputSearch,odeme:selectedOdeme,
-                                    sozles:selectedSozlesme
-                        },
-                    }).done(function(data){
-                        $('.ilanlar').html(data);
-                        location.hash = page;
-                        window.scrollTo(0, 0);
-                        
-                        $('.ajax-loader').css("visibility", "hidden");
-                    }).fail(function(){ 
-                        alert('İlanlar Yüklenemiyor !!!  ');
-                    });
+            var name1 = name.split(" ");
+            if(name1.length === 1){
+                birlesmisName = name1[0];
+            }
+            else if(name1.length === 2){
+                birlesmisName=name1[0]+name1[1];
+            }
+            else if(name1.length === 3){
+                birlesmisName=name1[0]+name1[1]+name1[2];
+            }
+
+            var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
+
+            $("#multiSel"+key).append(html);                                     
+    }
+    $('#button').click(function(){
+        doldurma($('#search').val());
+        getIlanlar(1);
+    });
+    $('#il_id').change(function(){
+        var il = new Array();
+        var n = jQuery('.mutliSelect input[type="checkbox"]').length;
+        if (n > 0){
+            jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
+            il.push($(this).val());
+            });
+        }
+        getIlanlar(1);
+        doldurma(il);
+    });
+    $('#baslangic_tarihi').change(function(){
+        var bas=$('#baslangic_tarihi').val()+"başlangıç";
+        getIlanlar(1);
+        doldurma(bas);
+        });
+    $('#bitis_tarihi').change(function(){
+        var bit=$('#bitis_tarihi').val()+"bitiş";
+        getIlanlar(1);
+        doldurma(bit);
+    });
+    $('.tur').click(function(){
+        var tur=$("#radioDiv input[type='radio']:checked").val();
+        getIlanlar(1);
+        doldurma(tur);
+    });
+    $('.usul').click(function(){
+        var usul=$("#radioDiv2 input[type='radio']:checked").val();
+        getIlanlar(1);
+        doldurma(usul);
+    });
+    $('.sozlesme').click(function(){
+        var sozlesme=$("#radioDiv4 input[type='radio']:checked").val();
+        getIlanlar(1);
+        doldurma(sozlesme);
+    });
+    var odeme = new Array();
+    $('.checkboxClass2').click(function(){ ///////////odeme turu /////////////////
+        var sonSecilen;
+        var n = jQuery('.checkboxClass2:checked').length;
+        if (n > 0){
+            jQuery('.checkboxClass2:checked').each(function(){
+                sonSecilen = $(this).attr('name');
+                if(jQuery.inArray(sonSecilen, odeme) === -1){
+                console.log(sonSecilen);
+                odeme.push(sonSecilen);
+                return false;
                 }
-            </script>
+            });
+
+        }
+        getIlanlar(1);
+        doldurma(sonSecilen);
+    });
+    var sektor = new Array();
+    $('.checkboxClass').click(function(){  ////////////////////sektor //////////////
+        var sonSecilen;
+        var n = jQuery('.checkboxClass:checked').length;
+            if (n > 0){
+                jQuery('.checkboxClass:checked').each(function(){
+                sonSecilen = $(this).attr('name');
+                if(jQuery.inArray(sonSecilen, sektor) === -1){
+                    sektor.push(sonSecilen);
+                    return false;
+                }
+                });
+            console.log(sonSecilen);
+        }
+        getIlanlar(1);
+        doldurma(sonSecilen);
+    });
+    $(".dropdown dt a").on('click', function() {
+        $(".dropdown dd ul").slideToggle('fast');
+    });
+
+    $(".dropdown dd ul li a").on('click', function() {
+        $(".dropdown dd ul").hide();
+    });
+
+    function getSelectedValue(id) {
+        return $("#" + id).find("dt a span.value").html();
+    }
+
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+    });
+
+    $('.mutliSelect input[type="checkbox"]').on('click', function() {
+        var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
+          title = $(this).attr('name');
+
+        if ($(this).is(':checked')) {
+          var html = '<span title="' + title + '">' + title + '</span>';
+          $('.multiSel').append(html);
+          $(".hida").hide();
+          getIlanlar(1);
+          doldurma(title);
+        } else {
+          $('span[title="' + title + '"]').remove();
+          var ret = $(".hida");
+          $('.dropdown dt a').append(ret);
+        }
+    });
+
+    $(document).ready(function(){
+
+        $(document).on('click', '.pagination a', function (e){
+            getIlanlar($(this).attr('href').split('page=')[1]);
+            e.preventDefault();
+        });
+        var sehirId = "{{$ilId}}";
+        var keyword = "{{$keyword}}";
+        var sektorID = "{{$sektor_id}}";
+
+        if(sehirId != ""){
+            jQuery('.mutliSelect input[type="checkbox"]').each(function(){
+                if($(this).val() == sehirId ){
+                    var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
+                        title = $(this).attr('name');
+                    var html = '<span title="' + title + '">' + title + '</span>';
+                    $(".hida").append(title+",");
+                    $(this).prop( "checked", true );
+                    doldurma(title);
+                }
+            });
+        }
+        if(keyword != ""){
+            $("#search").val(keyword);
+            doldurma(keyword);
+            $("#radioDiv3 input[type='radio']").each(function(){
+                if($(this).val() == "tum"){
+                    $(this).prop("checked",true);
+                }
+            });
+        }
+        if(sektorID != ""){
+            jQuery(".checkboxClass").each(function(){
+                if($(this).val() == sektorID){
+                    $(this).prop("checked",true);
+                }
+            });
+            var sonSecilen;
+            var n = jQuery('.checkboxClass:checked').length;
+                if (n > 0){
+                    jQuery('.checkboxClass:checked').each(function(){
+                    sonSecilen = $(this).attr('name');
+                    if(jQuery.inArray(sonSecilen, sektor) === -1){
+                        sektor.push(sonSecilen);
+                        return false;
+                    }
+                    });
+                console.log(sonSecilen);
+            }
+            getIlanlar(1);
+            doldurma(sonSecilen);
+        }
+    });
+
+    function getIlanlar(page) {
+        var il_id=$('#il_id').val();
+        var basTar=$('#baslangic_tarihi').val();
+        var bitTar=$('#bitis_tarihi').val();
+        var selectedSektor = new Array();
+        var n = jQuery(".checkboxClass:checked").length;  ///////////sektor /////////////
+        if (n > 0){
+            jQuery(".checkboxClass:checked").each(function(){
+                    selectedSektor.push($(this).val());
+                    var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
+                });
+        }
+        var selectedIl = new Array(); /////////// iller //////////////
+        var n = jQuery('.mutliSelect input[type="checkbox"]').length;
+        if (n > 0){
+            jQuery('.mutliSelect input[type="checkbox"]:checked').each(function(){
+                    selectedIl.push($(this).val());
+            });
+        }
+        var selectedOdeme = new Array(); /////////// odeme Turu ////////////
+        var n = jQuery('.checkboxClass2:checked').length;
+        if (n > 0){
+            jQuery('.checkboxClass2:checked').each(function(){
+                selectedOdeme.push($(this).val());
+            });
+        }
+        var selectedTur = "";
+        var selected = $("#radioDiv input[type='radio']:checked");
+        if (selected.length > 0) {
+            selectedTur = selected.val();
+            if(selectedTur === "Mal"){
+                selectedTur = 1;
+            }else if(selectedTur === "Hizmet"){
+                selectedTur = 2;
+            }else{
+                selectedTur = 3;
+            }
+        }
+        var selectedUsul = "";   //////////////////////////////İlan Usulü ///////////
+        var selected2 = $("#radioDiv2 input[type='radio']:checked");
+        if (selected2.length > 0) {
+            selectedUsul = selected2.val();
+            if(selectedUsul === "Açık"){
+                selectedUsul = 1;
+            }else if(selectedUsul === "Belirli İstekliler Arasında"){
+                selectedUsul = 2;
+            }else{
+                selectedUsul = 3;
+            }
+        }
+        var selectedSearch = "";    /////////////////////////// search button /////////////////////
+        var inputSearch = "";
+        var selected3 = $("#radioDiv3 input[type='radio']:checked");
+        if (selected3.length > 0) {
+            selectedSearch = selected3.val();
+            inputSearch=$('#search').val();
+        }
+        var selectedSozlesme = ""; //////////////////////Sözleşme Türü //////////////////////////
+        var selected4 = $("#radioDiv4 input[type='radio']:checked");
+        if (selected4.length > 0) {
+            selectedSozlesme = selected4.val();
+            if(selectedSozlesme === "Birim Fiyatlı"){
+                selectedSozlesme = 0;
+            }else if(selectedSozlesme === "Götürü Bedel"){
+                selectedSozlesme = 1;
+            }
+        }
+        $.ajax({
+            beforeSend: function(){
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            url : '?page='+page,
+            dataType: 'json',
+            data:{il:selectedIl,bas_tar:basTar,bit_tar:bitTar,sektor:selectedSektor,tur:selectedTur,
+                        usul:selectedUsul,radSearch:selectedSearch,input:inputSearch,odeme:selectedOdeme,
+                        sozles:selectedSozlesme
+            },
+        }).done(function(data){
+            $('.ilanlar').html(data);
+            location.hash = page;
+            window.scrollTo(0, 0);
+
+            $('.ajax-loader').css("visibility", "hidden");
+        }).fail(function(){ 
+            alert('İlanlar Yüklenemiyor !!!  ');
+        });
+    }
+</script>
 @endsection
