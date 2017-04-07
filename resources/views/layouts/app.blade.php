@@ -17,12 +17,12 @@
     <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!--script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
    
     <style>
-         div#header{
+      div#header{
       width: 100%;
       height: 100px;
       background-image:url("{{asset('images/header.jpg')}}");
@@ -176,11 +176,10 @@ window.requestAnimationFrame = window.requestAnimationFrame
         </div>
     
     </nav>
-
     @yield('content')
     @include('layouts.footer_menu')
     <!-- JavaScripts -->
-    <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script>
       var selected;
