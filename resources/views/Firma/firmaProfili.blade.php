@@ -313,7 +313,7 @@
                                            <label for="inputTask" class="col-sm-1 control-label">Şehir</label>
                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                            <div class="col-sm-9">
-                                               <select class="form-control" name="il_id" id="il_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                               <select class="form-control il_id" name="il_id" id="il_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                    <option selected disabled>Seçiniz</option>
                                                    @foreach($iller as $il)
                                                    <option  value="{{$il->id}}" >{{$il->adi}}</option>
@@ -457,7 +457,7 @@
            <div class="panel panel-default">
                <div style="border-bottom: 3px solid transparent;border-color:#ddd" class="panel-heading">
                    <h4 class="panel-title">
-                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><img src="{{asset('images/mali.png')}}">&nbsp;<strong>Mali Bilgileri</strong></a>
+                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><img src="{{asset('images/mali.png')}}">&nbsp;<strong>Mali Bilgiler</strong></a>
                        <?php
                             if (!$firma->mali_bilgiler) {
                                 $firma->mali_bilgiler = new App\MaliBilgi();
@@ -521,10 +521,6 @@
                                <td><strong>:</strong>  {{$firmaFatura->ilceler->adi}}</td>
                            </tr>
                            <tr>
-                               <td><strong>Semt</strong></td>
-                               <td><strong>:</strong>  {{$firmaFatura->semtler->adi}}</td>
-                           </tr>
-                           <tr>
                                <td><strong>Vergi Dairesi</strong></td>                                                        
                                <td><strong>:</strong>  {{$firma->mali_bilgiler->vergi_daireleri->adi}}</td>
                            </tr>
@@ -565,7 +561,7 @@
                                        <label for="inputTask" class="col-sm-1 control-label">Şehir</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
-                                           <select class="form-control" name="il_id" id="il_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                           <select class="form-control il_id" name="mali_il_id" id="mali_il_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                <option selected disabled>Seçiniz</option>
                                                @foreach($iller as $il)
                                                <option  value="{{$il->id}}" >{{$il->adi}}</option>
@@ -578,22 +574,12 @@
                                        <label for="inputTask" class="col-sm-1 control-label">İlçe</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
-                                           <select class="form-control" name="ilce_id" id="ilce_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                           <select class="form-control" name="mali_ilce_id" id="mali_ilce_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                <option selected disabled>Seçiniz</option>
 
                                            </select>
                                        </div>
                                    </div>
-                                   <div class="form-group error">
-                                       <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputTask" class="col-sm-1 control-label">Semt</label>
-                                      <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                       <div class="col-sm-9">
-                                           <select class="form-control" name="semt_id" id="semt_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                               <option selected disabled>Seçiniz</option>
-                                           </select>
-                                       </div>
-                                   </div>    
                                    <div class="form-group">
                                        <label for="inputTask" class="col-sm-1 control-label"></label>
                                        <label for="inputEmail3" class="col-sm-1 control-label">Firma Ünvanı</label>
@@ -617,14 +603,12 @@
                                    </div>
                                    <div class="form-group">
                                        <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-1 control-label">Vergi Daireleri</label>
+                                       <label for="inputEmail3" class="col-sm-1 control-label">Vergi Dairesi</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
                                            <select class="form-control" name="vergi_dairesi_id" id="vergi_dairesi_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                <option selected disabled>Seçiniz</option>
-                                               @foreach($vergiDaireleri as $vergiDaire)
-                                               <option  value="{{$vergiDaire->id}}" >{{$vergiDaire->adi}}</option>
-                                               @endforeach
+                                               
                                            </select>
                                        </div>
                                    </div>
@@ -711,6 +695,13 @@
                                <td><strong>:</strong>  {{$firma->ticari_bilgiler->ticaret_odalari->adi}}</td>
                            </tr>
                            <tr>
+                               <td><strong>Faaliyet Türü</strong></td>
+                               <td><strong>:</strong>@foreach($firma->faaliyetler as $faaliyet)
+                                   {{$faaliyet->adi}}
+                                   @endforeach
+                               </td>
+                           </tr>
+                           <tr>
                                <td><strong>Üst Sektör</strong></td>
                                <td><strong>:</strong>  {{$firma->ticari_bilgiler->sektorler->adi}}</td>
                            </tr>
@@ -729,20 +720,13 @@
                                </td>
                            </tr>
                            <tr>
-                               <td><strong>Kuruluş Tarihi</strong></td>
-                               @if($firma->kurulus_tarihi=="0000-00-00")
-                               <td><strong>:</strong> </td>
-                               @else
-                               <td><strong>:</strong> {{$firma->kurulus_tarihi}}</td>
-                               @endif
+                                <td><strong>Kuruluş Tarihi</strong></td>
+                                <td><strong>:</strong>
+                                    @if($firma->kurulus_tarihi != null)
+                                        {{$firma->kurulus_tarihi}}
+                                    @endif
+                                </td>
                            </tr> 
-                           <tr>
-                               <td><strong>Firma Faaliyet Türü</strong></td>
-                               <td><strong>:</strong>@foreach($firma->faaliyetler as $faaliyet)
-                                   {{$faaliyet->adi}}
-                                   @endforeach
-                               </td>
-                           </tr>
                            <tr>
                                <td><strong>Firmanın Ürettiği Markalar</strong></td>
                                <td><strong>:</strong>
@@ -793,6 +777,16 @@
                                        </div>
                                    </div>
                                    <div class="form-group">
+                                        <label for="inputTask" class="col-sm-1 control-label"></label>
+                                        <label for="inputEmail3" class="col-sm-1 control-label">Faaliyet Türü</label>
+                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                        <div class="col-sm-9">
+                                            @foreach($faaliyetler as $faaliyet)
+                                            <input type="checkbox" id="firma_faaliyet_turu" name="firma_faaliyet_turu[]" value="{{$faaliyet->id}}"  data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">{{$faaliyet->adi}}
+                                                @endforeach
+                                        </div>
+                                   </div>
+                                   <div class="form-group">
                                          <label for="inputTask" class="col-sm-1 control-label"></label>
                                          <label for="inputEmail3" class="col-sm-1 control-label">Üst Sektör</label>
                                          <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
@@ -810,9 +804,9 @@
                                        <label for="inputEmail3" class="col-sm-1 control-label">Faaliyet Sektörleri</label>
                                          <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
-                                           @foreach($ustsektor as $sektor)
-                                           <input type="checkbox" id="faaliyet_sektorleri" name="faaliyet_sektorleri[]" value="{{$sektor->id}}"  data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">{{$sektor->adi}}
-                                               @endforeach
+                                            @foreach($ustsektor as $sektor)
+                                                <input type="checkbox" id="faaliyet_sektorleri" name="faaliyet_sektorleri[]" value="{{$sektor->id}}"  data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">{{$sektor->adi}}
+                                            @endforeach
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -820,9 +814,9 @@
                                        <label for="inputEmail3" class="col-sm-1 control-label">Firma Departmanları</label>
                                          <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
-                                           @foreach($departmanlar as $departman)
-                                           <input type="checkbox" id="firma_departmanlari" name="firma_departmanları[]" value="{{$departman->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$departman->adi}}
-                                               @endforeach
+                                            @foreach($departmanlar as $departman)
+                                                <input type="checkbox" id="firma_departmanlari" name="firma_departmanları[]" value="{{$departman->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$departman->adi}}
+                                            @endforeach
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -831,16 +825,6 @@
                                          <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
                                            <input type="date" class="form-control datepicker" id="kurulus_tarihi" name="kurulus_tarihi" placeholder="Kuruluş Tarihi" value="{{$firma->kurulus_tarihi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                       </div>
-                                   </div>
-                                   <div class="form-group">
-                                         <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-1 control-label">Firma Faaliyet Türü</label>
-                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                       <div class="col-sm-9">
-                                           @foreach($faaliyetler as $faaliyet)
-                                           <input type="checkbox" id="firma_faaliyet_turu" name="firma_faaliyet_turu[]" value="{{$faaliyet->id}}"  data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">{{$faaliyet->adi}}
-                                               @endforeach
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -855,16 +839,14 @@
                                        </div>
                                    </div>
                                    <div class="form-group">
-                                         <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-1 control-label">Firmanın Sattığı Markalari</label>
-                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                       <div class="col-sm-9">
-
-                                           @foreach($markalar as $marka)
-                                           <input type="checkbox" id="firmanin_sattiği_markalar"  name="firmanin_sattıgı_markalar[]" value="{{$marka->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$marka->adi}}
-                                           @endforeach
-
-                                       </div>
+                                        <label for="inputTask" class="col-sm-1 control-label"></label>
+                                        <label for="inputEmail3" class="col-sm-1 control-label">Firmanın Sattığı Markalari</label>
+                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                        <div class="col-sm-9">
+                                            @foreach($markalar as $marka)
+                                            <input type="checkbox" id="firmanin_sattiği_markalar"  name="firmanin_sattıgı_markalar[]" value="{{$marka->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$marka->adi}}
+                                            @endforeach
+                                        </div>
                                    </div>
                                    {!! Form::submit('Kaydet', array('url'=>'firmaProfili/ticaribilgi/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                    <br>
@@ -1676,7 +1658,8 @@
              </div>
         </div>
      </div>
-   </div>       
+   </div>  
+    <script src="{{asset('js/selectDD.js')}}"></script>     
 <script> 
   $.validate({
     modules : 'location, date, security, file',
@@ -1707,13 +1690,14 @@
             e.preventDefault(); $(this).parent('div').remove(); x--;
         });
 
-        $('#il_id').on('change', function (e) {
+        $('.il_id').on('change', function (e) {
+            alert("girdi");
             var il_id = e.target.value;
-            GetIlce(il_id);
+            GetIlce(il_id,e.target.id);
+            GetVergi(il_id);
             //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
             //$("#semt_id")[0].selectedIndex=0;
         });
-
         $('#ilce_id').on('change', function (e) {
             var ilce_id = e.target.value;
             GetSemt(ilce_id);
@@ -2053,36 +2037,59 @@
         }
     });
     }
-
-    
-    function GetIlce(il_id) {
+    function GetIlce(il_id,Id) {
+        
         if (il_id > 0) {
-            $("#ilce_id").get(0).options.length = 0;
-            $("#ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
-
+            if(Id == "il_id"){
+                $("#ilce_id").get(0).options.length = 0;
+                $("#ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+            }
+            else{
+                $("#mali_ilce_id").get(0).options.length = 0;
+                $("#mali_ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+            }
             $.ajax({
                 type: "GET",
-                url: "{{asset('ajax-subcat?il_id=')}}"+il_id,
-
+                url: "{{asset('ajax-subcat')}}",
+                data:{il_id:il_id},
                 contentType: "application/json; charset=utf-8",
 
                 success: function(msg) {
-                    $("#ilce_id").get(0).options.length = 0;
-                    $("#ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
-
+                    if(Id == "il_id"){
+                        $("#ilce_id").get(0).options.length = 0;
+                        $("#ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
+                    }else{
+                        $("#mali_ilce_id").get(0).options.length = 0;
+                        $("#mali_ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
+                    }    
                     $.each(msg, function(index, ilce) {
-                        $("#ilce_id").get(0).options[$("#ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
+                        if(Id == "il_id"){
+                            $("#ilce_id").get(0).options[$("#ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
+                        }
+                        else{
+                            $("#mali_ilce_id").get(0).options[$("#mali_ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
+                        }
                     });
                 },
                 async: false,
                 error: function() {
-                    $("#ilce_id").get(0).options.length = 0;
+                    if(Id == "il_id"){
+                        $("#ilce_id").get(0).options.length = 0;
+                    }
+                    else{
+                        $("#mali_ilce_id").get(0).options.length = 0;
+                    }
                     alert("İlçeler yükelenemedi!!!");
                 }
             });
         }
         else {
-            $("#ilce_id").get(0).options.length = 0;
+            if(Id == "il_id"){
+                $("#ilce_id").get(0).options.length = 0;
+            }
+            else{
+                $("#mali_ilce_id").get(0).options.length = 0;
+            }
         }
     }
     
@@ -2116,14 +2123,45 @@
             $("#semt_id").get(0).options.length = 0;
         }
     }
+    function GetVergi(il_id) {
+        if (il_id > 0) {
+            $("#vergi_dairesi_id").get(0).options.length = 0;
+            $("#vergi_dairesi_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
 
+            $.ajax({
+                type: "GET",
+                url: "{{asset('vergi_daireleri')}}",
+                data:{il_id:il_id},
+                contentType: "application/json; charset=utf-8",
+
+                success: function(msg) {
+                    $("#vergi_dairesi_id").get(0).options.length = 0;
+                    $("#vergi_dairesi_id").get(0).options[0] = new Option("Seçiniz", "-1");
+
+                    $.each(msg, function(index, vergi) {
+                        $("#vergi_dairesi_id").get(0).options[$("#vergi_dairesi_id").get(0).options.length] = new Option(vergi.adi, vergi.id);
+                    });
+                },
+                error: function() {
+                    $("#vergi_dairesi_id").get(0).options.length = 0;
+                    alert("Vergi Daireleri yükelenemedi!!!");
+                }
+            });
+        }
+        else {
+            $("#vergi_dairesi_id").get(0).options.length = 0;
+        }
+    }
     function populateDD(){
-        GetIlce({{$firmaAdres->iller->id}});
+        GetIlce({{$firmaAdres->iller->id}},"il_id");
+        console.log({{$firmaAdres->ilceler->id}})
         GetSemt({{$firmaAdres->ilceler->id}});
         $("#il_id").val({{$firmaAdres->iller->id}});
-        $("#ilce_id").val({{$firmaAdres->ilceler->id}});
+        console.log($("#ilce_id").val({{$firmaAdres->ilceler->id}}));
         $("#semt_id").val({{$firmaAdres->semtler->id}});
     }
+    
+    
     $('#addImage').on('change', function(evt) {
     var selectedImage = evt.currentTarget.files[0];
     var imageWrapper = document.querySelector('.image-wrapper');

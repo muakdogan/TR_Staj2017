@@ -292,15 +292,16 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             @foreach($aktif_ilanlar as $aktif_ilan)
                             <?php  
                                 $aIlan=  \App\Ilan::find($aktif_ilan->ilan_id);
-                                $ilanTeklifsayısı = $aIlan->teklifler()->count();
+                                $ilanTeklifsayisi = $aIlan->teklifler()->count();
                             ?>
                             <tr>
                                 <td>{{$i++}}</td>
                                 <td>{{$aktif_ilan->ilan_adi}}</td>
                                 
                                 <td>{{date('d- m -Y', strtotime($aktif_ilan->kapanma_tarihi))}}</td>
-                                <td>{{$ilanTeklifsayısı}}</td>
-                                @if($aktif_ilan->kapanma_tarihi > $dt)
+                                <td>{{$ilanTeklifsayisi}}</td>
+                                
+                                @if($aktif_ilan->kapanma_tarihi > $dt || $ilanTeklifsayisi == 0)
                                    <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
                                 @else
                                 <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
@@ -314,29 +315,29 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 </div>
                 
                 <?php 
-                           $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
-                           $sonuc_ilanlar=DB::select(DB::raw("SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
-                            FROM ilanlar i, firmalar f, kismi_kapali_kazananlar kk
-                            WHERE f.id = i.firma_id
-                            AND kk.ilan_id = i.id
-                            AND f.id ='$firma->id'
-                            UNION 
-                            SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
-                            FROM ilanlar i, firmalar f, kismi_acik_kazananlar ka
-                            WHERE f.id = i.firma_id
-                            AND ka.ilan_id = i.id
-                            AND f.id ='$firma->id'
-                            ORDER BY kapanma_tarihi ASC "));
-                           
-                            $sonuc_kapali = 0;
-                            foreach($sonuc_ilanlar as $sonucIla){
-                             $sonuc_kapali++;
-                            }
-                           
-                            $i=0;
-                            $kullanici_id=Auth::user()->kullanici_id;
-                            $firma_id = session()->get('firma_id');
-                            $j=1;
+                    $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+                    $sonuc_ilanlar=DB::select(DB::raw("SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
+                     FROM ilanlar i, firmalar f, kismi_kapali_kazananlar kk
+                     WHERE f.id = i.firma_id
+                     AND kk.ilan_id = i.id
+                     AND f.id ='$firma->id'
+                     UNION 
+                     SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
+                     FROM ilanlar i, firmalar f, kismi_acik_kazananlar ka
+                     WHERE f.id = i.firma_id
+                     AND ka.ilan_id = i.id
+                     AND f.id ='$firma->id'
+                     ORDER BY kapanma_tarihi ASC "));
+
+                     $sonuc_kapali = 0;
+                     foreach($sonuc_ilanlar as $sonucIla){
+                      $sonuc_kapali++;
+                     }
+
+                     $i=0;
+                     $kullanici_id=Auth::user()->kullanici_id;
+                     $firma_id = session()->get('firma_id');
+                     $j=1;
                 ?>
                 
             
@@ -427,6 +428,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                         @else
                                           <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
                                         @endif
+                                    @else
+                                    <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}" disabled>Puan Ver/Yorum Yap</button></a>
                                     @endif
                                 <div class="modal fade" id="modalForm{{$i}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -500,7 +503,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                 @foreach($aktif_ilanlar as $aktif_ilan)
                                   @if($aktif_ilan->kapanma_tarihi < $dt)
                                       <tr>
-                                        <td><a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}" class="test" data-toggle="tooltip" data-placement="bottom" title="Bu ilanın henüz kazananını belirlemediniz lütfen ilanın kazananını belirlemek için tıklayınız!">{{$aktif_ilan->ilan_adi}}</a></td>
+                                        <td><a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}" class="test" data-toggle="tooltip" data-placement="bottom" title="Bu ilanın henüz kazananını belirlemediniz lütfen ilanın kazananını belirlemek için tıklayınız!">{{$aktif_ilan->ilan_adi}}</a></td>
                                       </tr>
                                   @else 
                                   @endif

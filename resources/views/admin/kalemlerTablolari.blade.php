@@ -62,7 +62,7 @@ $(function(){
     // source: SOURCE,
     source: {
 		data:{id:0},
-        url: "findChildrenTree",
+        url: "{{asset('findChildrenTree')}}",
         dataType:'json'
     },
     extensions: ["edit", "dnd", "table", "gridnav"],
@@ -106,7 +106,7 @@ $(function(){
 		var node = data.node;
 		console.log(node.key);
         data.result = {
-		  url: "findChildrenTree",
+		  url: "{{asset('findChildrenTree')}}",
 		 
 		  data: {id: node.key},
                   dataType:'json',
@@ -343,7 +343,7 @@ $(function(){
  $ajaxCall=function(value,id,column){
             jQuery.ajax({
                    type: "POST",
-                   url: "updateTree", 
+                   url: "{{asset('updateTree')}}", 
                    data:{value:value, id:id , type: column},
                     success: function(){
                        alert("başarılı");
