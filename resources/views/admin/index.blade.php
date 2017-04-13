@@ -4,7 +4,7 @@
 <html lang="en-US" ng-app="adminRecords">
     <head>
         <title>Laravel 5 AngularJS CRUD Example</title>
-        <link href="<?= asset('css/bootstrap.min.css') ?>" rel="stylesheet">
+        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     </head>
     <body>
         

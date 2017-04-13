@@ -1031,6 +1031,11 @@ Route::get('/ajax-subcatt', function () {
     $semtler = \App\Semt::where('ilce_id', '=', $ilce_id)->get();
     return Response::json($semtler);
 });
-
+Route::get('/vergi_daireleri', function (Request $request) {
+    
+    $il_id = Input::get('il_id');
+    $vergi_daireleri = \App\VergiDairesi::where('il_id', '=', $il_id)->get();
+    return Response::json($vergi_daireleri);
+});
 
  Route::auth();

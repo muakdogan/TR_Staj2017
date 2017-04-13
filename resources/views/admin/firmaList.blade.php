@@ -50,7 +50,7 @@
      function firmaListOnaysız(){
            $.ajax({
             type:"GET",
-            url:"firmaListeleme",
+            url:"{{asset('firmaListeleme')}}",
             data:{},
             cache: false,
             success: function(data){
@@ -67,7 +67,7 @@
          alert("girdi");
            $.ajax({
             type:"GET",
-            url:"firmaListeOnaylı",
+            url:"{{asset('firmaListeOnaylı')}}",
             data:{},
             cache: false,
             success: function(data){
