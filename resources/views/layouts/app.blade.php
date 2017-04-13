@@ -145,7 +145,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                 <li class="dropdown"><a class="dropdown-toggle yazi" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Firma İşlemleri</a>
                                     <?php                                   
                                         $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
-                                        $kullaniciF=$kullanici->firmalar()->where('onay','onay')->get();
+                                        $kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
                                         <ul style="list-style-type:square">

@@ -1050,7 +1050,7 @@
                                        <th>Yetkili Kişi Email Adresi:</th>
                                        <th>Yetkili Kişi Telefon:</th>
                                        <th>Referans Türü:</th>
-                                       <th>İş Yılı:</th>
+                                       <th>İşin Yılı:</th>
                                        <th></th>
                                    </tr>
                                    @foreach($firmaReferanslar as $firmaReferans)
@@ -1129,7 +1129,7 @@
                                                        </div>
                                                        <div class="form-group">
                                                              <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-1 control-label">Yapım İşi Adı</label>
+                                                           <label for="inputEmail3" class="col-sm-1 control-label">Yapımlan İşin Adı</label>
                                                              <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                            <div class="col-sm-9">
                                                                <input type="text" class="form-control " id="yapılan_isin_adi" name="yapılan_isin_adi" placeholder="Yapılan İşin Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
@@ -1150,7 +1150,7 @@
                                                        </div>
                                                        <div class="form-group">
                                                              <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-1 control-label">İş Yılı</label>
+                                                           <label for="inputEmail3" class="col-sm-1 control-label">İşin Yılı</label>
                                                              <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                            <div class="col-sm-9">
                                                                <input type="text" class="form-control " id="is_yili" name="is_yili" placeholder="İş Yılı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
@@ -1332,7 +1332,7 @@
                 <div class="panel-body">
                        @if($brosur==null)
                         <div class="bilgiEkle"> 
-                                <button style="margin-top:20px" id="btn-add-firmabrosurEkle" name="btn-add-firmabrosurEkle" class="btn btn-primary btn-xs"><img src="{{asset('images/plus.png')}}">&nbsp;Bilgilerinizi Ekleyin</button>
+                                <button style="margin-top:20px" id="btn-add-firmabrosurEkle" name="btn-add-firmabrosurEkle" class="btn btn-primary btn-xs"><img src="{{asset('images/plus.png')}}">&nbsp;Broşürünüzü Ekleyin</button>
                         </div>
                        
                        @else
@@ -1372,7 +1372,7 @@
 
                                                     <div class="form-group">
                                                           <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                        <label for="inputEmail3" class="col-sm-1 control-label">Broşür Adi</label>
+                                                        <label for="inputEmail3" class="col-sm-1 control-label">Broşür Adı</label>
                                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                         <div class="col-sm-9">
                                                             <input type="text" class="form-control " id="brosur_adi" name="brosur_adi" placeholder="Broşür Adi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
@@ -1380,7 +1380,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                          <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                        <label for="inputEmail3" class="col-sm-1 control-label">Broşür PDF</label>
+                                                        <label for="inputEmail3" class="col-sm-1 control-label">Broşür Dosyası</label>
                                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                         <div class="col-sm-9">
                                                             <div class="control-group">
@@ -1423,7 +1423,7 @@
 
                                               <div class="form-group">
                                                   <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                  <label for="inputEmail3" class="col-sm-1 control-label">Broşür Adi</label>
+                                                  <label for="inputEmail3" class="col-sm-1 control-label">Broşür Adı</label>
                                                   <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                   <div class="col-sm-9">
                                                       <input type="text" class="form-control " id="brosur_adi" name="brosur_adi" placeholder="Broşür Adi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
@@ -1431,7 +1431,7 @@
                                               </div>
                                               <div class="form-group">
                                                   <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                  <label for="inputEmail3" class="col-sm-1 control-label">Broşür PDF</label>
+                                                  <label for="inputEmail3" class="col-sm-1 control-label">Broşür Dosyası</label>
                                                   <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                   <div class="col-sm-9">
                                                       <div class="control-group">
