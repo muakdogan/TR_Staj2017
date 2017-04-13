@@ -13,7 +13,7 @@ $(document).ready(function(){
     
     
     
-   var url = "/tamrekabet/public/index.php/kullanici";
+   var url = "../kullanici";
     $('.open-modal-kullanici').click(function(){
         var kullanici_id = $(this).val();
         $.get(url + '/'  + kullanici_id, function (data) {
