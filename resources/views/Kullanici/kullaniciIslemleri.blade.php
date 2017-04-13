@@ -2,6 +2,43 @@
 <br>
 <br>
  @section('content')
+ 
+ <style>
+     .popup, .popup2, .bMulti {
+            background-color: #fff;
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: 0 0 25px 5px #999;
+            color: #111;
+            display: none;
+            min-width: 450px;
+            padding: 25px;
+            text-align: center;
+            }
+            .popup, .bMulti {
+                min-height: 150px;
+            }
+            .button.b-close, .button.bClose {
+                border-radius: 7px 7px 7px 7px;
+                box-shadow: none;
+                font: bold 131% sans-serif;
+                padding: 0 6px 2px;
+                position: absolute;
+                right: -7px;
+                top: -7px;
+            }
+            .button {
+                background-color: #2b91af;
+                border-radius: 10px;
+                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+            }
+     
+ </style>
      <div class="container">
          
            @include('layouts.alt_menu') 
@@ -20,13 +57,11 @@
                          <table class="table" >
                              <thead id="tasks-list" name="tasks-list">
                                  <tr id="firma{{$firma->id}}">
-                                  
                                   <tr>
                                      <th>Adı:</th>
                                      <th>Soyadı:</th>
                                      <th>Email:</th>
                                      <th>Role:</th>
-                                    
                                      <th></th>
                                      <th></th>
                                  </tr>
@@ -40,33 +75,20 @@
                                      </td>
                                      <td>
                                          {{$kullanici->email}}
-                                         
                                      </td>
-                                  
                                        <?php
-                                       
-                                       
                                         $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici->id)
                                                 ->where( 'firma_id', '=', $firma->id)
                                                   ->select('rol_id')->get();
                                         $rol_id=$rol_id->toArray();
-                                        
-                                        
                                         $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
                                         ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
                                         ->select('roller.adi as rolAdi')->get();
                                          $querys=$querys->toArray();
                                        ?>
-                                        
                                      <td>
-                                         
                                            {{$querys[0]['rolAdi']}}
-                                           
-                                      
                                      </td>
-                                      
-                                   
-
                                      <td> <button name="open-modal-kullanici"  value="{{$kullanici->id}}" class="btn btn-primary btn-xs open-modal-kullanici" >Düzenle</button></td>
                                      <td>
                                               {{ Form::open(array('url'=>'kullaniciDelete/'.$kullanici->id.'/'.$firma->id,'method' => 'DELETE', 'files'=>true)) }}
@@ -75,7 +97,6 @@
                                               {{ Form::close() }}
                                     </td>
                                    <input type="hidden" name="kullanici_id"  id="kullanici_id" value="{{$kullanici->id}}"> 
-
                                 </tr>
                                 @endforeach
                                      <div class="modal fade" id="myModal-kullaniciDüzenle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -103,7 +124,7 @@
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                                                          <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="email" name="email" placeholder="Email giriniz" value="" required>
+                                                             <input type="text" class="form-control " id="email" name="email" placeholder="Email giriniz" value="" required>
                                                          </div>
                                                      </div>
                                                      <div class="form-group">
@@ -112,8 +133,6 @@
                                                              <input type="text" class="form-control" id="rol" name="rol" placeholder="Rol giriniz" value="" required>
                                                          </div>
                                                      </div>
-                                                    
-                                                  
                                                      <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
 
                                                          {!! Form::submit('Kaydet', array('url'=>'kullaniciIslemleriUpdate/'.$kullanici->id,'class'=>'btn btn-danger')) !!}
@@ -153,7 +172,7 @@
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                                                          <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="email" name="email" placeholder="Email giriniz" value="" required>
+                                                             <input type="email" class="form-control email_control" onfocusout="email_control();" id="email" name="email" placeholder="Email giriniz" value="" required>
                                                          </div>
                                                      </div>
                                                      <div class="form-group">
@@ -168,9 +187,11 @@
                                                          </div>
                                                      </div>
                                                     
-                                                     {!! Form::submit('Kaydet', array('url'=>'kullaniciIslemleriEkle/'.$firma->id,'class'=>'btn btn-danger')) !!}
+                                                     {!! Form::submit('Kaydet', array('url'=>'kullaniciIslemleriEkle/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>
+                                                 <br>
+                                                 <br>
                                                  <div class="modal-footer">                                                            
                                                  </div>
                                              </div>
@@ -185,6 +206,42 @@
               
                                           
          </div>
-             
+           
+        <div id="email2"  class='popup'>
+            <span class="button b-close"><span>X</span></span>
+            <p style="color:red;font-size:18px"> Üzgünüz..!!!</p>
+            <p style="font-size:12px">Bu email sistemimize kayıtlıdır.Lütfen başka email ile tekrar deneyiniz.</p>
+        </div>
+            <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
     </div>
+ <script>
+    var email;
+    function email_control(){
+         email= $('.email_control').val();
+         alert(email);
+         email_Get();
+    }
+    function email_Get(){
+        $.ajax({
+            type:"GET",
+            url:"{{asset('email_girisControl')}}",
+            data:{email_giris:email},
+
+            cache: false,
+            success: function(data){
+                console.log(data);
+                if(data==1){
+                    $('#email2').bPopup({
+                                speed: 650,
+                                transition: 'slideIn',
+                                transitionClose: 'slideBack',
+                                autoClose: 5000 
+                            });
+
+                    $('.email_control').val("");
+                }   
+            }
+        });
+    }
+ </script>
 @endsection

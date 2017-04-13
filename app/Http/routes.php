@@ -117,10 +117,10 @@ Route::get('/', function () {
 Route::get('/firmaList', function () {
       
           $onay = DB::table('firmalar')
-           ->where('onay', '')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
+           ->where('onay', 0)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
           
           $onayli = DB::table('firmalar')
-           ->where('onay', 'onay')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination'); 
+           ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination'); 
        
          return View::make('admin.firmaList')-> with('onay',$onay)-> with('onayli',$onayli);
        
@@ -128,7 +128,7 @@ Route::get('/firmaList', function () {
 Route::get('/firmaListeleme',function (){
         
             $onay = DB::table('firmalar')
-           ->where('onay', '')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
+           ->where('onay', 0)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
         
            return Response::json(View::make('admin.firmaListTable',array('onay'=> $onay))->render());
            
@@ -136,7 +136,7 @@ Route::get('/firmaListeleme',function (){
 Route::get('/firmaListeOnaylı',function (){
         
              $onayli = DB::table('firmalar')
-             ->where('onay', 'onay')->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination'); 
+             ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination'); 
         
            return Response::json(View::make('admin.firmaListOnayli',array('onayli'=> $onayli))->render());
 });
@@ -393,56 +393,73 @@ Route::post('/getIlan',function () {
 });
 
 Route::post('/form', function (Request $request) {
-    $firma= new Firma();
+    DB::beginTransaction();
 
-    $firma->adi=Str::title(strtolower($request->firma_adi));
-    $now = new \DateTime();
-    $firma->olusturmaTarihi=$now;
-    $firma->save();
+        try {
+           $firma= new Firma();
 
-    $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
-    $iletisim->telefon = $request->telefon;
-    $firma->iletisim_bilgileri()->save($iletisim);    
+            $firma->adi=Str::title(strtolower($request->firma_adi));
+            $now = new \DateTime();
+            $firma->olusturmaTarihi=$now;
+            $firma->save();
 
-    $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
-    $adres->il_id = $request->il_id;
-    $adres->ilce_id = $request->ilce_id;
-    $adres->semt_id = $request->semt_id;
-    $adres->adres =Str::title(strtolower( $request->adres));
-    $tur = 1;
-    $adres->tur_id = $tur;
-    $firma->adresler()->save($adres);
+            $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
+            $iletisim->telefon = $request->telefon;
+            $firma->iletisim_bilgileri()->save($iletisim);    
 
-    $firma->sektorler()->attach($request->sektor_id);
+            $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
+            $adres->il_id = $request->il_id;
+            $adres->ilce_id = $request->ilce_id;
+            $adres->semt_id = $request->semt_id;
+            $adres->adres =Str::title(strtolower( $request->adres));
+            $tur = 1;
+            $adres->tur_id = $tur;
+            $firma->adresler()->save($adres);
 
-
-    $kullanici= new App\Kullanici();
-    $kullanici->adi = Str::title(strtolower($request->adi));
-    $kullanici->soyadi =Str::title(strtolower( $request->soyadi));
-    $kullanici->email = $request->email;
-    $kullanici->unvani = Str::title(strtolower($request->unvan));
-    $kullanici->telefon = $request->telefonkisisel;
-    $kullanici->save(); 
+            $firma->sektorler()->attach($request->sektor_id);
 
 
-    $user = $kullanici->user ?: new App\User();
-    $user->name = Str::title(strtolower($request->kullanici_adi));
-    $user->email = $request->email_giris;
-    $user->password =Hash::make( $request->password);
+            $kullanici= new App\Kullanici();
+            $kullanici->adi = Str::title(strtolower($request->adi));
+            $kullanici->soyadi =Str::title(strtolower( $request->soyadi));
+            $kullanici->email = $request->email;
+            $kullanici->unvani = Str::title(strtolower($request->unvan));
+            $kullanici->telefon = $request->telefonkisisel;
+            $kullanici->save(); 
 
-    $kullanici->users()->save($user);
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>1]);
 
-    $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
+            $user = new App\User();
+            $user->name = Str::title(strtolower($request->kullanici_adi));
+            $user->email = $request->email_giris;
+            $user->password =Hash::make( $request->password);
 
-        Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request) 
-        {
+            $kullanici->users()->save($user);
+            $firma->kullanicilar()->attach($kullanici,['rol_id'=>1]);
 
-            $message->to($request->email, $data['ad'])
-            ->subject('YENİ KAYIT OLMA İSTEĞİ!');
+            $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
 
-        });
-    return redirect('/');
+                Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request) 
+                {
+
+                    $message->to($request->email, $data['ad'])
+                    ->subject('YENİ KAYIT OLMA İSTEĞİ!');
+
+                });
+            //return redirect('/');
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+           
+            return Response::json($error);
+            
+            // something went wrong
+        }
+   
+   
+  
 });
     
 Route::post('/yeniFirma/{id}', function (Request $request,$id) {
@@ -607,6 +624,14 @@ Route::get('/emailControl/',function (){
 
     $emailControl = $emailControl->count();
     return Response::json($emailControl);
+});
+Route::get('/email_girisControl/',function (){
+    $email_giris = Input::get('email_giris');   
+    $email_girisControl = DB::table('kullanicilar')
+        ->where('email', '=', $email_giris);
+
+    $email_girisControl = $email_girisControl->count();
+    return Response::json($email_girisControl);
 });
 
 Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
