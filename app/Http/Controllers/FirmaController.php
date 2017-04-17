@@ -133,21 +133,34 @@ class FirmaController extends Controller
         
         $uretilenMarka = new \App\UretilenMarka();
         foreach($request->firmanin_urettigi_markalar as $urettigiMarka){
-        $uretilenMarka->adi = $urettigiMarka;
-        $firma->uretilen_markalar()->save($uretilenMarka);
+            $kayitKontrol=  \App\UretilenMarka::where('adi',$urettigiMarka)->get();
+            if(count($kayitKontrol) == 0){
+                $uretilenMarka->adi = $urettigiMarka;
+                $firma->uretilen_markalar()->save($uretilenMarka);
+            }    
         }
         
         foreach($request->faaliyet_sektorleri as $sektor){
-        $firma->sektorler()->attach($sektor);
+            $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$sektor)->get();
+            if(count($kayitKontrol) == 0){
+                $firma->sektorler()->attach($sektor);
+            }
         }
         foreach($request->firma_departmanları as $departman){
-        $firma->departmanlar()->attach($departman);
+            $kayitKontrol = \App\FirmaDepartman::where('firma_id',$firma->id)->where('departman_id',$departman)->get();
+            if(count($kayitKontrol) == 0){
+                $firma->departmanlar()->attach($departman);
+            }
+                
         }
-        foreach($request->firmanin_sattıgı_markalar as $markalar){
+        /*foreach($request->firmanin_sattıgı_markalar as $markalar){
         $firma->satilan_markalar()->attach($markalar);
-        }
+        }*/
         foreach($request->firma_faaliyet_turu as $faaliyetTur){
-        $firma->faaliyetler()->attach($faaliyetTur);
+            $kayitKontrol = \App\FirmaFaaliyet::where('firma_id',$firma->id)->where('faaliyet_id',$faaliyetTur)->get();
+            if(count($kayitKontrol) == 0){
+                $firma->faaliyetler()->attach($faaliyetTur);
+            }
         }
         return redirect('firmaProfili/'.$firma->id);
     }

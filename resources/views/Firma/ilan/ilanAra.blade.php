@@ -274,10 +274,17 @@
                         <?php $sektor_id = $sektor->id ?>
                     @endforeach
                 @endif
+                 @if (Auth::guest())
+                          <?php $davetEdildigimIlanlar = null; ?>
+                 @else
+                    <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); ?>
+                 @endif
+                 
+                 @if(count($davetEdildigimIlanlar) != 0 )
                  <h3 style="text-shadow: 2px 2px 4px #fff">Davet Edildiğiniz İlanlar</h3>
                  <hr class="hr">
-                <div class="col-sm-9 davetEdil">
-                            <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); ?>
+                 <div class="col-sm-9 davetEdil">
+                            
                             
                             @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
                                     <?php $dIlan = App\Ilan::find($davetEdildigimIlan->ilan_id); ?>
@@ -360,6 +367,7 @@
                                   
                             @endforeach
                 </div>
+                 @endif
                 <div class="col-sm-9 ilanlar" id="auto_load_div">
                    @include('Firma.ilan.ilanlar')   
                   

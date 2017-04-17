@@ -298,7 +298,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                 <td>{{$i++}}</td>
                                 <td>{{$aktif_ilan->ilan_adi}}</td>
                                 
-                                <td>{{date('d- m -Y', strtotime($aktif_ilan->kapanma_tarihi))}}</td>
+                                <td>{{date('d-m-Y', strtotime($aktif_ilan->kapanma_tarihi))}}</td>
                                 <td>{{$ilanTeklifsayisi}}</td>
                                 
                                 @if($aktif_ilan->kapanma_tarihi > $dt || $ilanTeklifsayisi == 0)
@@ -529,62 +529,66 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 $(document).ready( function() {
 
     $('[data-toggle="tooltip"]').tooltip();   
-
-      
-    
     $('#example').DataTable({  
         "language": {
-	"sDecimal":        ",",
-	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
-	"sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
-	"sInfoEmpty":      "Kayıt yok",
-	"sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
-	"sInfoPostFix":    "",
-	"sInfoThousands":  ".",
-	"sLengthMenu":     "Sayfada _MENU_ kayıt göster",
-	"sLoadingRecords": "Yükleniyor...",
-	"sProcessing":     "İşleniyor...",
-	"sSearch":         "Ara:",
-	"sZeroRecords":    "Eşleşen kayıt bulunamadı",
-	"oPaginate": {
-		"sFirst":    "İlk",
-		"sLast":     "Son",
-		"sNext":     "Sonraki",
-		"sPrevious": "Önceki"
-	},
-	"oAria": {
-		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
-		"sSortDescending": ": azalan sütun soralamasını aktifleştir"
-	}
-    }
+            "sDecimal":        ",",
+            "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+            "sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+            "sInfoEmpty":      "Kayıt yok",
+            "sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+            "sInfoPostFix":    "",
+            "sInfoThousands":  ".",
+            "sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+            "sLoadingRecords": "Yükleniyor...",
+            "sProcessing":     "İşleniyor...",
+            "sSearch":         "Ara:",
+            "sZeroRecords":    "Eşleşen kayıt bulunamadı",
+            "oPaginate": {
+                    "sFirst":    "<<",
+                    "sLast":     ">>",
+                    "sNext":     ">",
+                    "sPrevious": "<"
+            },
+            "oAria": {
+                    "sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+                    "sSortDescending": ": azalan sütun soralamasını aktifleştir"
+            }
+        },
+        "bLengthChange": false, ///// Bu kodu kaldırınca Sayfada kayıt göster kısmı ekrana gelicek.
+        "iDisplayLength": 10,
+        "bInfo":false, //// Bu kodu kaldırınca 2 kayıttan 1 - 2 arasındaki kayıtlar gösteriliyor gibi kısın aktive edilecek.
+        "sPaginationType": "full_numbers"
 });
 $('#sonuc').DataTable({  
         "language": {
-	"sDecimal":        ",",
-	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
-	"sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
-	"sInfoEmpty":      "Kayıt yok",
-	"sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
-	"sInfoPostFix":    "",
-	"sInfoThousands":  ".",
-	"sLengthMenu":     "Sayfada _MENU_ kayıt göster",
-	"sLoadingRecords": "Yükleniyor...",
-	"sProcessing":     "İşleniyor...",
-	"sSearch":         "Ara:",
-	"sZeroRecords":    "Eşleşen kayıt bulunamadı",
-	"oPaginate": {
-		"sFirst":    "İlk",
-		"sLast":     "Son",
-		"sNext":     "Sonraki",
-		"sPrevious": "Önceki"
-	},
-	"oAria": {
-		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
-		"sSortDescending": ": azalan sütun soralamasını aktifleştir"
-	}
-    }
+            "sDecimal":        ",",
+            "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+            "sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+            "sInfoEmpty":      "Kayıt yok",
+            "sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+            "sInfoPostFix":    "",
+            "sInfoThousands":  ".",
+            "sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+            "sLoadingRecords": "Yükleniyor...",
+            "sProcessing":     "İşleniyor...",
+            "sSearch":         "Ara:",
+            "sZeroRecords":    "Eşleşen kayıt bulunamadı",
+            "oPaginate": {
+                    "sFirst":    "<<",
+                    "sLast":     ">>",
+                    "sNext":     ">",
+                    "sPrevious": "<"
+            },
+            "oAria": {
+                    "sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+                    "sSortDescending": ": azalan sütun soralamasını aktifleştir"
+            }
+        },
+        "bLengthChange": false, ///// Bu kodu kaldırınca Sayfada kayıt göster kısmı ekrana gelicek.
+        "iDisplayLength": 10,
+        "bInfo":false ,//// Bu kodu kaldırınca 2 kayıttan 1 - 2 arasındaki kayıtlar gösteriliyor gibi kısım aktive edilecek.
+        "sPaginationType": "full_numbers"
 });
-
 var blink_speed = 1500;
 var t = setInterval(function () { var ele = document.getElementById("blinker"); ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden'); }, blink_speed);
 
