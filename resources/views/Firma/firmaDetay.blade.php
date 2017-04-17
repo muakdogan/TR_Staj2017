@@ -681,7 +681,7 @@
 <script>         
     $(document).ready(function(){
      $('[data-toggle="tooltip"]').tooltip();   
-    });
+     });
 
     $(".puanlama").each(function(){
         
