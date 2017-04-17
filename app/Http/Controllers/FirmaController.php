@@ -253,28 +253,23 @@ class FirmaController extends Controller
         }
     }
     public function calisanGunleriAdd(Request $request){
-         $validator = Validator::make($request->all(), [
-                    'calisma_gunleri' => 'required',
-                    'calisma_saatleri' => 'required',
-                    'calisma_profili' => 'required',
-                    'calisma_sayisi' => 'required',
-                    
-
-             
-                    
-        ]);
-
-        /*if ($validator->fails()) {
-            return redirect('firmaProfili/'.$request->id)
-                            ->withInput()
-                            ->withErrors($validator);
-        }*/
-        
+      
         $firma = Firma::find($request->id);
         $firma_calisan = $firma->firma_calisma_bilgileri ?: new \App\FirmaCalismaBilgisi();
         $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
         $firma_calisan->calisma_saatleri=Str::title(strtolower($request->calisma_saatleri));
-        $firma_calisan->calisan_profili=Str::title(strtolower($request->calisma_profili));
+        if($request->mavi_yaka!=null){
+             $firma_calisan->calisan_profili=$request->mavi_yaka;
+        }
+        else if($request->beyaz_yaka!=null){
+            $firma_calisan->calisan_profili=$request->beyaz_yaka;
+        } 
+        else if ($request->mavi_beyaz!=null){
+            $firma_calisan->calisan_profili=$request->mavi_beyaz;
+        }
+        else{
+            
+        }
         $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
        
       $firma->firma_calisma_bilgileri()->save( $firma_calisan);

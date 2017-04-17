@@ -54,7 +54,17 @@
             margin: 4px 2px;
             cursor: pointer;
             float:left;
-            }             
+            }  
+            .test + .tooltip > .tooltip-inner {
+                background-color: #73AD21; 
+                color: #FFFFFF; 
+                border: 1px solid green; 
+                padding: 10px;
+                font-size: 12px;
+             }
+             .test + .tooltip.bottom > .tooltip-arrow {
+                    border-bottom: 5px solid green;
+             }
         </style>
 </head>
 <body>
@@ -216,7 +226,7 @@
                                                 
                                             </div>
                                             <div class="modal-body">
-                                                {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                {!! Form::open(array('id'=>'valid','url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
                                                 
                                                 <div class="row">
                                                     <div class="col-sm-6">
@@ -224,12 +234,13 @@
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Firma Adı Göster</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control" name="firma_adi_gizli" id="firma_adi_gizli" data-validation="required" 
-                                                                    data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                                    <option selected disabled value="Seçiniz">Seçiniz</option>
-                                                                    <option   value="Göster">Göster</option>
-                                                                    <option  value="Gizle">Gizle</option>
-                                                                </select>
+                                                               
+                                                                 <input type="checkbox" class="filled-in firma_goster"  name="firma_adi_gizli[]" value="Göster" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Göster  
+                                                                 <input type="checkbox" data-toggle="tooltip" data-placement="bottom" title="İlanda firma 
+                                                                        isminin gözükmemesi satıcı firma tarafında 
+                                                                        belirsizlikler yaratabilir!" 
+                                                                        class="filled-in test firma_goster"  name="firma_adi_gizli" value="Gizli" data-validation-error-msg="Lütfen  birini seçiniz!" data-validation="checkbox_group"  data-validation-qty="min1" />Gizli
+                                                             
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -258,7 +269,7 @@
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
                                                                <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="{{$ilan->yayin_tarihi}}" placeholder="Yayinlanma Tarihi" type="text" data-validation="required" 
-                                                                data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                                data-validation-error-msg="Lütfen bu alanı doldurunuz!" />
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -363,6 +374,7 @@
                                                                 <input type="hidden" id="maliyet" name="maliyet" value=""></input>
                                                             </div>
                                                         </div>
+                                                        
                                                         <div class="form-group">
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Yeri</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
@@ -375,20 +387,29 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group error">
+                                                        
+                                                        <div class="form-group error teslim_il">
                                                             <label for="inputTask" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Yeri İl</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control" name="il_id" id="il_id" data-validation="required" 
-                                                              data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                                                <select class="form-control " name="il_id" id="il_id" >
                                                                     <option selected disabled>Seçiniz</option>
-                                                                    @foreach($iller as $il)
+                                                                     <?php $iller_query= DB::select(DB::raw("SELECT * 
+                                                                        FROM  `iller` 
+                                                                        WHERE adi = 'İstanbul'
+                                                                        OR adi =  'İzmir'
+                                                                        OR adi =  'Ankara'
+                                                                        UNION 
+                                                                        SELECT * 
+                                                                        FROM iller"));
+                                                                      ?>
+                                                                    @foreach($iller_query as $il)
                                                                     <option  value="{{$il->id}}" >{{$il->adi}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group error">
+                                                        <div class="form-group error teslim_ilce">
                                                             <label for="inputTask" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Yeri İlçe</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
@@ -430,7 +451,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-danger" url="firmaIlanOlustur/ilanBilgileri/'.$firma->id" style="float:right" type="submit">Kaydet</button>
+                                                <button class="btn btn-danger" url="firmaIlanOlustur/ilanBilgileri/'.$firma->id"  style="float:right" type="submit">Kaydet</button>
                                                 {!! Form::close() !!}
                                             </div>
                                             <br>
@@ -1318,6 +1339,8 @@
 <!--script src="{{asset('js/selectDD.js')}}"></script-->  
 <script charset="utf-8"> 
  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+     
        $.fn.datepicker.dates['tr'] = {
             days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
             daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
@@ -1329,13 +1352,15 @@
         var date_input=$('input[class="form-control date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
-            format: 'yyyy-mm-dd',
+            format: 'dd-mm-yyyy',
             language:"tr",
             container: container,
             weekStart:1,
             todayHighlight: true,
             autoclose: true
         });
+        
+        
         $('#il_id').on('change', function (e) {
             var il_id = e.target.value;
             GetIlce(il_id);
@@ -1343,6 +1368,9 @@
             //$("#semt_id")[0].selectedIndex=0;
         });
 });
+
+
+
  $.validate({
     modules : 'location, date, security, file',
     onModulesLoaded : function() {
@@ -1385,10 +1413,10 @@ function populateDD(){
     GetIlce({{$ilan->teslim_yeri_il_id}});
     $("#il_id").val({{$ilan->teslim_yeri_il_id}});
     if("{{$ilan->teslim_yeri_ilce_id}}" !== "" ){
-        alert("girdi");
+      
         $("#ilce_id").val({{$ilan->teslim_yeri_ilce_id}});
     }else{
-        alert("else");
+        
         $("#ilce_id").prop("selected".true);
     }
     $("#firma_sektor").val({{$ilan->firma_sektor}});
@@ -1588,6 +1616,24 @@ $( document ).ready(function() {
                    $('#mal').hide()
                 }
 });
+
+$( "#teslim_yeri" ).change(function() {
+        var teslim_yeri= $('#teslim_yeri').val();
+        if(teslim_yeri=="Satıcı Firma"){
+            $('.teslim_il').hide();
+            $('.teslim_ilce').hide();
+        }
+});
+$('.firma_goster').click(function() {
+    $(this).siblings('input:checkbox').prop('checked', false);
+});
+$.validator.addMethod("roles", function(value, elem, param) {
+    if($(".roles:checkbox:checked").length > 0){
+       return true;
+   }else {
+       return false;
+   }
+},"You must select at least one!");
 </script>
 </body>
 </html>
