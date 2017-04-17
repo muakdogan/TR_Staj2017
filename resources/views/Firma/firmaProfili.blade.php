@@ -1440,8 +1440,6 @@
                                       </div>
                                   </div>
                               </div>
-
-                      
                    </div>
                
            </div>
@@ -1485,7 +1483,13 @@
                            </tr>
                            <tr>
                                <td><strong>Çalışan Profili</strong></td>
-                               <td><strong>:</strong>  {{$firma->firma_calisma_bilgileri->calisan_profili}}</td>
+                                @if ($firma->firma_calisma_bilgileri->calisan_profili==1)
+                                  <td><strong>:</strong> Mavi Yaka</td>
+                                @elseif ($firma->firma_calisma_bilgileri->calisan_profili==2)
+                                   <td><strong>:</strong> Beyaz Yaka</td>
+                                @elseif($firma->firma_calisma_bilgileri->calisan_profili==3)
+                                   <td><strong>:</strong>Mavi Yaka,Beyaz Yaka</td>
+                                @endif
                            </tr>
                            <tr>
                                <td><strong>Çalışan Sayısı</strong></td>
@@ -1500,7 +1504,7 @@
                            <div class="modal-content">
                                <div class="modal-header">
                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                   <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Firma Broşürü</strong></h4>
+                                   <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Firma Çalışan Bilgileri</strong></h4>
                                </div>
                                <div class="modal-body">
                                    {!! Form::open(array('url'=>'firmaProfili/firmaCalisan/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
@@ -1528,10 +1532,13 @@
                                    </div>
                                    <div class="form-group">
                                        <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-1 control-label">Çalışma Profili</label>
+                                       <label for="inputEmail3" class="col-sm-1 control-label">Çalışan Profili</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
-                                           <input type="text" class="form-control " id="calisma_profili" name="calisma_profili" placeholder="Çalışma Profili" value="{{$firma->firma_calisma_bilgileri->calisan_profili}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                           <input type="checkbox" id="mavi_yaka" name="mavi_yaka" value="1">Mavi Yaka
+                                           <input type="checkbox" id="beyaz_yaka" name="beyaz_yaka" value="2">Beyaz Yaka
+                                           <input type="checkbox" id="mavi_beyaz" name="mavi_beyaz" value="3">Mavi Yaka,Beyaz Yaka
+                                           
                                        </div>
                                    </div>
                                    <div class="form-group">

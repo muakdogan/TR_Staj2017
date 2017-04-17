@@ -4,6 +4,7 @@ use App\Il;?>
 @section('content')
 <head>    
     <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
+    <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
     
     <style>
         .ajax-loader {
@@ -55,6 +56,14 @@ use App\Il;?>
                 text-align: center;
                 text-decoration: none;
             }
+            .search_icon {   
+                background-color: white;
+                background-image: url("{{asset('images/src.png')}}");
+                background-repeat: no-repeat;
+                padding: 0px 0px 0px 20px;
+             
+
+            }
 </style>
 </head>
     <div class="container">
@@ -86,17 +95,17 @@ use App\Il;?>
                                     </div>
                                     <div class="form-group ">
                                         <div class="col-sm-3">
-                                        {!! Form::label('Sektorler') !!}
+                                        {!! Form::label('Sektörler') !!}
                                         </div> 
                                         <div class="col-sm-1">:</div> 
                                         <div class="col-sm-8">
-                                            <select class="form-control" name="sektor_id" id="sektor_id" data-validation="required" 
-                                                  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >
-                                                <option selected disabled>Seçiniz</option>
+                                          <select class="form-control deneme"   name="sektor_id[]" id="custom-headers" multiple='multiple' >
+                                                <?php $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();  ?>
                                                 @foreach($sektorler as $sektor)
                                                 <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                                                 @endforeach
-                                            </select>
+                                          </select>
+                                            
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -313,6 +322,8 @@ use App\Il;?>
                     </div> 
                 </div>
             </div>
+            <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
+            <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
             <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
             <div class="col-lg-6">
@@ -342,7 +353,46 @@ use App\Il;?>
    </div>
 
 
-<script> 
+<script charset="utf-8">
+    var count = 0;
+    $('#custom-headers').multiSelect({
+        selectableHeader: "</i><input type='text'  class='search-input col-sm-12 search_icon' autocomplete='off' placeholder='Sektör Seçiniz'></input>",
+        selectionHeader: "<p style='font-size:12px;color:red'>Max 5 sektör seçebilirsiniz</p>",
+        afterInit: function(ms){
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+          .on('keydown', function(e){
+            if (e.which === 40){
+              that.$selectableUl.focus();
+              return false;
+            }
+          });
+
+        },
+        afterSelect: function(values){
+          count++;
+         
+          if(count>5){
+              $('#custom-headers').multiSelect('deselect', values);
+          }
+          this.qs1.cache();
+          this.qs2.cache();
+          
+         
+        },
+        afterDeselect: function(){
+          count--;
+          this.qs1.cache();
+          this.qs2.cache();
+        }
+        
+        
+    });
    
     function CheckPasswordStrength(password) {
         var password_strength = document.getElementById("password_strength");

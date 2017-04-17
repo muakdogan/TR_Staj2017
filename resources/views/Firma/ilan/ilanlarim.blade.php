@@ -2,7 +2,7 @@
 <?php use Carbon\Carbon;
     $dt = Carbon::today();
     $time = Carbon::parse($dt);
-    $dt = $time->format('Y-m-d');
+    $dt = $time->format('Y-m-d')
     ?>
 <br>
  <br>

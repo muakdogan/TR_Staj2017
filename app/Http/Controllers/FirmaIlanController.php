@@ -116,8 +116,8 @@ class FirmaIlanController extends Controller
                 $ilan=  new \App\Ilan();
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
-                    $ilan->yayin_tarihi= $request->yayinlanma_tarihi;
-                    $ilan->kapanma_tarihi= $request->kapanma_tarihi;
+                    $ilan->yayin_tarihi=date('Y-m-d', strtotime($request->yayinlanma_tarihi));
+                    $ilan->kapanma_tarihi= date('Y-m-d', strtotime($request->kapanma_tarihi));
                     $ilan->aciklama =Str::title(strtolower( $request->aciklama));
                     $ilan->ilan_turu= $request->ilan_turu;
                     $ilan->usulu= $request->rekabet_sekli;
@@ -129,8 +129,8 @@ class FirmaIlanController extends Controller
                     $ilan->teslim_yeri_il_id= $request->il_id;
                     $ilan->teslim_yeri_ilce_id= $request->ilce_id;
                     $ilan->isin_suresi= $request->isin_suresi;
-                    $ilan->is_baslama_tarihi= $request->is_baslama_tarihi;
-                    $ilan->is_bitis_tarihi= $request->is_bitis_tarihi;
+                    $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
+                    $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
                     $ilan->adi= $request->ilan_adi;
                     $firma->ilanlar()->save($ilan);
                 if($request->belirli_istekli!=null){
@@ -184,8 +184,8 @@ class FirmaIlanController extends Controller
                 $ilan=  $firma->ilanlar ?:new \App\Ilan();
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
-                    $ilan->yayin_tarihi= $request->yayinlanma_tarihi;
-                    $ilan->kapanma_tarihi= $request->kapanma_tarihi;
+                    $ilan->yayin_tarihi=date('Y-m-d', strtotime($request->yayinlanma_tarihi));
+                    $ilan->kapanma_tarihi= date('Y-m-d', strtotime($request->kapanma_tarihi));
                     $ilan->aciklama =Str::title(strtolower( $request->aciklama));
                     $ilan->ilan_turu= $request->ilan_turu;
                     $ilan->usulu= $request->rekabet_sekli;
@@ -200,8 +200,8 @@ class FirmaIlanController extends Controller
                     $ilan->teslim_yeri_il_id= $request->il_id;
                     $ilan->teslim_yeri_ilce_id= $request->ilce_id;
                     $ilan->isin_suresi= $request->isin_suresi;
-                    $ilan->is_baslama_tarihi= $request->is_baslama_tarihi;
-                    $ilan->is_bitis_tarihi= $request->is_bitis_tarihi;
+                    $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
+                    $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $firma->ilanlar()->save($ilan);
                 

@@ -20,7 +20,7 @@ class CreateFirmaCalismaBilgileriTable extends Migration
             $table->integer('calisma_gunleri_id')->unsigned();
             $table->foreign('calisma_gunleri_id')->references('id')->on('calisma_gunleri')->onDelete('cascade');
             $table->string('calisma_saatleri');
-            $table->string('calisan_profili');
+            $table->integer('calisan_profili');
             $table->string('calisan_sayisi');
         });
     }
