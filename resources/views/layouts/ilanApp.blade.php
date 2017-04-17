@@ -127,7 +127,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                             </a>
                            
                             <ul class="dropdown-menu">
-                                <li class="dropdown"><a class="dropdown-toggle yazi" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Firma İşlemleri</a>
+                                <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
                                     <?php                                   
                                         $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
                                         $kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
