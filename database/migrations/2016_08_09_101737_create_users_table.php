@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->integer('kullanici_id')->unsigned();
             $table->foreign('kullanici_id')->references('id')->on('kullanicilar')->onDelete('cascade');
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->change();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

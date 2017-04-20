@@ -116,7 +116,6 @@ tr:nth-child(even) {
              <p><strong>Adınız:&nbsp;&nbsp;</strong>{{$kullanici->adi}}</p>
              <p><strong>Kullanıcı Adınız:&nbsp;&nbsp;</strong>{{Auth::user()->name}}</p>
              <p><strong>Soyadınız:&nbsp;&nbsp;</strong>{{$kullanici->soyadi}}</p>
-             <p><strong>Unvanınız:&nbsp;&nbsp;</strong>{{$kullanici->unvani}}</p>
              <p><strong>Email:&nbsp;&nbsp;</strong>{{$kullanici->email}}</p>
              <p><strong>Telefon:&nbsp;&nbsp;</strong>{{$kullanici->telefon}}</p>
               <p></p>
@@ -150,12 +149,7 @@ tr:nth-child(even) {
                                       <input type="text" class="form-control" id="soyadi" name="soyadi" placeholder="Soyadı giriniz" value="{{$kullanici->soyadi}}" required>
                                   </div>
                               </div>
-                              <div class="form-group">
-                                  <label for="inputEmail3" class="col-sm-3 control-label">Unvan</label>
-                                  <div class="col-sm-9">
-                                      <input type="text" class="form-control" id="unvani" name="unvani" placeholder="Unvan giriniz" value="{{$kullanici->unvani}}" required>
-                                  </div>
-                              </div>
+                             
                               
                               <div class="form-group">
                                   <label for="inputEmail3" class="col-sm-3 control-label">Email</label>

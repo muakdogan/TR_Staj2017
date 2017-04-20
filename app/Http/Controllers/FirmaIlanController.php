@@ -69,8 +69,6 @@ class FirmaIlanController extends Controller
          $firma = Firma::find($request->id);
          $ilan = Ilan::find($ilan_id);
         
-         
-         $ilan->kdv_dahil=$request->kdv;
          $ilan->odeme_turu_id=$request->odeme_turu;
          $ilan->para_birimi_id=$request->para_birimi;
          $ilan->kismi_fiyat=$request->kismi_fiyat;
@@ -82,8 +80,7 @@ class FirmaIlanController extends Controller
      public function fiyatlandırmaBilgileriUpdate(Request $request,$id,$ilanid){
          $firma = Firma::find($request->id);
          $ilan = Ilan::find($ilanid);
-        
-         $ilan->kdv_dahil=$request->kdv;
+       
          $ilan->odeme_turu_id=$request->odeme_turu;
          $ilan->para_birimi_id=$request->para_birimi;
          $ilan->kismi_fiyat=$request->kismi_fiyat;
@@ -107,12 +104,6 @@ class FirmaIlanController extends Controller
                 $fileName = rand(11111, 99999) . '.' . $extension; 
                 
                 $firma = Firma::find($request->id);
-                $firma->goster = $request->firma_adi_gizli;
-                $firma->save();
-                
-                
-                
-                
                 $ilan=  new \App\Ilan();
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
@@ -132,6 +123,9 @@ class FirmaIlanController extends Controller
                     $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
                     $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
                     $ilan->adi= $request->ilan_adi;
+                    foreach($request->firma_adi_gizli as $firma_adi_gizli){
+                        $ilan->goster = $firma_adi_gizli;
+                    }
                     $firma->ilanlar()->save($ilan);
                 if($request->belirli_istekli!=null){
                     foreach($request->belirli_istekli as $belirli){

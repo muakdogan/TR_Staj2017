@@ -172,7 +172,7 @@ Route::POST('/firmaDavet', function () {
 Route::get('/firmaOnay/{id}', function ($id) {
  
     $firmas = Firma::find($id);
-    $firmas->onay="onay";
+    $firmas->onay=1;
     $firma_kul = DB::table('firma_kullanicilar')
             ->where( 'firma_kullanicilar.firma_id', '=',  $id)
             ->select('firma_kullanicilar.kullanici_id as kulId')->get();
@@ -194,7 +194,7 @@ Route::get('/firmaOnay/{id}', function ($id) {
 Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
  
     $yorumlar = App\Yorum::find($id);
-    $yorumlar->onay="onay";
+    $yorumlar->onay=1;
     
     $yorum_kul = App\Kullanici::find($yorum_kul_id);
     
@@ -222,11 +222,9 @@ Route::get('/kullaniciBilgileri/{id}', function ($id) {
 });
 Route::post('/kullaniciBilgileriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
     $firma = Firma::find($id);
-
     $kullanici= App\Kullanici::find($kul_id);
     $kullanici->adi = Str::title(strtolower($request->adi));
     $kullanici->soyadi = Str::title(strtolower($request->soyadi));
-    $kullanici->unvani =Str::title(strtolower( $request->unvani));
     $kullanici->email = $request->email;
     $kullanici->telefon = $request->telefon;
     $kullanici->save();
@@ -238,6 +236,7 @@ Route::post('/kullaniciBilgileriUpdate/{id}/{kul_id}', function (Request $reques
      
     return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
 }); 
+ 
 Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $request,$id,$user_id) {
     $firma = Firma::find($id);
 
@@ -261,11 +260,13 @@ Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
     $user->email = $request->email;
     $user->password =Hash::make('tamrekabet');
     $rol=$request->rol;
+    $unvan=$request->unvan;
 
     $kullanici->users()->save($user);
 
     $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol]);
-
+    $firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
+    
     $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
 
         Mail::send('auth.emails.password', $data, function($message) use($data,$request) 
@@ -273,6 +274,26 @@ Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
             $message->to($request->email, $data['ad'],$request->to)
             ->subject('YENİ KAYIT OLMA İSTEĞİ!');
         });
+    return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+
+}); 
+Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
+    $firma = Firma::find($id);
+    $roller=  App\Rol::all();
+    $kullanici= App\Kullanici::find($kul_id);
+    $kullanici->adi = Str::title(strtolower($request->adi));
+    $kullanici->soyadi = Str::title(strtolower($request->soyadi));
+    $kullanici->email = $request->email;
+    $kullanici->save();
+    $user = $kullanici->users;
+    $user->email = $request->email;
+    $user->password =Hash::make('tamrekabet');
+    $rol=$request->rol;
+    $unvan=$request->unvan;
+    $kullanici->users()->save($user);
+    $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol]);
+    $firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
+    
     return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
 
 }); 
@@ -423,7 +444,7 @@ Route::post('/form', function (Request $request) {
             $kullanici->adi = Str::title(strtolower($request->adi));
             $kullanici->soyadi =Str::title(strtolower( $request->soyadi));
             $kullanici->email = $request->email;
-            $kullanici->unvani = Str::title(strtolower($request->unvan));
+          
             $kullanici->telefon = $request->telefonkisisel;
             $kullanici->save(); 
 
@@ -435,6 +456,8 @@ Route::post('/form', function (Request $request) {
 
             $kullanici->users()->save($user);
             $firma->kullanicilar()->attach($kullanici,['rol_id'=>1]);
+            $firma->kullanicilar()->attach($kullanici,['unvan'=>Str::title(strtolower($request->unvan))]);
+                    
 
             $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
 
