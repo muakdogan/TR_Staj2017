@@ -126,6 +126,7 @@ class FirmaIlanController extends Controller
                     foreach($request->firma_adi_gizli as $firma_adi_gizli){
                         $ilan->goster = $firma_adi_gizli;
                     }
+                    $ilan->statu = 0;
                     $firma->ilanlar()->save($ilan);
                 if($request->belirli_istekli!=null){
                     foreach($request->belirli_istekli as $belirli){

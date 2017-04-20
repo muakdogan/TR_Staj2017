@@ -173,11 +173,12 @@ Route::get('/firmaOnay/{id}', function ($id) {
  
     $firmas = Firma::find($id);
     $firmas->onay=1;
-    $firma_kul = DB::table('firma_kullanicilar')
-            ->where( 'firma_kullanicilar.firma_id', '=',  $id)
-            ->select('firma_kullanicilar.kullanici_id as kulId')->get();
+    $firma_kul = App\FirmaKullanici::where('firma_id',$id)->get();
+    foreach ($firma_kul as $firmaKul){
+        
+    }
     
-    $firmaOnay=  \App\Kullanici::find($firma_kul->kulId);
+    $firmaOnay=  \App\Kullanici::find($firmaKul->kullanici_id);
     
     $data = ['ad' => $firmaOnay->adi, 'soyad' => $firmaOnay->soyadi];
 
@@ -779,7 +780,11 @@ Route::get('/set_session' ,function () {
 //////////////////////////////////////Puan Yorum //////////////////////
 Route::post('/yorumPuan/{yorum_firma_id}/{yorum_yapilan_firma}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$yorum_yapilan_firma,$ilan_id,$kullanici_id,Request $request) {
     $now = new \DateTime();
-
+    
+    $ilan = Ilan::find($ilan_id);
+    $ilan->statu = 1;
+    $ilan->save();
+    
     $puan = new App\Puanlama();
     $puan->firma_id=$yorum_yapilan_firma;
     $puan->ilan_id=$ilan_id;

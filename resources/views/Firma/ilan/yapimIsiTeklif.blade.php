@@ -102,7 +102,10 @@
                   </td>
               </tr>
               <tr>
-                  <td colspan="8"></td>
+                  <td colspan="8">
+                            <input type="hidden" id="iskonto"><label id="iskontoLabel"></label>
+                            <input style="width: 60px" type="hidden" name="iskontoVal" id="iskontoVal" value="" placeholder="yüzde">   
+                  </td> 
                   <td colspan="3" style="text-align:right">
                       <label for="toplamFiyatLabel" id="toplamFiyatLabel" class="control-label toplam" ></label>
                       <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
@@ -122,7 +125,15 @@
           </tbody>
     </table>
     <div align="right">
-        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
-        {!! Form::close() !!}
+         @if($ilan->kapanma_tarihi > $dt)
+                    @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
+                        {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger btn-info')) !!}
+                    @else
+                        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger btn-info')) !!}
+                    @endif
+         @else
+            Bu ilanın KAPANMA SÜRESİ geçmiştir.O yüzden teklif günceleyemezsiniz !           
+         @endif
+         {!! Form::close() !!}
     </div>                     
 </div>
