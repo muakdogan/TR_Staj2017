@@ -109,7 +109,15 @@
                     </tbody>
             </table>
             <div align="right">
-                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                 @if($ilan->kapanma_tarihi > $dt)
+                    @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
+                        {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
+                    @else
+                        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
+                    @endif
+                 @else
+                    Bu ilanın KAPANMA SÜRESİ geçmiştir.O yüzden teklif günceleyemezsiniz !   
+                @endif
                 {!! Form::close() !!}
             </div>                        
        

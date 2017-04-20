@@ -23,8 +23,8 @@
                         <th width="9%">Ambalaj:</th>
                         <th width="4%">Miktar:</th>
                         <th width="9%">Birim:</th>
-                        <th width="13%">KDV Oranı:</th>
-                        <th width="11%">Birim Fiyat:</th>
+                        <th width="10%">KDV Oranı:</th>
+                        <th width="14%">Birim Fiyat:</th>
                         <th width="1%"></th><!--Fiyat hesaplaması için gerekli -->
                         <th width="11%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
 
@@ -91,15 +91,15 @@
                         <td>
                             @if($ilan->kismi_fiyat == 0)
                                 @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}" required>
+                                    <input style="margin-top: 0px" align="right" id='turkLirasi' type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}" required>
                                 @else
-                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
+                                    <input style="margin-top: 0px" align="right" id='turkLirasi' type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
                                 @endif
                             @else
                                 @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}">
+                                    <input style="margin-top: 0px" align="right" id='turkLirasi' type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}">
                                 @else
-                                    <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
+                                    <input style="margin-top: 0px" align="right" id='turkLirasi' type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
                                 @endif
                             @endif    
                         </td>
@@ -124,7 +124,7 @@
                     <tr>
                         <td colspan="8">
                             <input type="hidden" id="iskonto"><label id="iskontoLabel"></label>
-                            <input style="width: 60px" type="hidden" name="iskontoVal" id="iskontoVal" value="" placeholder="rakam">   
+                            <input style="width: 60px" type="hidden" name="iskontoVal" id="iskontoVal" value="" placeholder="yüzde">   
                         </td> 
                         <td colspan="3" style="text-align:right">
                             <label for="toplamFiyatLabel" id="toplamFiyatLabel" name="toplamFiyatLabel" class="control-label toplam" ></label>
@@ -146,10 +146,12 @@
             <div align="right">
                 @if($ilan->kapanma_tarihi > $dt)
                     @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
-                        {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                        {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
                     @else
-                        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger')) !!}
+                        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
                     @endif
+                @else
+                    Bu ilanın KAPANMA SÜRESİ geçmiştir.O yüzden teklif günceleyemezsiniz !
                 @endif
                 
                 {!! Form::close() !!}

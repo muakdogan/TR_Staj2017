@@ -461,7 +461,7 @@
             var birlesmisName;
             $("#multisel"+key).empty();
 
-            var name1 = name.split(" ");
+            var name1 = name.split(" "); /// Birden fazla kelime kontrolü
             if(name1.length === 1){
                 birlesmisName = name1[0];
             }
@@ -665,7 +665,7 @@
                 selectedOdeme.push($(this).val());
             });
         }
-        var selectedTur = "";
+        var selectedTur = "";   //////////////////ilan türü /////
         var selected = $("#radioDiv input[type='radio']:checked");
         if (selected.length > 0) {
             selectedTur = selected.val();

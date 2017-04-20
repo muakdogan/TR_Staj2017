@@ -202,10 +202,10 @@ input[type=text]:focus,input[type=datetime-local]:focus,input[type=time]:focus {
 input[type=submit]
 {
   border:none;
-  background: #FAFEFF;
+  background: #5bc0de;
   padding: .5em 1em;
   margin-top: 1em;
-  color:#4478a0;
+  color:white;
 }
 input[type=submit]:active
 {
@@ -501,7 +501,15 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         
 </body>
 <script src="{{asset('js/sortAnimation.js')}}"></script>
+<script src="{{asset('js/jquery.turkLirasi.min.js')}}"></script>
 <script>
+    var fiyat;
+    var temp=0;
+    var count=0;
+    var toplamFiyat;
+    var kdvsizToplamFiyat;
+    var ilan_turu={{$ilan->ilan_turu}};
+    var sozlesme_turu={{$ilan->sozlesme_turu}};
     $(function() {
     var updating = false;
     $("#toplamFiyatLabel").on('fnLabelChanged', function(){
@@ -653,13 +661,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     }
 
     // Do the work!
-    var fiyat;
-    var temp=0;
-    var count=0;
-    var toplamFiyat;
-    var kdvsizToplamFiyat;
-    var ilan_turu={{$ilan->ilan_turu}};
-    var sozlesme_turu={{$ilan->sozlesme_turu}};
+    
     $('.kdv').on('input', function() {
         var kdv=parseFloat(this.value);
         var result;
@@ -696,6 +698,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 parseFloat(n);
                 kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
             });
+            alert(kdvsizToplamFiyat);
             if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
                 $('#iskontoLabel').text(" İskonto Ver");
                 $('#iskonto').prop("type", "checkbox");
@@ -806,15 +809,18 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     });
     
 });
-    
+    $("#turkLirasi").turkLirasi();
     
     $('#iskontoVal').on('input',function(){
         var iskontoOrani = parseInt($(this).val());
+        
         if(isNaN(iskontoOrani)) {
             iskontoOrani = 0;
         }
+        alert("dif");
         var iskontoluToplamFiyatKdvsiz = kdvsizToplamFiyat.toFixed(2)- (kdvsizToplamFiyat.toFixed(2)* iskontoOrani)/100;
         var iskontoluToplamFiyatKdvli = toplamFiyat.toFixed(2)- (toplamFiyat.toFixed(2)* iskontoOrani)/100;
+        alert(iskontoluToplamFiyatKdvsiz);
         $("#iskontoluToplamFiyatLabel").text("İskontolu KDV Dahil Toplam Fiyat: " + iskontoluToplamFiyatKdvli.toFixed(2));
         $("#iskontoluToplamFiyatL").text("İskontolu KDV Hariç Toplam Fiyat: "+iskontoluToplamFiyatKdvsiz.toFixed(2));
         $("#iskontoluToplamFiyatKdvli").val(iskontoluToplamFiyatKdvli.toFixed(2));

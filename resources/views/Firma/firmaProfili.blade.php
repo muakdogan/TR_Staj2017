@@ -1736,7 +1736,8 @@
         </div>
      </div>
    </div>  
-    <script src="{{asset('js/selectDD.js')}}"></script>     
+    <script src="{{asset('js/selectDD.js')}}"></script>    
+    <script src="{{asset('js/jquery.turklirasi.min.js')}}"></script> 
 <script> 
   $.validate({
     modules : 'location, date, security, file',
@@ -1744,26 +1745,8 @@
       $('#country').suggestCountry();
     }
   });
-  function formatMoney(num) {
-    var currency_symbol = "₺"
-    if(!isNaN(num)){
-        num =0;
-    }
-
-  var formattedOutput = new Intl.NumberFormat('tr-TR', {
-      style: 'currency',
-      currency: 'TRY',
-      minimumFractionDigits: 2,
-    });
-
-  return formattedOutput.format(num).replace(currency_symbol, '')
- }
-
-  $('#yillik_cirosu').keyup(function(){
-      var value = $(this).val();
-      var changeValue = formatMoney(value);
-      $(this).val(changeValue);
-  });
+$("#yillik_cirosu").turkLirasi();
+$("#sermayesi").turkLirasi();
   $('.firma_faaliyet_turu').click(function(){ ///////////faaliyet turu /////////////////
         var sonSecilen;
         var count=0;

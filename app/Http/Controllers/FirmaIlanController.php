@@ -132,6 +132,7 @@ class FirmaIlanController extends Controller
                     $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
                     $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
                     $ilan->adi= $request->ilan_adi;
+                    $ilan->statu = 0;
                     $firma->ilanlar()->save($ilan);
                 if($request->belirli_istekli!=null){
                     foreach($request->belirli_istekli as $belirli){

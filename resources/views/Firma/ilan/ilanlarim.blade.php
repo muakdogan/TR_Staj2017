@@ -10,7 +10,7 @@
     <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
     <script src="{{asset('js/wNumb.js')}}"></script>
     <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css"></link>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"></link>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
     
@@ -25,11 +25,13 @@ td, th {
     border: 1px solid #fff;
     text-align: left;
     padding: 8px;
+    font-size: 12px;
 }
 
 tr:nth-child(even) {
     background-color: #fff;
 }
+
 .div5{
     float:right;
 }
@@ -48,6 +50,16 @@ tr:nth-child(even) {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 8px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding : 0px;
+    margin-left: 0px;
+    display: inline;
+    border: 0px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    border: 0px;
 }
 .add
 {
@@ -226,15 +238,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
        animation: fontbulger 2s infinite;
         font-weight: bold;
     }
+    
 
 
 </style>
      <div class="container">
            @include('layouts.alt_menu')
                          <?php 
-                           $ilanlarFirma = $firma->ilanlar()->
-                           orderBy('yayin_tarihi','desc')->limit('5')->get();
-                           
                           $aktif_ilanlar= DB::select(DB::raw("SELECT * , i.id AS ilan_id, i.adi AS ilan_adi
                             FROM ilanlar i, firmalar f
                             WHERE f.id = i.firma_id
@@ -273,7 +283,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                      <div class="panel-heading"><strong>Aktif İlanlarım &nbsp;({{$count->count}} İlan)</strong></div>
                     @endforeach
                     <div class="panel-body">
-                        <table  id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <table  id="example" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size: 12px;">
                             <tr>
                                 <th>Sıra</th>
@@ -294,7 +304,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                 $aIlan=  \App\Ilan::find($aktif_ilan->ilan_id);
                                 $ilanTeklifsayisi = $aIlan->teklifler()->count();
                             ?>
-                            <tr>
+                            <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}'">
                                 <td>{{$i++}}</td>
                                 <td>{{$aktif_ilan->ilan_adi}}</td>
                                 
@@ -315,7 +325,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 </div>
                 
                 <?php 
-                    $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
                     $sonuc_ilanlar=DB::select(DB::raw("SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
                      FROM ilanlar i, firmalar f, kismi_kapali_kazananlar kk
                      WHERE f.id = i.firma_id
@@ -344,7 +353,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 <div class="panel panel-default">
                     <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$sonuc_kapali}} İlan)</strong></div>
                     <div class="panel-body">
-                        <table id="sonuc" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <table id="sonuc" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size:12px">
                             <tr>
                                 <th>Sıra</th>
@@ -358,7 +367,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                         </thead>
                         <tbody>
                             @foreach($sonuc_ilanlar as $ilan)
-                            <tr>
+                            <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$ilan->ilan_id), false) }}'">
                                 <?php 
                                     $sIlan =  \App\Ilan::find($ilan->ilan_id);
                                     if(count($sIlan)!= 0){
@@ -429,7 +438,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                           <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
                                         @endif
                                     @else
-                                    <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}" disabled>Puan Ver/Yorum Yap</button></a>
+                                    <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}" >İlanı Gör</button></a>
                                     @endif
                                 <div class="modal fade" id="modalForm{{$i}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -490,6 +499,52 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                      </table>
                     </div>
                 </div>
+                <?php $pasif_ilanlar = App\Ilan::where('statu',2)->get();
+                      $pasif_count = $pasif_ilanlar->count();
+                ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>Pasif İlanlarım &nbsp;({{$pasif_count}} İlan)</strong></div>
+                    <div class="panel-body">
+                        <table  id="pasif" class="row-border hover order-column" cellspacing="0" width="100%">
+                        <thead style=" font-size: 12px;">
+                            <tr>
+                                <th>Sıra</th>
+                                <th>İlan Adı</th>
+                                <th>Kapanma Tarihi</th>
+                                <th>Verilen Teklif Sayısı</th>
+                                <th></th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody style="font_size:12px">
+                            <?php 
+                                $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+                                $i=1;
+                            ?>
+                            @foreach($pasif_ilanlar as $pasif_ilan)
+                            <?php  
+                                
+                                $ilanTeklifsayisi = $pasif_ilan->teklifler()->count();
+                            ?>
+                            <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$pasif_ilan->id), false) }}'">
+                                <td>{{$i++}}</td>
+                                <td>{{$pasif_ilan->adi}}</td>
+                                
+                                <td>{{date('d-m-Y', strtotime($pasif_ilan->kapanma_tarihi))}}</td>
+                                <td>{{$ilanTeklifsayisi}}</td>
+                                
+                                @if($pasif_ilan->kapanma_tarihi > $dt || $ilanTeklifsayisi == 0)
+                                   <td> <a href="{{ URL::to('teklifGor', array($firma->id,$pasif_ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
+                                @else
+                                <td> <a href="{{ URL::to('teklifGor', array($firma->id,$pasif_ilan->id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
+
+                                @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-3">
                     <div class="panel panel-default">
@@ -529,7 +584,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 $(document).ready( function() {
 
     $('[data-toggle="tooltip"]').tooltip();   
-    $('#example').DataTable({  
+    var table = $('#example').DataTable({  
         "language": {
             "sDecimal":        ",",
             "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
@@ -557,9 +612,17 @@ $(document).ready( function() {
         "bLengthChange": false, ///// Bu kodu kaldırınca Sayfada kayıt göster kısmı ekrana gelicek.
         "iDisplayLength": 10,
         "bInfo":false, //// Bu kodu kaldırınca 2 kayıttan 1 - 2 arasındaki kayıtlar gösteriliyor gibi kısın aktive edilecek.
-        "sPaginationType": "full_numbers"
+        "sPaginationType": "full_numbers",
+        "dom": '<"pull-left"f><"pull-right"l>tip' /// search butonu yerini değiştirme
 });
-$('#sonuc').DataTable({  
+    $('#example tbody')
+        .on( 'mouseenter', 'td', function () {
+            var colIdx = table.cell(this).index().column;
+ 
+            $( table.cells().nodes() ).removeClass( 'highlight' );
+            $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+        } );
+var tableSonuc = $('#sonuc').DataTable({  
         "language": {
             "sDecimal":        ",",
             "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
@@ -587,8 +650,57 @@ $('#sonuc').DataTable({
         "bLengthChange": false, ///// Bu kodu kaldırınca Sayfada kayıt göster kısmı ekrana gelicek.
         "iDisplayLength": 10,
         "bInfo":false ,//// Bu kodu kaldırınca 2 kayıttan 1 - 2 arasındaki kayıtlar gösteriliyor gibi kısım aktive edilecek.
-        "sPaginationType": "full_numbers"
+        "sPaginationType": "full_numbers",
+        "dom": '<"pull-left"f><"pull-right"l>tip'    /// search butonu yerini değiştirme
 });
+$('#sonuc tbody')
+        .on( 'mouseenter', 'td', function () {
+            var colIdx = tableSonuc.cell(this).index().column;
+ 
+            $( tableSonuc.cells().nodes() ).removeClass( 'highlight' );
+            $( tableSonuc.column( colIdx ).nodes() ).addClass( 'highlight' );
+        } );
+        
+    var tablePasif = $('#pasif').DataTable({  
+        "language": {
+            "sDecimal":        ",",
+            "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
+            "sInfo":           "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+            "sInfoEmpty":      "Kayıt yok",
+            "sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
+            "sInfoPostFix":    "",
+            "sInfoThousands":  ".",
+            "sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+            "sLoadingRecords": "Yükleniyor...",
+            "sProcessing":     "İşleniyor...",
+            "sSearch":         "Ara:",
+            "sZeroRecords":    "Eşleşen kayıt bulunamadı",
+            "oPaginate": {
+                    "sFirst":    "<<",
+                    "sLast":     ">>",
+                    "sNext":     ">",
+                    "sPrevious": "<"
+            },
+            "oAria": {
+                    "sSortAscending":  ": artan sütun sıralamasını aktifleştir",
+                    "sSortDescending": ": azalan sütun soralamasını aktifleştir"
+            }
+        },
+        "bLengthChange": false, ///// Bu kodu kaldırınca Sayfada kayıt göster kısmı ekrana gelicek.
+        "iDisplayLength": 10,
+        "bInfo":false, //// Bu kodu kaldırınca 2 kayıttan 1 - 2 arasındaki kayıtlar gösteriliyor gibi kısın aktive edilecek.
+        "sPaginationType": "full_numbers",
+        "dom": '<"pull-left"f><"pull-right"l>tip'    /// search butonu yerini değiştirme
+});
+    $('#pasif tbody')
+        .on( 'mouseenter', 'td', function () {
+            var colIdx = tablePasif.cell(this).index().column;
+ 
+            $( tablePasif.cells().nodes() ).removeClass( 'highlight' );
+            $( tablePasif.column( colIdx ).nodes() ).addClass( 'highlight' );
+        } );
+        
+   
 var blink_speed = 1500;
 var t = setInterval(function () { var ele = document.getElementById("blinker"); ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden'); }, blink_speed);
 
