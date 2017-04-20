@@ -62,6 +62,7 @@
                                      <th>Soyadı:</th>
                                      <th>Email:</th>
                                      <th>Role:</th>
+                                     <th>Ünvan</th>
                                      <th></th>
                                      <th></th>
                                  </tr>
@@ -86,8 +87,12 @@
                                         ->select('roller.adi as rolAdi')->get();
                                          $querys=$querys->toArray();
                                        ?>
+                                     
                                      <td>
                                            {{$querys[0]['rolAdi']}}
+                                     </td>
+                                     <td>
+                                           {{$kullanici->unvan}}
                                      </td>
                                      <td> <button name="open-modal-kullanici"  value="{{$kullanici->id}}" class="btn btn-primary btn-xs open-modal-kullanici" >Düzenle</button></td>
                                      <td>
@@ -107,7 +112,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kullanıcı Düzenle</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kullaniciIslemleriUpdate/'.$kullanici->id ,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('url'=>'kullaniciIslemleriUpdate/'.$firma->id.'/'.$kullanici->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
@@ -127,15 +132,26 @@
                                                              <input type="text" class="form-control " id="email" name="email" placeholder="Email giriniz" value="" required>
                                                          </div>
                                                      </div>
-                                                     <div class="form-group">
+                                                    <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Rol</label>
                                                          <div class="col-sm-9">
-                                                             <input type="text" class="form-control" id="rol" name="rol" placeholder="Rol giriniz" value="" required>
+                                                             <select class="form-control" name="rol" id="rol" required>
+                                                                 <option selected disabled>Seçiniz</option>
+                                                                 @foreach($roller as $rol)
+                                                                 <option  value="{{$rol->id}}" >{{$rol->adi}}</option>
+                                                                 @endforeach
+                                                             </select>
+                                                         </div>
+                                                     </div>
+                                                      <div class="form-group">
+                                                         <label for="inputEmail3" class="col-sm-3 control-label">Ünvan</label>
+                                                         <div class="col-sm-9">
+                                                             <input type="text" class="form-control" id="unvan" name="unvan" placeholder="Ünvan giriniz" value="" required>
                                                          </div>
                                                      </div>
                                                      <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">  
 
-                                                         {!! Form::submit('Kaydet', array('url'=>'kullaniciIslemleriUpdate/'.$kullanici->id,'class'=>'btn btn-danger')) !!}
+                                                         {!! Form::submit('Kaydet', array('url'=>'kullaniciIslemleriUpdate/'.$firma->id.'/'.$kullanici->id ,'class'=>'btn btn-danger')) !!}
                                                          {!! Form::close() !!}
                                                  </div>
                                                  <div class="modal-footer">                                                            
@@ -143,10 +159,8 @@
                                              </div>
                                          </div>
                                      </div>
-                                
                                      </thead>
                                      </table>
-                         
                                      <div class="modal fade" id="myModal-kullanici" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                          <div class="modal-dialog">
                                              <div class="modal-content">
@@ -186,7 +200,12 @@
                                                              </select>
                                                          </div>
                                                      </div>
-                                                    
+                                                       <div class="form-group">
+                                                         <label for="inputEmail3" class="col-sm-3 control-label">Ünvan</label>
+                                                         <div class="col-sm-9">
+                                                             <input type="text" class="form-control" id="unvan" name="unvan" placeholder="Ünvan giriniz" value="" required>
+                                                         </div>
+                                                     </div>       
                                                      {!! Form::submit('Kaydet', array('url'=>'kullaniciIslemleriEkle/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                                      {!! Form::close() !!}
                                                  </div>

@@ -1638,7 +1638,7 @@
            <div class="panel panel-default">
                <div  class="panel-heading">
                    <h4 class="panel-title">
-                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse8"><strong><img src="{{asset('images/bilgilendirme.png')}}">&nbsp;Bilgilendirme Tercihi</strong></a>
+                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse8"><strong><img src="{{asset('images/bilgilendirme.png')}}">&nbsp;Bilgilendirilme Tercihi</strong></a>
                     @if($firma->bilgilendirme_tercihi==null)
                     @else
                        <button style="float:right" id="btn-add-bilgilendirmetercihi" name="btn-add-bilgilendirmetercihi" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
@@ -1670,16 +1670,16 @@
                                <div class="modal-content">
                                    <div class="modal-header">
                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                       <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Bilgilendirme Tercihi</strong></h4>
+                                       <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Bilgilendirilme Tercihi</strong></h4>
                                    </div>
                                    <div class="modal-body">
                                        {!! Form::open(array('url'=>'firmaProfili/bilgilendirmeTercihi/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                        <div class="form-group">
-                                           <label for="inputEmail3" class="col-sm-4 control-label">Bilgilendirme Tercihi</label>
+                                           <label for="inputEmail3" class="col-sm-4 control-label">Bilgilendirilme Tercihi</label>
                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                            <div class="col-sm-7">
-                                               <input type="text" class="form-control " id="bilgilendirme_tercihi" name="bilgilendirme_tercihi" placeholder="Bilgilendirme Tercihi" value="{{$firma->bilgilendirme_tercihi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                               <input type="text" class="form-control " id="bilgilendirme_tercihi" name="bilgilendirme_tercihi" placeholder="Bilgilendirilme Tercihi" value="{{$firma->bilgilendirme_tercihi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
                                            </div>
                                        </div>
                                        {!! Form::submit('Kaydet', array('url'=>'firmaProfili/bilgilendirmeTercihi/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}

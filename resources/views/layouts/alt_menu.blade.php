@@ -35,7 +35,8 @@
                      </li>
                      <li class=""><a href="{{ URL::to('davetEdildigim', array($firma->id), false)}}">Davet Edildiğim İlanlar</a></li>
                      <!--li><a href="#">Mesajlar</a></li-->
-                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanıcı İşlemleri</a></li>
+                    
+                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanici İşlemleri</a></li>
                      <li><div class="deneme">
                              <a><p style="padding-top: 15px; padding-left: 25px;font-size: 16px; color:white"  class="firmaDavet" id="firmaDavetButton">Firma Davet Et !</p></a>
                                   <div class="modal fade" id="FirmaDavet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
