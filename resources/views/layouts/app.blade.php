@@ -137,6 +137,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                        
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
+                            $firmaId = session()->get('firma_id');
                             ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
                                {{ Auth::user()->name }}/ {{$firmaAdi}}<span class="caret"></span>
@@ -153,6 +154,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                         </ul>
                                     @endforeach
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
+                                <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi">Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
                                 <li><a href="{{ url('/sessionKill') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>

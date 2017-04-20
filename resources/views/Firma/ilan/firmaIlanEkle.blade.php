@@ -16,8 +16,44 @@
         <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
+     
+    
         
         <style>
+            .popup, .popup2, .bMulti {
+            background-color: #fff;
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: 0 0 25px 5px #999;
+            color: #111;
+            display: none;
+            min-width: 450px;
+            padding: 25px;
+            text-align: center;
+            }
+            .popup, .bMulti {
+                min-height: 150px;
+            }
+            .button.b-close, .button.bClose {
+                border-radius: 7px 7px 7px 7px;
+                box-shadow: none;
+                font: bold 131% sans-serif;
+                padding: 0 6px 2px;
+                position: absolute;
+                right: -7px;
+                top: -7px;
+            }
+            .button {
+                background-color: #2b91af;
+                border-radius: 10px;
+                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+            }
+            
             table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
@@ -65,10 +101,15 @@
              .test + .tooltip.bottom > .tooltip-arrow {
                     border-bottom: 5px solid green;
              }
+             
         </style>
+        
 </head>
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+
     <div class="container">
         <br>
         <br>
@@ -111,13 +152,17 @@
                                             <?php
                                             $firma->firma_sektorler = new App\FirmaSektor();
                                             $firma->firma_sektorler->sektorler = new App\Sektor();
+                                             if (!$ilan){
+                                                $ilan = new App\Ilan();
+                                             
+                                             }
 
-                                            if($firma->goster=="Göster"){
+                                            if($ilan->goster=="Göster"){
                                             ?>
                                                 <td width="75%"><strong>:</strong> {{$firma->adi}}</td>
                                             <?php
                                             }
-                                            else if($firma->goster=="Gizle"){    
+                                            else if($ilan->goster=="Gizle"){    
                                             ?>
                                             <td width="75%"><strong>:</strong> {{$firma->adi}}(GİZLİ)</td>
                                             <?php
@@ -128,18 +173,7 @@
 
                                         <tr>
                                             <td><strong>İlan Adı</strong></td>
-                                            <?php
-                                            //$firmaAdres = $firma->adresler()->first();
-                                            if (!$ilan)
-                                                $ilan = new App\Ilan();
-
-                                            /*if (!$firmaAdres) {
-                                                $firmaAdres = new Adres();
-                                                $firmaAdres->iller = new Il();
-                                                $firmaAdres->ilceler = new Ilce();
-                                                $firmaAdres->semtler = new Semt();
-                                            }*/
-                                            ?>
+                                           
                                             <td><strong>:</strong> {{$ilan->adi}}</td>
                                         </tr>
                                         <tr>
@@ -239,7 +273,7 @@
                                                                  <input type="checkbox" data-toggle="tooltip" data-placement="bottom" title="İlanda firma 
                                                                         isminin gözükmemesi satıcı firma tarafında 
                                                                         belirsizlikler yaratabilir!" 
-                                                                        class="filled-in test firma_goster"  name="firma_adi_gizli" value="Gizli" data-validation-error-msg="Lütfen  birini seçiniz!" data-validation="checkbox_group"  data-validation-qty="min1" />Gizli
+                                                                        class="filled-in test firma_goster"  name="firma_adi_gizli[]" value="Gizli" data-validation-error-msg="Lütfen  birini seçiniz!" data-validation="checkbox_group"  data-validation-qty="min1" />Gizli
                                                              
                                                             </div>
                                                         </div>
@@ -255,11 +289,12 @@
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlan Sektör</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control" name="firma_sektor" id="firma_sektor" data-validation="required" 
+                                                              
+                                                                <select class="form-control selectpicker" style="height:20px" data-live-search="true"  name="firma_sektor" id="firma_sektor" data-validation="required" 
                                                                 data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                                    <option selected disabled>Seçiniz</option>
+                                                                    <option  style="color:#eee"selected disabled>Seçiniz</option>
                                                                     @foreach($sektorler as $sektor)
-                                                                    <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                                                    <option style="font-size:12px" value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -295,7 +330,7 @@
                                                              <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlan Türü</label>
                                                              <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px" class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control" name="ilan_turu" id="ilan_turu" data-validation="required" 
+                                                                <select class="form-control"  name="ilan_turu" id="ilan_turu" data-validation="required" 
                                                               data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
                                                                     <option  value="1">Mal</option>
@@ -347,8 +382,11 @@
                                                             <div class="col-sm-8">
                                                                 <div class="control-group">
                                                                     <div class="controls">
-                                                                        {!! Form::file('teknik',array('data-validation'=>'required' ,
-                                                                           'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                                                        {!! Form::file('teknik',array(
+                                                                           'data-toggle'=>'tooltip',
+                                                                           'data-placement'=>'bottom',
+                                                                           'title'=>'Yüklenebilir dosya türü:.pdf',
+                                                                           'class'=>'test'))!!}
                                                                         <p class="errors">{!!$errors->first('image')!!}</p>
                                                                         @if(Session::has('error'))
                                                                         <p class="errors">{!! Session::get('error') !!}</p>
@@ -479,22 +517,11 @@
                                 <table class="table" >
                                     <thead id="tasks-list" name="tasks-list">
                                         <tr id="firma{{$firma->id}}">
+                                       
                                         <tr>
-                                            <td width="25%"><strong>KDV</strong></td> 
-                                            <td width="75%"><strong>:</strong> 
-                                                @if($ilan->kdv_dahil != null)  
-                                                    @if ($ilan->kdv_dahil == 1)
-                                                       Kdv Dahil
-                                                    @else
-                                                        Kdv Dahil Değil
-                                                    @endif
-                                                @endif
-                                            </td> 
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Ödeme Türü</strong></td>
+                                            <td width="25%"><strong>Ödeme Türü</strong></td>
                                             
-                                            <td><strong>:</strong><?php if($ilan->odeme_turu_id != NULL)
+                                            <td width="75%"><strong>:</strong><?php if($ilan->odeme_turu_id != NULL)
                                             {?> {{$ilan->odeme_turleri->adi}}<?php }?></td>
                                             
                                         </tr>
@@ -531,15 +558,6 @@
                                             <div class="modal-body">
                                                 {!! Form::open(array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
-                                                <div class="form-group">
-                                                     
-                                                    <label for="inputTask" class="col-sm-2 control-label">KDV</label>
-                                                     <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="checkbox" class="filled-in" id="filled-in-box" name="kdv" checked="checked"  data-validation="required" 
-                                                      data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>  
-                                                    </div>
-                                                </div>
                                                 <div class="form-group">
                                                    
                                                     <label for="inputEmail3" class="col-sm-2 control-label">Ödeme Türü</label>
@@ -1332,12 +1350,19 @@
                 
             </div>
         </div>
+         <div id="mesaj" class="popup">
+            <span class="button b-close"><span>X</span></span>
+            <h2 style="color:red;font-size:14px"> Dikkat!!</h2>
+            <h3 style="font-size:12px">Lütfen Rekabet Şeklini Seçmeden Önce İlan Sektörü Seçimi Yapınız.</h3>
+        </div>
     </div>
 
+    <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <!--script src="{{asset('js/selectDD.js')}}"></script-->  
 <script charset="utf-8"> 
+    var firmaCount = 0;
  $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();   
      
@@ -1433,7 +1458,7 @@ function populateDD(){
 }
       
 
-var sektor;
+var sektor=0;
     
 $(function() {
     $("#yaklasik_maliyet").change(function(){
@@ -1445,6 +1470,8 @@ $(function() {
 $(function() {
     $("#firma_sektor").change(function(){
       sektor = $('option:selected', this).attr('value');
+ 
+      
     });
 });
 function funcBelirliEzgi(){             
@@ -1468,22 +1495,32 @@ function funcBelirliEzgi(){
 $(function() {
     $("#rekabet_sekli").change(function(){
         var option = $('option:selected', this).attr('value');
-    
-        if(option==="2"){
-            $('#belirli-istekliler').show();
-            funcBelirliEzgi();
+        if(sektor!==0){
+            if(option==="2"){
+                $('#belirli-istekliler').show();
+                funcBelirliEzgi();
+            }
+            else
+            {
+                 $('#belirli-istekliler').hide();            
+            }
         }
         else
         {
-             $('#belirli-istekliler').hide();            
+             $('#mesaj').bPopup({
+                 speed: 650,
+                 transition: 'slideIn',
+                 transitionClose: 'slideBack',
+                 autoClose: 5000 
+             });
         }
-
     });
 });
 
+
 $('#custom-headers').multiSelect({
-  selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
-  selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectableHeader: "<input style='width:115px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectionHeader: "<input  style='width:115px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
   afterInit: function(ms){
     var that = this,
         $selectableSearch = that.$selectableUl.prev(),
@@ -1507,11 +1544,17 @@ $('#custom-headers').multiSelect({
       }
     });
   },
-  afterSelect: function(){
+  afterSelect: function(values){
+       firmaCount++;
+       if( firmaCount>2){
+              $('#custom-headers').multiSelect('deselect', values);
+       }
+       
     this.qs1.cache();
     this.qs2.cache();
   },
   afterDeselect: function(){
+      firmaCount--;
     this.qs1.cache();
     this.qs2.cache();
   }
@@ -1623,17 +1666,21 @@ $( "#teslim_yeri" ).change(function() {
             $('.teslim_il').hide();
             $('.teslim_ilce').hide();
         }
+        else if(teslim_yeri=="Adrese Teslim"){
+             $('.teslim_il').show();
+            $('.teslim_ilce').show();
+        }
+        else{}
+        
+       
 });
 $('.firma_goster').click(function() {
     $(this).siblings('input:checkbox').prop('checked', false);
 });
-$.validator.addMethod("roles", function(value, elem, param) {
-    if($(".roles:checkbox:checked").length > 0){
-       return true;
-   }else {
-       return false;
-   }
-},"You must select at least one!");
+$(function() {
+  $('.selectpicker').selectpicker();
+});
+
 </script>
 </body>
 </html>

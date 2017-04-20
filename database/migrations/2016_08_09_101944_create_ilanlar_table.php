@@ -37,7 +37,6 @@ class CreateIlanlarTable extends Migration {
             $table->string('isin_suresi');
             $table->date('is_baslama_tarihi');
             $table->date('is_bitis_tarihi');
-            $table->string('kdv_dahil');
             $table->integer('odeme_turu_id')->unsigned();
             $table->foreign('odeme_turu_id')->references('id')->on('odeme_turleri')->onDelete('cascade');
             $table->integer('para_birimi_id')->unsigned();
@@ -45,6 +44,7 @@ class CreateIlanlarTable extends Migration {
             $table->string('yaklasik_maliyet');
             $table->float('komisyon_miktari');
             $table->string('fiyatlandirma_sekli');
+            $table->string('goster');
             $table->timestamps();
             
             
