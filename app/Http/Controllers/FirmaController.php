@@ -146,13 +146,7 @@ class FirmaController extends Controller
                 $firma->sektorler()->attach($sektor);
             }
         }
-        foreach($request->firma_departmanları as $departman){
-            $kayitKontrol = \App\FirmaDepartman::where('firma_id',$firma->id)->where('departman_id',$departman)->get();
-            if(count($kayitKontrol) == 0){
-                $firma->departmanlar()->attach($departman);
-            }
-                
-        }
+       
         /*foreach($request->firmanin_sattıgı_markalar as $markalar){
         $firma->satilan_markalar()->attach($markalar);
         }*/
@@ -255,6 +249,12 @@ class FirmaController extends Controller
     public function calisanGunleriAdd(Request $request){
       
         $firma = Firma::find($request->id);
+         foreach($request->firma_departmanları as $departman){
+            $kayitKontrol = \App\FirmaDepartman::where('firma_id',$firma->id)->where('departman_id',$departman)->get();
+            if(count($kayitKontrol) == 0){
+                $firma->departmanlar()->attach($departman);
+            }  
+        }
         $firma_calisan = $firma->firma_calisma_bilgileri ?: new \App\FirmaCalismaBilgisi();
         $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
         $firma_calisan->calisma_saatleri=Str::title(strtolower($request->calisma_saatleri));
@@ -271,6 +271,7 @@ class FirmaController extends Controller
             
         }
         $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
+       
        
       $firma->firma_calisma_bilgileri()->save( $firma_calisan);
         return redirect('firmaProfili/'.$firma->id);
@@ -353,8 +354,9 @@ class FirmaController extends Controller
     }
     public function deleteKalite(Request $request,$id){  
         
-         $kalite = \App\FirmaKaliteBelgesi::find($id);
-         
+         $Firmakaliter = \App\FirmaKaliteBelgesi::where('belge_id',$id)->where('firma_id',$request->firma_id)->get();
+         foreach ($Firmakaliter as $Firmakalite){}
+         $kalite = \App\FirmaKaliteBelgesi::find($Firmakalite->id);    
          $kalite->delete();
          
         return redirect('firmaProfili/'.$request->firma_id);
