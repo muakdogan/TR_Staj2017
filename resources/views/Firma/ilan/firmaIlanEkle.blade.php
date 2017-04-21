@@ -114,7 +114,11 @@
         <br>
         <br>
           @include('layouts.alt_menu') 
-       <h2>İlan Oluştur</h2>
+        @if($ilan->id == 0)  
+            <h2>İlan Oluştur</h2>
+        @else
+            <h2>İlan Düzenle</h2>
+        @endif    
     </div>
     <div class="container">
         <div class="row">

@@ -420,9 +420,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                  <td>İş Bitiş Tarihi:</td>
                                  <td>{{date('d-m-Y', strtotime($ilan->is_bitis_tarihi))}}</td>
                              </tr>
-                      
-                                
                             </table>
+                            @if($ilan->firma_id == session()->get('firma_id'))
+                            <a href="{{ URL::to('ilanEkle', array($firma->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
+                                @endif
                         </div>
                         <div class="tab-pane" id="2">
                             <?php $firma=$ilan->firmalar;?>

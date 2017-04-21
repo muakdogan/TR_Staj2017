@@ -1384,7 +1384,7 @@
                      ?>
                 <div style="border-bottom: 3px solid transparent;border-color:#ddd" class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"><img src="{{asset('images/brosur.png')}}">&nbsp;<strong>Firma Broşürü</strong></a>
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"><img src="{{asset('images/brosur.png')}}">&nbsp;<strong>Firma Broşürü</strong></a>
                         @if($brosur==null)
                         @else
                         <button style="float:right"id="btn-add-firmabrosurEkle" name="btn-add-firmabrosurEkle" class="btn btn-primary btn-xs" >Ekle</button>
@@ -1664,11 +1664,51 @@
                 <div  class="panel-heading">
                    <h4 class="panel-title">
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse8"><strong><img src="{{asset('images/bilgilendirme.png')}}">&nbsp;Bilgilendirilme Tercihi</strong></a>
+                        <button style="float:right" id="btn-add-bilgilendirmetercihi" name="btn-add-bilgilendirmetercihi" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
+                    </h4>
                 </div>
                 <div class="panel-body">
-                    
+                       <table class="table" >
+                           <thead id="tasks-list" name="tasks-list">
+                               <tr id="firma{{$firma->id}}">
+                               <tr>
+                                   <td width="25%"><strong>Bilgilendirme Tercihi</strong></td>
+                                   <td width="75%"><strong>:</strong>  {{$firma->bilgilendirme_tercihi}}</td>
+                               </tr>
+                               </tr>
+                           </thead>
+                       </table>
+                       <div class="modal fade" id="myModal-bilgilendirmetercihi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                           <div class="modal-dialog">
+                               <div class="modal-content">
+                                   <div class="modal-header">
+                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                       <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Bilgilendirilme Tercihi</strong></h4>
+                                   </div>
+                                   <div class="modal-body">
+                                       {!! Form::open(array('url'=>'firmaProfili/bilgilendirmeTercihi/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
                    
-                </div>
+                                       <div class="form-group">
+                                           <label for="inputEmail3" class="col-sm-4 control-label">Bilgilendirilme Tercihi</label>
+                                           <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                           <div class="col-sm-7">
+                                               <input type="checkbox" class="bilgilendirme"  id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" data-validation="checkbox_group" value="Sms" data-validation-qty="min1" data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>Sms <br>
+                                               <input type="checkbox" class="bilgilendirme" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" data-validation="checkbox_group" value="Mail" data-validation-qty="min1" data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>Mail <br>
+                                               <input type="checkbox" class="bilgilendirme" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" data-validation="checkbox_group" value="Telefon" data-validation-qty="min1" data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>Telefon <br>
+                                               <input type="checkbox" class="bilgilendirme" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" data-validation="checkbox_group" value="Bilgilendirme İstemiyorum" data-validation-qty="min1" data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>Bilgilendirme İstemiyorum
+                                           </div>
+                                       </div>
+                                       {!! Form::submit('Kaydet', array('url'=>'firmaProfili/bilgilendirmeTercihi/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                       <br>
+                                       <br>
+                                       {!! Form::close() !!}
+                                    </div>
+                                   <div class="modal-footer">                                                            
+                                    </div>
+                               </div>
+                           </div>
+                      </div>
+                 </div>
            </div>
        </div>
     </div>
@@ -1713,7 +1753,6 @@
      </div>
    </div>  
     <script src="{{asset('js/selectDD.js')}}"></script>    
-    <script src="{{asset('js/jquery.turklirasi.min.js')}}"></script> 
 <script> 
     var count = 0;
     $('#custom-headers').multiSelect({
@@ -1754,15 +1793,30 @@
         
         
     });
-    
+    /////////////Bilgilendirme Checkbox buton kontrolü
+    $('.bilgilendirme').click(function(){
+        jQuery('.bilgilendirme').each(function(){
+            $(this).attr("disabled",false);
+        });
+        jQuery('.bilgilendirme:checked').each(function(){
+            alert($(this).val());
+            if($(this).val() == "Bilgilendirme İstemiyorum"){
+                alert("girdi");
+                jQuery('.bilgilendirme').each(function(){
+                    if($(this).val() != "Bilgilendirme İstemiyorum"){
+                        $(this).prop("checked",false);
+                        $(this).attr("disabled",true);
+                    }
+                });
+            }
+        });
+    });        
   $.validate({
     modules : 'location, date, security, file',
     onModulesLoaded : function() {
       $('#country').suggestCountry();
     }
   });
-$("#yillik_cirosu").turkLirasi();
-$("#sermayesi").turkLirasi();
   $('.firma_faaliyet_turu').click(function(){ ///////////faaliyet turu /////////////////
         var sonSecilen;
         var count=0;
@@ -1941,8 +1995,8 @@ $("#sermayesi").turkLirasi();
         var ticaret= document.getElementById("ticaret_odasi");
         var ticaret_odasi= ticaret.options[ticaret.selectedIndex].value;
      
-        var ust= document.getElementById("ust_sektor");
-        var ust_sektor= ust.options[ust.selectedIndex].value;
+       
+        var ust_sektor= $('#ust_sektor').val();
         
         var faaliyet_sektorleri=$('#faaliyet_sektorleri').val(); 
         
