@@ -623,7 +623,7 @@
                                    </div>   
                                    <div class="form-group error">
                                        <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputTask" class="col-sm-3 control-label">Şehir</label>
+                                       <label for="inputTask" class="col-sm-3 control-label">İl</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-7">
                                            <select class="form-control il_id" name="mali_il_id" id="mali_il_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
@@ -690,8 +690,14 @@
                                        <label for="inputEmail3" class="col-sm-3 control-label">Yıllık Ciro</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-7">
-                                           <input type="text" class="form-control" id="yillik_cirosu" name="yillik_cirosu" placeholder="Yıllık Cirosu" value="{{$firma->mali_bilgiler->yillik_cirosu}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                               
+                                           <select class="form-control" name="yillik_cirosu" id="yillik_cirosu" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                               <option selected disabled>Seçiniz</option>
+                                               <option  value="0-300.000" >0-300.000</option>
+                                               <option  value="300.001-1.000.000" >300.001-1.000.000</option>
+                                               <option  value="1.000.001-8.000.000" >1.000.001-8.000.000</option>
+                                               <option  value="8.000.001-40.000.000" >8.000.001-40.000.000</option>
+                                               <option  value="40.000.000 ve üzeri" >40.000.000 ve üzeri</option>
+                                            </select>   
                                                <label>Gösterme</label>
                                                <label class="switch" style="margin-bottom: -5px;">
                                                     <input type="checkbox" id="ciro_goster" name="ciro_goster" checked>
@@ -794,13 +800,7 @@
                                    @endforeach
                                </td>
                            </tr>
-                           <tr>
-                               <td><strong>Firma Departmanları</strong></td>
-                               <td><strong>:</strong>@foreach($firma->departmanlar as $departman)
-                                   {{$departman->adi}}
-                                   @endforeach
-                               </td>
-                           </tr>
+                           
                            <tr>
                                 <td><strong>Kuruluş Tarihi</strong></td>
                                 <td><strong>:</strong>
@@ -897,16 +897,6 @@
                                    </div>
                                    <div class="form-group">
                                          <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-4 control-label">Firma Departmanları</label>
-                                         <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
-                                       <div class="col-sm-6">
-                                            @foreach($departmanlar as $departman)
-                                                <input type="checkbox" id="firma_departmanlari" name="firma_departmanları[]" value="{{$departman->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$departman->adi}}
-                                            @endforeach
-                                       </div>
-                                   </div>
-                                   <div class="form-group">
-                                         <label for="inputTask" class="col-sm-1 control-label"></label>
                                        <label for="inputEmail3" class="col-sm-4 control-label">Kuruluş Tarihi</label>
                                          <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-6">
@@ -988,7 +978,7 @@
                                       
                                         <td>
                                             
-                                            {{ Form::open(array('url'=>'firmaProfili/kaliteSil/'.$kalite_belgesi->id,'method' => 'DELETE', 'files'=>true)) }}
+                                            {{ Form::open(array('url'=>'firmaProfili/kaliteSil/'.$kalite_belgesi->id,'method' => 'DELETE')) }}
                                             <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                             {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
                                             {{ Form::close() }}
@@ -1546,7 +1536,7 @@
                        
                        $calisan= DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
                        ?>
-                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse7"><img src="{{asset('images/calisan.png')}}">&nbsp;<strong>Firma Çalışan Bilgileri</strong></a>
+                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse7"><img src="{{asset('images/calisan.png')}}">&nbsp;<strong>İdari Bilgiler</strong></a>
                        @if($calisan==null)
                        @else
                              <button style="float:right" id="btn-add-firmacalisanbilgileri" name="btn-add-firmacalisanbilgileri" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
@@ -1563,7 +1553,6 @@
                    @else
                    <table class="table" >
                        <thead id="tasks-list" name="tasks-list">
-                           <tr id="firma{{$firma->id}}">
                            <tr>
                                <td width="25%"><strong>Çalışma Günleri</strong></td>
                                <td width="75%"><strong>:</strong>  {{$calismaGunu}}</td>
@@ -1586,6 +1575,12 @@
                                <td><strong>Çalışan Sayısı</strong></td>
                                <td><strong>:</strong>  {{$firma->firma_calisma_bilgileri->calisan_sayisi}}</td>
                            </tr>
+                           <tr>
+                               <td><strong>Firma Departmanları</strong></td>
+                               <td><strong>:</strong>@foreach($firma->departmanlar as $departman)
+                                   {{$departman->adi}}
+                                   @endforeach
+                               </td>
                            </tr>
                        </thead>
                    </table>
@@ -1595,7 +1590,7 @@
                            <div class="modal-content">
                                <div class="modal-header">
                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                   <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Firma Çalışan Bilgileri</strong></h4>
+                                   <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>İdari Bilgiler</strong></h4>
                                </div>
                                <div class="modal-body">
                                    {!! Form::open(array('url'=>'firmaProfili/firmaCalisan/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
@@ -1640,6 +1635,16 @@
                                            <input type="text" class="form-control " id="calisma_sayisi" name="calisma_sayisi" placeholder="Çalışma Sayısı" value="{{$firma->firma_calisma_bilgileri->calisan_sayisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
                                        </div>
                                    </div>
+                                   <div class="form-group">
+                                         <label for="inputTask" class="col-sm-1 control-label"></label>
+                                       <label for="inputEmail3" class="col-sm-4 control-label">Firma Departmanları</label>
+                                         <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
+                                       <div class="col-sm-6">
+                                            @foreach($departmanlar as $departman)
+                                                <input type="checkbox" id="firma_departmanlari" name="firma_departmanları[]" value="{{$departman->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$departman->adi}}
+                                            @endforeach
+                                       </div>
+                                   </div>
 
                                    {!! Form::submit('Kaydet', array('url'=>'firmaProfili/firmaCalisan/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                    <br>
@@ -1656,63 +1661,14 @@
 
            </div>
            <div class="panel panel-default">
-               <div  class="panel-heading">
+                <div  class="panel-heading">
                    <h4 class="panel-title">
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse8"><strong><img src="{{asset('images/bilgilendirme.png')}}">&nbsp;Bilgilendirilme Tercihi</strong></a>
-                    @if($firma->bilgilendirme_tercihi==null)
-                    @else
-                       <button style="float:right" id="btn-add-bilgilendirmetercihi" name="btn-add-bilgilendirmetercihi" class="btn btn-primary btn-xs" >Ekle / Düzenle</button>
+                </div>
+                <div class="panel-body">
                     
-                    @endif
-                   </h4>
-               </div>
-              
-                   <div class="panel-body">
-                       
-                    @if($firma->bilgilendirme_tercihi==null)
-                        <div class="bilgiEkle"> 
-                               <button style="margin-top:20px" id="btn-add-bilgilendirmetercihi" name="btn-add-bilgilendirmetercihi" class="btn btn-primary btn-xs"><img src="{{asset('images/plus.png')}}">&nbsp;Bilgilerinizi Ekleyin</button>
-                        </div>
-                    @else
-                       <table class="table" >
-                           <thead id="tasks-list" name="tasks-list">
-                               <tr id="firma{{$firma->id}}">
-                               <tr>
-                                   <td width="25%"><strong>Bilgilendirme Tercihi</strong></td>
-                                   <td width="75%"><strong>:</strong>  {{$firma->bilgilendirme_tercihi}}</td>
-                               </tr>
-                               </tr>
-                           </thead>
-                       </table>
-                    @endif
-                       <div class="modal fade" id="myModal-bilgilendirmetercihi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                           <div class="modal-dialog">
-                               <div class="modal-content">
-                                   <div class="modal-header">
-                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                       <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Bilgilendirilme Tercihi</strong></h4>
-                                   </div>
-                                   <div class="modal-body">
-                                       {!! Form::open(array('url'=>'firmaProfili/bilgilendirmeTercihi/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
-
-                                       <div class="form-group">
-                                           <label for="inputEmail3" class="col-sm-4 control-label">Bilgilendirilme Tercihi</label>
-                                           <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                           <div class="col-sm-7">
-                                               <input type="text" class="form-control " id="bilgilendirme_tercihi" name="bilgilendirme_tercihi" placeholder="Bilgilendirilme Tercihi" value="{{$firma->bilgilendirme_tercihi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                           </div>
-                                       </div>
-                                       {!! Form::submit('Kaydet', array('url'=>'firmaProfili/bilgilendirmeTercihi/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
-                                       <br>
-                                       <br>
-                                       {!! Form::close() !!}
-                                   </div>
-                                   <div class="modal-footer">                                                            
-                                   </div>
-                               </div>
-                           </div>
-                      </div>
-                 </div>
+                   
+                </div>
            </div>
        </div>
     </div>
