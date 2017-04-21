@@ -4,7 +4,7 @@ $(document).ready(function(){
         $('#btn-save-firmabrosurEkle').val("add");
         $('#myModal-firmabrosurEkle').modal('show');
     });
-    var url = "/tamrekabet/public/index.php/firmabrosur";
+    var url = "../firmabrosur";
     $('.open-modal-brosurGuncelle').click(function(){
         var brosur_id = $(this).val();
     

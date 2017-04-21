@@ -82,17 +82,24 @@
                                                 ->where( 'firma_id', '=', $firma->id)
                                                   ->select('rol_id')->get();
                                         $rol_id=$rol_id->toArray();
+                                        
                                         $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
                                         ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
                                         ->select('roller.adi as rolAdi')->get();
                                          $querys=$querys->toArray();
+                                         
+                                         $queryUnvan = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici->id)
+                                                ->where( 'firma_id', '=', $firma->id)
+                                                ->select('unvan')->get();
+                                         $queryUnvan= $queryUnvan->toArray();
+                                         
                                        ?>
                                      
                                      <td>
                                            {{$querys[0]['rolAdi']}}
                                      </td>
                                      <td>
-                                           {{$kullanici->unvan}}
+                                           {{$queryUnvan[0]['unvan']}}
                                      </td>
                                      <td> <button name="open-modal-kullanici"  value="{{$kullanici->id}}" class="btn btn-primary btn-xs open-modal-kullanici" >Düzenle</button></td>
                                      <td>

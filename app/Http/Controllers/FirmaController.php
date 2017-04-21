@@ -127,7 +127,7 @@ class FirmaController extends Controller
         $ticariBilgi = $firma->ticari_bilgiler ?: new \App\TicariBilgi();
         $ticariBilgi->tic_sicil_no = $request->ticaret_sicil_no;
         $ticariBilgi->tic_oda_id = 1;//$request->ticaret_odasi;
-        $ticariBilgi->ust_sektor_id = $request->ust_sektor;
+        $ticariBilgi->ust_sektor = $request->ust_sektor;
         
         $firma->ticari_bilgiler()->save($ticariBilgi);        
         

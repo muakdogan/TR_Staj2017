@@ -5,7 +5,6 @@ use App\Il;?>
 <head>    
     <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
     <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
-    
     <style>
         .ajax-loader {
                     visibility: hidden;
@@ -61,7 +60,6 @@ use App\Il;?>
                 background-image: url("{{asset('images/src.png')}}");
                 background-repeat: no-repeat;
                 padding: 0px 0px 0px 20px;
-             
 
             }
 </style>
