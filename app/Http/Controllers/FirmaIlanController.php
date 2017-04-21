@@ -173,10 +173,10 @@ class FirmaIlanController extends Controller
                 $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
 
                 $firma = Firma::find($request->id);
-                $ilanlar = Ilan::find($ilan_id);
+                $ilan = Ilan::find($ilan_id);
+                $eskiTeknikSartname = $ilan->teknik_sartname;
                 $firma->goster = $request->firma_adi_gizli;
                 $firma->save();
-                $ilan=  $firma->ilanlar ?:new \App\Ilan();
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
                     $ilan->firma_sektor=$request->firma_sektor;
                     $ilan->yayin_tarihi=date('Y-m-d', strtotime($request->yayinlanma_tarihi));
@@ -198,17 +198,16 @@ class FirmaIlanController extends Controller
                     $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
                     $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
                     $ilan->adi=Str::title(strtolower( $request->ilan_adi));
-                    $firma->ilanlar()->save($ilan);
+                    $ilan->save();
                 
                 
 
                 $request->file('teknik')->move($destinationPath, $fileName); // uploading file to given path
                 // sending back with message
                 Session::flash('success', 'Upload successfully');
-                /*if ($firma->firma_brosurler){
-                    
-                File::delete("brosur/$oldName");
-                }*/
+                File::delete("Teknik/$eskiTeknikSartname"); /// Dosyadan silme
+               
+                
                 return Redirect::to('firmaIlanOlustur/'.$firma->id.'/'.$ilan->id);
                 //return  Redirect::route('commucations')->with('fileName', $fileName);
             } 

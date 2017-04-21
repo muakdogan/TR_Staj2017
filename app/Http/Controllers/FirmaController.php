@@ -208,7 +208,7 @@ class FirmaController extends Controller
         $kalite->save();
         return redirect('firmaProfili/'.$kalite->firma_kalite_belgeleri->$firma_id);
     }
-    public function brosurUpdate(Request $request){    
+    public function brosurUpdate(Request $request,$id){    
         $file = $request->file('yolu');
         
         // getting all of the post data
@@ -217,9 +217,10 @@ class FirmaController extends Controller
         $rules = array('yolu' => 'required|mimes:pdf|max:100000'); //mimes:jpeg,bmp,png and for max size max:10000
         // doing the validation, passing post data, rules and the messages
         $validator = Validator::make($file, $rules);
+        $brosur = \App\FirmaBrosur::find($id);
         if ($validator->fails()) {
             // send back to the page with the input data and errors
-            return Redirect::to('firmaProfili/'.$request->id)->withInput()->withErrors($validator);
+            return Redirect::to('firmaProfili/'.$brosur->firma_id)->withInput()->withErrors($validator);
         } else {
             // checking file is valid.
             if ($request->file('yolu')->isValid()) {
@@ -227,7 +228,7 @@ class FirmaController extends Controller
                 $extension = $request->file('yolu')->getClientOriginalExtension(); // getting image extension
                 $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
 
-                $brosur = \App\FirmaBrosur::find(1);
+                
                 $oldName = $brosur->yolu;
                 $brosur->yolu=$fileName;
                 $brosur->adi=Str::title(strtolower($request->brosur_adi));
@@ -278,13 +279,28 @@ class FirmaController extends Controller
     }
     public function bilgilendirmeTercihiAdd(Request $request){
         $firma = Firma::find($request->id);
-        $firma->bilgilendirme_tercihi=Str::title(strtolower($request->bilgilendirme_tercihi));
+        foreach($request->bilgilendirme_tercihi as $bilgilendirme){
+            if($bilgilendirme == "Sms"){
+                $firma->sms=1;
+            }
+            elseif ($bilgilendirme == "Mail") {
+                $firma->mail=1;
+            }
+            elseif($bilgilendirme == "Telefon"){
+                $firma->telefon=1;
+            }
+            else{
+                $firma->sms=0;
+                $firma->mail=0;
+                $firma->telefon=0;
+            }
+        }
         $firma->save();
         
         return redirect('firmaProfili/'.$firma->id);
     }
     public function uploadPdf(Request $request){
-         $file = $request->file('yolu');
+        $file = $request->file('yolu');
         // getting all of the post data
         $file = array('yolu' => $request->file('yolu'));
         // setting up rules
@@ -373,6 +389,7 @@ class FirmaController extends Controller
         
          $brosur = \App\FirmaBrosur::find($id);
          
+         File::delete("brosur/$brosur->yolu");
          $brosur->delete();
          
         return redirect('firmaProfili/'.$request->firma_id);
