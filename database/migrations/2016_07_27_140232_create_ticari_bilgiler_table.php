@@ -20,8 +20,7 @@ class CreateTicariBilgilerTable extends Migration
             $table->string('tic_sicil_no');
             $table->integer('tic_oda_id')->unsigned();
             $table->foreign('tic_oda_id')->references('id')->on('ticaret_odalari')->onDelete('cascade');
-            $table->integer('ust_sektor_id')->unsigned();
-            $table->foreign('ust_sektor_id')->references('id')->on('sektorler')->onDelete('cascade');
+            $table->tinyInteger('ust_sektor');
             $table->timestamps();
         });
     }

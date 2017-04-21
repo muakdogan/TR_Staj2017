@@ -28,7 +28,15 @@
         <script src="{{asset('js/ajax-crud-firmacalisanlari.js')}}"></script>
         <script src="{{asset('js/ajax-crud-firmabrosur.js')}}"></script>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
+        <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <style>
+            .search_icon {   
+                background-color: white;
+                background-image: url("{{asset('images/src.png')}}");
+                background-repeat: no-repeat;
+                padding: 0px 0px 0px 20px;
+
+            }
             table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
@@ -220,6 +228,8 @@
    </head>
    <body>
          <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+         <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
+            <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
   
    <div class="container">
        <br>
@@ -768,11 +778,17 @@
                                </td>
                            </tr>
                            <tr>
-                               <td><strong>Üst Sektör</strong></td>
-                               <td><strong>:</strong>  {{$firma->ticari_bilgiler->sektorler->adi}}</td>
+                              <td><strong>Üst Sektör</strong></td>
+                              @if ($firma->ticari_bilgiler->ust_sektor==1)
+                                   <td><strong>:</strong> Sanayi</td>
+                              @elseif($firma->ticari_bilgiler->ust_sektor==2)
+                                   <td><strong>:</strong> Tarım</td>
+                              @elseif($firma->ticari_bilgiler->ust_sektor==3)
+                                   <td><strong>:</strong> Hizmet</td> 
+                              @endif
                            </tr>
                            <tr>
-                               <td><strong>Faliyet Sektör</strong></td>
+                               <td><strong>Faaliyet Gösterilen Sektörler</strong></td>
                                <td><strong>:</strong>@foreach($firma->sektorler as $sektor)
                                    {{$sektor->adi}}
                                    @endforeach
@@ -859,20 +875,24 @@
                                        <div class="col-sm-6">
                                            <select class="form-control" name="ust_sektor" id="ust_sektor" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                <option selected disabled>Seçiniz</option>
-                                               @foreach($ustsektor as $ust)
-                                               <option  value="{{$ust->id}}" >{{$ust->adi}}</option>
-                                               @endforeach
+                                               <option  value="1" >Sanayi</option>
+                                               <option  value="2" >Tarım</option>
+                                               <option  value="3" >Hizmet</option>
                                            </select>
                                        </div>
                                    </div>
                                    <div class="form-group">
                                          <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-4 control-label">Faaliyet Sektörleri</label>
+                                       <label for="inputEmail3" class="col-sm-4 control-label">Faaliyet Gösterilen Sektörler</label>
                                          <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-6">
-                                            @foreach($ustsektor as $sektor)
-                                                <input type="checkbox" id="faaliyet_sektorleri" name="faaliyet_sektorleri[]" value="{{$sektor->id}}"    data-validation-error-msg="Lütfen bu alanı doldurunuz!">{{$sektor->adi}}
-                                            @endforeach
+                                           <select class="form-control deneme"   name="faaliyet_sektorleri[]" id="custom-headers" multiple='multiple' >
+                                                <?php $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();  ?>
+                                                @foreach($ustsektor as $sektor)
+                                                <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                                @endforeach
+                                          </select>
+                                           
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -1739,6 +1759,46 @@
     <script src="{{asset('js/selectDD.js')}}"></script>    
     <script src="{{asset('js/jquery.turklirasi.min.js')}}"></script> 
 <script> 
+    var count = 0;
+    $('#custom-headers').multiSelect({
+        selectableHeader: "</i><input type='text'  class='search-input col-sm-12 search_icon' autocomplete='off' placeholder='Sektör Seçiniz'></input>",
+        selectionHeader: "<p style='font-size:12px;color:red'>Max 5 sektör</p>",
+        afterInit: function(ms){
+          var that = this,
+              $selectableSearch = that.$selectableUl.prev(),
+              $selectionSearch = that.$selectionUl.prev(),
+              selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+              selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+          that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+          .on('keydown', function(e){
+            if (e.which === 40){
+              that.$selectableUl.focus();
+              return false;
+            }
+          });
+
+        },
+        afterSelect: function(values){
+          count++;
+         
+          if(count>5){
+              $('#custom-headers').multiSelect('deselect', values);
+          }
+          this.qs1.cache();
+          this.qs2.cache();
+          
+         
+        },
+        afterDeselect: function(){
+          count--;
+          this.qs1.cache();
+          this.qs2.cache();
+        }
+        
+        
+    });
+    
   $.validate({
     modules : 'location, date, security, file',
     onModulesLoaded : function() {

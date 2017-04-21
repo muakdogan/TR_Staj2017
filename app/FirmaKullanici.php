@@ -8,7 +8,7 @@ class FirmaKullanici extends Model
 {
     //
     protected $table = 'firma_kullanicilar';
-    
+    public $timestamps = false;
     public function roller()
     {
         return $this->belongsTo('App\Rol')->withPivot('rol_id', 'id');
