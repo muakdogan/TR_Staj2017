@@ -15,7 +15,6 @@ use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 
@@ -257,16 +256,16 @@ Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
     $kullanici->email = $request->email;
     $kullanici->save();
 
-    $user = $kullanici->user ?: new App\User();
+    $user = $kullanici->users ?: new App\User();
     $user->email = $request->email;
     $user->password =Hash::make('tamrekabet');
-    $rol=$request->rol;
-    $unvan=$request->unvan;
 
     $kullanici->users()->save($user);
-
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol]);
-    $firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
+    $rol=$request->rol;
+    $unvan=$request->unvan;
+    $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol,'unvan'=>$unvan]);
+    
+    //$firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
     
     $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
 
@@ -281,21 +280,31 @@ Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
 Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
     $firma = Firma::find($id);
     $roller=  App\Rol::all();
+    
+    
     $kullanici= App\Kullanici::find($kul_id);
+    
     $kullanici->adi = Str::title(strtolower($request->adi));
     $kullanici->soyadi = Str::title(strtolower($request->soyadi));
     $kullanici->email = $request->email;
     $kullanici->save();
-    $user = $kullanici->users;
+    
+    $user = $kullanici->users ?: new App\User();
     $user->email = $request->email;
     $user->password =Hash::make('tamrekabet');
-    $rol=$request->rol;
-    $unvan=$request->unvan;
-    $kullanici->users()->save($user);
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol]);
-    $firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
     
-    return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+    $kullanici->users()->save($user);
+    
+    $firmaKullanicilar = App\FirmaKullanici::where('kullanici_id', '=',  $kul_id)
+            ->where('firma_id', '=',$id)->first();
+   
+      
+    $firmaKullanicilar->rol_id =$request->rol;
+    $firmaKullanicilar->unvan=$request->unvan;
+   
+    $firmaKullanicilar->save();
+  
+   return Redirect::to('/kullaniciIslemleri/'.$firma->id);
 
 }); 
 Route::get('/kullanici/{kullanici_id?}',function($kullanici_id){
@@ -312,7 +321,7 @@ Route::delete('/kullaniciDelete/{id}/{firma_id}',function($id,$firma_id,Request 
     $user->delete();
     $kul->delete();
 
-    return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+     return Redirect::to('/kullaniciIslemleri/'.$firma_id);
 
 });
    
