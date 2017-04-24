@@ -1682,10 +1682,10 @@
                                <tr id="firma{{$firma->id}}">
                                <tr>
                                    <td width="25%"><strong>Bilgilendirme Tercihi :</strong></td>
-                                   <td width="75%"><input type="checkbox" class="bilgilendirmeOnTaraf"  id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" disabled/>Sms <br>
-                                   <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" disabled/>Mail <br>
-                                               <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]"  disabled/>Telefon <br>
-                                               <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" disabled/>Bilgilendirme İstemiyorum</td>
+                                   <td width="75%"><input type="checkbox" class="bilgilendirmeOnTaraf"  id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" value="Sms" disabled/>Sms <br>
+                                   <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" value="Mail" disabled/>Mail <br>
+                                               <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" value="Telefon" disabled/>Telefon <br>
+                                               <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" value="Bilgilendirme İstemiyorum" disabled/>Bilgilendirme İstemiyorum</td>
                                </tr>
                                </tr>
                            </thead>
@@ -1822,7 +1822,34 @@
                 });
             }
         });
-    });        
+    });
+    jQuery('.bilgilendirmeOnTaraf').each(function(){
+        if($(this).val() == "Sms"){
+            if({{$ilan->sms}} == 1){
+                $(this).prop("checked",true);
+            }
+            else{
+                $(this).prop("checked",false);
+            }
+        }
+        else if($(this).val() == "Mail"){
+            if({{$ilan->mail}} == 1){
+                $(this).prop("checked",true);
+            }
+            else{
+                $(this).prop("checked",false);
+            }
+        }
+        else{
+            if({{$ilan->telefon}} == 1){
+                $(this).prop("checked",true);
+            }
+            else{
+                $(this).prop("checked",false);
+            }
+        }
+    });
+    
   $.validate({
     modules : 'location, date, security, file',
     onModulesLoaded : function() {
