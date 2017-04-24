@@ -222,7 +222,16 @@
               .slider.round:before {
                 border-radius: 50%;
               }
-
+              .test + .tooltip > .tooltip-inner {
+                background-color: #73AD21; 
+                color: #FFFFFF; 
+                border: 1px solid green; 
+                padding: 10px;
+                font-size: 12px;
+             }
+             .test + .tooltip.bottom > .tooltip-arrow {
+                    border-bottom: 5px solid green;
+             }
                            
         </style>
    </head>
@@ -1668,12 +1677,15 @@
                     </h4>
                 </div>
                 <div class="panel-body">
-                       <table class="table" >
+                       <table data-toggle="tooltip" data-placement="bottom" title="Eğer değiştirmek istiyorsanız Ekle/Düzenle butonunu kullanın!" class="table" >
                            <thead id="tasks-list" name="tasks-list">
                                <tr id="firma{{$firma->id}}">
                                <tr>
-                                   <td width="25%"><strong>Bilgilendirme Tercihi</strong></td>
-                                   <td width="75%"><strong>:</strong>  {{$firma->bilgilendirme_tercihi}}</td>
+                                   <td width="25%"><strong>Bilgilendirme Tercihi :</strong></td>
+                                   <td width="75%"><input type="checkbox" class="bilgilendirmeOnTaraf"  id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" disabled/>Sms <br>
+                                   <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" disabled/>Mail <br>
+                                               <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]"  disabled/>Telefon <br>
+                                               <input type="checkbox" class="bilgilendirmeOnTaraf" id="bilgilendirme_tercihi" name="bilgilendirme_tercihi[]" disabled/>Bilgilendirme İstemiyorum</td>
                                </tr>
                                </tr>
                            </thead>
@@ -1841,7 +1853,7 @@
     
    
     $( document ).ready(function() {
-        
+         $('[data-toggle="tooltip"]').tooltip();   
         var max_fields      = 10; //maximum input boxes allowed
         var wrapper         = $(".input_fields_wrap"); //Fields wrapper
         var add_button      = $(".add_field_button"); //Add button ID
