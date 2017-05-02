@@ -16,9 +16,6 @@
         <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
-     
-    
-        
         <style>
             .popup, .popup2, .bMulti {
             background-color: #fff;
@@ -1470,15 +1467,24 @@ $(function() {
         $('#maliyet').val(option);   
     });
 });
-
+    var select_count=0;
+    var multiselectCount=0;
 $(function() {
     $("#firma_sektor").change(function(){
       sektor = $('option:selected', this).attr('value');
- 
+      select_count++;
+      alert("girdi:"+select_count);
+      if(select_count>1){
+          
+      }
+      $('#custom-headers').multiSelect('deselect_all');
+      //$('#custom-headers').multiSelect().remove();
+   
+      funcBelirliIstekler();
       
     });
 });
-function funcBelirliEzgi(){             
+function funcBelirliIstekler(){             
     $.ajax({
         type:"GET",
         url: "{{asset('belirli')}}",
@@ -1486,9 +1492,16 @@ function funcBelirliEzgi(){
         cache: false,
         success: function(data){
            console.log(data);
+           $("#custom-headers option").remove();
+            for(var c=0; c<multiselectCount; c++){
+                $("#"+(c+48)+"-selectable").remove();
+            }
+                   
            for(var key=0; key <Object.keys(data).length;key++)
             {
-                $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key });        
+                multiselectCount++;
+                $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key }); 
+               
             } 
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) { 
@@ -1500,9 +1513,9 @@ $(function() {
     $("#rekabet_sekli").change(function(){
         var option = $('option:selected', this).attr('value');
         if(sektor!==0){
+            alert(option);
             if(option==="2"){
                 $('#belirli-istekliler').show();
-                funcBelirliEzgi();
             }
             else
             {
@@ -1520,8 +1533,6 @@ $(function() {
         }
     });
 });
-
-
 $('#custom-headers').multiSelect({
   selectableHeader: "<input style='width:115px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
   selectionHeader: "<input  style='width:115px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
@@ -1562,6 +1573,7 @@ $('#custom-headers').multiSelect({
     this.qs1.cache();
     this.qs2.cache();
   }
+ 
 });
 
 var ilan_turu;
