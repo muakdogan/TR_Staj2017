@@ -1836,6 +1836,7 @@
             }
         });
     });
+    var kontrol=0;
     jQuery('.bilgilendirmeOnTaraf').each(function(){
         if($(this).val() == "Sms"){
             if({{$firma->sms}} == 1){

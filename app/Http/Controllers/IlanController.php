@@ -57,12 +57,12 @@ class IlanController extends Controller
                         $sektor_id = 0;
                     }
                 }
-                $ilanlar->where('ilanlar.adi',$input )
-                        ->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
-                        ->orWhere('ilanlar.kapanma_tarihi', $input )
-                        ->orWhere('firmalar.adi',$input )
-                        ->orWhere('ilanlar.firma_sektor',$sektor_id)
-                        ->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
+                $ilanlar->where('ilanlar.adi',$input )->where('ilanlar.goster',1);
+                        //->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
+                        //->orWhere('ilanlar.kapanma_tarihi', $input )
+                        //->orWhere('firmalar.adi',$input )
+                        //->orWhere('ilanlar.firma_sektor',$sektor_id)
+                        //->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
             }
             else if($radSearch == "ilan_baslık"){
                 $ilanlar->where('ilanlar.adi', $input);
@@ -84,9 +84,9 @@ class IlanController extends Controller
                     $sektor_id = 0;
                 }
             }
-            $ilanlar->where('ilanlar.adi' ,$keyword )
-                    ->orWhere('firmalar.adi',$keyword )
-                    ->orWhere('ilanlar.firma_sektor',$sektor_id);
+            //$ilanlar->where('ilanlar.adi' ,$keyword )
+              //      ->Where('firmalar.adi',$keyword )->where('ilanlar.goster',1)
+                //    ->Where('ilanlar.firma_sektor',$sektor_id);
         }
         if($il_id != NULL)
             {
