@@ -20,8 +20,7 @@
         <script src="{{asset('js/ajax-crud-malibilgiler.js')}}"></script>
         <script src="{{asset('js/ajax-crud-ticaribilgiler.js')}}"></script>
         <script src="{{asset('js/ajax-crud-bilgilendirmetercihi.js')}}"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        
         <script src="{{asset('js/ajax-crud-referanslar.js')}}"></script>
         <script src="{{asset('js/ajax-crud-referanslarGecmis.js')}}"></script>
         <script src="{{asset('js/ajax-crud-kalite.js')}}"></script>
@@ -170,8 +169,8 @@
                 .switch {
                 position: relative;
                 display: inline-block;
-                width: 60px;
-                height: 24px;
+                width: 40px;
+                height: 18px;
                 margin-top: 8px;
               }
 
@@ -192,10 +191,10 @@
               .slider:before {
                 position: absolute;
                 content: "";
-                height: 18px;
+                height: 16px;
                 width: 20px;
-                left: 4px;
-                bottom: 4px;
+                left: 0px;
+                bottom: 2px;
                 background-color: white;
                 -webkit-transition: .4s;
                 transition: .4s;
@@ -241,6 +240,8 @@
          <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
          <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
          <script src="{{asset('js/multiple-select.js')}}"></script>
+         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
          
   
    <div class="container">
@@ -876,7 +877,7 @@
                                         <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
                                         <div class="col-sm-6">
                                             @foreach($faaliyetler as $faaliyet)
-                                                <input type="checkbox" class="firma_faaliyet_turu" id="firma_faaliyet_turu" name="firma_faaliyet_turu[]" value="{{$faaliyet->id}}"  data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">{{$faaliyet->adi}}
+                                                <input type="checkbox" class="firma_faaliyet_turu" id="firma_faaliyet_turu" name="firma_faaliyet_turu[]" value="{{$faaliyet->id}}"  data-validation="checkbox_group" data-validation-qty="min1" data-validation-error-msg="En az bir tanesini seçiniz!">{{$faaliyet->adi}}
                                             @endforeach
                                         </div>
                                    </div>
@@ -912,7 +913,7 @@
                                        <label for="inputEmail3" class="col-sm-4 control-label">Kuruluş Tarihi</label>
                                          <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-6">
-                                           <input type="date" class="form-control datepicker" id="kurulus_tarihi" name="kurulus_tarihi" placeholder="Kuruluş Tarihi" value="{{$firma->kurulus_tarihi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                           <input type="text" class="form-control date" id="kurulus_tarihi" name="kurulus_tarihi" placeholder="Kuruluş Tarihi" value="{{$firma->kurulus_tarihi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                        </div>
                                    </div>
                                    <div class="form-group" id="uretilenDiv">
@@ -1417,12 +1418,12 @@
                                 <th>Broşür Pdf:</th>
                                 
                                 @foreach($firma->firma_brosurler as $firmaBrosur)
-                                    <tr>   
+                                    <tr >   
                                        <td>
                                            {{$firmaBrosur->adi}}
                                        </td>
-                                       <td>
-                                           <a href="{{ asset('brosur/'.$firmaBrosur->yolu) }}">{{$firmaBrosur->yolu}}</a>
+                                       <td data-toggle="tooltip" data-placement="bottom" title="PDF'i görüntülemek için lütfen üstüne tıklayın!">
+                                           <a  href="{{ asset('brosur/'.$firmaBrosur->yolu) }}">{{$firmaBrosur->yolu}}</a>
                                        </td>
                                   
                                    <td> <button   value="{{$firmaBrosur->id}}" class="btn btn-primary btn-xs open-modal-brosurGuncelle" >Düzenle</button>
@@ -1774,8 +1775,6 @@
     <script src="{{asset('js/selectDD.js')}}"></script>    
 <script> 
     
-    
-    
     $("#firma_departmanlari").multipleSelect({
             width: 260,
             multiple: true,
@@ -1827,9 +1826,7 @@
             $(this).attr("disabled",false);
         });
         jQuery('.bilgilendirme:checked').each(function(){
-            alert($(this).val());
             if($(this).val() == "Bilgilendirme İstemiyorum"){
-                alert("girdi");
                 jQuery('.bilgilendirme').each(function(){
                     if($(this).val() != "Bilgilendirme İstemiyorum"){
                         $(this).prop("checked",false);
@@ -1843,6 +1840,7 @@
         if($(this).val() == "Sms"){
             if({{$firma->sms}} == 1){
                 $(this).prop("checked",true);
+                kontrol=1;
             }
             else{
                 $(this).prop("checked",false);
@@ -1851,17 +1849,24 @@
         else if($(this).val() == "Mail"){
             if({{$firma->mail}} == 1){
                 $(this).prop("checked",true);
+                kontrol=1;
+            }
+            else{
+                $(this).prop("checked",false);
+            }
+        }
+        else if($(this).val() == "Telefon"){
+            if({{$firma->telefon}} == 1){
+                $(this).prop("checked",true);
+                kontrol=1;
             }
             else{
                 $(this).prop("checked",false);
             }
         }
         else{
-            if({{$firma->telefon}} == 1){
+            if(kontrol == 0){
                 $(this).prop("checked",true);
-            }
-            else{
-                $(this).prop("checked",false);
             }
         }
     });
@@ -1896,6 +1901,30 @@
     
    
     $( document ).ready(function() {
+         $.fn.datepicker.dates['tr'] = {
+            days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
+            daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
+            daysMin: ["Pz", "Pzt", "Sa", "Çr", "Pr", "Cu", "Ct", "Pz"],
+            months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            monthsShort: ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
+            today: "Bugün"
+	};
+        var date_input=$('input[class="form-control date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'yyyy',
+            language:"tr",
+            viewMode:"years",
+            minViewMode:"years",
+            container: container,
+            weekStart:1,
+            todayHighlight: true,
+            autoclose: true
+        });
+        
+        
+        
+        
          $('[data-toggle="tooltip"]').tooltip();   
         var max_fields      = 10; //maximum input boxes allowed
         var wrapper         = $(".input_fields_wrap"); //Fields wrapper
