@@ -29,6 +29,7 @@
         <script src="{{asset('js/ajax-crud-firmabrosur.js')}}"></script>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
+        <link href="{{asset('css/multiple-select.css')}}" rel="stylesheet"/>
         <style>
             .search_icon {   
                 background-color: white;
@@ -238,7 +239,9 @@
    <body>
          <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
          <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
-            <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
+         <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
+         <script src="{{asset('js/multiple-select.js')}}"></script>
+         
   
    <div class="container">
        <br>
@@ -1577,7 +1580,7 @@
                                 @elseif ($firma->firma_calisma_bilgileri->calisan_profili==2)
                                    <td><strong>:</strong> Beyaz Yaka</td>
                                 @elseif($firma->firma_calisma_bilgileri->calisan_profili==3)
-                                   <td><strong>:</strong>Mavi Yaka,Beyaz Yaka</td>
+                                   <td><strong>:</strong> Mavi Yaka,Beyaz Yaka</td>
                                 @endif
                            </tr>
                            <tr>
@@ -1587,7 +1590,7 @@
                            <tr>
                                <td><strong>Firma Departmanları</strong></td>
                                <td><strong>:</strong>@foreach($firma->departmanlar as $departman)
-                                   {{$departman->adi}}
+                                   {{$departman->adi}},
                                    @endforeach
                                </td>
                            </tr>
@@ -1630,9 +1633,11 @@
                                        <label for="inputEmail3" class="col-sm-1 control-label">Çalışan Profili</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-9">
-                                           <input type="checkbox" id="mavi_yaka" name="mavi_yaka" value="1">Mavi Yaka
-                                           <input type="checkbox" id="beyaz_yaka" name="beyaz_yaka" value="2">Beyaz Yaka
-                                           <input type="checkbox" id="mavi_beyaz" name="mavi_beyaz" value="3">Mavi Yaka,Beyaz Yaka
+                                           
+                                           <input type="checkbox" class="firma_calisan " name="firma_calisma_profili[]" value="1" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Mavi Yaka
+                                           <input type="checkbox" class="firma_calisan "  name="firma_calisma_profili[]" value="2" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Beyaz Yaka
+                                           <input type="checkbox" class="firma_calisan "  name="firma_calisma_profili[]" value="3" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Mavi Yaka,Beyaz Yaka
+                                           
                                            
                                        </div>
                                    </div>
@@ -1641,17 +1646,19 @@
                                        <label for="inputEmail3" class="col-sm-3 control-label">Çalışan Sayısı</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-7">
-                                           <input type="text" class="form-control " id="calisma_sayisi" name="calisma_sayisi" placeholder="Çalışma Sayısı" value="{{$firma->firma_calisma_bilgileri->calisan_sayisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                           <input type="text" class="form-control " id="calisma_sayisi" name="calisma_sayisi" placeholder="Çalışan Sayısı" value="{{$firma->firma_calisma_bilgileri->calisan_sayisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
                                        </div>
                                    </div>
                                    <div class="form-group">
                                          <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-4 control-label">Firma Departmanları</label>
-                                         <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
+                                       <label for="inputEmail3" class="col-sm-3 control-label">Firma Departmanları</label>
+                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-6">
-                                            @foreach($departmanlar as $departman)
-                                                <input type="checkbox" id="firma_departmanlari" name="firma_departmanları[]" value="{{$departman->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$departman->adi}}
-                                            @endforeach
+                                           <select id="firma_departmanlari"   name="firma_departmanları[]" multiple="multiple">
+                                                @foreach($departmanlar as $departman)
+                                                 <option data-toggle="tooltip" data-placement="bottom" title="{{$departman->adi}}" value="{{$departman->id}}">{{$departman->adi}}</option>
+                                                @endforeach
+                                           </select>
                                        </div>
                                    </div>
 
@@ -1766,6 +1773,15 @@
    </div>  
     <script src="{{asset('js/selectDD.js')}}"></script>    
 <script> 
+    
+    
+    
+    $("#firma_departmanlari").multipleSelect({
+            width: 260,
+            multiple: true,
+            multipleWidth: 100
+    });
+    
     var count = 0;
     $('#custom-headers').multiSelect({
         selectableHeader: "</i><input type='text'  class='search-input col-sm-12 search_icon' autocomplete='off' placeholder='Sektör Seçiniz'></input>",
@@ -1825,7 +1841,7 @@
     });
     jQuery('.bilgilendirmeOnTaraf').each(function(){
         if($(this).val() == "Sms"){
-            if({{$ilan->sms}} == 1){
+            if({{$firma->sms}} == 1){
                 $(this).prop("checked",true);
             }
             else{
@@ -1833,7 +1849,7 @@
             }
         }
         else if($(this).val() == "Mail"){
-            if({{$ilan->mail}} == 1){
+            if({{$firma->mail}} == 1){
                 $(this).prop("checked",true);
             }
             else{
@@ -1841,7 +1857,7 @@
             }
         }
         else{
-            if({{$ilan->telefon}} == 1){
+            if({{$firma->telefon}} == 1){
                 $(this).prop("checked",true);
             }
             else{
@@ -2397,6 +2413,10 @@
       console.log('please select and image file');
     }
   });
+  
+  $('.firma_calisan').click(function() {
+    $(this).siblings('input:checkbox').prop('checked', false);
+});
 </script>
 </body>
 </html>

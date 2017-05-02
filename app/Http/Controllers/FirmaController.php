@@ -259,17 +259,9 @@ class FirmaController extends Controller
         $firma_calisan = $firma->firma_calisma_bilgileri ?: new \App\FirmaCalismaBilgisi();
         $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
         $firma_calisan->calisma_saatleri=Str::title(strtolower($request->calisma_saatleri));
-        if($request->mavi_yaka!=null){
-             $firma_calisan->calisan_profili=$request->mavi_yaka;
-        }
-        else if($request->beyaz_yaka!=null){
-            $firma_calisan->calisan_profili=$request->beyaz_yaka;
-        } 
-        else if ($request->mavi_beyaz!=null){
-            $firma_calisan->calisan_profili=$request->mavi_beyaz;
-        }
-        else{
-            
+        
+        foreach($request->firma_calisma_profili as $firma_calisma){
+                       $firma_calisan->calisan_profili = $firma_calisma;
         }
         $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
        
