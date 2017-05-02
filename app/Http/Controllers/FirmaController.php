@@ -139,11 +139,18 @@ class FirmaController extends Controller
                 $firma->uretilen_markalar()->save($uretilenMarka);
             }    
         }
-        
-        foreach($request->faaliyet_sektorleri as $sektor){
-            $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$sektor)->get();
+        if(count($request->faaliyet_sektorleri) > 0){
+            foreach($request->faaliyet_sektorleri as $sektor){
+                $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$sektor)->get();
+                if(count($kayitKontrol) == 0){
+                    $firma->sektorler()->attach($sektor);
+                }
+            }
+        }
+        else{
+            $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$request->faaliyet_sektorleri)->get();
             if(count($kayitKontrol) == 0){
-                $firma->sektorler()->attach($sektor);
+                $firma->sektorler()->attach($request->faaliyet_sektorleri);
             }
         }
        
