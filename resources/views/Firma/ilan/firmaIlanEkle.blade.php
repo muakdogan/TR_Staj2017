@@ -273,11 +273,11 @@
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
                                                                
-                                                                 <input type="checkbox" class="filled-in firma_goster"  name="firma_adi_gizli[]" value="Göster" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Göster  
+                                                                 <input type="checkbox" class="filled-in firma_goster"  name="firma_adi_gizli[]" value="1" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Göster  
                                                                  <input type="checkbox" data-toggle="tooltip" data-placement="bottom" title="İlanda firma 
                                                                         isminin gözükmemesi satıcı firma tarafında 
                                                                         belirsizlikler yaratabilir!" 
-                                                                        class="filled-in test firma_goster"  name="firma_adi_gizli[]" value="Gizli" data-validation-error-msg="Lütfen  birini seçiniz!" data-validation="checkbox_group"  data-validation-qty="min1" />Gizli
+                                                                        class="filled-in test firma_goster"  name="firma_adi_gizli[]" value="0" data-validation-error-msg="Lütfen  birini seçiniz!" data-validation="checkbox_group"  data-validation-qty="min1" />Gizli
                                                              
                                                             </div>
                                                         </div>
@@ -1367,6 +1367,7 @@
 <!--script src="{{asset('js/selectDD.js')}}"></script-->  
 <script charset="utf-8"> 
     var firmaCount = 0;
+    var multiselectCount=0;
  $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();   
      
@@ -1387,6 +1388,9 @@
             weekStart:1,
             todayHighlight: true,
             autoclose: true
+        }).on('change', function() {
+            $(this).validate();  // triggers the validation test
+        // '$(this)' refers to '$("#datepicker")'
         });
         
         
@@ -1478,6 +1482,7 @@ $(function() {
       
     });
 });
+
 function funcBelirliEzgi(){             
     $.ajax({
         type:"GET",
@@ -1486,10 +1491,15 @@ function funcBelirliEzgi(){
         cache: false,
         success: function(data){
            console.log(data);
+            $("#custom-headers option").remove();
+            for(var c=0; c<multiselectCount; c++){
+                $("#"+(c+48)+"-selectable").remove();
+            }
            for(var key=0; key <Object.keys(data).length;key++)
             {
+                multiselectCount++;
                 $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key });        
-            } 
+            }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) { 
             alert("Status: " + textStatus); alert("Error: " + errorThrown); 

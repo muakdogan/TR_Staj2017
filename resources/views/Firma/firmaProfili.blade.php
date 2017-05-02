@@ -1823,29 +1823,38 @@
             }
         });
     });
+    var kontrol=0;
     jQuery('.bilgilendirmeOnTaraf').each(function(){
         if($(this).val() == "Sms"){
-            if({{$ilan->sms}} == 1){
+            if({{$firma->sms}} == 1){
                 $(this).prop("checked",true);
+                kontrol=1;
             }
             else{
                 $(this).prop("checked",false);
             }
         }
         else if($(this).val() == "Mail"){
-            if({{$ilan->mail}} == 1){
+            if({{$firma->mail}} == 1){
                 $(this).prop("checked",true);
+                kontrol=1;
+            }
+            else{
+                $(this).prop("checked",false);
+            }
+        }
+        else if($(this).val() == "Telefon"){
+            if({{$firma->telefon}} == 1){
+                $(this).prop("checked",true);
+                kontrol=1;
             }
             else{
                 $(this).prop("checked",false);
             }
         }
         else{
-            if({{$ilan->telefon}} == 1){
+            if(kontrol == 0){
                 $(this).prop("checked",true);
-            }
-            else{
-                $(this).prop("checked",false);
             }
         }
     });

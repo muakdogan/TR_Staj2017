@@ -194,7 +194,12 @@
                
             
                 <div class="span12">
-                     <?php $ilan = DB::table('ilanlar')->count();?>
+                     <?php 
+                        use Carbon\Carbon;
+                        $dt = Carbon::now();
+                        $dt->toDateString();  
+                     $ilan = DB::table('ilanlar')->where('ilanlar.yayin_tarihi', '<=' , $dt->today())
+                ->where('ilanlar.kapanma_tarihi', '>=' , $dt->today())->count();?>
                     <h1 style="color:#ccc">
                         Sizin için  burada {{$ilan}} ilan var!
                     </h1>

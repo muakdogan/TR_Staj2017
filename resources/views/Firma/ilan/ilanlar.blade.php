@@ -123,7 +123,7 @@ a{
                         <p style="font-size: 17px; color: #333"><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
                         @if(number_format($puan[0]['ortalama'],1)> 0)
                             <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
-                            <p style="font-size:15px; color:#666"><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >@if($ilan->goster == "Gizle")
+                            <p style="font-size:15px; color:#666"><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >@if($ilan->goster == 0)
                                     Firma Adı Gizli
                                 @else    
                                     Firma: {{$ilan->adi}}
