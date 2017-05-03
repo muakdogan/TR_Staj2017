@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-   var url = "/tamrekabet/public/index.php/firma";
+   var url = "tamrekabet/public/index.php/firma";
     $('.open-modal-gecmis').click(function(){
         var ref_id = $(this).val();
 

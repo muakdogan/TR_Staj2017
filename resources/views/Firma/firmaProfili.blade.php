@@ -513,7 +513,7 @@
                                            <label for="inputEmail3" class="col-sm-3 control-label">Tanıtım Yazısı</label>
                                              <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                            <div class="col-sm-8">  
-                                               <textarea id="tanitim_yazisi" name="tanitim_yazisi" rows="5" class="form-control ckeditor"  placeholder="{{$firma->tanitim_yazisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">&lt;p&gt; &lt;/p&gt;</textarea>
+                                               <textarea id="tanitim_yazisi" name="tanitim_yazisi" rows="5" class="form-control ckeditor"  placeholder="{{$firma->tanitim_yazisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">&lt;p&gt; &lt;/p&gt; <?php echo $firma->tanitim_yazisi;?></textarea>
                                         
                                                 <br>
                                                 <br>
@@ -544,7 +544,7 @@
                        @if($firma->mali_bilgiler->firma_id==0)
                         
                        @else
-                            <button style="float:right" id="btn-add-malibilgiler" name="btn-add-malibilgiler" class="btn btn-primary btn-xs">Ekle / Düzenle</button>
+                            <button style="float:right" id="btn-add-malibilgiler" name="btn-add-malibilgiler" onclick="populateMaliDD()" class="btn btn-primary btn-xs">Ekle / Düzenle</button>
                        @endif
                    </h4>
                </div>
@@ -878,7 +878,7 @@
                                         <div class="col-sm-6">
                                             @foreach($faaliyetler as $faaliyet)
                                                 <input type="checkbox" class="firma_faaliyet_turu" id="firma_faaliyet_turu" name="firma_faaliyet_turu[]" value="{{$faaliyet->id}}"  data-validation="checkbox_group" data-validation-qty="min1" data-validation-error-msg="En az bir tanesini seçiniz!">{{$faaliyet->adi}}
-                                            @endforeach
+                                            @endforeach    
                                         </div>
                                    </div>
                                    <div class="form-group">
@@ -923,8 +923,11 @@
                                        <div class="col-sm-6">
                                            <div class="input_fields_wrap">
                                                <button  class="add_field_button btn btn-danger">Ekle</button>
+                                               @foreach($uretilenMarka as $markas)
+                                                    <div><input type="text" id="firmanin_urettigi_markalar" name="firmanin_urettigi_markalar[]"  value="{{$markas->adi}}" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><a href="#" class="remove_field">Sil</a></div>
+                                               @endforeach
                                                <div><input type="text" id="firmanin_urettigi_markalar" name="firmanin_urettigi_markalar[]"  value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"></div>
-                                           </div>
+                                            </div>
                                        </div>
                                    </div>
                                    <div class="form-group" id="sattigiDiv">
@@ -1166,13 +1169,13 @@
                                        </td>
                                        <td>
                                            {{ Form::open(array('url'=>'firmaProfili/referansSil/'.$firmaReferans->id,'method' => 'DELETE', 'files'=>true))}}
-                               <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                   {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs'])}}
-                                   {{ Form::close()}}
-                                   </td>
-                                   <input type="hidden" name="ref_id"  id="ref_id" value="{{$firmaReferans->id}}"> 
+                                            <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs'])}}
+                                                {{ Form::close()}}
+                                        </td>
+                                                <input type="hidden" name="ref_id"  id="ref_id" value="{{$firmaReferans->id}}"> 
                                        </tr>
-                                       <div class="modal fade" id="myModal-referanslarGecmis" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="myModal-referanslarGecmis" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                            <div class="modal-dialog">
                                                <div class="modal-content">
                                                    <div class="modal-header">
@@ -1181,13 +1184,11 @@
                                                    </div>
                                                    <div class="modal-body">
                                                        {!! Form::open(array('url'=>'firmaProfili/referansUpdate/'. $firmaReferans->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
-
-                                                       <div class="form-group">
-                                                             
-                                                           <label for="inputEmail3" class="col-sm-2 control-label">Referans Türü</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                             
-                                                           <div class="col-sm-9">
+                                                        <div class="form-group">
+                                                           <label for="inputEmail3" class="col-sm-1 control-label"></label>
+                                                           <label for="inputEmail3" class="col-sm-3 control-label">Referans Türü</label>
+                                                           <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                           <div class="col-sm-7">
                                                                <select class="form-control" name="ref_turu" id="ref_turu" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                                    <option selected disabled value="Seçiniz">Seçiniz</option>
                                                                    <option   value="Geçmiş">Geçmiş</option>
@@ -1196,25 +1197,25 @@
                                                            </div>
                                                        </div>
                                                        <div class="form-group">
-                                                          <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">Firma Adı</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="text" class="form-control " id="ref_firma_adi" name="ref_firma_adi" placeholder="Firma Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
-                                                       </div>
-                                                       <div class="form-group">
-                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">Yapımlan İşin Adı</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="text" class="form-control " id="yapılan_isin_adi" name="yapılan_isin_adi" placeholder="Yapılan İşin Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Firma Adı</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control " id="ref_firma_adi" name="ref_firma_adi" placeholder="Firma Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
                                                        </div>
                                                        <div class="form-group">
                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">İşin Türü</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Yapılan İşin Adı</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control " id="yapılan_isin_adi" name="yapılan_isin_adi" placeholder="Yapılan İşin Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
+                                                       </div>
+                                                       <div class="form-group">
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">İşin Türü</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                            <div class="col-sm-7">
                                                                <select class="form-control" name="isin_turu" id="isin_turu" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                                    <option selected disabled value="Seçiniz">Seçiniz</option>
@@ -1225,62 +1226,59 @@
                                                            </div>
                                                        </div>
                                                        <div class="form-group">
-                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">İşin Yılı</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="text" class="form-control " id="is_yili" name="is_yili" placeholder="İş Yılı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">İşin Yılı</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control " id="is_yili" name="is_yili" placeholder="İş Yılı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
                                                        </div>
                                                        <div class="form-group">
-                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">Çalışma Süresi</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="text" class="form-control " id="calısma_suresi" name="calısma_suresi" placeholder="Çalışma Süresi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Çalışma Süresi</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control " id="calısma_suresi" name="calısma_suresi" placeholder="Çalışma Süresi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
                                                        </div>
                                                        <div class="form-group">
-                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">Yetkili Kişi Adı</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="text" class="form-control " id="yetkili_kisi_adi" name="yetkili_kisi_adi" placeholder="Yetkili Kişi Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Yetkili Kişi Adı</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control " id="yetkili_kisi_adi" name="yetkili_kisi_adi" placeholder="Yetkili Kişi Adı" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
                                                        </div>
                                                        <div class="form-group">
-                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">Y.K Email Adresi</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="email" class="form-control " id="yetkili_kisi_email" name="yetkili_kisi_email" placeholder="Yetkili Kişi Email Adresi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Y.K Email Adresi</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="email" class="form-control " id="yetkili_kisi_email" name="yetkili_kisi_email" placeholder="Yetkili Kişi Email Adresi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
                                                        </div>
                                                        <div class="form-group">
-                                                             <label for="inputTask" class="col-sm-1 control-label"></label>
-                                                           <label for="inputEmail3" class="col-sm-3 control-label">Y.K Telefon</label>
-                                                             <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                                           <div class="col-sm-7">
-                                                               <input type="text" class="form-control " id="yetkili_kisi_telefon" name="yetkili_kisi_telefon" placeholder="Yetkili Kişi Telefon" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                                           </div>
+                                                            <label for="inputTask" class="col-sm-1 control-label"></label>
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Y.K Telefon</label>
+                                                            <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control " id="yetkili_kisi_telefon" name="yetkili_kisi_telefon" placeholder="Yetkili Kişi Telefon" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
+                                                            </div>
                                                        </div>
                                                        <input type="hidden" name="ref_id"  id="ref_id" value="{{$firmaReferans->id}}">
-
-
-                                                           {!! Form::submit('Kaydet', array('url'=>'firmaProfili/referansUpdate/'. $firmaReferans->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
-                                                           <br>
-                                                           <br>
-                                                           {!! Form::close() !!}
-                                                           </div>
-                                                           <div class="modal-footer">   
-                                                           </div>
+                                                        {!! Form::submit('Kaydet', array('url'=>'firmaProfili/referansUpdate/'. $firmaReferans->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}                                                          
+                                                        {!! Form::close() !!}                  
                                                    </div>
-                                               </div>
-                                           </div>
+                                                    <div class="modal-footer">   
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
                                            @endforeach
 
-                                           </thead>
-                                           </table>
+                                </thead>
+                             </table>
                            @endif
                                            <div class="modal fade" id="myModal-referanslar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                <div class="modal-dialog">
@@ -1878,6 +1876,17 @@
       $('#country').suggestCountry();
     }
   });
+  jQuery('.firma_faaliyet_turu').each(function(){
+      alert("gridi");
+      <?php foreach ($firma->faaliyetler as $flyt){ ?>
+              var falyAdi = {{$flyt->id}};
+          if($(this).val() == falyAdi){
+              $(this).prop("checked",true);
+            }
+          
+      <?php } ?>
+
+   });
   $('.firma_faaliyet_turu').click(function(){ ///////////faaliyet turu /////////////////
         var sonSecilen;
         var count=0;
@@ -1901,7 +1910,7 @@
   $('#presentation').restrictLength( $('#pres-max-length') );
     
    
-    $( document ).ready(function() {
+    $(document).ready(function() {
          $.fn.datepicker.dates['tr'] = {
             days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
             daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
@@ -1923,10 +1932,15 @@
             autoclose: true
         });
         
-        
-        
-        
-         $('[data-toggle="tooltip"]').tooltip();   
+        $("#calisma_gunleri").val({{$firma->firma_calisma_bilgileri->calisma_gunleri_id}});
+        $("#ticaret_odasi").val({{$firma->ticari_bilgiler->tic_oda_id}});
+        $("#ust_sektor").val({{$firma->ticari_bilgiler->ust_sektor}});
+        $('[data-toggle="tooltip"]').tooltip();   
+        var arrayDepartman = new Array();
+        <?php foreach($firma->departmanlar as $departman){ ?>
+             arrayDepartman.push({{$departman->id}});
+        <?php } ?>
+        $("#firma_departmanlari").multipleSelect("setSelects", arrayDepartman);
         var max_fields      = 10; //maximum input boxes allowed
         var wrapper         = $(".input_fields_wrap"); //Fields wrapper
         var add_button      = $(".add_field_button"); //Add button ID
@@ -2396,6 +2410,7 @@
                         $("#vergi_dairesi_id").get(0).options[$("#vergi_dairesi_id").get(0).options.length] = new Option(vergi.adi, vergi.id);
                     });
                 },
+                async: false,
                 error: function() {
                     $("#vergi_dairesi_id").get(0).options.length = 0;
                     alert("Vergi Daireleri yükelenemedi!!!");
@@ -2408,13 +2423,25 @@
     }
     function populateDD(){
         GetIlce({{$firmaAdres->iller->id}},"il_id");
-        console.log({{$firmaAdres->ilceler->id}})
         GetSemt({{$firmaAdres->ilceler->id}});
         $("#il_id").val({{$firmaAdres->iller->id}});
-        console.log($("#ilce_id").val({{$firmaAdres->ilceler->id}}));
         $("#semt_id").val({{$firmaAdres->semtler->id}});
     }
-    
+    function populateMaliDD(){
+        GetIlce({{$firmaFatura->iller->id}},"mali_il_id");
+        GetVergi({{$firmaFatura->iller->id}});
+        $("#mali_il_id").val({{$firmaFatura->iller->id}});
+        $("#mali_ilce_id").val({{$firmaFatura->ilceler->id}});
+        $("#sirket_turu").val({{$firma->sirket_turu}});
+        $("#yillik_cirosu").val("{{$firma->mali_bilgiler->yillik_cirosu}}");
+        $("#vergi_dairesi_id").val(13);
+        if({{$firma->mali_bilgiler->ciro_goster}} == 0){
+            $("#ciro_goster").prop('checked',false);
+        }
+        if({{$firma->mali_bilgiler->sermaye_goster}} == 0){
+            $("#sermaye_goster").prop('checked',false);
+        }
+    }
     
     $('#addImage').on('change', function(evt) {
     var selectedImage = evt.currentTarget.files[0];

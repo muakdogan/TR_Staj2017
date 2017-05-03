@@ -101,10 +101,10 @@ class FirmaController extends Controller
         $maliBilgi->unvani =Str::title(strtolower( $request->unvani));
         $maliBilgi->vergi_numarasi =Str::title(strtolower( $request->vergi_numarasi));
         $maliBilgi->vergi_dairesi_id = $request->vergi_dairesi_id;
-        $maliBilgi->sermayesi = Str::title(strtolower($request ->sermayesi));
-        $maliBilgi->yillik_cirosu = Str::title(strtolower($request ->yillik_cirosu));
-        $maliBilgi->ciro_goster = $request ->ciro_goster;
-        $maliBilgi->sermaye_goster = $request ->sermaye_goster;
+        $maliBilgi->sermayesi = Str::title(strtolower($request->sermayesi));
+        $maliBilgi->yillik_cirosu = Str::title(strtolower($request->yillik_cirosu));
+        $maliBilgi->ciro_goster = $request->ciro_goster ? true : false;
+        $maliBilgi->sermaye_goster = $request->sermaye_goster ? true : false;
         $firma->mali_bilgiler()->save($maliBilgi);        
         
         
