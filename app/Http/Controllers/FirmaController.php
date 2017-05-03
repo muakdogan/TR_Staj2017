@@ -112,7 +112,7 @@ class FirmaController extends Controller
         $adres->il_id = $request->mali_il_id;
         $adres->ilce_id = $request->mali_ilce_id;
         $adres->semt_id = $request->mali_semt_id;
-        $adres->adres =Str::title(strtolower( $request->fatura_adres));
+        $adres->adres =Str::title(strtolower($request->fatura_adresi));
         $tur = 2;
         $adres->tur_id = $tur;
         $firma->adresler()->save($adres);
@@ -267,9 +267,22 @@ class FirmaController extends Controller
         $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
         $firma_calisan->calisma_saatleri=Str::title(strtolower($request->calisma_saatleri));
         
-        foreach($request->firma_calisma_profili as $firma_calisma){
-                       $firma_calisan->calisan_profili = $firma_calisma;
+      
+        if(count($request->firma_calisma_profili)== 2){
+            
+             $firma_calisan->calisan_profili = 3;
+            
         }
+        else {
+              foreach($request->firma_calisma_profili as $calisan){
+                  
+               $firma_calisan->calisan_profili = $calisan;
+              }
+            
+        }
+       
+                      
+       
         $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
        
        
