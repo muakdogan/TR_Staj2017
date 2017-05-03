@@ -345,18 +345,18 @@
 
                                </tr>
                                <tr>
-                                   <td width="25%"><strong>İli</strong></td>
-                                   <td width="75%"><strong>:</strong>  {{$firmaAdres->iller->adi}}</td>
+                                   <td  width="25%"><strong>İli</strong></td>
+                                   <td id="il_id_td" width="75%"><strong>:</strong>  {{$firmaAdres->iller->adi}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>İlçesi</strong></td>
-                                   <td><strong>:</strong>  {{$firmaAdres->ilceler->adi}}</td>
+                                   <td id="ilce_id_td"><strong>:</strong>  {{$firmaAdres->ilceler->adi}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>Semt</strong></td>
-                                   <td><strong>:</strong>  {{$firmaAdres->semtler->adi}}</td>
+                                   <td  id="semt_id_td"><strong>:</strong>  {{$firmaAdres->semtler->adi}}</td>
 
                                </tr>
                                <tr>
@@ -491,7 +491,7 @@
                                <tr id="firma{{$firma->id}}">
                                <tr>
                                    <td width="25%"><strong>Tanıtım Yazısı</strong></td>
-                                   <td width="75%"><strong>:</strong>
+                                   <td id="tanitim_id_td" width="75%"><strong>:</strong>
                                        <?php echo $firma->tanitim_yazisi;?>
                                    </td>
                                </tr>
@@ -589,7 +589,7 @@
                                @foreach($sirketTurleri as $sirket)<?php
                                if ($sirket->id == $firma->sirket_turu) {
                                    ?>
-                                   <td><strong>:</strong>  {{$sirket->adi}}</td>
+                                   <td id="sirket_id_td"><strong>:</strong>  {{$sirket->adi}}</td>
                                    <?php
                                }
                                ?>
@@ -597,27 +597,27 @@
                            </tr>
                            <tr>
                                <td><strong>Fatura Adresi</strong></td>
-                               <td><strong>:</strong>  {{$firmaFatura->adres}}</td>
+                               <td><strong>:</strong>{{$firmaFatura->adres}}</td>
                            </tr>
                            <tr>
                                <td><strong>İli</strong></td>
-                               <td><strong>:</strong>  {{$firmaFatura->iller->adi}}</td>
+                               <td id="mali_il_td"><strong>:</strong>  {{$firmaFatura->iller->adi}}</td>
                            </tr>
                            <tr>
                                <td><strong>İlçesi</strong></td>
-                               <td><strong>:</strong>  {{$firmaFatura->ilceler->adi}}</td>
+                               <td id="mali_ilce_td"><strong>:</strong>  {{$firmaFatura->ilceler->adi}}</td>
                            </tr>
                            <tr>
                                <td><strong>Vergi Dairesi</strong></td>                                                        
-                               <td><strong>:</strong>  {{$firma->mali_bilgiler->vergi_daireleri->adi}}</td>
+                               <td id="vergi_id_td"><strong>:</strong>  {{$firma->mali_bilgiler->vergi_daireleri->adi}}</td>
                            </tr>
                            <tr>
-                               <td><strong>Vergi Numarası</strong></td>
+                               <td  ><strong>Vergi Numarası</strong></td>
                                <td><strong>:</strong>  {{$firma->mali_bilgiler->vergi_numarasi}}</td>
                            </tr>
                            <tr>
                                <td><strong>Yıllık Ciro</strong></td>
-                               <td><strong>:</strong>  {{$firma->mali_bilgiler->yillik_cirosu}}</td>
+                               <td id="ciro_id_td"><strong>:</strong>  {{$firma->mali_bilgiler->yillik_cirosu}}</td>
                            </tr>
                            <tr>
                                <td><strong>Sermayesi</strong></td>
@@ -648,7 +648,7 @@
                                        <label for="inputTask" class="col-sm-3 control-label">İl</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-7">
-                                           <select class="form-control il_id" name="mali_il_id" id="mali_il_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                           <select class="form-control il_id"  name="mali_il_id" id="mali_il_id" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                <option selected disabled>Seçiniz</option>
                                                @foreach($iller as $il)
                                                <option  value="{{$il->id}}" >{{$il->adi}}</option>
@@ -802,28 +802,30 @@
                            </tr>
                            <tr>
                                <td><strong>Ticaret Odası</strong></td>
-                               <td><strong>:</strong>  {{$firma->ticari_bilgiler->ticaret_odalari->adi}}</td>
+                               <td id="odasi_id_td"><strong>:</strong>  {{$firma->ticari_bilgiler->ticaret_odalari->adi}}</td>
                            </tr>
                            <tr>
                                <td><strong>Faaliyet Türü</strong></td>
-                               <td><strong>:</strong>@foreach($firma->faaliyetler as $faaliyet)
+                               <td id="faaliyet_id_td" ><strong>:</strong>@foreach($firma->faaliyetler as $faaliyet)
                                    {{$faaliyet->adi}}
                                    @endforeach
                                </td>
                            </tr>
                            <tr>
                               <td><strong>Üst Sektör</strong></td>
-                              @if ($firma->ticari_bilgiler->ust_sektor==1)
-                                   <td><strong>:</strong> Sanayi</td>
-                              @elseif($firma->ticari_bilgiler->ust_sektor==2)
-                                   <td><strong>:</strong> Tarım</td>
-                              @elseif($firma->ticari_bilgiler->ust_sektor==3)
-                                   <td><strong>:</strong> Hizmet</td> 
-                              @endif
+                              <td id="ust_id_td"> <strong>:</strong>
+                                @if ($firma->ticari_bilgiler->ust_sektor==1)
+                                     Sanayi
+                                @elseif($firma->ticari_bilgiler->ust_sektor==2)
+                                     Tarım
+                                @elseif($firma->ticari_bilgiler->ust_sektor==3)
+                                     Hizmet
+                                @endif
+                              </td>
                            </tr>
                            <tr>
                                <td><strong>Faaliyet Gösterilen Sektörler</strong></td>
-                               <td><strong>:</strong>@foreach($firma->sektorler as $sektor)
+                               <td  id="gfaaliyet_id_td"><strong>:</strong>@foreach($firma->sektorler as $sektor)
                                    {{$sektor->adi}}
                                    @endforeach
                                </td>
@@ -839,7 +841,7 @@
                            </tr> 
                            <tr>
                                <td><strong>Firmanın Ürettiği Markalar</strong></td>
-                               <td><strong>:</strong>
+                               <td  id="urettigi_id_td"><strong>:</strong>
                                    <?php $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get(); ?>
                                    @foreach($uretilenMarka as $marka)
                                    {{$marka->adi}}
@@ -848,7 +850,7 @@
                            </tr>
                            <tr>
                                <td><strong>Firmanın Sattığı Markalar</strong></td>
-                               <td><strong>:</strong>@foreach($firma->satilan_markalar as $satMarka)
+                               <td id="sattıgı_id_td"><strong>:</strong>@foreach($firma->satilan_markalar as $satMarka)
                                    {{$satMarka->adi}}
                                    @endforeach
                                </td>
@@ -996,7 +998,7 @@
                                    
                                    @foreach($firma->kalite_belgeleri as $kalite_belgesi)
                                     <tr>
-                                       <td>
+                                       <td id="kalite_id_td">
                                            {{$kalite_belgesi->adi}}
                                        </td>
                                        <td>
@@ -1155,7 +1157,7 @@
                                        <td>
                                            {{$firmaReferans->is_adi}}
                                        </td>
-                                       <td>
+                                       <td id="is_turu_id_td">
                                            {{$firmaReferans->is_turu}}
                                        </td>
                                        <td>
@@ -1170,7 +1172,7 @@
                                        <td>
                                            {{$firmaReferans->yetkili_telefon}}
                                        </td>
-                                       <td>
+                                       <td id="ref_turu_id_td">
                                            {{$firmaReferans->ref_turu}}
                                        </td>
                                        <td>
@@ -1281,8 +1283,14 @@
                                                             </div>
                                                        </div>
                                                        <input type="hidden" name="ref_id"  id="ref_id" value="{{$firmaReferans->id}}">
-                                                        {!! Form::submit('Kaydet', array('url'=>'firmaProfili/referansUpdate/'. $firmaReferans->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}                                                          
-                                                        {!! Form::close() !!}                  
+
+                                                           {!! Form::submit('Kaydet', array('url'=>'firmaProfili/referansUpdate/'. $firmaReferans->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                           <br>
+                                                           <br>
+                                                           {!! Form::close() !!}
+                                                           </div>
+                                                           <div class="modal-footer">   
+                                                           </div>
                                                    </div>
                                                     <div class="modal-footer">   
                                                     </div>
@@ -1436,18 +1444,18 @@
                                            {{$firmaBrosur->adi}}
                                        </td>
                                        <td data-toggle="tooltip" data-placement="bottom" title="PDF'i görüntülemek için lütfen üstüne tıklayın!">
-                                           <a  href="{{ asset('brosur/'.$firmaBrosur->yolu) }}">{{$firmaBrosur->yolu}}</a>
+                                           <a target="_blank" href="{{ asset('brosur/'.$firmaBrosur->yolu) }}"><img src="{{asset('images/see.png')}}">   {{$firmaBrosur->yolu}}</a>
                                        </td>
                                   
-                                   <td> <button   value="{{$firmaBrosur->id}}" class="btn btn-primary btn-xs open-modal-brosurGuncelle" >Düzenle</button>
+                                    <td><button   value="{{$firmaBrosur->id}}" class="btn btn-primary btn-xs open-modal-brosurGuncelle" >Düzenle</button>
+                                    </td>
+                                    <td>
+                                    {{ Form::open(array('url'=>'firmaProfili/brosurSil/'.$firmaBrosur->id,'method' => 'DELETE', 'files'=>true)) }}
+                                                 <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                              {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                             {{ Form::close() }}
                                    </td>
-                                   <td>
-                                   {{ Form::open(array('url'=>'firmaProfili/brosurSil/'.$firmaBrosur->id,'method' => 'DELETE', 'files'=>true)) }}
-                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                             {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                            {{ Form::close() }}
-                                  </td>
-                                    <input type="hidden" name="brosur_id"  id="brosur_id" value="{{$firmaBrosur->id}}"> 
+                                     <input type="hidden" name="brosur_id"  id="brosur_id" value="{{$firmaBrosur->id}}"> 
                                     </tr>
                                     <div class="modal fade" id="myModal-firmabrosurGuncelle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -1580,8 +1588,8 @@
                    <table class="table" >
                        <thead id="tasks-list" name="tasks-list">
                            <tr>
-                               <td width="25%"><strong>Çalışma Günleri</strong></td>
-                               <td width="75%"><strong>:</strong>  {{$calismaGunu}}</td>
+                               <td  width="25%"><strong>Çalışma Günleri</strong></td>
+                               <td  id="calisma_id_td" width="75%"><strong>:</strong>  {{$calismaGunu}}</td>
                            </tr>
                            <tr>
                                <td><strong>Çalışma Saatleri</strong></td>
@@ -1589,20 +1597,22 @@
                            </tr>
                            <tr>
                                <td><strong>Çalışan Profili</strong></td>
+                               <td id="profil_id_td"><strong>:</strong> 
                                 @if ($firma->firma_calisma_bilgileri->calisan_profili==1)
-                                  <td><strong>:</strong> Mavi Yaka</td>
+                                  Mavi Yaka
                                 @elseif ($firma->firma_calisma_bilgileri->calisan_profili==2)
-                                   <td><strong>:</strong> Beyaz Yaka</td>
+                                  Beyaz Yaka
                                 @elseif($firma->firma_calisma_bilgileri->calisan_profili==3)
-                                   <td><strong>:</strong> Mavi Yaka,Beyaz Yaka</td>
+                                   Mavi Yaka,Beyaz Yaka
                                 @endif
+                                </td>
                            </tr>
                            <tr>
                                <td><strong>Çalışan Sayısı</strong></td>
                                <td><strong>:</strong>  {{$firma->firma_calisma_bilgileri->calisan_sayisi}}</td>
                            </tr>
                            <tr>
-                               <td><strong>Firma Departmanları</strong></td>
+                               <td id="departman_id_td"><strong>Firma Departmanları</strong></td>
                                <td><strong>:</strong>@foreach($firma->departmanlar as $departman)
                                    {{$departman->adi}},
                                    @endforeach
@@ -1644,13 +1654,11 @@
                                    </div>
                                    <div class="form-group">
                                        <label for="inputTask" class="col-sm-1 control-label"></label>
-                                       <label for="inputEmail3" class="col-sm-1 control-label">Çalışan Profili</label>
+                                       <label for="inputEmail3" class="col-sm-3 control-label">Çalışan Profili</label>
                                        <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
-                                       <div class="col-sm-9">
-                                           
-                                           <input type="checkbox" class="firma_calisan " name="firma_calisma_profili[]" value="1" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Mavi Yaka
+                                       <div class="col-sm-7">
+                                           <input type="checkbox" class="firma_calisan " name="firma_calisma_profili[]" value="1" data-validation="checkbox_group"  data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Mavi Yaka
                                            <input type="checkbox" class="firma_calisan "  name="firma_calisma_profili[]" value="2" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Beyaz Yaka
-                                           <input type="checkbox" class="firma_calisan "  name="firma_calisma_profili[]" value="3" data-validation="checkbox_group" data-validation-error-msg="Lütfen birini seçiniz!"  data-validation-qty="min1"/>Mavi Yaka,Beyaz Yaka
                                            
                                            
                                        </div>
@@ -1990,7 +1998,7 @@
         max = total_yuzde;
         if(max > 1 && max <= 15)
         {
-            $('.ppc-progress-fill').css("background","#e54100");
+            $('.ppc-progress-wrapper').css("background","#e54100");
             $('.ppc-percents span').css("color","#e54100");
             
         }
@@ -2014,13 +2022,13 @@
         }
         if(max > 60 && max <=75 )
         {
-            $('.ppc-progress-fill').css("background","#a5c530");
+            //$('.ppc-progress-fill').css("background","#a5c530");
             $('.ppc-percents span').css("color","#a5c530");
             
         }
         if(max > 75 && max <=100)
         {
-            $('.ppc-progress-fill').css("background","#45c538");
+            //$('.ppc-progress-fill').css("background","#45c538");
             $('.ppc-percents span').css("color","#45c538");
             
         }
@@ -2035,11 +2043,12 @@
         var $ppc = $('.progress-pie-chart'),
         deg = 360 * value / 100;
         if (value > 50) {
-        $ppc.addClass('gt-50');
+           $ppc.addClass('gt-50');
         }
 
         $('.ppc-progress-fill').css('transform', 'rotate(' + deg + 'deg)');
         $('.ppc-percents span').html(value + '%');
+     
 
         if (value == max) {
             clearInterval(animate);
@@ -2052,272 +2061,7 @@
        
 
     });
-        var total_row=44; 
-        var dolu_row=0;
-        var total_yuzde=0; 
-        function dolulukForm(){
-     
-        var logo1 = document.getElementById("logo1").src;
-        
-        var il = document.getElementById("il_id");
-        var il_id= il.options[il.selectedIndex].value;
-        
-        var ilce = document.getElementById("ilce_id");
-        var ilce_id= ilce.options[ilce.selectedIndex].value;
-      
-        
-        var semt = document.getElementById("semt_id");
-        var semt_id= semt.options[semt.selectedIndex].value;
-      
-        var adres=$('#adres').val(); 
-        
-        var telefon=$('#telefon').val(); 
-        
-        var fax=$('#fax').val(); 
-        
-        var web_sayfasi=$('#web_sayfasi').val(); 
-        
-        var firma_tanitim =document.getElementById("tanitim_yazisi").value; 
-        
-        var mal_il= document.getElementById("il_id");
-        var mal_il_id= mal_il.options[mal_il.selectedIndex].value;
-        
-        var mal_ilce= document.getElementById("ilce_id");
-        var mal_ilce_id= mal_ilce.options[mal_ilce.selectedIndex].value;
-        
-        var mal_semt= document.getElementById("semt_id");
-        var mal_semt_id= mal_semt.options[mal_semt.selectedIndex].value;
-        
-        var unvani=$('#unvani').val(); 
-        
-        var sirket= document.getElementById("sirket_turu");
-        var sirket_turu= sirket.options[sirket.selectedIndex].value;
-        
-        var vergi= document.getElementById("vergi_dairesi_id");
-        var vergi_dairesi= vergi.options[vergi.selectedIndex].value;
-        
-        var vergi_numarasi=$('#vergi_numarasi').val(); 
-        
-        var yillik_cirosu=$('#yillik_cirosu').val(); 
-        
-        var sermayesi=$('#sermayesi').val(); 
-        
-        var ticaret_sicil_no=$('#ticaret_sicil_no').val(); 
-        
-        var ticaret= document.getElementById("ticaret_odasi");
-        var ticaret_odasi= ticaret.options[ticaret.selectedIndex].value;
-     
-       
-        var ust_sektor= $('#ust_sektor').val();
-        
-        var faaliyet_sektorleri=$('#faaliyet_sektorleri').val(); 
-        
-        var firma_departmanlari=$('#firma_departmanlari').val(); 
-        
-        var kurulus_tarihi=$('#kurulus_tarihi').val(); 
-        
-        var firma_faaliyet_turu=$('#firma_faaliyet_turu').val(); 
-        
-        /* undifined  diyor*/
-        var firmanin_urettigi_markalar=$('#firmanin-urettigi_markalar').val(); 
-        
-        /*undifined diyor*/
-        var firmanin_sattigi_markalar=$('#firmanin_sattigi_markalar').val(); 
-       
-        var kalite= document.getElementById("kalite_belgeleri");
-        var kalite_belgeleri= kalite.options[kalite.selectedIndex].value;
-        
-        var belge_no=$('#belge_no').val(); 
-        
-        var ref= document.getElementById("ref_turu");
-        var ref_turu= ref.options[ref.selectedIndex].value;
-        
-        var ref_firma_adi=$('#ref_firma_adi').val(); 
-        
-        var yapılan_isin_adi=$('#yapılan_isin_adi').val(); 
-        
-        var is= document.getElementById("isin_turu");
-        var isin_turu= is.options[is.selectedIndex].value;
-        
-        var is_yili=$('#is_yili').val(); 
-        
-        var calisma_suresi=$('#calısma_suresi').val(); 
-        
-        var yetkili_kisi_adi=$('#yetkili_kisi_adi').val(); 
-        
-        var yetkili_kisi_email=$('#yetkili_kisi_email').val(); 
-        
-        var yetkili_kisi_telefon=$('#yetkili_kisi_telefon').val(); 
-        
-        var brosur_adi=$('#brosur_adi').val(); 
-       
-        var calisma= document.getElementById("calisma_gunleri");
-        var calisma_gunleri= calisma.options[calisma.selectedIndex].value;
-        
-        var calisma_saatleri=$('#calisma_saatleri').val(); 
-        
-        var calisma_profili=$('#calisma_profili').val(); 
-        
-        var calisma_sayisi=$('#calisma_sayisi').val(); 
-        
-        var bilgilendirme_tercihi=$('#bilgilendirme_tercihi').val(); 
-        
-        if(logo1 != null ){
-             dolu_row++
-        }
-        if(il_id != "" && il_id != "Seçiniz"){
-            dolu_row++
-        }
-        if(ilce_id != "" && ilce_id!="Seçiniz"){
-             dolu_row++
-        } 
-        if(semt_id != "" && semt_id!="Seçiniz"){
-            dolu_row++  
-        } 
-        if(adres != ""){
-            dolu_row++
-            
-        }
-        if(telefon != ""){
-             dolu_row++
-        }
-        if(fax != ""){
-             dolu_row++
-        }
-        if(web_sayfasi != ""){
-             dolu_row++
-            
-        } 
-        if(firma_tanitim != ""){
-             dolu_row++
-            
-        }
-        if(mal_il_id != "" && mal_il_id!="Seçiniz"){
-             dolu_row++
-        }
-        if(mal_ilce_id != "" && mal_ilce_id!="Seçiniz"){
-             dolu_row++
-        }
-        if(mal_semt_id != "" && mal_semt_id!="Seçiniz"){
-             dolu_row++
-        }
-        if(unvani != ""){
-             dolu_row++
-        }
-        if(sirket_turu != "" && sirket_turu!="Seçiniz"){
-             dolu_row++
-        }
-        if(vergi_dairesi != "" && vergi_dairesi!="Seçiniz"){
-             dolu_row++
-        }
-        if(vergi_numarasi != ""){
-             dolu_row++
-        }
-        if(yillik_cirosu != ""){
-             dolu_row++
-        }
-        if(sermayesi != ""){
-             dolu_row++
-        }
-        if(ticaret_sicil_no != ""){
-             dolu_row++
-        }
-        if(ticaret_odasi != "" && ticaret_odasi!="Seçiniz"){
-             dolu_row++
-        }
-        if(ust_sektor != "" && ust_sektor!="Seçiniz"){
-             dolu_row++
-        }
-        if(faaliyet_sektorleri != ""){
-             dolu_row++
-        }
-        if(firma_departmanlari != ""){
-             dolu_row++
-        }
-        if(kurulus_tarihi != ""){
-             dolu_row++
-        }
-        if(firma_faaliyet_turu != ""){
-             dolu_row++
-        }
-        if(firmanin_urettigi_markalar != ""){
-             dolu_row++
-        }
-        if(firmanin_sattigi_markalar != ""){
-             dolu_row++
-        }
-        if(kalite_belgeleri != "" && kalite_belgeleri!="Seçiniz"){
-             dolu_row++
-        }
-        if(belge_no != ""){
-             dolu_row++
-        }
-        if(ref_turu != ""  && ref_turu!="Seçiniz"){
-             dolu_row++
-        }
-        if(ref_firma_adi != ""){
-             dolu_row++
-        }
-        if(yapılan_isin_adi != ""){
-             dolu_row++
-        }
-        if(isin_turu != ""  && isin_turu!="Seçiniz"){
-             dolu_row++
-        }
-        if(is_yili != ""){
-             dolu_row++
-        }
-        if(calisma_suresi != ""){
-             dolu_row++
-        }
-        if(yetkili_kisi_adi != ""){
-             dolu_row++
-        }
-        if(yetkili_kisi_email != ""){
-             dolu_row++
-        }
-        if(yetkili_kisi_telefon != ""){
-             dolu_row++
-        }
-        if(brosur_adi != ""){
-             dolu_row++
-        }
-        if(calisma_gunleri != ""  && calisma_gunleri!="Seçiniz"){
-             dolu_row++
-        }
-        if(calisma_saatleri != ""){
-             dolu_row++
-        }
-        if(calisma_profili != ""){
-             dolu_row++
-        }
-        if(calisma_sayisi != ""){
-             dolu_row++
-        }
-        if(bilgilendirme_tercihi != ""){
-             dolu_row++
-        }
-        
-       var total_dolu_row=dolu_row;
-       var hesaplama=(total_dolu_row/total_row)*100;
-       total_yuzde=hesaplama.toFixed(0);
-       funcDolulukKayıt()
-       
-    }
-   function funcDolulukKayıt(){             
-    $.ajax({
-        type:"POST",
-        url: "{{asset('doluluk_orani')}}"+"/"+{{$firma->id}},
-        data:{doluluk_orani:total_yuzde},
-        cache: false,
-        success: function(data){
-           console.log(data);
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) { 
-            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-        }
-    });
-    }
+   
     function GetIlce(il_id,Id) {
         
         if (il_id > 0) {
@@ -2437,7 +2181,8 @@
     function populateDD(){
         GetIlce({{$firmaAdres->iller->id}},"il_id");
         GetSemt({{$firmaAdres->ilceler->id}});
-        $("#il_id").val({{$firmaAdres->iller->id}});
+        $("#il_id ").val({{$firmaAdres->iller->id}}).trigger("event");
+        console.log($("#ilce_id").val({{$firmaAdres->ilceler->id}}));
         $("#semt_id").val({{$firmaAdres->semtler->id}});
     }
     function populateMaliDD(){
@@ -2484,9 +2229,261 @@
     }
   });
   
-  $('.firma_calisan').click(function() {
-    $(this).siblings('input:checkbox').prop('checked', false);
-});
+  
+        var total_row=44; 
+        var dolu_row=0;
+        var total_yuzde=0; 
+        function dolulukForm(){
+     
+        var logo1 = document.getElementById("logo1").src;
+        
+        var il_id = $('#il_id_td').text();
+    
+        var ilce_id = $('#ilce_id_td').text();
+        
+        var semt_id= $('#semt_id_td').text();
+      
+        var adres=$('#adres').val(); 
+        
+        var telefon=$('#telefon').val(); 
+        
+        var fax=$('#fax').val(); 
+        
+        var web_sayfasi=$('#web_sayfasi').val(); 
+        
+        var firma_tanitim =$('#tanitim_id_td').text(); 
+     
+        var mal_il_id= $('#mali_il_td').text()
+       
+        var mal_ilce_id= $('#mali_ilce_td').text();
+        
+        var unvani=$('#unvani').val();      
+       
+        var sirket_turu=$('#sirket_id_td').text();
+       
+        var vergi_dairesi= $('#vergi_id_td').text();
+        
+        var vergi_numarasi=$('#vergi_numarasi').val(); 
+        
+        var yillik_cirosu=$('#ciro_id_td').text(); 
+        
+        var sermayesi=$('#sermayesi').val(); 
+
+        var ticaret_sicil_no=$('#ticaret_sicil_no').val(); 
+        var ticaret_odasi= $('#odasi_id_td').text();
+     
+       
+        var ust_sektor= $('#ust_id_td').text();
+        
+        var faaliyet_sektorleri=$('#dfaaliyet_id_td').text(); 
+        
+        var firma_departmanlari=$('#departman_id_td').text(); 
+        
+        var kurulus_tarihi=$('#kurulus_tarihi').val(); 
+        
+        var firma_faaliyet_turu=$('#faaliyet_id_td').text(); 
+        
+        var firmanin_urettigi_markalar=$('#urettigi_id_td').text(); 
+        
+        var firmanin_sattigi_markalar=$('#sattıgı_id_td').text(); 
+       
+       
+        var kalite_belgeleri=$('#kalite_id_td').text();
+        
+        var belge_no=$('#belge_no').val(); 
+        
+      
+        var ref_turu= $('#ref_turu_id_td').text();
+        
+        var ref_firma_adi=$('#ref_firma_adi').val(); 
+        
+        var yapılan_isin_adi=$('#yapılan_isin_adi').val(); 
+       
+        var isin_turu= $('#is_turu_id_td').text();
+        
+        var is_yili=$('#is_yili').val(); 
+        
+        var calisma_suresi=$('#calısma_suresi').val(); 
+        
+        var yetkili_kisi_adi=$('#yetkili_kisi_adi').val(); 
+        
+        var yetkili_kisi_email=$('#yetkili_kisi_email').val(); 
+        
+        var yetkili_kisi_telefon=$('#yetkili_kisi_telefon').val(); 
+        
+        var brosur_adi=$('#brosur_adi').val(); 
+       
+        var calisma_gunleri= $('#calisma_id_td').text();
+        
+        var calisma_saatleri=$('#calisma_saatleri').val(); 
+        
+        var calisma_profili=$('#profil_id_td').text(); 
+        
+        var calisma_sayisi=$('#calisma_sayisi').val(); 
+        
+        var bilgilendirme_tercihi='dolu'; 
+        
+        if(logo1 != null ){
+             dolu_row++
+        }
+        if(il_id != "" && il_id != "Seçiniz"){
+            dolu_row++
+        }
+        if(ilce_id != "" && ilce_id!="Seçiniz"){
+             dolu_row++
+        } 
+        if(semt_id != "" && semt_id!="Seçiniz"){
+            dolu_row++  
+        } 
+        if(adres != ""){
+            dolu_row++
+            
+        }
+        if(telefon != ""){
+             dolu_row++
+        }
+        if(fax != ""){
+             dolu_row++
+        }
+        if(web_sayfasi != ""){
+             dolu_row++
+            
+        } 
+        if(firma_tanitim != ""){
+             dolu_row++
+            
+        }
+        if(mal_il_id != "" && mal_il_id!="Seçiniz"){
+             dolu_row++
+        }
+        if(mal_ilce_id != "" && mal_ilce_id!="Seçiniz"){
+             dolu_row++
+        }
+        
+        if(unvani != ""){
+             dolu_row++
+        }
+        if(sirket_turu != "" && sirket_turu!="Seçiniz"){
+             dolu_row++
+        }
+        if(vergi_dairesi != "" && vergi_dairesi!="Seçiniz"){
+             dolu_row++
+        }
+        if(vergi_numarasi != ""){
+             dolu_row++
+        }
+        if(yillik_cirosu != ""){
+             dolu_row++
+        }
+        if(sermayesi != ""){
+             dolu_row++
+        }
+        if(ticaret_sicil_no != ""){
+             dolu_row++
+        }
+        if(ticaret_odasi != "" && ticaret_odasi!="Seçiniz"){
+             dolu_row++
+        }
+        if(ust_sektor != "" && ust_sektor!="Seçiniz"){
+             dolu_row++
+        }
+        if(faaliyet_sektorleri != ""){
+             dolu_row++
+        }
+        if(firma_departmanlari != ""){
+             dolu_row++
+        }
+        if(kurulus_tarihi != ""){
+             dolu_row++
+        }
+        if(firma_faaliyet_turu != ""){
+             dolu_row++
+        }
+        if(firmanin_urettigi_markalar != ""){
+             dolu_row++
+        }
+        if(firmanin_sattigi_markalar != ""){
+             dolu_row++
+        }
+        if(kalite_belgeleri != "" && kalite_belgeleri!="Seçiniz"){
+             dolu_row++
+        }
+        if(belge_no != ""){
+             dolu_row++
+        }
+        if(ref_turu != ""  && ref_turu!="Seçiniz"){
+             dolu_row++
+        }
+        if(ref_firma_adi != ""){
+             dolu_row++
+        }
+        if(yapılan_isin_adi != ""){
+             dolu_row++
+        }
+        if(isin_turu != ""  && isin_turu!="Seçiniz"){
+             dolu_row++
+        }
+        if(is_yili != ""){
+             dolu_row++
+        }
+        if(calisma_suresi != ""){
+             dolu_row++
+        }
+        if(yetkili_kisi_adi != ""){
+             dolu_row++
+        }
+        if(yetkili_kisi_email != ""){
+             dolu_row++
+        }
+        if(yetkili_kisi_telefon != ""){
+             dolu_row++
+        }
+        if(brosur_adi != ""){
+             dolu_row++
+        }
+        if(calisma_gunleri != ""  && calisma_gunleri!="Seçiniz"){
+             dolu_row++
+        }
+        if(calisma_saatleri != ""){
+             dolu_row++
+        }
+        if(calisma_profili != ""){
+             dolu_row++
+        }
+        if(calisma_sayisi != ""){
+             dolu_row++
+        }
+        if(bilgilendirme_tercihi != ""){
+             dolu_row++
+        }
+        
+       var total_dolu_row=dolu_row;
+       
+       //alert(total_dolu_row);
+       //alert(total_row);
+       var hesaplama=(total_dolu_row/total_row)*100;
+       total_yuzde=hesaplama.toFixed(0);
+       
+       funcDolulukKayıt()
+       
+    }
+    
+   function funcDolulukKayıt(){             
+    $.ajax({
+        type:"POST",
+        url: "{{asset('doluluk_orani')}}"+"/"+{{$firma->id}},
+        data:{doluluk_orani:total_yuzde},
+       
+        cache: false,
+        success: function(data){
+           console.log(data);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        }
+    });
+    }
+
 </script>
 </body>
 </html>
