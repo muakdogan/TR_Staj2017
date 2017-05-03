@@ -538,7 +538,16 @@
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><img src="{{asset('images/mali.png')}}">&nbsp;<strong>Mali Bilgiler</strong></a>
                        <?php
                             if (!$firma->mali_bilgiler) {
+                                $mali_bilgi = "boş";
+                                $checkboxCiro = 1;
+                                $checkboxSermaye =1;
                                 $firma->mali_bilgiler = new App\MaliBilgi();
+                            }
+                            else{
+                                $mali_bilgi="dolu";
+                                
+                                $checkboxCiro=$firma->mali_bilgiler->ciro_goster;
+                                $checkboxSermaye=$firma->mali_bilgiler->sermaye_goster;
                             }
                        ?>
                        @if($firma->mali_bilgiler->firma_id==0)
@@ -753,6 +762,12 @@
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4"><img src="{{asset('images/tl.png')}}">&nbsp;<strong>Ticari Bilgiler</strong></a>
                        <?php
                        $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
+                       if (!$firmaFatura) {
+                                   $firmaFatura = new Adres();
+                                   $firmaFatura->iller = new Il();
+                                   $firmaFatura->ilceler = new Ilce();
+                                   $firmaFatura->semtler = new Semt();
+                               }
                        if (!$firma->ticari_bilgiler) {
                            $firma->ticari_bilgiler = new App\TicariBilgi();
                            $firma->ticari_bilgiler->ticaret_odalari = new App\TicaretOdasi();
@@ -1877,7 +1892,6 @@
     }
   });
   jQuery('.firma_faaliyet_turu').each(function(){
-      alert("gridi");
       <?php foreach ($firma->faaliyetler as $flyt){ ?>
               var falyAdi = {{$flyt->id}};
           if($(this).val() == falyAdi){
@@ -1959,7 +1973,6 @@
         });
 
         $('.il_id').on('change', function (e) {
-            alert("girdi");
             var il_id = e.target.value;
             GetIlce(il_id,e.target.id);
             GetVergi(il_id);
@@ -2428,21 +2441,22 @@
         $("#semt_id").val({{$firmaAdres->semtler->id}});
     }
     function populateMaliDD(){
+        alert({{$firmaFatura->iller}});
         GetIlce({{$firmaFatura->iller->id}},"mali_il_id");
         GetVergi({{$firmaFatura->iller->id}});
         $("#mali_il_id").val({{$firmaFatura->iller->id}});
         $("#mali_ilce_id").val({{$firmaFatura->ilceler->id}});
         $("#sirket_turu").val({{$firma->sirket_turu}});
         $("#yillik_cirosu").val("{{$firma->mali_bilgiler->yillik_cirosu}}");
-        $("#vergi_dairesi_id").val(13);
-        if({{$firma->mali_bilgiler->ciro_goster}} == 0){
+        $("#vergi_dairesi_id").val({{$firma->mali_bilgiler->vergi_dairesi_id}});
+        
+        if( "{{$mali_bilgi}}" == "dolu" && {{$checkboxCiro}} == 0){
             $("#ciro_goster").prop('checked',false);
         }
-        if({{$firma->mali_bilgiler->sermaye_goster}} == 0){
+        if( "{{$mali_bilgi}}" == "dolu" && {{$checkboxSermaye}} == 0){
             $("#sermaye_goster").prop('checked',false);
         }
     }
-    
     $('#addImage').on('change', function(evt) {
     var selectedImage = evt.currentTarget.files[0];
     var imageWrapper = document.querySelector('.image-wrapper');
