@@ -2441,7 +2441,6 @@
         $("#semt_id").val({{$firmaAdres->semtler->id}});
     }
     function populateMaliDD(){
-        alert({{$firmaFatura->iller}});
         GetIlce({{$firmaFatura->iller->id}},"mali_il_id");
         GetVergi({{$firmaFatura->iller->id}});
         $("#mali_il_id").val({{$firmaFatura->iller->id}});
