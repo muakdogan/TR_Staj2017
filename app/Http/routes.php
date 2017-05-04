@@ -1136,5 +1136,11 @@ Route::get('/vergi_daireleri', function (Request $request) {
     $vergi_daireleri = \App\VergiDairesi::where('il_id', '=', $il_id)->get();
     return Response::json($vergi_daireleri);
 });
+Route::get('/ticaret_odalari', function (Request $request) {
+    
+    $il_id = Input::get('il_id');
+    $ticaret_odalari = \App\TicaretOdasi::where('il_id', '=', $il_id)->get();
+    return Response::json($ticaret_odalari);
+});
 
  Route::auth();

@@ -6,6 +6,8 @@ $(document).ready(function(){
     });
  
     $('.open-modal-kaliteGuncelle').click(function(){
-        $('#myModal-kaliteGuncelle').modal('show');
-    });
+            console.log($(this).val());
+            $('#myModal-kaliteGuncelle').modal('show');
+            $('#kalite_belgeleri').val($(this).val());
+        });
 });
