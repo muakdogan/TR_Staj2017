@@ -14,8 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Str;
-
-
+use DB;
 
 class FirmaController extends Controller
 {
@@ -23,41 +22,43 @@ class FirmaController extends Controller
         
         $proper=Str::title(strtolower($string));
         return response($proper);
-        
     }*/
 
     public function uploadImage(Request $request) {
-        $file = $request->file('logo');
-        $file = array('logo' => $request->file('logo'));
-        $rules = array('logo' => 'required|mimes:jpeg,bmp,png|max:100000'); //mimes:jpeg,bmp,png and for max size max:10000
-        $validator = Validator::make($file, $rules);
-        if ($validator->fails()) {
-            return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
-        } 
-        else {
-            if ($request->file('logo')->isValid()) {
-                $destinationPath = 'uploads'; // upload path
-                $extension = $request->file('logo')->getClientOriginalExtension();
-                $fileName = rand(11111, 99999) . '.' . $extension; 
-                
-                $firma = Firma::find($request->id);
-                $oldName=$firma->logo;
-                $firma->logo = $fileName; 
-                $firma->save();
-                
-                $request->file('logo')->move($destinationPath, $fileName);
-               
-                Session::flash('success', 'Upload successfully');
-                File::delete("uploads/$oldName");
-                return Redirect::to('firmaProfili/'.$firma->id);
+        
+      
+            $file = $request->file('logo');
+            $file = array('logo' => $request->file('logo'));
+            $rules = array('logo' => 'required|mimes:jpeg,bmp,png|max:100000'); //mimes:jpeg,bmp,png and for max size max:10000
+            $validator = Validator::make($file, $rules);
+            if ($validator->fails()) {
+                return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
             } 
             else {
-              
-                Session::flash('error', 'uploaded file is not valid');
-                return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
+                if ($request->file('logo')->isValid()) {
+                    $destinationPath = 'uploads'; // upload path
+                    $extension = $request->file('logo')->getClientOriginalExtension();
+                    $fileName = rand(11111, 99999) . '.' . $extension; 
+
+                    $firma = Firma::find($request->id);
+                    $oldName=$firma->logo;
+                    $firma->logo = $fileName; 
+                    $firma->save();
+                    $request->file('logo')->move($destinationPath, $fileName);
+
+                    Session::flash('success', 'Upload successfully');
+                    File::delete("uploads/$oldName");
+                    return Redirect::to('firmaProfili/'.$firma->id);
+                } 
+                else {
+
+                    Session::flash('error', 'uploaded file is not valid');
+                    return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
+                }
             }
-        }
+       
     }
+    
     public function deleteImage($id){
         $item = Firma::findOrFail($id);
         $oldName=$item->logo;
@@ -67,135 +68,196 @@ class FirmaController extends Controller
         return Redirect::to('iletisimbilgilerii/'.$item->id);
     }
     public function iletisimAdd(Request $request){
-        $firma = Firma::find($request->id);
         
-        $iletisim = $firma->iletisim_bilgileri ?: new IletisimBilgisi();
-        $iletisim->telefon =Str::title(strtolower( $request->telefon));
-        $iletisim->fax =Str::title(strtolower( $request->fax));
-        $iletisim->web_sayfasi = $request->web_sayfasi;
-        $firma->iletisim_bilgileri()->save($iletisim);        
+        DB::beginTransaction();
 
-        $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new Adres();
-        $adres->il_id = $request->il_id;
-        $adres->ilce_id = $request->ilce_id;
-        $adres->semt_id = $request->semt_id;
-        $adres->adres = Str::title(strtolower($request->adres));
-        $tur = 1;
-        $adres->tur_id = $tur;
-        $firma->adresler()->save($adres);
-        
-        return redirect('firmaProfili/'.$firma->id);
+        try {
+            $firma = Firma::find($request->id);
+
+            $iletisim = $firma->iletisim_bilgileri ?: new IletisimBilgisi();
+            $iletisim->telefon =Str::title(strtolower( $request->telefon));
+            $iletisim->fax =Str::title(strtolower( $request->fax));
+            $iletisim->web_sayfasi = $request->web_sayfasi;
+            $firma->iletisim_bilgileri()->save($iletisim);        
+
+            $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new Adres();
+            $adres->il_id = $request->il_id;
+            $adres->ilce_id = $request->ilce_id;
+            $adres->semt_id = $request->semt_id;
+            $adres->adres = Str::title(strtolower($request->adres));
+            $tur = 1;
+            $adres->tur_id = $tur;
+            $firma->adresler()->save($adres);
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
     }
     public function tanitimAdd(Request $request){
-        $firma = Firma::find($request->id);
-        $firma->tanitim_yazisi = Str::title(strtolower($request->tanitim_yazisi));
-        $firma->save();        
-        return redirect('firmaProfili/'.$firma->id);
+    
+            $firma = Firma::find($request->id);
+            $firma->tanitim_yazisi = Str::title(strtolower($request->tanitim_yazisi));
+            $firma->save();        
+            return redirect('firmaProfili/'.$firma->id);
+      
     }
     public function maliBilgiAdd(Request $request){
-        $firma = Firma::find($request->id);
-        $firma->sirket_turu =Str::title(strtolower( $request->sirket_turu));
-        $firma->save();
         
-        $maliBilgi = $firma->mali_bilgiler ?: new \App\MaliBilgi();
-        $maliBilgi->unvani =Str::title(strtolower( $request->unvani));
-        $maliBilgi->vergi_numarasi =Str::title(strtolower( $request->vergi_numarasi));
-        $maliBilgi->vergi_dairesi_id = $request->vergi_dairesi_id;
-        $maliBilgi->sermayesi = Str::title(strtolower($request ->sermayesi));
-        $maliBilgi->yillik_cirosu = Str::title(strtolower($request ->yillik_cirosu));
-        $maliBilgi->ciro_goster = $request ->ciro_goster;
-        $maliBilgi->sermaye_goster = $request ->sermaye_goster;
-        $firma->mali_bilgiler()->save($maliBilgi);        
+    DB::beginTransaction();
+
+        try {   
+                $firma = Firma::find($request->id);
+                $firma->sirket_turu =Str::title(strtolower( $request->sirket_turu));
+                $firma->save();
+
+                $maliBilgi = $firma->mali_bilgiler ?: new \App\MaliBilgi();
+                $maliBilgi->unvani =Str::title(strtolower( $request->unvani));
+                $maliBilgi->vergi_numarasi =Str::title(strtolower( $request->vergi_numarasi));
+                $maliBilgi->vergi_dairesi_id = $request->vergi_dairesi_id;
+                $maliBilgi->sermayesi = Str::title(strtolower($request ->sermayesi));
+                $maliBilgi->yillik_cirosu = Str::title(strtolower($request ->yillik_cirosu));
+                $maliBilgi->ciro_goster = $request ->ciro_goster;
+                $maliBilgi->sermaye_goster = $request ->sermaye_goster;
+                $firma->mali_bilgiler()->save($maliBilgi);        
+
+
+                $adres = $firma->adresler()->where('tur_id', '=', '2')->first() ?: new Adres();
+                $adres->il_id = $request->mali_il_id;
+                $adres->ilce_id = $request->mali_ilce_id;
+                $adres->semt_id = $request->mali_semt_id;
+                $adres->adres =Str::title(strtolower($request->fatura_adresi));
+                $tur = 2;
+                $adres->tur_id = $tur;
+                $firma->adresler()->save($adres);
         
-        
-        $adres = $firma->adresler()->where('tur_id', '=', '2')->first() ?: new Adres();
-        $adres->il_id = $request->mali_il_id;
-        $adres->ilce_id = $request->mali_ilce_id;
-        $adres->semt_id = $request->mali_semt_id;
-        $adres->adres =Str::title(strtolower($request->fatura_adresi));
-        $tur = 2;
-        $adres->tur_id = $tur;
-        $firma->adresler()->save($adres);
-        
-        return redirect('firmaProfili/'.$firma->id);
+         DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        //return redirect('firmaProfili/'.$firma->id);
     }
     public function ticariBilgiAdd(Request $request){
-        $firma = Firma::find($request->id);
-        $firma->kurulus_tarihi=$request->kurulus_tarihi;
-        $firma->save();
         
-        $ticariBilgi = $firma->ticari_bilgiler ?: new \App\TicariBilgi();
-        $ticariBilgi->tic_sicil_no = $request->ticaret_sicil_no;
-        $ticariBilgi->tic_oda_id = 1;//$request->ticaret_odasi;
-        $ticariBilgi->ust_sektor = $request->ust_sektor;
+    DB::beginTransaction();
+
+        try {     
         
-        $firma->ticari_bilgiler()->save($ticariBilgi);        
-        
-        $uretilenMarka = new \App\UretilenMarka();
-        foreach($request->firmanin_urettigi_markalar as $urettigiMarka){
-            $kayitKontrol=  \App\UretilenMarka::where('adi',$urettigiMarka)->get();
-            if(count($kayitKontrol) == 0){
-                $uretilenMarka->adi = $urettigiMarka;
-                $firma->uretilen_markalar()->save($uretilenMarka);
-            }    
-        }
-        if(count($request->faaliyet_sektorleri) > 0){
-            foreach($request->faaliyet_sektorleri as $sektor){
-                $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$sektor)->get();
+            $firma = Firma::find($request->id);
+            $firma->kurulus_tarihi=$request->kurulus_tarihi;
+            $firma->save();
+
+            $ticariBilgi = $firma->ticari_bilgiler ?: new \App\TicariBilgi();
+            $ticariBilgi->tic_sicil_no = $request->ticaret_sicil_no;
+            $ticariBilgi->tic_oda_id = 1;//$request->ticaret_odasi;
+            $ticariBilgi->ust_sektor = $request->ust_sektor;
+
+            $firma->ticari_bilgiler()->save($ticariBilgi);        
+
+            $uretilenMarka = new \App\UretilenMarka();
+            foreach($request->firmanin_urettigi_markalar as $urettigiMarka){
+                $kayitKontrol=  \App\UretilenMarka::where('adi',$urettigiMarka)->get();
                 if(count($kayitKontrol) == 0){
-                    $firma->sektorler()->attach($sektor);
+                    $uretilenMarka->adi = $urettigiMarka;
+                    $firma->uretilen_markalar()->save($uretilenMarka);
+                }    
+            }
+            if(count($request->faaliyet_sektorleri) > 0){
+                foreach($request->faaliyet_sektorleri as $sektor){
+                    $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$sektor)->get();
+                    if(count($kayitKontrol) == 0){
+                        $firma->sektorler()->attach($sektor);
+                    }
                 }
             }
-        }
-        else{
-            $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$request->faaliyet_sektorleri)->get();
-            if(count($kayitKontrol) == 0){
-                $firma->sektorler()->attach($request->faaliyet_sektorleri);
-            }
-        }
-       
-        /*foreach($request->firmanin_sattıgı_markalar as $markalar){
-        $firma->satilan_markalar()->attach($markalar);
-        }*/
-        foreach($request->firma_faaliyet_turu as $faaliyetTur){
-            $kayitKontrol = \App\FirmaFaaliyet::where('firma_id',$firma->id)->where('faaliyet_id',$faaliyetTur)->get();
-            if(count($kayitKontrol) == 0){
-                $firma->faaliyetler()->attach($faaliyetTur);
-            }
-        }
-        return redirect('firmaProfili/'.$firma->id);
-    }
-    public function kaliteAdd(Request $request){
-        $firma = Firma::find($request->id);
-         
-        $firma->kalite_belgeleri()->attach($request->kalite_belgeleri,['belge_no'=>$request->belge_no]);
-   
-        return redirect('firmaProfili/'.$firma->id);
-    }
-    public function referansAdd(Request $request){        
-        $firma = Firma::find($request->id);
-        $firma_referans = $firma->firma_referanslar ?: new \App\FirmaReferans();
-            if ($firma->firma_referanslar) {
-                $firmaReferans = $firma->firma_referanslar()->where('id', '=', '$request->ref_id')->first() ? : new \App\FirmaReferans();
-            } else {
-                $firmaReferans = $firma->firma_referanslar()->where('ref_turu', '=', '$request->ref_turu')->first() ? : new \App\FirmaReferans();
+            else{
+                $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$request->faaliyet_sektorleri)->get();
+                if(count($kayitKontrol) == 0){
+                    $firma->sektorler()->attach($request->faaliyet_sektorleri);
+                }
             }
 
-        $firmaReferans->ref_turu=Str::title(strtolower($request->ref_turu));
-        $firmaReferans->adi=Str::title(strtolower($request->ref_firma_adi));
-        $firmaReferans->is_adi=Str::title(strtolower($request->yapılan_isin_adi));
-        $firmaReferans->is_turu=$request->isin_turu;
-        $firmaReferans->is_yili=$request->is_yili;
-        $firmaReferans->calisma_suresi=Str::title(strtolower($request->calısma_suresi));
-        $firmaReferans->yetkili_adi=Str::title(strtolower($request->yetkili_kisi_adi));
-        $firmaReferans->yetkili_email=$request->yetkili_kisi_email;
-        $firmaReferans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
-        $firma->firma_referanslar()->save( $firmaReferans);
-        return redirect('firmaProfili/'.$firma->id);
+            /*foreach($request->firmanin_sattıgı_markalar as $markalar){
+            $firma->satilan_markalar()->attach($markalar);
+            }*/
+            foreach($request->firma_faaliyet_turu as $faaliyetTur){
+                $kayitKontrol = \App\FirmaFaaliyet::where('firma_id',$firma->id)->where('faaliyet_id',$faaliyetTur)->get();
+                if(count($kayitKontrol) == 0){
+                    $firma->faaliyetler()->attach($faaliyetTur);
+                }
+            }
+        
+           DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        //return redirect('firmaProfili/'.$firma->id);
     }
-    public function referansUpdate(Request $request){        
-        $referans = \App\FirmaReferans::find($request->ref_id);
-       
+    public function kaliteAdd(Request $request){
+        
+        DB::beginTransaction();
+
+            try {  
+                $firma = Firma::find($request->id);
+                $firma->kalite_belgeleri()->attach($request->kalite_belgeleri,['belge_no'=>$request->belge_no]);
+
+               DB::commit();
+                // all good
+            } catch (\Exception $e) {
+                $error="error";
+                DB::rollback();
+                return Response::json($error);
+            }
+        //return redirect('firmaProfili/'.$firma->id);
+    }
+    public function referansAdd(Request $request){  
+        
+    DB::beginTransaction();
+
+        try {    
+            $firma = Firma::find($request->id);
+            $firma_referans = $firma->firma_referanslar ?: new \App\FirmaReferans();
+                if ($firma->firma_referanslar) {
+                    $firmaReferans = $firma->firma_referanslar()->where('id', '=', '$request->ref_id')->first() ? : new \App\FirmaReferans();
+                } else {
+                    $firmaReferans = $firma->firma_referanslar()->where('ref_turu', '=', '$request->ref_turu')->first() ? : new \App\FirmaReferans();
+                }
+
+            $firmaReferans->ref_turu=Str::title(strtolower($request->ref_turu));
+            $firmaReferans->adi=Str::title(strtolower($request->ref_firma_adi));
+            $firmaReferans->is_adi=Str::title(strtolower($request->yapılan_isin_adi));
+            $firmaReferans->is_turu=$request->isin_turu;
+            $firmaReferans->is_yili=$request->is_yili;
+            $firmaReferans->calisma_suresi=Str::title(strtolower($request->calısma_suresi));
+            $firmaReferans->yetkili_adi=Str::title(strtolower($request->yetkili_kisi_adi));
+            $firmaReferans->yetkili_email=$request->yetkili_kisi_email;
+            $firmaReferans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
+            $firma->firma_referanslar()->save( $firmaReferans);
+            
+           DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        //return redirect('firmaProfili/'.$firma->id);
+    }
+    public function referansUpdate(Request $request){ 
+     DB::beginTransaction();
+
+        try {   
+        
+        $referans = \App\FirmaReferans::find($request->ref_id);      
         $referans->ref_turu=Str::title(strtolower($request->ref_turu));
         $referans->adi=Str::title(strtolower($request->ref_firma_adi));
         $referans->is_adi=Str::title(strtolower($request->yapılan_isin_adi));
@@ -206,14 +268,34 @@ class FirmaController extends Controller
         $referans->yetkili_email=$request->yetkili_kisi_email;
         $referans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
         $referans->save( );
+        
+           DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
         return redirect('firmaProfili/'.$referans->firma_id);
     }
-    public function kaliteGuncelle(Request $request){        
+     public function kaliteGuncelle(Request $request){    
+     DB::beginTransaction();
+
+        try {   
         $firma = \App\Firma::find($request->id);
-  
+        $firma->kalite_belgeleri()->attach($request->kalite_belgeleri,['belge_no'=>$request->belge_no]);
+        $firma->save();
         
-        $kalite->save();
-        return redirect('firmaProfili/'.$kalite->firma_kalite_belgeleri->$firma_id);
+        
+           DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        
+        //return redirect('firmaProfili/'.$kalite->firma_kalite_belgeleri->$firma_id);
     }
     public function brosurUpdate(Request $request,$id){    
         $file = $request->file('yolu');
@@ -255,7 +337,10 @@ class FirmaController extends Controller
         }
     }
     public function calisanGunleriAdd(Request $request){
-      
+        
+     DB::beginTransaction();
+
+        try {   
         $firma = Firma::find($request->id);
          foreach($request->firma_departmanları as $departman){
             $kayitKontrol = \App\FirmaDepartman::where('firma_id',$firma->id)->where('departman_id',$departman)->get();
@@ -280,36 +365,51 @@ class FirmaController extends Controller
               }
             
         }
-       
-                      
-       
         $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
-       
-       
-      $firma->firma_calisma_bilgileri()->save( $firma_calisan);
-        return redirect('firmaProfili/'.$firma->id);
+        $firma->firma_calisma_bilgileri()->save( $firma_calisan);
+         
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        //return redirect('firmaProfili/'.$firma->id);
     }
     public function bilgilendirmeTercihiAdd(Request $request){
-        $firma = Firma::find($request->id);
-        foreach($request->bilgilendirme_tercihi as $bilgilendirme){
-            if($bilgilendirme == "Sms"){
-                $firma->sms=1;
-            }
-            elseif ($bilgilendirme == "Mail") {
-                $firma->mail=1;
-            }
-            elseif($bilgilendirme == "Telefon"){
-                $firma->telefon=1;
-            }
-            else{
-                $firma->sms=0;
-                $firma->mail=0;
-                $firma->telefon=0;
-            }
-        }
-        $firma->save();
         
-        return redirect('firmaProfili/'.$firma->id);
+    DB::beginTransaction();
+
+        try {     
+        
+            $firma = Firma::find($request->id);
+            foreach($request->bilgilendirme_tercihi as $bilgilendirme){
+                if($bilgilendirme == "Sms"){
+                    $firma->sms=1;
+                }
+                elseif ($bilgilendirme == "Mail") {
+                    $firma->mail=1;
+                }
+                elseif($bilgilendirme == "Telefon"){
+                    $firma->telefon=1;
+                }
+                else{
+                    $firma->sms=0;
+                    $firma->mail=0;
+                    $firma->telefon=0;
+                }
+            }
+            $firma->save();
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        //return redirect('firmaProfili/'.$firma->id);
     }
     public function uploadPdf(Request $request){
         $file = $request->file('yolu');
@@ -366,7 +466,6 @@ class FirmaController extends Controller
               return Redirect::to('/');
         }
         //$this->authorize('show',$firma);
-        
         $iller = Il::all();
         $sirketTurleri=  SirketTuru::all();
         $vergiDaireleri= \App\VergiDairesi::all();

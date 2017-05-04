@@ -21,6 +21,42 @@ use App\Il;?>
                 top:50%;
                 left:32%;
             }
+            form .error {
+                  color: #000000;
+        }
+         .popup, .popup2, .bMulti {
+            background-color: #fff;
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: 0 0 25px 5px #999;
+            color: #111;
+            display: none;
+            min-width: 450px;
+            padding: 25px;
+            text-align: center;
+            }
+            .popup, .bMulti {
+                min-height: 150px;
+            }
+            .button.b-close, .button.bClose {
+                border-radius: 7px 7px 7px 7px;
+                box-shadow: none;
+                font: bold 131% sans-serif;
+                padding: 0 6px 2px;
+                position: absolute;
+                right: -7px;
+                top: -7px;
+            }
+            .button {
+                background-color: #2b91af;
+                border-radius: 10px;
+                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+            }
 </style>
  <div class="container">     
         <h1>YENİ FİRMA OLUŞTUR</h1>
@@ -30,7 +66,7 @@ use App\Il;?>
                 <div  class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                        {!! Form::open(array('url'=>'yeniFirma/'.$kullanici_id->id ,'method' => 'POST','files'=>true))!!}
+                        {!! Form::open(array('id'=>'yeni_kayit','url'=>'yeniFirma/'.$kullanici_id->id ,'method' => 'POST','files'=>true))!!}
                          <div class="row">
                                 <h5><strong>Firma Bilgileri</strong></h5>
                                     <hr>
@@ -132,9 +168,20 @@ use App\Il;?>
                     </div> 
                 </div>
             </div>
+             <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
             <div class="col-lg-6">
             </div> 
+        </div>
+         <div id="mesaj" class="popup">
+            <span class="button b-close"><span>X</span></span>
+            <h2 style="color:red"> Üzgünüz.. !!!</h2>
+            <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
+        </div>
+         <div  id="kayit_msg"  class='popup'>
+            <span class="button b-close"><span>X</span></span>
+            <p style="color:green;font-size:18px">Bilgilendirme</p>
+            <p style="font-size:12px">Firmanız Kayıt edilmiştir.</p>
         </div>
   </div>
 <script>
@@ -227,5 +274,57 @@ $('#semt_id').on('change', function (e) {
            
         });
 });
+var kullaniciId='{{$kullanici_id->id}}';
+$("#yeni_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert(formURL );
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('yeniFirmaKaydet')}}"+"/"+kullaniciId}, 5000);
+                    }
+                    else{
+                        $('#kayit_msg').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        alert("calisti");
+                        setTimeout(function(){ location.href="{{asset('/')}}"}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault(); //STOP default action
+        });
+
+
+
+
+
+
 </script>
 @endsection
