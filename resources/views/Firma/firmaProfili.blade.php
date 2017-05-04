@@ -2148,7 +2148,37 @@
             $("#semt_id").get(0).options.length = 0;
         }
     }
-    function GetVergi(il_id) {
+    function GetTicaret(il_id) {
+        if (il_id > 0) {
+            $("#ticaret_odasi").get(0).options.length = 0;
+            $("#ticaret_odasi").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+
+            $.ajax({
+                type: "GET",
+                url: "{{asset('ticaret_odalari')}}",
+                data:{il_id:il_id},
+                contentType: "application/json; charset=utf-8",
+
+                success: function(msg) {
+                    $("#ticaret_odasi").get(0).options.length = 0;
+                    $("#ticaret_odasi").get(0).options[0] = new Option("Seçiniz", "-1");
+
+                    $.each(msg, function(index, ticaret) {
+                        $("#ticaret_odasi").get(0).options[$("#ticaret_odasi").get(0).options.length] = new Option(ticaret.adi, ticaret.id);
+                    });
+                },
+                async: false,
+                error: function() {
+                    $("#ticaret_odasi").get(0).options.length = 0;
+                    alert("Vergi Daireleri yükelenemedi!!!");
+                }
+            });
+        }
+        else {
+            $("#ticaret_odasi").get(0).options.length = 0;
+        }
+    }
+        function GetVergi(il_id) {
         if (il_id > 0) {
             $("#vergi_dairesi_id").get(0).options.length = 0;
             $("#vergi_dairesi_id").get(0).options[0] = new Option("Yükleniyor", "-1"); 
@@ -2188,6 +2218,7 @@
     function populateMaliDD(){
         GetIlce({{$firmaFatura->iller->id}},"mali_il_id");
         GetVergi({{$firmaFatura->iller->id}});
+        GetTicaret({{$firmaFatura->iller->id}});
         $("#mali_il_id").val({{$firmaFatura->iller->id}});
         $("#mali_ilce_id").val({{$firmaFatura->ilceler->id}});
         $("#sirket_turu").val({{$firma->sirket_turu}});

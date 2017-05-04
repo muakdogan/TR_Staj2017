@@ -69,7 +69,7 @@ use App\Il;?>
         <h1>ÜYELİK OLUŞTUR</h1>
         <br>
         <div class="row">
-            <div  class="col-lg-6">
+            <div  class="col-lg-10">
                 <div  class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-body"> 
