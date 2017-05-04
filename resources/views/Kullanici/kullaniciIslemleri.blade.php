@@ -119,7 +119,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kullanıcı Düzenle</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kullaniciIslemleriUpdate/'.$firma->id.'/'.$kullanici->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('id'=>'kullanici_up_kayit','url'=>'kullaniciIslemleriUpdate/'.$firma->id.'/'.$kullanici->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
@@ -176,7 +176,7 @@
                                                      <h4 class="modal-title" id="myModalLabel">Kullanıcı Ekle</h4>
                                                  </div>
                                                  <div class="modal-body">
-                                                     {!! Form::open(array('url'=>'kullaniciIslemleriEkle/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                     {!! Form::open(array('id'=>'kullanici_add_kayit','url'=>'kullaniciIslemleriEkle/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
                                                             {!! csrf_field() !!}
                                                      <div class="form-group">
                                                          <label for="inputEmail3" class="col-sm-3 control-label">Adı</label>
@@ -232,7 +232,16 @@
               
                                           
          </div>
-           
+           <div id="mesaj" class="popup">
+            <span class="button b-close"><span>X</span></span>
+            <h2 style="color:red"> Üzgünüz.. !!!</h2>
+            <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
+         </div>
+          <div  id="kayit_msg"  class='popup'>
+            <span class="button b-close"><span>X</span></span>
+            <p style="color:green;font-size:18px">Bilgilendirme</p>
+            <p style="font-size:12px">Kayıdınız Alınmıştır Lütfen E-mailinizi Kontrol ediniz. </p>
+        </div>
         <div id="email2"  class='popup'>
             <span class="button b-close"><span>X</span></span>
             <p style="color:red;font-size:18px"> Üzgünüz..!!!</p>
@@ -269,5 +278,98 @@
             }
         });
     }
+    
+ var firmaId='{{$firma->id}}';   
+ $("#kullanici_up_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            //console.log($(this).attr("url"));
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                    }
+                    else{
+                        $('#kayit_msg').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault(); //STOP default action
+        });
+        
+  $("#kullanici_add_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            //console.log($(this).attr("url"));
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                    }
+                    else{
+                        $('#kayit_msg').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault(); //STOP default action
+        });
  </script>
 @endsection

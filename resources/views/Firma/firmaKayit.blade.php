@@ -69,7 +69,7 @@ use App\Il;?>
         <h1>ÜYELİK OLUŞTUR</h1>
         <br>
         <div class="row">
-            <div  class="col-lg-10">
+            <div  class="col-lg-6">
                 <div  class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-body"> 
@@ -478,12 +478,10 @@ use App\Il;?>
     }
 }  
     
-    
  $("#firma_kayit").submit(function(e)
-        {
-            var postData = $(this).serialize();
+   {
+       var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            
             //console.log($(this).attr("url"));
             $.ajax(
             {
@@ -498,7 +496,6 @@ use App\Il;?>
                     console.log(data);
                     $('.ajax-loader').css("visibility", "hidden");
                     if(data=="error"){
-                       
                          $('#mesaj').bPopup({
                             speed: 650,
                             transition: 'slideIn',
@@ -508,7 +505,6 @@ use App\Il;?>
                         setTimeout(function(){ location.href="{{asset('firmaKayit')}}"}, 5000);
                     }
                     else{
-                        alert("else-içerde");
                         $('#kayit_msg').bPopup({
                             speed: 650,
                             transition: 'slideIn',
@@ -518,7 +514,6 @@ use App\Il;?>
                         
                         setTimeout(function(){ location.href="{{asset('/')}}"}, 5000);
                     }
-                   
                         e.preventDefault();
                 },
                 error: function(jqXHR, textStatus, errorThrown) 
@@ -536,8 +531,8 @@ use App\Il;?>
           $('#country').suggestCountry();
         }
       });
-      $('#presentation').restrictLength( $('#pres-max-length') );
-
+    $('#presentation').restrictLength( $('#pres-max-length') );
+    
     var email; 
     var email_giris;
     function emailControl(){
@@ -618,7 +613,6 @@ use App\Il;?>
                alert('İller Yüklenemiyor !!!  ');
             });
     });
-
     $('#ilce_id').on('change', function (e) {
         console.log(e);
 

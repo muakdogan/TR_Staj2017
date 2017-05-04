@@ -214,8 +214,6 @@
                                  </tr>
                              </thead>
                          </table>
-
-
                          <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                              <div class="modal-dialog">
                                  <div class="modal-content">
@@ -224,8 +222,6 @@
                                          <h4 class="modal-title" id="myModalLabel">İlan Bilgileri</h4>
                                      </div>
                                      <div class="modal-body">
-                                         
-                                         
                                          {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileriUpdate/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
                                           
                                            <div class="form-group">

@@ -247,64 +247,81 @@ Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $reques
     return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
 }); 
 Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
-    $firma = Firma::find($id);
-    $roller=  App\Rol::all();
-
-    $kullanici= new App\Kullanici();
-    $kullanici->adi = Str::title(strtolower($request->adi));
-    $kullanici->soyadi = Str::title(strtolower($request->soyadi));
-    $kullanici->email = $request->email;
-    $kullanici->save();
-
-    $user = $kullanici->users ?: new App\User();
-    $user->email = $request->email;
-    $user->password =Hash::make('tamrekabet');
-
-    $kullanici->users()->save($user);
-    $rol=$request->rol;
-    $unvan=$request->unvan;
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol,'unvan'=>$unvan]);
     
-    //$firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
-    
-    $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
+    DB::beginTransaction();
 
-        Mail::send('auth.emails.password', $data, function($message) use($data,$request) 
-        {
-            $message->to($request->email, $data['ad'],$request->to)
-            ->subject('YENİ KAYIT OLMA İSTEĞİ!');
-        });
-    return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+        try {  
+            $firma = Firma::find($id);
+            $roller=  App\Rol::all();
+
+            $kullanici= new App\Kullanici();
+            $kullanici->adi = Str::title(strtolower($request->adi));
+            $kullanici->soyadi = Str::title(strtolower($request->soyadi));
+            $kullanici->email = $request->email;
+            $kullanici->save();
+
+            $user = $kullanici->users ?: new App\User();
+            $user->email = $request->email;
+            $user->password =Hash::make('tamrekabet');
+
+            $kullanici->users()->save($user);
+            $rol=$request->rol;
+            $unvan=$request->unvan;
+            $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol,'unvan'=>$unvan]);
+
+            //$firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
+
+            $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
+
+                Mail::send('auth.emails.password', $data, function($message) use($data,$request) 
+                {
+                    $message->to($request->email, $data['ad'],$request->to)
+                    ->subject('YENİ KAYIT OLMA İSTEĞİ!');
+                });
+       DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }    
+      //return Redirect::to('/kullaniciIslemleri/'.$firma->id);
+    
 
 }); 
 Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
-    $firma = Firma::find($id);
-    $roller=  App\Rol::all();
-    
-    
-    $kullanici= App\Kullanici::find($kul_id);
-    
-    $kullanici->adi = Str::title(strtolower($request->adi));
-    $kullanici->soyadi = Str::title(strtolower($request->soyadi));
-    $kullanici->email = $request->email;
-    $kullanici->save();
-    
-    $user = $kullanici->users ?: new App\User();
-    $user->email = $request->email;
-    $user->password =Hash::make('tamrekabet');
-    
-    $kullanici->users()->save($user);
-    
-    $firmaKullanicilar = App\FirmaKullanici::where('kullanici_id', '=',  $kul_id)
-            ->where('firma_id', '=',$id)->first();
-   
-      
-    $firmaKullanicilar->rol_id =$request->rol;
-    $firmaKullanicilar->unvan=$request->unvan;
-   
-    $firmaKullanicilar->save();
-  
-   return Redirect::to('/kullaniciIslemleri/'.$firma->id);
+    DB::beginTransaction();
+
+        try {
+            $firma = Firma::find($id);
+            $roller=  App\Rol::all();
+            $kullanici= App\Kullanici::find($kul_id);
+
+            $kullanici->adi = Str::title(strtolower($request->adi));
+            $kullanici->soyadi = Str::title(strtolower($request->soyadi));
+            $kullanici->email = $request->email;
+            $kullanici->save();
+
+            $user = $kullanici->users ?: new App\User();
+            $user->email = $request->email;
+            $user->password =Hash::make('tamrekabet');
+
+            $kullanici->users()->save($user);
+
+            $firmaKullanicilar = App\FirmaKullanici::where('kullanici_id', '=',  $kul_id)
+                    ->where('firma_id', '=',$id)->first();
+
+            $firmaKullanicilar->rol_id =$request->rol;
+            $firmaKullanicilar->unvan=$request->unvan;
+            $firmaKullanicilar->save();
+     DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+   //return Redirect::to('/kullaniciIslemleri/'.$firma->id);
 
 }); 
 Route::get('/kullanici/{kullanici_id?}',function($kullanici_id){
@@ -478,17 +495,13 @@ Route::post('/form', function (Request $request) {
                     ->subject('YENİ KAYIT OLMA İSTEĞİ!');
 
                 });
-            //return redirect('/');
-
             DB::commit();
             // all good
         } catch (\Exception $e) {
             $error="error";
             DB::rollback();
-           
             return Response::json($error);
             
-            // something went wrong
         }
    
    
@@ -496,41 +509,54 @@ Route::post('/form', function (Request $request) {
 });
     
 Route::post('/yeniFirma/{id}', function (Request $request,$id) {
-    $kullanici= App\Kullanici::find($id);
+    
+    DB::beginTransaction();
 
-    $firma= new Firma();
-    $firma->adi=Str::title(strtolower($request->adi));
-    $now = new \DateTime();
-    $firma->olusturmaTarihi=$now;
-    $firma->save();
-
-    $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
-    $iletisim->telefon = $request->telefon;
-    $firma->iletisim_bilgileri()->save($iletisim);    
-
-    $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
-    $adres->il_id = $request->il_id;
-    $adres->ilce_id = $request->ilce_id;
-    $adres->semt_id = $request->semt_id;
-    $adres->adres =Str::title(strtolower( $request->adres));
-    $tur = 1;
-    $adres->tur_id = $tur;
-    $firma->adresler()->save($adres);
-
-    $firma->sektorler()->attach($request->sektor_id);
-
-    $kullanici->firmalar()->attach($firma);
-
-    $data = ['ad' => $kullanici->adi, 'soyad' => $kullanici->soyadi];
-
-        Mail::send('auth.emails.mesaj', $data, function($message) use($data,$id) 
-        {
+        try {  
+    
             $kullanici= App\Kullanici::find($id);
-            $message->to($kullanici->users->email, $data['ad'])
-            ->subject('YENİ FİRMA EKLEME İSTEĞİ!');
 
-        });
-    return redirect('/'); 
+            $firma= new Firma();
+            $firma->adi=Str::title(strtolower($request->adi));
+            $now = new \DateTime();
+            $firma->olusturmaTarihi=$now;
+            $firma->save();
+
+            $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
+            $iletisim->telefon = $request->telefon;
+            $firma->iletisim_bilgileri()->save($iletisim);    
+
+            $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
+            $adres->il_id = $request->il_id;
+            $adres->ilce_id = $request->ilce_id;
+            $adres->semt_id = $request->semt_id;
+            $adres->adres =Str::title(strtolower( $request->adres));
+            $tur = 1;
+            $adres->tur_id = $tur;
+            $firma->adresler()->save($adres);
+
+            $firma->sektorler()->attach($request->sektor_id);
+
+            $kullanici->firmalar()->attach($firma);
+
+            $data = ['ad' => $kullanici->adi, 'soyad' => $kullanici->soyadi];
+
+                Mail::send('auth.emails.mesaj', $data, function($message) use($data,$id) 
+                {
+                    $kullanici= App\Kullanici::find($id);
+                    $message->to($kullanici->users->email, $data['ad'])
+                    ->subject('YENİ FİRMA EKLEME İSTEĞİ!');
+
+                });
+        
+        DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+         //return redirect('/'); 
 });
     
     
@@ -713,7 +739,6 @@ Route::get('/firma/{ref_id?}',function($ref_id){
 Route::get('/firmabrosur/{brosur_id?}',function($brosur_id){
 $brosur= App\FirmaBrosur::find($brosur_id);
 return Response::json($brosur);
-
 });
 
 //firma ilan route... /////////////////////////////////////////////////
@@ -721,8 +746,8 @@ Route::get('/firmaIlanOlustur/{id}/{ilanid}', 'FirmaIlanController@showFirmaIlan
 Route::get('/ilanEkle/{id}/{ilan_id}', 'FirmaIlanController@showFirmaIlanEkle');
 
 Route::post('firmaIlanOlustur/firmaBilgilerim/{id}', 'FirmaIlanController@firmaBilgilerimAdd');
-
-Route::post('firmaIlanOlustur/ilanBilgileri/{id}', 'FirmaIlanController@ilanAdd');
+Route::post('firmaIlanOlustur/ilanBilgileri/{id}', 'FirmaIlanController@ilanAdd2');
+Route::post('firmaIlanOlustur/ilanBilgileri/{id}/{ilan_id}', 'FirmaIlanController@ilanAdd');
 Route::post('firmaIlanOlustur/ilanBilgileriUpdate/{id}/{ilan_id}', 'FirmaIlanController@ilanUpdate');
 
 Route::post('firmaIlanOlustur/fiyatlandırmaBilgileri/{id}/{ilan_id}', 'FirmaIlanController@fiyatlandırmaBilgileriAdd');
@@ -946,133 +971,145 @@ Route::get('rekabet/{ilan_id}' ,function ($ilanid) {
 });
 /////////////////////////////////////teklif Gönder /////////////////////////////////
 Route::post('/teklifGonder/{firma_id}/{ilan_id}/{kullanici_id}' ,function ($firma_id,$ilan_id,$kullanici_id,Request $request) {
-    $now = new Carbon();
+    
+    
+       DB::beginTransaction();
 
-    $ilan=  Ilan::find($ilan_id);
-    $teklifExist = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan_id)->get();
-    $teklifExist=$teklifExist->toArray();
-    if($teklifExist != null ){
-        $id = $teklifExist[0]['id'];
-    }
-    else{
-        $id=0;
-    }
-    $teklif = Teklif::find($id);
-    if($teklifExist == null ){
-        $teklif = new \App\Teklif;
-        $teklif->firma_id =$firma_id;
-        $teklif->ilan_id = $ilan_id;
-        $teklif->save();
-    }
-    $kdvsizFiyatToplam=0;
-    $arrayFiyat = Array();
-    $arrayKdv = Array();
+        try {
+                $now = new Carbon();
 
-    foreach($request->kdv as $kdv){
-        $arrayKdv[] = $kdv;
-    }
-    foreach($request->birim_fiyat as $birimFiyat){
-        $arrayFiyat[] = $birimFiyat;
-    }
-    if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){
-        $i=0;
-        foreach($request->ilan_mal_id as $id){
-            $ilan_mal= \App\IlanMal::find($id);
-            $ilan_mal_teklifler = new App\MalTeklif;
-            $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
-            $ilan_mal_teklifler-> teklif_id = $teklif->id;
-            if($arrayKdv[$i] == -1){
-                $i++;
-                continue;
-            }
-            $ilan_mal_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_mal->miktar)*(1+$arrayKdv[$i]/100);
-            $ilan_mal_teklifler->kdv_orani = $arrayKdv[$i];
-            $ilan_mal_teklifler->kdv_haric_fiyat = $arrayFiyat[$i];
-            $ilan_mal_teklifler->tarih= $now;
-            $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
-            $ilan_mal_teklifler->kullanici_id=$kullanici_id;
-            $ilan_mal_teklifler->save();
-            $kdvsizFiyatToplam = $kdvsizFiyatToplam + ($arrayFiyat[$i]*$ilan_mal->miktar);
-            $i++;
+                $ilan=  Ilan::find($ilan_id);
+                $teklifExist = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan_id)->get();
+                $teklifExist=$teklifExist->toArray();
+                if($teklifExist != null ){
+                    $id = $teklifExist[0]['id'];
+                }
+                else{
+                    $id=0;
+                }
+                $teklif = Teklif::find($id);
+                if($teklifExist == null ){
+                    $teklif = new \App\Teklif;
+                    $teklif->firma_id =$firma_id;
+                    $teklif->ilan_id = $ilan_id;
+                    $teklif->save();
+                }
+                $kdvsizFiyatToplam=0;
+                $arrayFiyat = Array();
+                $arrayKdv = Array();
+
+                foreach($request->kdv as $kdv){
+                    $arrayKdv[] = $kdv;
+                }
+                foreach($request->birim_fiyat as $birimFiyat){
+                    $arrayFiyat[] = $birimFiyat;
+                }
+                if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){
+                    $i=0;
+                    foreach($request->ilan_mal_id as $id){
+                        $ilan_mal= \App\IlanMal::find($id);
+                        $ilan_mal_teklifler = new App\MalTeklif;
+                        $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
+                        $ilan_mal_teklifler-> teklif_id = $teklif->id;
+                        if($arrayKdv[$i] == -1){
+                            $i++;
+                            continue;
+                        }
+                        $ilan_mal_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_mal->miktar)*(1+$arrayKdv[$i]/100);
+                        $ilan_mal_teklifler->kdv_orani = $arrayKdv[$i];
+                        $ilan_mal_teklifler->kdv_haric_fiyat = $arrayFiyat[$i];
+                        $ilan_mal_teklifler->tarih= $now;
+                        $ilan_mal_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                        $ilan_mal_teklifler->kullanici_id=$kullanici_id;
+                        $ilan_mal_teklifler->save();
+                        $kdvsizFiyatToplam = $kdvsizFiyatToplam + ($arrayFiyat[$i]*$ilan_mal->miktar);
+                        $i++;
+                    }
+                }elseif ($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) {
+                    $i=0;
+                    foreach($request->ilan_hizmet_id as $id){
+                        $ilan_hizmet= \App\IlanHizmet::find($id);
+                        $ilan_hizmet_teklifler = new App\HizmetTeklif;
+                        $ilan_hizmet_teklifler-> ilan_hizmet_id = $ilan_hizmet->id;
+                        $ilan_hizmet_teklifler-> teklif_id = $teklif->id;
+                        if($arrayKdv[$i] == -1){
+                            $i++;
+                            continue;
+                        }
+                        $ilan_hizmet_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_hizmet->miktar)*(1+$arrayKdv[$i]/100);
+                        $ilan_hizmet_teklifler->kdv_orani = $arrayKdv[$i];
+                        $ilan_hizmet_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
+                        $ilan_hizmet_teklifler->tarih= $now;
+                        $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                        $ilan_hizmet_teklifler->kullanici_id=$kullanici_id;
+                        $ilan_hizmet_teklifler->save();
+                        $i++;
+                    }
+
+                }elseif($ilan->sozlesme_turu == 1){
+                    $i=0;
+                    foreach($request->ilan_goturu_bedel_id as $id){
+                        $ilan_goturu = \App\IlanGoturuBedel::find($id);
+                        $ilan_goturu_teklifler = new App\GoturuBedelTeklif;
+                        $ilan_goturu_teklifler-> ilan_goturu_bedel_id = $ilan_goturu->id;
+                        $ilan_goturu_teklifler-> teklif_id = $teklif->id;
+                        if($arrayKdv[$i] == -1){
+                            $i++;
+                            continue;
+                        }
+                        $ilan_goturu_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_goturu->miktar)*(1+$arrayKdv[$i]/100);
+                        $ilan_goturu_teklifler->kdv_orani = $arrayKdv[$i];
+                        $ilan_goturu_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
+                        $ilan_goturu_teklifler->tarih= $now;
+                        $ilan_goturu_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                        $ilan_goturu_teklifler->kullanici_id=$kullanici_id;
+                        $ilan_goturu_teklifler->save();
+                        $kdvsizFiyatToplam = $kdvsizFiyatToplam + ($arrayFiyat[$i]*$ilan_goturu->miktar);
+                        $i++;
+                    }
+
+                }else{
+                    $i=0;
+                    foreach($request->ilan_yapim_isi_id as $id){
+                        $ilan_yapim = \App\IlanYapimIsi::find($id);
+                        $ilan_yapim_teklifler = new App\YapimIsiTeklif;
+                        $ilan_yapim_teklifler-> ilan_yapim_isleri_id = $ilan_yapim->id;
+                        $ilan_yapim_teklifler-> teklif_id = $teklif->id;
+                        if($arrayKdv[$i] == -1){
+                            $i++;
+                            continue;
+                        }
+                        $ilan_yapim_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_yapim->miktar)*(1+$arrayKdv[$i]/100);
+                        $ilan_yapim_teklifler->kdv_orani = $arrayKdv[$i];
+                        $ilan_yapim_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
+                        $ilan_yapim_teklifler->tarih= $now;
+                        $ilan_yapim_teklifler->para_birimleri_id=$ilan->para_birimi_id;
+                        $ilan_yapim_teklifler->kullanici_id=$kullanici_id;
+                        $ilan_yapim_teklifler->save();
+                        $i++;
+                    }
+                }
+                $firma_kullanici = DB::table('firma_kullanicilar')->where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->get();
+                //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
+                $teklifHareket = new App\TeklifHareket;
+                $teklifHareket->kdv_haric_fiyat=$request->toplamFiyatKdvsiz;
+                $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
+                $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
+                $teklifHareket->tarih = $now;
+                $teklifHareket->kullanici_id=$kullanici_id;
+                $teklifHareket->iskonto_orani=$request->iskontoVal;
+                $teklifHareket->iskontolu_kdvli_fiyat=$request->iskontoluToplamFiyatKdvli;
+                $teklifHareket->iskontolu_kdvsiz_fiyat=$request->iskontoluToplamFiyatKdvsiz;
+                $teklif->teklif_hareketler()->save($teklifHareket);
+
+        DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
         }
-    }elseif ($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) {
-        $i=0;
-        foreach($request->ilan_hizmet_id as $id){
-            $ilan_hizmet= \App\IlanHizmet::find($id);
-            $ilan_hizmet_teklifler = new App\HizmetTeklif;
-            $ilan_hizmet_teklifler-> ilan_hizmet_id = $ilan_hizmet->id;
-            $ilan_hizmet_teklifler-> teklif_id = $teklif->id;
-            if($arrayKdv[$i] == -1){
-                $i++;
-                continue;
-            }
-            $ilan_hizmet_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_hizmet->miktar)*(1+$arrayKdv[$i]/100);
-            $ilan_hizmet_teklifler->kdv_orani = $arrayKdv[$i];
-            $ilan_hizmet_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-            $ilan_hizmet_teklifler->tarih= $now;
-            $ilan_hizmet_teklifler->para_birimleri_id=$ilan->para_birimi_id;
-            $ilan_hizmet_teklifler->kullanici_id=$kullanici_id;
-            $ilan_hizmet_teklifler->save();
-            $i++;
-        }
-
-    }elseif($ilan->sozlesme_turu == 1){
-        $i=0;
-        foreach($request->ilan_goturu_bedel_id as $id){
-            $ilan_goturu = \App\IlanGoturuBedel::find($id);
-            $ilan_goturu_teklifler = new App\GoturuBedelTeklif;
-            $ilan_goturu_teklifler-> ilan_goturu_bedel_id = $ilan_goturu->id;
-            $ilan_goturu_teklifler-> teklif_id = $teklif->id;
-            if($arrayKdv[$i] == -1){
-                $i++;
-                continue;
-            }
-            $ilan_goturu_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_goturu->miktar)*(1+$arrayKdv[$i]/100);
-            $ilan_goturu_teklifler->kdv_orani = $arrayKdv[$i];
-            $ilan_goturu_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-            $ilan_goturu_teklifler->tarih= $now;
-            $ilan_goturu_teklifler->para_birimleri_id=$ilan->para_birimi_id;
-            $ilan_goturu_teklifler->kullanici_id=$kullanici_id;
-            $ilan_goturu_teklifler->save();
-            $kdvsizFiyatToplam = $kdvsizFiyatToplam + ($arrayFiyat[$i]*$ilan_goturu->miktar);
-            $i++;
-        }
-
-    }else{
-        $i=0;
-        foreach($request->ilan_yapim_isi_id as $id){
-            $ilan_yapim = \App\IlanYapimIsi::find($id);
-            $ilan_yapim_teklifler = new App\YapimIsiTeklif;
-            $ilan_yapim_teklifler-> ilan_yapim_isleri_id = $ilan_yapim->id;
-            $ilan_yapim_teklifler-> teklif_id = $teklif->id;
-            if($arrayKdv[$i] == -1){
-                $i++;
-                continue;
-            }
-            $ilan_yapim_teklifler->kdv_dahil_fiyat = $arrayFiyat[$i] * ($ilan_yapim->miktar)*(1+$arrayKdv[$i]/100);
-            $ilan_yapim_teklifler->kdv_orani = $arrayKdv[$i];
-            $ilan_yapim_teklifler->kdv_haric_fiyat=$arrayFiyat[$i];
-            $ilan_yapim_teklifler->tarih= $now;
-            $ilan_yapim_teklifler->para_birimleri_id=$ilan->para_birimi_id;
-            $ilan_yapim_teklifler->kullanici_id=$kullanici_id;
-            $ilan_yapim_teklifler->save();
-            $i++;
-        }
-    }
-    $firma_kullanici = DB::table('firma_kullanicilar')->where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->get();
-    //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
-    $teklifHareket = new App\TeklifHareket;
-    $teklifHareket->kdv_haric_fiyat=$request->toplamFiyatKdvsiz;
-    $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
-    $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
-    $teklifHareket->tarih = $now;
-    $teklifHareket->kullanici_id=$kullanici_id;
-    $teklifHareket->iskonto_orani=$request->iskontoVal;
-    $teklifHareket->iskontolu_kdvli_fiyat=$request->iskontoluToplamFiyatKdvli;
-    $teklifHareket->iskontolu_kdvsiz_fiyat=$request->iskontoluToplamFiyatKdvsiz;
-    $teklif->teklif_hareketler()->save($teklifHareket);
-
-   return Redirect::to('firmaIslemleri/'.$firma_id);
+   //return Redirect::to('firmaIslemleri/'.$firma_id);
 
 }); 
 ////////////////////////ilan detay ///////////////////////////
