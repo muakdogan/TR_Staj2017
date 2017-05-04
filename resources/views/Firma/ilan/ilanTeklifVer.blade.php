@@ -39,8 +39,45 @@ tr:nth-child(even) {
     cursor: pointer;
     border-radius: 8px;
 }
+    form .error {
+                  color: #000000;
+        }
+         .popup, .popup2, .bMulti {
+            background-color: #fff;
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: 0 0 25px 5px #999;
+            color: #111;
+            display: none;
+            min-width: 450px;
+            padding: 25px;
+            text-align: center;
+            }
+            .popup, .bMulti {
+                min-height: 150px;
+            }
+            .button.b-close, .button.bClose {
+                border-radius: 7px 7px 7px 7px;
+                box-shadow: none;
+                font: bold 131% sans-serif;
+                padding: 0 6px 2px;
+                position: absolute;
+                right: -7px;
+                top: -7px;
+            }
+            .button {
+                background-color: #2b91af;
+                border-radius: 10px;
+                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+            }
 
 </style>
+   <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
      <div class="container">
          <?php $firma=$ilan->firmalar;?>
           @include('layouts.alt_menu') 

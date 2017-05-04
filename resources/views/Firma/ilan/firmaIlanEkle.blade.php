@@ -104,8 +104,8 @@
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
-     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 
     <div class="container">
         <br>
@@ -125,9 +125,9 @@
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"><strong>İlan Bilgilerim</strong></a>
-                                 <?php 
-                                  $kullanici_id= Auth::user()->kullanici_id;
-                                  $firma_id=$firma->id;
+                                <?php 
+                                    $kullanici_id= Auth::user()->kullanici_id;
+                                    $firma_id=$firma->id;
                                     $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
                                             ->where( 'firma_id', '=', $firma_id)
                                             ->select('rol_id')->get();
@@ -158,12 +158,12 @@
                                              
                                              }
 
-                                            if($ilan->goster=="Göster"){
+                                            if($ilan->goster==1){
                                             ?>
                                                 <td width="75%"><strong>:</strong> {{$firma->adi}}</td>
                                             <?php
                                             }
-                                            else if($ilan->goster=="Gizle"){    
+                                            else if($ilan->goster==0){    
                                             ?>
                                             <td width="75%"><strong>:</strong> {{$firma->adi}}(GİZLİ)</td>
                                             <?php
@@ -261,7 +261,7 @@
                                                 
                                             </div>
                                             <div class="modal-body">
-                                                {!! Form::open(array('id'=>'valid','url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                {!! Form::open(array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
                                                 
                                                 <div class="row">
                                                     <div class="col-sm-6">
@@ -490,7 +490,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-danger" url="firmaIlanOlustur/ilanBilgileri/'.$firma->id"  style="float:right" type="submit">Kaydet</button>
+                                                {!! Form::submit('Kaydet', array('url'=>'firmaIlanOlustur/ilanBilgileri/'.$firma->id.'/'.$ilan->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                                 {!! Form::close() !!}
                                             </div>
                                             <br>
@@ -518,10 +518,8 @@
                                 <table class="table" >
                                     <thead id="tasks-list" name="tasks-list">
                                         <tr id="firma{{$firma->id}}">
-                                       
                                         <tr>
                                             <td width="25%"><strong>Ödeme Türü</strong></td>
-                                            
                                             <td width="75%"><strong>:</strong><?php if($ilan->odeme_turu_id != NULL)
                                             {?> {{$ilan->odeme_turleri->adi}}<?php }?></td>
                                             
@@ -537,10 +535,10 @@
                                         <tr>
                                             <td><strong>Fiyatlandırma Şekli</strong></td>
                                             <td><strong>:</strong> 
-                                                @if($ilan->fiyatlandırma_sekli != null)
-                                                    @if($ilan->fiyatlandirma_sekli==1)
-                                                        Kısmş Fiyat Teklifine Açık
-                                                    @elseif($ilan->fiyatlandirma_sekli==0)
+                                                @if($ilan->kismi_fiyat != null)
+                                                    @if($ilan->kismi_fiyat==1)
+                                                        Kısmi Fiyat Teklifine Açık
+                                                    @elseif($ilan->kismi_fiyat==0)
                                                         Kısmi Fiyat Teklifine Kapalı
                                                     @endif
                                                 @endif  
@@ -557,10 +555,9 @@
                                                 <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Fiyatlandırma Bilgileri</strong></h4>
                                             </div>
                                             <div class="modal-body">
-                                                {!! Form::open(array('url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                {!! Form::open(array('id'=>'fiyatlandirma_kayit','url'=>'firmaIlanOlustur/fiyatlandırmaBilgileri/'.$firma->id.'/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                 <div class="form-group">
-                                                   
                                                     <label for="inputEmail3" class="col-sm-2 control-label">Ödeme Türü</label>
                                                      <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                     <div class="col-sm-9">
@@ -574,7 +571,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                   
                                                     <label for="inputEmail3" class="col-sm-2 control-label">Para Birimi</label>
                                                      <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                                     <div class="col-sm-9">
@@ -690,7 +686,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'mal_up_kayit','url'=>'kalemlerListesiMalUpdate/'.$ilan_mal->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                             <div class="form-group">
                                                                 <label for="inputEmail3" class="col-sm-2 control-label">Marka</label>
@@ -761,7 +757,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'mal_add_kayit','url'=>'kalemlerListesiMal/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                             <div class="form-group">
                                                                 <label for="inputEmail3" class="col-sm-2 control-label">Marka</label>
@@ -894,7 +890,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'hizmet_up_kayit','url'=>'kalemlerListesiHizmetUpdate/'.$ilan_hizmet->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
                                                             <div class="form-group">
                                                                 <label for="inputTask" class="col-sm-1 control-label"></label>
@@ -972,7 +968,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'hizmet_add_kayit','url'=>'kalemlerListesiHizmet/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
 
                                                             <div class="form-group">
@@ -1101,7 +1097,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'goturu_up_kayit','url'=>'kalemlerListesiGoturuUpdate/'.$ilan_goturu_bedel->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
 
                                                             <div class="form-group">
@@ -1148,7 +1144,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'goturu_add_kayit','url'=>'kalemlerListesiGoturu/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
 
                                                             <div class="form-group">
@@ -1244,7 +1240,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'yapim_up_kayit','url'=>'kalemlerListesiYapimİsiUpdate/'.$ilan_yapim_isi->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
 
 
@@ -1301,7 +1297,7 @@
                                                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            {!! Form::open(array('url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
+                                                            {!! Form::open(array('id'=>'yapim_add_kayit','url'=>'kalemlerListesiYapim/'.$ilan->id,'class'=>'form-horizontal','method'=>'POST', 'files'=>true)) !!}
 
 
                                                             <div class="form-group">
@@ -1356,11 +1352,17 @@
             <h2 style="color:red;font-size:14px"> Dikkat!!</h2>
             <h3 style="font-size:12px">Lütfen Rekabet Şeklini Seçmeden Önce İlan Sektörü Seçimi Yapınız.</h3>
         </div>
+         <div id="mesaj_sistem" class="popup">
+            <span class="button b-close"><span>X</span></span>
+            <h2 style="color:red"> Üzgünüz.. !!!</h2>
+            <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
+       </div>
     </div>
 
     <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+  
 <!--script src="{{asset('js/selectDD.js')}}"></script-->  
 <script charset="utf-8"> 
     var firmaCount = 0;
@@ -1398,8 +1400,6 @@
             //$("#semt_id")[0].selectedIndex=0;
         });
 });
-
-
 
  $.validate({
     modules : 'location, date, security, file',
@@ -1700,6 +1700,389 @@ $('.firma_goster').click(function() {
 $(function() {
   $('.selectpicker').selectpicker();
 });
+
+
+////transection controllerinde çıkan sistemsel hatanın ekrana bastırılması.
+var firma_id='{{$firma->id}}';
+var ilanId='{{$ilan->id}}';
+$("#fiyatlandirma_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#mal_add_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#mal_up_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#hizmet_up_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#hizmet_add_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#goturu_add_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#goturu_up_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#yapim_add_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+$("#yapim_up_kayit").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+            alert("girdi");
+            alert(formURL);
+            
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj_sistem').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
+                    }
+                    else{
+                         alert("calisti");
+                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault();
+    });
+
+
+
+
+
+
+
+
+
 
 </script>
 </body>

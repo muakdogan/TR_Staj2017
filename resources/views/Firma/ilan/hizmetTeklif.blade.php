@@ -146,3 +146,50 @@
     </div>       
 
 </div>
+<div id="mesaj" class="popup">
+            <span class="button b-close"><span>X</span></span>
+            <h2 style="color:red"> Üzgünüz.. !!!</h2>
+            <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
+        </div>
+<script>
+var firmaId='{{$firma->id}}'
+$("#teklifForm").submit(function(e)
+   {
+       var postData = $(this).serialize();
+            var formURL = $(this).attr('action');
+           alert("girdi");
+            $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR) 
+                {
+                    console.log(data);
+                    $('.ajax-loader').css("visibility", "hidden");
+                    if(data=="error"){
+                         $('#mesaj').bPopup({
+                            speed: 650,
+                            transition: 'slideIn',
+                            transitionClose: 'slideBack',
+                            autoClose: 5000 
+                        });
+                        setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 5000);
+                    }
+                    else{
+                       
+                        setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 1000);
+                    }
+                        e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert(textStatus + "," + errorThrown);     
+                }
+            });
+            e.preventDefault(); //STOP default action
+        });
+</script>
