@@ -246,11 +246,11 @@ Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $reques
 
     return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
 }); 
-Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
+Route::post('kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
     
     DB::beginTransaction();
-
         try {  
+            
             $firma = Firma::find($id);
             $roller=  App\Rol::all();
 
@@ -268,27 +268,34 @@ Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
             $rol=$request->rol;
             $unvan=$request->unvan;
             $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol,'unvan'=>$unvan]);
-
-            //$firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
-
-            $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
-
-                Mail::send('auth.emails.password', $data, function($message) use($data,$request) 
+            
+            
+            
+                $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
+                Mail::send('auth.emails.password',$data, function($message) use($data,$request) 
                 {
-                    $message->to($request->email, $data['ad'],$request->to)
+                    $message->to($request->email, $data['ad'])
                     ->subject('YENİ KAYIT OLMA İSTEĞİ!');
                 });
-       DB::commit();
-            // all good
-        } catch (\Exception $e) {
-            $error="error";
+                
+              
+           DB::commit();
+        
+        
+             // all good
+         } catch (\Exception $e) {
+             
+             $e.getMessage();
+             $error="error";
             DB::rollback();
             return Response::json($error);
-        }    
+        }
+        
       //return Redirect::to('/kullaniciIslemleri/'.$firma->id);
     
 
 }); 
+
 Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
     DB::beginTransaction();
 

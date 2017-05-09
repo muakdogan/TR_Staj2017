@@ -228,9 +228,7 @@
                                      </div>
                                      </div>
                                      </div>
-            
-              
-                                          
+             
          </div>
            <div id="mesaj" class="popup">
             <span class="button b-close"><span>X</span></span>
@@ -284,7 +282,9 @@
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
+            alert(formURL);
             //console.log($(this).attr("url"));
+            alert("girdi");
             $.ajax(
             {
                 beforeSend: function(){
@@ -331,6 +331,8 @@
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
             //console.log($(this).attr("url"));
+            alert("girdiadd");
+             alert(formURL);
             $.ajax(
             {
                 beforeSend: function(){
