@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Kullanici;
 use Validator;
 use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+
+//use Auth;
 
 class AuthController extends Controller
 {
@@ -31,18 +34,31 @@ class AuthController extends Controller
      */
             //auth/login?redirectTo='Firma.ilan.ilanAra';
              protected $redirectPath = '/';
-           
+
             //protected $redirectTo = '/';
-             
-             
+
+
+    protected function authenticated(Request $request, Kullanici $user)
+    {
+        //set the session varibles after login - mete 8May17
+        $request->session()->put('kullanici_id', $user->id);
+        $request->session()->put('kullanici_adi', $user->adi . " " . $user->soyadi);
+        //birden fazla firma olunca aşağısı değişecek
+        $firma_id = $user->firmalar()->first()->id;
+        $request->session()->put('firma_id', $firma_id);
+        $request->session()->put('firma_adi', $user->firmalar()->first()->adi);
+        $role_id = $user->get_role_id($firma_id);
+        $request->session()->put('role_id', $user->get_role_id($firma_id));
+        
+        return redirect()->intended($this->redirectPath());
+    }
     public function getLogout(){
-        $firma = Firma::find(1);
         Auth::logout();
         Session::flush();
         return Redirect::to('/');
-    }        
-            
-            
+    }
+
+
 
     /**
      * Create a new authentication controller instance.
@@ -82,12 +98,12 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-        
+
         return \App\Admin::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
-                
+
     }
 }

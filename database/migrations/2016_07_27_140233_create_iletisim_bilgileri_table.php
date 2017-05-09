@@ -19,6 +19,7 @@ class CreateIletisimBilgileriTable extends Migration
             $table->foreign('firma_id')->references('id')->on('firmalar')->onDelete('cascade');
             $table->string('telefon');
             $table->string('fax');
+            $table->string('email');
             $table->string('web_sayfasi');
         });
     }

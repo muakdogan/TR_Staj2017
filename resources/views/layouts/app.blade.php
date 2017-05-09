@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    	
+
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +11,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title></title>
-     
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
     <script src="{{asset('js/jquery.js')}}"></script>
@@ -20,7 +19,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
-   
+
     <style>
       div#header{
       width: 100%;
@@ -42,7 +41,7 @@
     .yazi{
       font-family:"Times New Roman";
       background-color: #ccc;
-                
+
      }
 
 </style>
@@ -120,9 +119,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav" style="float:right">
-                    
+
                     @if (Auth::guest())
-                    
+
                     <li>
                         <a href="{{ url('/firmaKayit') }}">ÜYE OL</a>
                     </li>
@@ -133,19 +132,19 @@ window.requestAnimationFrame = window.requestAnimationFrame
                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
                     </li>
                    @else
-                   
-                       
+
+
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
-                            $firmaId = session()->get('firma_id');
+                              $firmaId = session()->get('firma_id');
                             ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }}/ {{$firmaAdi}}<span class="caret"></span>
-                            </a>                           
+                               {{ session()->get('kullanici_adi') }}/ {{$firmaAdi}}<span class="caret"></span>
+                            </a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
-                                    <?php                                   
-                                        $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                    <?php
+                                        $kullanici = App\Kullanici::find(Auth::user()->id);
                                         $kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
@@ -166,17 +165,17 @@ window.requestAnimationFrame = window.requestAnimationFrame
                 </ul>
                  <ul class="nav navbar-nav" style="padding-left: 30px" >
                     <li>
-                       
+
                         <a href="{{url('/ilanAra')}}">İLAN ARA</a>
-                        
+
                     </li>
-                   
-                    
+
+
                 </ul>
             </div>
-         
+
         </div>
-    
+
     </nav>
     @yield('content')
     @include('layouts.footer_menu')
@@ -188,7 +187,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
       var count;
       var click=0;
       var session_value;
-         
+
     $( document ).ready(function() {
 
         @if(Auth::guest())
@@ -197,14 +196,13 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
             count = '{{$kullanici->firmalar()->count()}}';
             session_value = "{{$firmaAdi}}";
-            if(count==1){
+
                    selected='{{$kullanicifirma->id}}';
                    funcLocations();
-            }
 
         @endif
-    }); 
-         
+    });
+
     $('.firmaSec').on('click', function() {
 
         selected = $(this).attr('name');
@@ -220,12 +218,12 @@ window.requestAnimationFrame = window.requestAnimationFrame
                     url: "{{asset('set_session')}}",
                     data: { role: selected },
                     }).done(function(data){
-                               console.log(data); 
+                               console.log(data);
 
-                               if(click==1 ){  
+                               if(click==1 ){
                                  location.href="{{asset('firmaIslemleri')}}"+"/"+selected;
                                }
-                               }).fail(function(){ 
+                               }).fail(function(){
                                    alert('Yüklenemiyor !!!  ');
                                });
 

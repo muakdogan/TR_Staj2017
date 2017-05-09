@@ -19,46 +19,46 @@ use DB;
 class FirmaController extends Controller
 {
     /*public function properFunc($string){
-        
+
         $proper=Str::title(strtolower($string));
         return response($proper);
     }*/
 
     public function uploadImage(Request $request) {
-        
-      
+
+
             $file = $request->file('logo');
             $file = array('logo' => $request->file('logo'));
             $rules = array('logo' => 'required|mimes:jpeg,bmp,png|max:100000'); //mimes:jpeg,bmp,png and for max size max:10000
             $validator = Validator::make($file, $rules);
             if ($validator->fails()) {
                 return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
-            } 
+            }
             else {
                 if ($request->file('logo')->isValid()) {
                     $destinationPath = 'uploads'; // upload path
                     $extension = $request->file('logo')->getClientOriginalExtension();
-                    $fileName = rand(11111, 99999) . '.' . $extension; 
+                    $fileName = rand(11111, 99999) . '.' . $extension;
 
                     $firma = Firma::find($request->id);
                     $oldName=$firma->logo;
-                    $firma->logo = $fileName; 
+                    $firma->logo = $fileName;
                     $firma->save();
                     $request->file('logo')->move($destinationPath, $fileName);
 
                     Session::flash('success', 'Upload successfully');
                     File::delete("uploads/$oldName");
                     return Redirect::to('firmaProfili/'.$firma->id);
-                } 
+                }
                 else {
 
                     Session::flash('error', 'uploaded file is not valid');
                     return Redirect::to('firmaProfili/'.$request->firmaId)->withInput()->withErrors($validator);
                 }
             }
-       
+
     }
-    
+
     public function deleteImage($id){
         $item = Firma::findOrFail($id);
         $oldName=$item->logo;
@@ -68,7 +68,7 @@ class FirmaController extends Controller
         return Redirect::to('iletisimbilgilerii/'.$item->id);
     }
     public function iletisimAdd(Request $request){
-        
+
         DB::beginTransaction();
 
         try {
@@ -78,7 +78,7 @@ class FirmaController extends Controller
             $iletisim->telefon =Str::title(strtolower( $request->telefon));
             $iletisim->fax =Str::title(strtolower( $request->fax));
             $iletisim->web_sayfasi = $request->web_sayfasi;
-            $firma->iletisim_bilgileri()->save($iletisim);        
+            $firma->iletisim_bilgileri()->save($iletisim);
 
             $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new Adres();
             $adres->il_id = $request->il_id;
@@ -98,18 +98,18 @@ class FirmaController extends Controller
         }
     }
     public function tanitimAdd(Request $request){
-    
+
             $firma = Firma::find($request->id);
             $firma->tanitim_yazisi = Str::title(strtolower($request->tanitim_yazisi));
-            $firma->save();        
+            $firma->save();
             return redirect('firmaProfili/'.$firma->id);
-      
+
     }
     public function maliBilgiAdd(Request $request){
-        
+
     DB::beginTransaction();
 
-        try {   
+        try {
                 $firma = Firma::find($request->id);
                 $firma->sirket_turu =Str::title(strtolower( $request->sirket_turu));
                 $firma->save();
@@ -122,7 +122,7 @@ class FirmaController extends Controller
                 $maliBilgi->yillik_cirosu = Str::title(strtolower($request ->yillik_cirosu));
                 $maliBilgi->ciro_goster = $request ->ciro_goster;
                 $maliBilgi->sermaye_goster = $request ->sermaye_goster;
-                $firma->mali_bilgiler()->save($maliBilgi);        
+                $firma->mali_bilgiler()->save($maliBilgi);
 
 
                 $adres = $firma->adresler()->where('tur_id', '=', '2')->first() ?: new Adres();
@@ -133,7 +133,7 @@ class FirmaController extends Controller
                 $tur = 2;
                 $adres->tur_id = $tur;
                 $firma->adresler()->save($adres);
-        
+
          DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -144,11 +144,11 @@ class FirmaController extends Controller
         //return redirect('firmaProfili/'.$firma->id);
     }
     public function ticariBilgiAdd(Request $request){
-        
+
     DB::beginTransaction();
 
-        try {     
-        
+        try {
+
             $firma = Firma::find($request->id);
             $firma->kurulus_tarihi=$request->kurulus_tarihi;
             $firma->save();
@@ -158,7 +158,7 @@ class FirmaController extends Controller
             $ticariBilgi->tic_oda_id = $request->ticaret_odasi;
             $ticariBilgi->ust_sektor = $request->ust_sektor;
 
-            $firma->ticari_bilgiler()->save($ticariBilgi);        
+            $firma->ticari_bilgiler()->save($ticariBilgi);
 
             $uretilenMarka = new \App\UretilenMarka();
             foreach($request->firmanin_urettigi_markalar as $urettigiMarka){
@@ -166,7 +166,7 @@ class FirmaController extends Controller
                 if(count($kayitKontrol) == 0){
                     $uretilenMarka->adi = $urettigiMarka;
                     $firma->uretilen_markalar()->save($uretilenMarka);
-                }    
+                }
             }
             if(count($request->faaliyet_sektorleri) > 1){
                 foreach($request->faaliyet_sektorleri as $sektor){
@@ -201,7 +201,7 @@ class FirmaController extends Controller
                     $firma->faaliyetler()->attach($faaliyetTur);
                 }
             }
-        
+
            DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -212,10 +212,10 @@ class FirmaController extends Controller
         //return redirect('firmaProfili/'.$firma->id);
     }
     public function kaliteAdd(Request $request){
-        
+
         DB::beginTransaction();
 
-            try {  
+            try {
                 $firma = Firma::find($request->id);
                 $firma->kalite_belgeleri()->attach($request->kalite_belgeleri,['belge_no'=>$request->belge_no]);
 
@@ -228,11 +228,11 @@ class FirmaController extends Controller
             }
         //return redirect('firmaProfili/'.$firma->id);
     }
-    public function referansAdd(Request $request){  
-        
+    public function referansAdd(Request $request){
+
     DB::beginTransaction();
 
-        try {    
+        try {
             $firma = Firma::find($request->id);
             $firma_referans = $firma->firma_referanslar ?: new \App\FirmaReferans();
                 if ($firma->firma_referanslar) {
@@ -251,7 +251,7 @@ class FirmaController extends Controller
             $firmaReferans->yetkili_email=$request->yetkili_kisi_email;
             $firmaReferans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
             $firma->firma_referanslar()->save( $firmaReferans);
-            
+
            DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -261,12 +261,12 @@ class FirmaController extends Controller
         }
         //return redirect('firmaProfili/'.$firma->id);
     }
-    public function referansUpdate(Request $request){ 
+    public function referansUpdate(Request $request){
      DB::beginTransaction();
 
-        try {   
-        
-        $referans = \App\FirmaReferans::find($request->ref_id);      
+        try {
+
+        $referans = \App\FirmaReferans::find($request->ref_id);
         $referans->ref_turu=Str::title(strtolower($request->ref_turu));
         $referans->adi=Str::title(strtolower($request->ref_firma_adi));
         $referans->is_adi=Str::title(strtolower($request->yapılan_isin_adi));
@@ -277,7 +277,7 @@ class FirmaController extends Controller
         $referans->yetkili_email=$request->yetkili_kisi_email;
         $referans->yetkili_telefon=Str::title(strtolower($request->yetkili_kisi_telefon));
         $referans->save( );
-        
+
            DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -287,15 +287,15 @@ class FirmaController extends Controller
         }
         return redirect('firmaProfili/'.$referans->firma_id);
     }
-     public function kaliteGuncelle(Request $request){    
+     public function kaliteGuncelle(Request $request){
      DB::beginTransaction();
 
-        try {   
+        try {
         $firma = \App\Firma::find($request->id);
         $firma->kalite_belgeleri()->attach($request->kalite_belgeleri,['belge_no'=>$request->belge_no]);
         $firma->save();
-        
-        
+
+
            DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -303,12 +303,12 @@ class FirmaController extends Controller
             DB::rollback();
             return Response::json($error);
         }
-        
+
         //return redirect('firmaProfili/'.$kalite->firma_kalite_belgeleri->$firma_id);
     }
-    public function brosurUpdate(Request $request,$id){    
+    public function brosurUpdate(Request $request,$id){
         $file = $request->file('yolu');
-        
+
         // getting all of the post data
         $file = array('yolu' => $request->file('yolu'));
         // setting up rules
@@ -326,7 +326,7 @@ class FirmaController extends Controller
                 $extension = $request->file('yolu')->getClientOriginalExtension(); // getting image extension
                 $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
 
-                
+
                 $oldName = $brosur->yolu;
                 $brosur->yolu=$fileName;
                 $brosur->adi=Str::title(strtolower($request->brosur_adi));
@@ -346,37 +346,37 @@ class FirmaController extends Controller
         }
     }
     public function calisanGunleriAdd(Request $request){
-        
+
      DB::beginTransaction();
 
-        try {   
+        try {
         $firma = Firma::find($request->id);
          foreach($request->firma_departmanları as $departman){
             $kayitKontrol = \App\FirmaDepartman::where('firma_id',$firma->id)->where('departman_id',$departman)->get();
             if(count($kayitKontrol) == 0){
                 $firma->departmanlar()->attach($departman);
-            }  
+            }
         }
         $firma_calisan = $firma->firma_calisma_bilgileri ?: new \App\FirmaCalismaBilgisi();
         $firma_calisan->calisma_gunleri_id=$request->calisma_gunleri;
         $firma_calisan->calisma_saatleri=Str::title(strtolower($request->calisma_saatleri));
-        
-      
+
+
         if(count($request->firma_calisma_profili)== 2){
-            
+
              $firma_calisan->calisan_profili = 3;
-            
+
         }
         else {
               foreach($request->firma_calisma_profili as $calisan){
-                  
+
                $firma_calisan->calisan_profili = $calisan;
               }
-            
+
         }
         $firma_calisan->calisan_sayisi=Str::title(strtolower($request->calisma_sayisi));
         $firma->firma_calisma_bilgileri()->save( $firma_calisan);
-         
+
             DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -387,11 +387,11 @@ class FirmaController extends Controller
         //return redirect('firmaProfili/'.$firma->id);
     }
     public function bilgilendirmeTercihiAdd(Request $request){
-        
+
     DB::beginTransaction();
 
-        try {     
-        
+        try {
+
             $firma = Firma::find($request->id);
             foreach($request->bilgilendirme_tercihi as $bilgilendirme){
                 if($bilgilendirme == "Sms"){
@@ -440,12 +440,12 @@ class FirmaController extends Controller
 
                 $firma = Firma::find($request->id);
                 $firma_brosur= new \App\FirmaBrosur();
-                
+
                 /*if ($firma->firma_brosurler() != " "){
                     $oldName=$firma->firma_brosurler()->first()->yolu ;
-     
+
                 }*/
-                
+
                 $firma_brosur->yolu = $fileName;
                 $firma_brosur->adi=Str::title(strtolower($request->brosur_adi));
                 $firma->firma_brosurler()->save($firma_brosur);
@@ -454,7 +454,7 @@ class FirmaController extends Controller
                 // sending back with message
                 Session::flash('success', 'Upload successfully');
                 /*if ($firma->firma_brosurler){
-                    
+
                 File::delete("brosur/$oldName");
                 }*/
                 return Redirect::to('firmaProfili/'.$firma->id);
@@ -465,14 +465,13 @@ class FirmaController extends Controller
                 return Redirect::to('firmaProfili/'.$firma->id)->withInput()->withErrors($validator);
             }
         }
-         
+
      }
     public function showFirma($id){
-        
 
         $firma = Firma::find($id);
         if (Gate::denies('show', $firma)) {
-              return Redirect::to('/');
+              redirect()->intended($this->redirectPath());
         }
         //$this->authorize('show',$firma);
         $iller = Il::all();
@@ -487,49 +486,49 @@ class FirmaController extends Controller
         
         return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)->with('calisma_günleri',$calisma_günleri);
     }
-    public function deleteKalite(Request $request,$id){  
-        
+    public function deleteKalite(Request $request,$id){
+
          $Firmakaliter = \App\FirmaKaliteBelgesi::where('belge_id',$id)->where('firma_id',$request->firma_id)->get();
          foreach ($Firmakaliter as $Firmakalite){}
-         $kalite = \App\FirmaKaliteBelgesi::find($Firmakalite->id);    
+         $kalite = \App\FirmaKaliteBelgesi::find($Firmakalite->id);
          $kalite->delete();
-         
+
         return redirect('firmaProfili/'.$request->firma_id);
     }
-      public function deleteReferans(Request $request,$id){  
-        
+      public function deleteReferans(Request $request,$id){
+
          $referans = \App\FirmaReferans::find($id);
-         
+
          $referans->delete();
-         
+
         return redirect('firmaProfili/'.$request->firma_id);
     }
-     public function deleteBrosur(Request $request,$id){  
-        
+     public function deleteBrosur(Request $request,$id){
+
          $brosur = \App\FirmaBrosur::find($id);
-         
+
          File::delete("brosur/$brosur->yolu");
          $brosur->delete();
-         
+
         return redirect('firmaProfili/'.$request->firma_id);
     }
-     
-     
+
+
     //eski fonksiyonlar...suan kullanılmıyorlar
     public function firma(Request $request){
         $firma = new Firma();
         $firma->adi = $request->firmaAdi;
         $firma->save();
-        
+
         foreach($request->sektor as $sektor)
             $firma->sektorler()->attach($sektor);
         return redirect('/');
-    } 
+    }
     public function index($id){
         $firmalar = Firma::find($id);
         $sektorler = Sektor::all();
 
         return view('firmaKaydet')->with('firmalar',$firmalar)->with('sektorler', $sektorler);
     }
-    
+
 }

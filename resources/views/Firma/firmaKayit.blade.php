@@ -1,8 +1,8 @@
 @extends('layouts.app')
-<?php use App\IletisimBilgi; 
+<?php use App\IletisimBilgi;
 use App\Il;?>
 @section('content')
-<head>    
+<head>
     <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
     <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
     <style>
@@ -55,7 +55,7 @@ use App\Il;?>
                 text-align: center;
                 text-decoration: none;
             }
-            .search_icon {   
+            .search_icon {
                 background-color: white;
                 background-image: url("{{asset('images/src.png')}}");
                 background-repeat: no-repeat;
@@ -72,7 +72,7 @@ use App\Il;?>
             <div  class="col-lg-6">
                 <div  class="panel-group" id="accordion">
                     <div class="panel panel-default">
-                        <div class="panel-body"> 
+                        <div class="panel-body">
                             {!! Form::open(array('id'=>'firma_kayit','url'=>'form' ,'name'=>'kayit','method' => 'POST','files'=>true))!!}
                             <div class="row">
                                 <h5><strong>Firma Bilgileri</strong></h5>
@@ -80,22 +80,22 @@ use App\Il;?>
                                     <div class="form-group">
                                         <div class="col-sm-3">
                                         {!! Form::label('Firma adı') !!}
-                                        </div> 
-                                        <div class="col-sm-1">:</div> 
+                                        </div>
+                                        <div class="col-sm-1">:</div>
                                         <div class="col-sm-8">
-                                        {!! Form::text('firma_adi', null, 
-                                        array('class'=>'form-control', 
+                                        {!! Form::text('firma_adi', null,
+                                        array('class'=>'form-control',
                                         'placeholder'=>'Firma adı',
-                                        'data-validation'=>'length', 
-                                        'data-validation-length'=>'min1', 
+                                        'data-validation'=>'length',
+                                        'data-validation-length'=>'min1',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group ">
                                         <div class="col-sm-3">
                                         {!! Form::label('Sektörler') !!}
-                                        </div> 
-                                        <div class="col-sm-1">:</div> 
+                                        </div>
+                                        <div class="col-sm-1">:</div>
                                         <div class="col-sm-8">
                                           <select class="form-control deneme"   name="sektor_id[]" id="custom-headers" multiple='multiple' >
                                                 <?php $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();  ?>
@@ -103,40 +103,54 @@ use App\Il;?>
                                                 <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                                                 @endforeach
                                           </select>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="form-group">
                                           <div class="col-sm-3">
                                         {!! Form::label('Telefon') !!}
                                           </div>
-                                        <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-1">:</div>
                                         <div class="col-sm-8">
-                                        {!! Form::text('telefon', null, 
-                                        array('class'=>'form-control', 
+                                        {!! Form::text('telefon', null,
+                                        array('class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
-                                        'data-validation'=>'length ', 
-                                        'data-validation-length'=>'min2', 
+                                        'data-validation'=>'length ',
+                                        'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                          <div class="col-sm-3">
+                                            {!! Form::label('Firma E-posta') !!}
+                                         </div>
+                                        <div class="col-sm-1">:</div>
+                                        <div class="col-sm-8">
+                                            {!! Form::email('email', null,
+                                            array('id'=>'email',
+                                            'class'=>'form-control',
+                                            'placeholder'=>'E-postanız',
+                                            'data-validation'=>'email',
+                                             'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-3">
                                         <label for="">İl</label>
                                         </div>
-                                        <div class="col-sm-1">:</div> 
+                                        <div class="col-sm-1">:</div>
                                             <div class="col-sm-8">
-                                                <select class="form-control input-sm" name="il_id" id="il_id" data-validation="required" 
+                                                <select class="form-control input-sm" name="il_id" id="il_id" data-validation="required"
                                                       data-validation-error-msg="Lütfen bu alanı doldurunuz!" >
                                                     <option  value="Seçiniz" selected disabled>Seçiniz</option>
-                                                    
-                                                    <?php $iller_query= DB::select(DB::raw("SELECT * 
-                                                            FROM  `iller` 
+
+                                                    <?php $iller_query= DB::select(DB::raw("SELECT *
+                                                            FROM  `iller`
                                                             WHERE adi = 'İstanbul'
                                                             OR adi =  'İzmir'
                                                             OR adi =  'Ankara'
-                                                            UNION 
-                                                            SELECT * 
+                                                            UNION
+                                                            SELECT *
                                                             FROM iller"));
                                                             ?>
                                                     @foreach($iller_query as $il)
@@ -152,24 +166,24 @@ use App\Il;?>
                                     <div class="col-sm-3">
                                         <label for="">İlçe</label>
                                     </div>
-                                    <div class="col-sm-1">:</div> 
+                                    <div class="col-sm-1">:</div>
                                         <div class="col-sm-8">
-                                            <select class="form-control input-sm" name="ilce_id" id="ilce_id" data-validation="required" 
+                                            <select class="form-control input-sm" name="ilce_id" id="ilce_id" data-validation="required"
                                                                             data-validation-error-msg="Lütfen bu alanı dolduurnuz!">
                                               <option selected disabled>Seçiniz</option>
-                                            </select> 
+                                            </select>
                                     </div>
                                 </div>
                                     <div class="form-group">
-                                 <div class="col-sm-3">   
+                                 <div class="col-sm-3">
                                     <label for="">Semt</label>
                                  </div>
-                                  <div class="col-sm-1">:</div> 
+                                  <div class="col-sm-1">:</div>
                                         <div class="col-sm-8">
-                                            <select class="form-control input-sm" name="semt_id" id="semt_id"  data-validation="required" 
+                                            <select class="form-control input-sm" name="semt_id" id="semt_id"  data-validation="required"
                                                    data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                <option selected disabled>Seçiniz</option>   
-                                            </select> 
+                                                <option selected disabled>Seçiniz</option>
+                                            </select>
                                         </div>
                                 </div>
                             </div>
@@ -178,92 +192,78 @@ use App\Il;?>
                             <h5><strong>Kişisel  Bilgiler</strong></h5>
                             <hr>
                                 <div class="form-group">
-                                <div class="col-sm-3">   
+                                <div class="col-sm-3">
                                     {!! Form::label('Adınız') !!}
                                 </div>
-                                 <div class="col-sm-1">:</div> 
+                                 <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                        {!! Form::text('adi', null, 
-                                        array('class'=>'form-control', 
+                                        {!! Form::text('adi', null,
+                                        array('class'=>'form-control',
                                         'placeholder'=>'Adınız',
-                                        'data-validation'=>'length', 
-                                        'data-validation-length'=>'min2', 
+                                        'data-validation'=>'length',
+                                        'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-3"> 
+                                    <div class="col-sm-3">
                                     {!! Form::label('Soyadınız') !!}
                                     </div>
-                                     <div class="col-sm-1">:</div> 
+                                     <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                        {!! Form::text('soyadi', null, 
-                                        array('class'=>'form-control', 
+                                        {!! Form::text('soyadi', null,
+                                        array('class'=>'form-control',
                                         'placeholder'=>'Soyadınız',
-                                        'data-validation'=>'length', 
-                                        'data-validation-length'=>'min2', 
+                                        'data-validation'=>'length',
+                                        'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                  <div class="col-sm-3"> 
+                                  <div class="col-sm-3">
                                         {!! Form::label('unvan') !!}
                                    </div>
-                                     <div class="col-sm-1">:</div> 
+                                     <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                        {!! Form::text('unvan', null, 
-                                        array('class'=>'form-control', 
+                                        {!! Form::text('unvan', null,
+                                        array('class'=>'form-control',
                                         'placeholder'=>'Ünvanınız',
-                                        'data-validation'=>'length', 
+                                        'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'LÜtfen bu alanı doldurunuz!')) !!}
                                     </div>
                                 </div>
+
                                 <div class="form-group">
-                                      <div class="col-sm-3"> 
-                                        {!! Form::label('E-posta') !!}
-                                     </div>
-                                    <div class="col-sm-1">:</div> 
-                                    <div class="col-sm-8">
-                                        {!! Form::email('email', null, 
-                                        array('id'=>'email',
-                                        'class'=>'form-control', 
-                                        'placeholder'=>'E-postanız',
-                                        'onFocusout'=>'emailControl()',
-                                        'data-validation'=>'email',
-                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-3"> 
+                                    <div class="col-sm-3">
                                          {!! Form::label('Telefon') !!}
                                     </div>
-                                    <div class="col-sm-1">:</div> 
+                                    <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                        {!! Form::text('telefonkisisel', null, 
-                                        array( 'class'=>'form-control', 
+                                        {!! Form::text('telefonkisisel', null,
+                                        array( 'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
-                                        'data-validation'=>'length', 
-                                        'data-validation-length'=>'3-17', 
+                                        'data-validation'=>'length',
+                                        'data-validation-length'=>'3-17',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                                      </div>
                                 </div>
                             </div>
-                            <br> 
+                            <br>
                             <div class="row">
                             <h5><strong>Giriş Bilgilerinizi Oluşturun</strong></h5>
                             <hr>
                             <div class="form-group">
-                                  <div class="col-sm-3"> 
+                                  <div class="col-sm-3">
                                     {!! Form::label(' Kullanıcı Adı') !!}
                                   </div>
-                                  <div class="col-sm-1">:</div> 
+                                  <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                        {!! Form::text('kullanici_adi', null, 
-                                        array('class'=>'form-control', 
+                                        {!! Form::text('kullanici_adi', null,
+                                        array('class'=>'form-control',
                                         'placeholder'=>'Kullanıcı Adı',
-                                        'data-validation'=>'length', 
-                                        'data-validation-length'=>'min2', 
+                                        'data-validation'=>'length',
+                                        'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!' )) !!}
                                     </div>
                                 </div>
@@ -271,10 +271,10 @@ use App\Il;?>
                                     <div class="col-sm-3">
                                     {!! Form::label('Email') !!}
                                     </div>
-                                       <div class="col-sm-1">:</div> 
+                                       <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
                                         {!! Form::email('email_giris', null,
-                                         array('id'=>'email_giris','class'=>'form-control email', 
+                                         array('id'=>'email_giris','class'=>'form-control email',
                                          'placeholder'=>'E-postanız' ,
                                          'onFocusout'=>'email_girisControl()',
                                           'data-validation'=>'email' ,
@@ -285,25 +285,25 @@ use App\Il;?>
                                     <div class="col-sm-3">
                                     {!! Form::label('Şifre') !!}
                                      </div>
-                                    <div class="col-sm-1">:</div> 
+                                    <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                         <input type="password" name="password" id="password" class="form-control" placeholder='Şifre' onkeyup="CheckPasswordStrength(this.value)"data-validation="required" 
+                                         <input type="password" name="password" id="password" class="form-control" placeholder='Şifre' onkeyup="CheckPasswordStrength(this.value)"data-validation="required"
                                                    data-validation-error-msg="Lütfen bu alanı doldurunuz!" />
                                          <span id="password_strength"></span>
                                          <span id="passwordmsg"></span>
-                                        
+
                                      </div>
                                 </div>
                                 <div class="form-group">
                                 <div class="col-sm-3">
                                     {!! Form::label('Şifre Tekrar') !!}
                                     </div>
-                                    <div class="col-sm-1">:</div> 
+                                    <div class="col-sm-1">:</div>
                                     <div class="col-sm-8">
-                                        
-                                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder='Şifre Tekrar'  onfocusout="checkPass(); return false;" data-validation="required" 
+
+                                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder='Şifre Tekrar'  onfocusout="checkPass(); return false;" data-validation="required"
                                                    data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
-                                   
+
                                         <span id="confirmMessage" class="confirmMessage"></span>
                                     </div>
                                 </div>
@@ -317,7 +317,7 @@ use App\Il;?>
                             </div>
                             {!! Form::close() !!}
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
@@ -325,9 +325,9 @@ use App\Il;?>
             <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
             <div class="col-lg-6">
-            </div> 
+            </div>
     </div>
-        
+
         <div id="mesaj" class="popup">
             <span class="button b-close"><span>X</span></span>
             <h2 style="color:red"> Üzgünüz.. !!!</h2>
@@ -374,54 +374,54 @@ use App\Il;?>
         },
         afterSelect: function(values){
           count++;
-         
+
           if(count>5){
               $('#custom-headers').multiSelect('deselect', values);
           }
           this.qs1.cache();
           this.qs2.cache();
-          
-         
+
+
         },
         afterDeselect: function(){
           count--;
           this.qs1.cache();
           this.qs2.cache();
         }
-        
-        
+
+
     });
-   
+
     function CheckPasswordStrength(password) {
         var password_strength = document.getElementById("password_strength");
- 
+
         //TextBox left blank.
         if (password.length == 0) {
             password_strength.innerHTML = "";
             return;
         }
- 
+
         //Regular Expressions.
         var regex = new Array();
         regex.push("[A-Z]"); //Uppercase Alphabet.
         regex.push("[a-z]"); //Lowercase Alphabet.
         regex.push("[0-9]"); //Digit.
         regex.push("[$@$!%*#?&]"); //Special Character.
- 
+
         var passed = 0;
- 
+
         //Validate for each Regular Expression.
         for (var i = 0; i < regex.length; i++) {
             if (new RegExp(regex[i]).test(password)) {
                 passed++;
             }
         }
- 
+
         //Validate for length of Password.
         if (passed > 6 && password.length > 12) {
             passed++;
         }
- 
+
         //Display status.
         var color = "";
         var strength = "";
@@ -450,7 +450,7 @@ use App\Il;?>
     }
   function checkPass()
 {
-   
+
     //Store the password field objects into variables ...
     var password = document.getElementById('password');
     var password_confirmation = document.getElementById('password_confirmation');
@@ -459,12 +459,12 @@ use App\Il;?>
     //Set the colors we will be using ...
     var goodColor = "#66cc66";
     var badColor = "#ff6666";
-    //Compare the values in the password field 
+    //Compare the values in the password field
     //and the confirmation field
     if(password.value == password_confirmation.value){
-        //The passwords match. 
+        //The passwords match.
         //Set the color to the good color and inform
-        //the user that they have entered the correct password 
+        //the user that they have entered the correct password
         password_confirmation.style.backgroundColor = goodColor;
         message.style.color = goodColor;
         message.innerHTML = "Şifre Eşleşti"
@@ -476,8 +476,8 @@ use App\Il;?>
         message.style.color = badColor;
         message.innerHTML = "Şifre Eşleşmedi"
     }
-}  
-    
+}
+
  $("#firma_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
@@ -491,7 +491,7 @@ use App\Il;?>
                 url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus, jqXHR) 
+                success:function(data, textStatus, jqXHR)
                 {
                     console.log(data);
                     $('.ajax-loader').css("visibility", "hidden");
@@ -500,7 +500,7 @@ use App\Il;?>
                             speed: 650,
                             transition: 'slideIn',
                             transitionClose: 'slideBack',
-                            autoClose: 5000 
+                            autoClose: 5000
                         });
                         setTimeout(function(){ location.href="{{asset('firmaKayit')}}"}, 5000);
                     }
@@ -509,36 +509,36 @@ use App\Il;?>
                             speed: 650,
                             transition: 'slideIn',
                             transitionClose: 'slideBack',
-                            autoClose: 5000 
+                            autoClose: 5000
                         });
-                        
+
                         setTimeout(function(){ location.href="{{asset('/')}}"}, 5000);
                     }
                         e.preventDefault();
                 },
-                error: function(jqXHR, textStatus, errorThrown) 
+                error: function(jqXHR, textStatus, errorThrown)
                 {
-                    alert(textStatus + "," + errorThrown);     
+                    alert(textStatus + "," + errorThrown);
                 }
             });
             e.preventDefault(); //STOP default action
         });
-        
+
     $.validate({
-        
+
         modules : 'location, date, security, file',
         onModulesLoaded : function() {
           $('#country').suggestCountry();
         }
       });
     $('#presentation').restrictLength( $('#pres-max-length') );
-    
-    var email; 
+
+    var email;
     var email_giris;
     function emailControl(){
         email = $('#email').val();
         emailGet();
-    } 
+    }
     function email_girisControl(){
          email_giris = $('#email_giris').val();
          email_girisGet();
@@ -558,11 +558,11 @@ use App\Il;?>
                                 speed: 650,
                                 transition: 'slideIn',
                                 transitionClose: 'slideBack',
-                                autoClose: 5000 
+                                autoClose: 5000
                             });
 
                     $('#email_giris').val("");
-                }   
+                }
              }
         });
     }
@@ -579,14 +579,14 @@ use App\Il;?>
                                 speed: 650,
                                 transition: 'slideIn',
                                 transitionClose: 'slideBack',
-                                autoClose: 5000 
+                                autoClose: 5000
                             });
 
                     $('#email').val("");
-                }   
+                }
              }
         });
-    } 
+    }
     $('#il_id').on('change', function (e) {
         console.log(e);
 
@@ -609,7 +609,7 @@ use App\Il;?>
         }).done(function(data){
 
               $('.ajax-loader').css("visibility", "hidden");
-            }).fail(function(){ 
+            }).fail(function(){
                alert('İller Yüklenemiyor !!!  ');
             });
     });
@@ -635,7 +635,7 @@ use App\Il;?>
         }).done(function(data){
 
               $('.ajax-loader').css("visibility", "hidden");
-            }).fail(function(){ 
+            }).fail(function(){
                alert('İller Yüklenemiyor !!!  ');
             });
     });

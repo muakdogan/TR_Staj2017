@@ -11,7 +11,7 @@ class FirmaKullanici extends Model
     public $timestamps = false;
     public function roller()
     {
-        return $this->belongsTo('App\Rol')->withPivot('rol_id', 'id');
+        return $this->belongsTo('App\Rol', 'rol_id', 'id');
     }
     public function mal_teklifler()
     {
@@ -29,5 +29,5 @@ class FirmaKullanici extends Model
     {
         return $this->hasMany('App\YapimIsiTeklif', 'firma_kullanicilar_id', 'id');
     }
-   
+
 }

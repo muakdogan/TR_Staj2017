@@ -59,7 +59,7 @@ class Firma extends Model
     public function firma_calisma_bilgileri()
     {
         return $this->hasOne('App\FirmaCalismaBilgisi', 'firma_id', 'id');
-    }    
+    }
     public function adresler()
     {
         return $this->hasMany('App\Adres', 'firma_id', 'id');
@@ -70,7 +70,7 @@ class Firma extends Model
     }
     public function kullanicilar()
     {
-        return $this->belongsToMany('App\Kullanici','firma_kullanicilar', 'firma_id','kullanici_id');
+        return $this->belongsToMany('App\Kullanici','firma_kullanicilar', 'firma_id','kullanici_id')->withPivot('rol_id', 'unvan');
     }
      public function ilanlar()
     {
@@ -108,6 +108,6 @@ class Firma extends Model
     {
         return $this->hasMany('App\Puanlama', 'yorum_yapan_firma_id', 'id');
     }
-    
-    
+
+
 }
