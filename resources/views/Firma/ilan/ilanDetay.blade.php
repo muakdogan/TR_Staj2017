@@ -57,7 +57,7 @@
         text-align: center;
         color: white;
     }
-    point { 
+    point {
         display: block;
         font-size: 1.49em;
         margin-top: 0.1em;
@@ -227,27 +227,27 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     -moz-animation:2s blinker linear infinite;
     }
 
-    @-moz-keyframes blinker {  
+    @-moz-keyframes blinker {
      0% { opacity: 1.0; }
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
 
-    @-webkit-keyframes blinker {  
+    @-webkit-keyframes blinker {
      0% { opacity: 1.0; }
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
 
-    @keyframes blinker {  
+    @keyframes blinker {
      0% { opacity: 1.0; }
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
     .test + .tooltip > .tooltip-inner {
-        background-color: #73AD21; 
-        color: #FFFFFF; 
-        border: 1px solid green; 
+        background-color: #73AD21;
+        color: #FFFFFF;
+        border: 1px solid green;
         padding: 10px;
         font-size: 12px;
      }
@@ -257,18 +257,18 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
 </style>
 <body>
-    
+
     <div class="container">
         <br>
         <br>
-        @include('layouts.alt_menu') 
+        @include('layouts.alt_menu')
         <div class="ajax-loader">
             <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
         </div>
         <div class="panel panel-warning">
             <div class="panel-heading"><h4><strong>{{$ilan->adi}}</strong> ilanı </h4></div>
             <div class="panel-body">
-                <div id="exTab2" class="col-lg-8">	
+                <div id="exTab2" class="col-lg-8">
                     <ul class="nav nav-tabs">
                         <li class="active"><a  href="#1" data-toggle="tab">İlan Bilgileri</a>
                         </li>
@@ -280,9 +280,9 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                     <div class="tab-content ">
                         <div class="tab-pane active" id="1">
                             <table class="table" >
-                                
+
                             <?php $firma = $ilan->firmalar; ?>
-                           
+
                              <tr>
                                  <td>Firma Adı:</td>
                                  <?php
@@ -295,7 +295,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                   <td>{{$firma->adi}}</td>
                                  <?php
                                  }
-                                 else if($firma->goster=="Gizle"){    
+                                 else if($firma->goster=="Gizle"){
                                  ?>
                                  <td>{{$firma->adi}}(GİZLİ)</td>
                                  <?php
@@ -397,7 +397,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                                  <td>Teslim Yeri:</td>
                                  <?php
                                  if ($ilan->teslim_yeri_satici_firma == NULL) {
-                                     ?>  
+                                     ?>
 
 
                                      <?php
@@ -429,24 +429,24 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             <?php $firma=$ilan->firmalar;?>
                                 <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
                                 <hr>
-                            @if(session()->get('firma_id') != $firma->id ) 
+                            @if(session()->get('firma_id') != $firma->id )
                                 @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
                                        @include('Firma.ilan.malTeklif')
-                                @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)       
+                                @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)
                                        @include('Firma.ilan.hizmetTeklif')
                                 @elseif($ilan->ilan_turu == 3)
                                        @include('Firma.ilan.yapimIsiTeklif')
                                 @else
                                        @include('Firma.ilan.goturuBedelTeklif')
-                                @endif       
-                            @endif     
-                        </div> 
+                                @endif
+                            @endif
+                        </div>
                         <div class="tab-pane kismiRekabet" id="3">
                             @if($ilan->kismi_fiyat == 1)
                                 @include('Firma.ilan.kismiRekabet')
-                            @endif    
+                            @endif
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -466,13 +466,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                             @include('Firma.ilan.rekabet')
                         </div>
                     </div>
-                </div>    
+                </div>
             </div>
         </div>
     </div>
-    
+
      <?php $j=0;$k=0;
-          $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+          $kullanici = App\Kullanici::find(session()->get('kullanici_id'));
       ?>
         <div class="modal fade" id="myModalSirketListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -486,20 +486,20 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                     <hr>
                     <div id="radioDiv">
                         @foreach($kullanici->firmalar as $kullanicifirma)
-                        <input type="radio" name="firmaSec" value="{{$kullanicifirma->id}}"> {{$kullanicifirma->adi}}<br>   
+                        <input type="radio" name="firmaSec" value="{{$kullanicifirma->id}}"> {{$kullanicifirma->adi}}<br>
                         @endforeach
                     </div>
                     <button  style='float:right' type='button' class="firmaButton" class='btn btn-info'>Firma Seçiniz</button><br><br>
                 </div>
-                <div class="modal-footer">                                                            
+                <div class="modal-footer">
                 </div>
              </div>
             </div>
         </div>
         <br>
-        <br>                                     
-       <hr>     
-        
+        <br>
+       <hr>
+
 </body>
 <script src="{{asset('js/sortAnimation.js')}}"></script>
 <script src="{{asset('js/jquery.turkLirasi.min.js')}}"></script>
@@ -520,7 +520,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     		if (!updating) {
             updating = true;
             $("html").trigger('startUpdate');
-            
+
            sortTable(table, function() {
                 updating = false;
                 $("html").trigger('stopUpdate');
@@ -563,16 +563,16 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     var inverse = false;
 
     function compareCells(a, b) {
-    
+
         var b = $.text([b]);
         var a = $.text([a]);
-       
+
         var arrA = a.split(' ');
         var arrB = b.split(' ');
-	
+
             a = arrA[0];
             b = arrB[0];
-     
+
         if (isNumber(a) && isNumber(b)) {
             return parseInt(b) - parseInt(a);
         } else {
@@ -647,7 +647,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             return $(this).index() === idIndex;
         });
 
-        if (!$(startList).compare(endList)) { //has the order actually changed?        
+        if (!$(startList).compare(endList)) { //has the order actually changed?
             makeClickable(newTable);
             updateRank(newTable);
             if (!callback) currentTable.rankingTableUpdate(newTable);
@@ -662,7 +662,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     }
 
     // Do the work!
-    
+
     $('.kdv').on('input', function() {
         var kdv=parseFloat(this.value);
         var result;
@@ -673,10 +673,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 miktar = parseFloat($(this).parent().prev().prev().text());
             }else if(ilan_turu === 2 && sozlesme_turu == 0){  ///hizmet
                 miktar = parseFloat($(this).parent().prev().prev().text());
-            }else if(ilan_turu === 3){     //yapim işi 
+            }else if(ilan_turu === 3){     //yapim işi
                 miktar = parseFloat($(this).parent().prev().prev().text());
             }else{
-                
+
             }
             fiyat=parseFloat($(this).parent().next().children().val());
             if(isNaN(fiyat)) {
@@ -716,7 +716,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             var parabirimi = "{{$ilan->para_birimleri->adi}}";
             var symbolP;
             console.log(parabirimi);
-            if(parabirimi.indexOf("Lirası") !== -1){  
+            if(parabirimi.indexOf("Lirası") !== -1){
                 symbolP = String.fromCharCode(8378);
             }
             else if(parabirimi === "Dolar"){
@@ -731,7 +731,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             voteClick($('#table'));
             $("#toplamFiyat").val(toplamFiyat.toFixed(2));
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
-        }  
+        }
     });
 
     $('.fiyat').on('input', function() {
@@ -747,10 +747,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 miktar = parseFloat($(this).parent().prev().prev().prev().text());
             }else if(ilan_turu === 2 && sozlesme_turu == 0){  ///hizmet
                 miktar = parseFloat($(this).parent().prev().prev().prev().text());
-            }else if(ilan_turu === 3){     //yapim işi 
+            }else if(ilan_turu === 3){     //yapim işi
                 miktar = parseFloat($(this).parent().prev().prev().prev().text());
             }else{
-                
+
             }
             kdv=parseFloat($(this).parent().prev().children().val());
             if(isNaN(fiyat)) {
@@ -767,7 +767,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             kdvsizToplamFiyat=0;
             var y = 0;
             $(".kdvsizFiyat").each(function(){
-                
+
                 var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
                 var n = new Number($(this).val());
                 if(n == 0){
@@ -791,7 +791,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             }
             var parabirimi = "{{$ilan->para_birimleri->adi}}";
             var symbolP;
-            if(parabirimi.indexOf("Lirası") !== -1){  
+            if(parabirimi.indexOf("Lirası") !== -1){
                 symbolP = String.fromCharCode(8378);
             }
             else if(parabirimi === "Dolar"){
@@ -808,13 +808,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
         }
     });
-    
+
 });
     $("#turkLirasi").turkLirasi();
-    
+
     $('#iskontoVal').on('input',function(){
         var iskontoOrani = parseInt($(this).val());
-        
+
         if(isNaN(iskontoOrani)) {
             iskontoOrani = 0;
         }
@@ -827,7 +827,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         $("#iskontoluToplamFiyatKdvli").val(iskontoluToplamFiyatKdvli.toFixed(2));
         $("#iskontoluToplamFiyatKdvsiz").val(iskontoluToplamFiyatKdvsiz.toFixed(2));
     });
-    
+
     $('.teklifGonder').on('click', function() {
         alert('Bu ilana teklif vermek istediğinize emin misiniz ? ');
     });
@@ -840,7 +840,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             }).done(function(data){
                 $('#myModalSirketListe').modal('toggle');
                 location.reload();
-            }).fail(function(){ 
+            }).fail(function(){
                 alert('Yüklenemiyor !!!  ');
             });
     });
@@ -864,7 +864,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             }, 300);
         });
     })(jQuery);
-    
+
     $(document).ready(function() {
         var firmaId = "{{session()->get('firma_id')}}";
         if(firmaId === ""){
@@ -885,7 +885,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 canselIskontoVal();
             }
         });
-        
+
         $("#teklifForm").submit(function(e)
         {
             var postData = $(this).serialize();
@@ -900,27 +900,27 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus, jqXHR) 
+                success:function(data, textStatus, jqXHR)
                 {
                     $.ajax(
                         {
                             url : "{{asset('rekabet')}}" + ilan_id,
                             type: "GET",
-                            success:function(data, textStatus, jqXHR) 
+                            success:function(data, textStatus, jqXHR)
                             {
                                 $('.rekabet').html(data);
                                 $('.ajax-loader').css("visibility", "hidden");
                             },
-                            error: function(jqXHR, textStatus, errorThrown) 
+                            error: function(jqXHR, textStatus, errorThrown)
                             {
-                                alert(textStatus + "," + errorThrown);     
+                                alert(textStatus + "," + errorThrown);
                             }
                         });
                         e.preventDefault();
                 },
-                error: function(jqXHR, textStatus, errorThrown) 
+                error: function(jqXHR, textStatus, errorThrown)
                 {
-                    alert(textStatus + "," + errorThrown);     
+                    alert(textStatus + "," + errorThrown);
                 }
             });
             e.preventDefault(); //STOP default action
@@ -932,7 +932,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         $("#iskontoluToplamFiyatLabel").text("");
         $("#iskontoluToplamFiyatL").text("");
     }
-    
-    
+
+
 </script>
 @endsection
