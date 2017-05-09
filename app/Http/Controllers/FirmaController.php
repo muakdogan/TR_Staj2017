@@ -155,7 +155,7 @@ class FirmaController extends Controller
 
             $ticariBilgi = $firma->ticari_bilgiler ?: new \App\TicariBilgi();
             $ticariBilgi->tic_sicil_no = $request->ticaret_sicil_no;
-            $ticariBilgi->tic_oda_id = 1;//$request->ticaret_odasi;
+            $ticariBilgi->tic_oda_id = $request->ticaret_odasi;
             $ticariBilgi->ust_sektor = $request->ust_sektor;
 
             $firma->ticari_bilgiler()->save($ticariBilgi);
@@ -168,7 +168,7 @@ class FirmaController extends Controller
                     $firma->uretilen_markalar()->save($uretilenMarka);
                 }
             }
-            if(count($request->faaliyet_sektorleri) > 0){
+            if(count($request->faaliyet_sektorleri) > 1){
                 foreach($request->faaliyet_sektorleri as $sektor){
                     $kayitKontrol = \App\FirmaSektor::where('firma_id',$firma->id)->where('sektor_id',$sektor)->get();
                     if(count($kayitKontrol) == 0){
@@ -182,10 +182,19 @@ class FirmaController extends Controller
                     $firma->sektorler()->attach($request->faaliyet_sektorleri);
                 }
             }
-
-            /*foreach($request->firmanin_sattıgı_markalar as $markalar){
-            $firma->satilan_markalar()->attach($markalar);
-            }*/
+            if(count($request->firmanin_sattigi_markalar) > 1){
+                foreach($request->firmanin_sattigi_markalar as $markalar){
+                    $satilan = new \App\FirmaSatilanMarka();
+                    $satilan->firma_id = $firma->id;
+                    $satilan->satilan_marka_adi = $markalar;
+                    $satilan->save();
+                }
+            }else{
+                $satilan = new \App\FirmaSatilanMarka();
+                $satilan->firma_id = $firma->id;
+                $satilan->satilan_marka_adi = $request->firmanin_sattigi_markalar;
+                $satilan->save();
+            }    
             foreach($request->firma_faaliyet_turu as $faaliyetTur){
                 $kayitKontrol = \App\FirmaFaaliyet::where('firma_id',$firma->id)->where('faaliyet_id',$faaliyetTur)->get();
                 if(count($kayitKontrol) == 0){
@@ -471,12 +480,11 @@ class FirmaController extends Controller
         $ticaretodasi=  \App\TicaretOdasi::all();
         $ustsektor=  Sektor::all();
         $departmanlar=  \App\Departman::all();
-        $markalar=  \App\SatilanMarka::all();
         $faaliyetler= \App\Faaliyet::all();
         $kalite_belgeleri= \App\KaliteBelgesi::all();
         $calisma_günleri= \App\CalismaGunu::all();
-
-        return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)->with('markalar',$markalar)->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)->with('calisma_günleri',$calisma_günleri);
+        
+        return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)->with('calisma_günleri',$calisma_günleri);
     }
     public function deleteKalite(Request $request,$id){
 
