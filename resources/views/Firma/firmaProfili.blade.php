@@ -4,6 +4,14 @@
     use App\Ilce;
     use App\IletisimBilgisi;
     use App\Semt;
+    
+    $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
+                       if (!$firmaFatura) {
+                                   $firmaFatura = new Adres();
+                                   $firmaFatura->iller = new Il();
+                                   $firmaFatura->ilceler = new Ilce();
+                                   $firmaFatura->semtler = new Semt();
+                               }
 ?>
 @extends('layouts.app')
 @section('content')
@@ -605,17 +613,11 @@
                            <tr>
                                <td width="25%"><strong>Firma Ünvanı</strong></td>
                                <?php
-                               $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
+                               
                                if (!$firma->mali_bilgiler) {
                                    $firma->mali_bilgiler = new App\MaliBilgi();
                                    $firma->mali_bilgiler->vergi_daireleri = new App\VergiDairesi();
                                    $firma->sirket_turleri = new App\SirketTuru();
-                               }
-                               if (!$firmaFatura) {
-                                   $firmaFatura = new Adres();
-                                   $firmaFatura->iller = new Il();
-                                   $firmaFatura->ilceler = new Ilce();
-                                   $firmaFatura->semtler = new Semt();
                                }
                                ?>
                                <td width="75%"><strong>:</strong>{{$firma->mali_bilgiler->unvani}}</td>
@@ -676,7 +678,7 @@
                                        <label for="inputEmail3" class="col-sm-3 control-label">Fatura Adresi</label>
                                         <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                        <div class="col-sm-7">
-                                           <input type="text" class="form-control" id="fatura_adresi" name="fatura_adresi" placeholder="Fatura Adresi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                                           <input type="text" class="form-control" id="fatura_adresi" name="fatura_adresi" placeholder="Fatura Adresi" value="{{$firmaFatura->adres}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                        </div>
                                    </div>   
                                    <div class="form-group error">
@@ -797,13 +799,7 @@
                    <h4 class="panel-title">
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4"><img src="{{asset('images/tl.png')}}">&nbsp;<strong>Ticari Bilgiler</strong></a>
                        <?php
-                       $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
-                       if (!$firmaFatura) {
-                                   $firmaFatura = new Adres();
-                                   $firmaFatura->iller = new Il();
-                                   $firmaFatura->ilceler = new Ilce();
-                                   $firmaFatura->semtler = new Semt();
-                               }
+                       
                        if (!$firma->ticari_bilgiler) {
                            $firma->ticari_bilgiler = new App\TicariBilgi();
                            $firma->ticari_bilgiler->ticaret_odalari = new App\TicaretOdasi();
@@ -816,7 +812,6 @@
                            $firma->firma_sektorler->sektorler = new App\Sektor();
 
                            $firma->firma_satilan_markalar = new App\FirmaSatilanMarka();
-                           $firma->firma_satilan_markalar->satilan_markalar = new App\SatilanMarka();
 
                            $firma->firma_faaliyetler = new App\FirmaFaaliyet();
                            $firma->firma_faaliyetler->faaliyetler = new App\Faaliyet();
@@ -825,7 +820,7 @@
                            $firma->uretilen_markalar = new App\UretilenMarka();
                        }
                        ?>
-                       <button  style="float:right" id="btn-add-ticaribilgiler" name="btn-add-ticaribilgiler" class="btn btn-primary btn-xs">Ekle / Düzenle</button>
+                       <button  style="float:right" id="btn-add-ticaribilgiler" onclick="populateTicaretDD()" name="btn-add-ticaribilgiler" class="btn btn-primary btn-xs">Ekle / Düzenle</button>
                    </h4>
                </div>
 
@@ -886,9 +881,13 @@
                            </tr>
                            <tr>
                                <td><strong>Firmanın Sattığı Markalar</strong></td>
-                               <td id="sattıgı_id_td"><strong>:</strong>@foreach($firma->satilan_markalar as $satMarka)
-                                   {{$satMarka->adi}}
-                                   @endforeach
+                               <td id="sattıgı_id_td"><strong>:</strong>
+                                   <?php $satilanMarka = \App\FirmaSatilanMarka::where('firma_id', '=', $firma->id)->get(); ?>
+                                    @if(count($satilanMarka) > 1)
+                                        @foreach($firma->$satilanMarka as $satMarka)
+                                        {{$satMarka->satilan_marka_adi}}
+                                        @endforeach
+                                    @endif 
                                </td>
                            </tr>
                        </thead>
@@ -979,7 +978,7 @@
                                                @foreach($uretilenMarka as $markas)
                                                     <div><input type="text" id="firmanin_urettigi_markalar" name="firmanin_urettigi_markalar[]"  value="{{$markas->adi}}" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><a href="#" class="remove_field">Sil</a></div>
                                                @endforeach
-                                               <div><input type="text" id="firmanin_urettigi_markalar" name="firmanin_urettigi_markalar[]"  value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"></div>
+                                               
                                             </div>
                                        </div>
                                    </div>
@@ -988,9 +987,13 @@
                                         <label for="inputEmail3" class="col-sm-4 control-label">Firmanın Sattığı Markalari</label>
                                         <label for="inputTask" style="text-align: left"class="col-sm-1 control-label">:</label>
                                         <div class="col-sm-6">
-                                            @foreach($markalar as $marka)
-                                            <input type="checkbox" id="firmanin_sattiği_markalar"  name="firmanin_sattıgı_markalar[]" value="{{$marka->id}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" >{{$marka->adi}}
-                                            @endforeach
+                                            <div class="input_fields_sattigi_wrap">
+                                                <button  class="add_field_sattigi_button btn btn-danger">Ekle</button>
+                                                @foreach($satilanMarka as $markaSatilan)
+                                                    <div><input type="text" id="firmanin_sattigi_markalar"  name="firmanin_sattigi_markalar[]" value="{{$markaSatilan->adi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" ><a href="#" class="remove_field">Sil</a></div>
+                                                @endforeach
+                                                <div><input type="text" id="firmanin_sattigi_markalar"  name="firmanin_sattigi_markalar[]" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!" ><a href="#" class="remove_field">Sil</a></div>
+                                            </div>
                                         </div>
                                    </div>
                                    {!! Form::submit('Kaydet', array('url'=>'firmaProfili/ticaribilgi/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
@@ -2000,7 +2003,7 @@
         });
         
         $("#calisma_gunleri").val({{$firma->firma_calisma_bilgileri->calisma_gunleri_id}});
-        $("#ticaret_odasi").val({{$firma->ticari_bilgiler->tic_oda_id}});
+        
         $("#ust_sektor").val({{$firma->ticari_bilgiler->ust_sektor}});
         $('[data-toggle="tooltip"]').tooltip();   
         var arrayDepartman = new Array();
@@ -2024,7 +2027,21 @@
         $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
             e.preventDefault(); $(this).parent('div').remove(); x--;
         });
+        
+        var s=1;
+        var wrapper_sattigi         = $(".input_fields_sattigi_wrap"); //Fields wrapper
+        var add_button_sattigi      = $(".add_field_sattigi_button"); //Add button ID
+        $(add_button_sattigi).click(function(e){ //on add input button click
+            e.preventDefault();
+            if(s < max_fields){ //max input box allowed
+                s++; //text box increment
+                $(wrapper_sattigi).append('<div><input type="text" name="firmanin_sattigi_markalar_[]"/><a href="#" class="remove_field">Sil</a></div>'); //add input box
+            }
+        });
 
+        $(wrapper_sattigi).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        });
         $('.il_id').on('change', function (e) {
             var il_id = e.target.value;
             GetIlce(il_id,e.target.id);
@@ -2260,10 +2277,13 @@
         console.log($("#ilce_id").val({{$firmaAdres->ilceler->id}}));
         $("#semt_id").val({{$firmaAdres->semtler->id}});
     }
+    function populateTicaretDD(){
+        GetTicaret({{$firmaFatura->iller->id}});
+        $("#ticaret_odasi").val({{$firma->ticari_bilgiler->tic_oda_id}});
+    }
     function populateMaliDD(){
         GetIlce({{$firmaFatura->iller->id}},"mali_il_id");
         GetVergi({{$firmaFatura->iller->id}});
-        GetTicaret({{$firmaFatura->iller->id}});
         $("#mali_il_id").val({{$firmaFatura->iller->id}});
         $("#mali_ilce_id").val({{$firmaFatura->ilceler->id}});
         $("#sirket_turu").val({{$firma->sirket_turu}});
@@ -2644,8 +2664,8 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert("girdi");
                 alert(formURL);
+                alert(postData);
             
             $.ajax(
             {
