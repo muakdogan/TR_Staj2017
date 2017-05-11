@@ -85,8 +85,8 @@ class IlanController extends Controller
                 }
             }
             //$ilanlar->where('ilanlar.adi' ,$keyword )
-              //      ->Where('firmalar.adi',$keyword )->where('ilanlar.goster',1)
-                //    ->Where('ilanlar.firma_sektor',$sektor_id);
+            //->Where('firmalar.adi',$keyword )->where('ilanlar.goster',1)
+            //->Where('ilanlar.firma_sektor',$sektor_id);
         }
         if($il_id != NULL)
             {
@@ -99,7 +99,7 @@ class IlanController extends Controller
             $ilanlar->where('ilanlar.kapanma_tarihi','<=',$bit_tar);
         }
         if($sektorlerInput != NULL){
-            $ilanlar->whereIn('ilanlar.firma_sektor',$sektorlerInput);
+            $ilanlar->whereIn('ilanlar.ilan_sektor',$sektorlerInput);
         }
         if($tur != NULL){
             $ilanlar->where('ilanlar.ilan_turu',$tur);

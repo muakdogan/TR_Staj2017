@@ -1,4 +1,4 @@
-@extends('layouts.ilanApp')
+@extends('layouts.app')
  @section('content')
     <style>
            input[type=text] {
@@ -156,12 +156,13 @@
                     border-top: 1px solid #ddd;
                 
             }
+            
+            
    </style>
 <body style="overflow-x:hidden">
-  
     <div  class="container-fuild">
-           <div id ="header" class="row content ">
-               <div class="container">
+           <div  id ="header" class="row content ">
+               <div  class="container">
                    <div class="col-sm-4" id="ilanCount">
                        
                         <?php $ilanCount = DB::table('ilanlar')->count();?>
@@ -288,7 +289,7 @@
                             
                             @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
                                     <?php $dIlan = App\Ilan::find($davetEdildigimIlan->ilan_id); ?>
-                                    <?php $sektorAdi = App\Sektor::find($dIlan->firma_sektor); 
+                                    <?php $sektorAdi = App\Sektor::find($dIlan->ilan_sektor); 
                                         if($dIlan->ilan_turu == 1){
                                             $ilan_turu="Mal";
                                         }

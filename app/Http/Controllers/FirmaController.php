@@ -6,6 +6,11 @@ use App\Il;
 use App\IletisimBilgisi;
 use App\Adres;
 use App\SirketTuru;
+use App\TicariBilgi;
+use App\TicaretOdasi;
+use App\FirmaSatilanMarka;
+use App\Ilce;
+use App\Semt;
 use Session;
 use File;
 use Gate;
@@ -23,7 +28,71 @@ class FirmaController extends Controller
         $proper=Str::title(strtolower($string));
         return response($proper);
     }*/
-
+     public function showFirma($id){
+        $firma = Firma::find($id);
+        if (Gate::denies('show', $firma)) {
+              redirect()->intended($this->redirectPath());
+        }
+        $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
+        if (!$firmaFatura) {
+               $firmaFatura = new Adres();
+               $firmaFatura->iller = new Il();
+               $firmaFatura->ilceler = new Ilce();
+               $firmaFatura->semtler = new Semt();
+        }
+        $firmaAdres = $firma->adresler()->where('tur_id', '=', '1')->first();
+        if (!$firmaAdres) {
+               $firmaAdres = new Adres();
+               $firmaAdres->iller = new Il();
+               $firmaAdres->ilceler = new Ilce();
+               $firmaAdres->semtler = new Semt();
+        }
+        if (!$firma->ticari_bilgiler) {
+                $firma->ticari_bilgiler = new TicariBilgi();
+                $firma->ticari_bilgiler->ticaret_odalari = new TicaretOdasi();
+                $firma->ticari_bilgiler->sektorler = new Sektor();
+        }
+         if (!$firma->kalite_belgeleri) {
+                      $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();  
+        } 
+        if (!$firma->firma_referanslar) {
+           $firma->firma_referanslar = new App\FirmaReferans();
+        } else {
+           $firmaReferanslar = $firma->firma_referanslar()->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc')->get();
+        }
+        if (!$firma->firma_brosurler) {
+                 $firma->firma_brosurler = new App\FirmaBrosur();              
+        }
+        if (!$firma->firma_calisma_bilgileri) {
+               $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
+               $calismaGunu = '';
+        } else{
+               $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
+        }
+        $calisan= DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
+        $brosur=DB::table('firma_brosurler')->where('firma_id',$firma->id )->count();            
+        $referans= DB::table('firma_referanslar')->where('firma_id', $firma->id)->count();
+        $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get();
+        $satilanMarka = FirmaSatilanMarka::where('firma_id', '=', $firma->id)->get();
+        $kaliteBelge= DB::table('firma_kalite_belgeleri')->where('firma_id', $firma->id)->count();
+        $iller = Il::all();
+        $sirketTurleri=  SirketTuru::all();
+        $vergiDaireleri= \App\VergiDairesi::all();
+        $ticaretodasi=  \App\TicaretOdasi::all();
+        $ustsektor=  Sektor::all();
+        $departmanlar=  \App\Departman::all();
+        $faaliyetler= \App\Faaliyet::all();
+        $kalite_belgeleri= \App\KaliteBelgesi::all();
+        $calisma_günleri= \App\CalismaGunu::all();
+        return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)
+                ->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)
+                ->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)
+                ->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)
+                ->with('calisma_günleri',$calisma_günleri)->with('firmaFatura',$firmaFatura)->with('firmaAdres',$firmaAdres)
+                ->with('uretilenMarka',$uretilenMarka)->with('satilanMarka',$satilanMarka)->with('kaliteBelge',$kaliteBelge)
+                ->with('firmaReferanslar',$firmaReferanslar)->with('referans',$referans)->with('brosur',$brosur)
+                ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan);
+    }
     public function uploadImage(Request $request) {
 
 
@@ -467,25 +536,7 @@ class FirmaController extends Controller
         }
 
      }
-    public function showFirma($id){
-
-        $firma = Firma::find($id);
-        if (Gate::denies('show', $firma)) {
-              redirect()->intended($this->redirectPath());
-        }
-        //$this->authorize('show',$firma);
-        $iller = Il::all();
-        $sirketTurleri=  SirketTuru::all();
-        $vergiDaireleri= \App\VergiDairesi::all();
-        $ticaretodasi=  \App\TicaretOdasi::all();
-        $ustsektor=  Sektor::all();
-        $departmanlar=  \App\Departman::all();
-        $faaliyetler= \App\Faaliyet::all();
-        $kalite_belgeleri= \App\KaliteBelgesi::all();
-        $calisma_günleri= \App\CalismaGunu::all();
-        
-        return view('Firma.firmaProfili', ['firma' => $firma], ['iller' => $iller])->with('sirketTurleri',$sirketTurleri)->with('vergiDaireleri',$vergiDaireleri)->with('ustsektor',$ustsektor)->with('ticaretodasi',$ticaretodasi)->with('departmanlar',$departmanlar)->with('faaliyetler',$faaliyetler)->with('kalite_belgeleri',$kalite_belgeleri)->with('calisma_günleri',$calisma_günleri);
-    }
+   
     public function deleteKalite(Request $request,$id){
 
          $Firmakaliter = \App\FirmaKaliteBelgesi::where('belge_id',$id)->where('firma_id',$request->firma_id)->get();

@@ -1,18 +1,3 @@
-<?php
-    use App\Adres;
-    use App\Il;
-    use App\Ilce;
-    use App\IletisimBilgisi;
-    use App\Semt;
-    
-    $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
-                       if (!$firmaFatura) {
-                                   $firmaFatura = new Adres();
-                                   $firmaFatura->iller = new Il();
-                                   $firmaFatura->ilceler = new Ilce();
-                                   $firmaFatura->semtler = new Semt();
-                               }
-?>
 @extends('layouts.app')
 @section('content')
 <!DOCTYPE html>
@@ -28,7 +13,6 @@
         <script src="{{asset('js/ajax-crud-malibilgiler.js')}}"></script>
         <script src="{{asset('js/ajax-crud-ticaribilgiler.js')}}"></script>
         <script src="{{asset('js/ajax-crud-bilgilendirmetercihi.js')}}"></script>
-        
         <script src="{{asset('js/ajax-crud-referanslar.js')}}"></script>
         <script src="{{asset('js/ajax-crud-referanslarGecmis.js')}}"></script>
         <script src="{{asset('js/ajax-crud-kalite.js')}}"></script>
@@ -243,40 +227,39 @@
                form .error {
                   color: #000;
                  }
-         .popup, .popup2, .bMulti {
-            background-color: #fff;
-            border-radius: 10px 10px 10px 10px;
-            box-shadow: 0 0 25px 5px #999;
-            color: #111;
-            display: none;
-            min-width: 450px;
-            padding: 25px;
-            text-align: center;
-            }
-            .popup, .bMulti {
-                min-height: 150px;
-            }
-            .button.b-close, .button.bClose {
-                border-radius: 7px 7px 7px 7px;
-                box-shadow: none;
-                font: bold 131% sans-serif;
-                padding: 0 6px 2px;
-                position: absolute;
-                right: -7px;
-                top: -7px;
-            }
-            .button {
-                background-color: #2b91af;
-                border-radius: 10px;
-                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-                color: #fff;
-                cursor: pointer;
-                display: inline-block;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-            }
-                           
+                .popup, .popup2, .bMulti {
+                   background-color: #fff;
+                   border-radius: 10px 10px 10px 10px;
+                   box-shadow: 0 0 25px 5px #999;
+                   color: #111;
+                   display: none;
+                   min-width: 450px;
+                   padding: 25px;
+                   text-align: center;
+                   }
+                   .popup, .bMulti {
+                       min-height: 150px;
+                   }
+                   .button.b-close, .button.bClose {
+                       border-radius: 7px 7px 7px 7px;
+                       box-shadow: none;
+                       font: bold 131% sans-serif;
+                       padding: 0 6px 2px;
+                       position: absolute;
+                       right: -7px;
+                       top: -7px;
+                   }
+                   .button {
+                       background-color: #2b91af;
+                       border-radius: 10px;
+                       box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                       color: #fff;
+                       cursor: pointer;
+                       display: inline-block;
+                       padding: 10px 20px;
+                       text-align: center;
+                       text-decoration: none;
+                   }        
         </style>
    </head>
    <body>
@@ -324,7 +307,7 @@
                                                             <br>
                                                             <div style="width:128px;height:128px;"class="image-wrapper">
                                                                  <img src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;">
-                                                        </div> 
+                                                            </div> 
                                                     </div>
                                                     <div class="col-sm-8" >
                                                         <div class="secure"><strong>Logonuzu Değiştirin</strong></div>
@@ -374,48 +357,37 @@
                            <thead id="tasks-list" name="tasks-list">
                                <tr>
                                    <td><strong>Adres</strong></td>
-                                   <?php
-                                   $firmaAdres = $firma->adresler()->where('tur_id', '=', '1')->first();
-                                   if (!$firma->iletisim_bilgileri)
-                                       $firma->iletisim_bilgileri = new IletisimBilgisi();
-                                   if (!$firmaAdres) {
-                                       $firmaAdres = new Adres();
-                                       $firmaAdres->iller = new Il();
-                                       $firmaAdres->ilceler = new Ilce();
-                                       $firmaAdres->semtler = new Semt();
-                                   }
-                                   ?>
                                    <td><strong>:</strong>  {{$firmaAdres->adres}}</td>
 
                                </tr>
                                <tr>
                                    <td  width="25%"><strong>İli</strong></td>
-                                   <td id="il_id_td" width="75%"><strong>:</strong>  {{$firmaAdres->iller->adi}}</td>
+                                   <td id="il_id_td" width="75%"><strong>:</strong> {{$firmaAdres->iller->adi}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>İlçesi</strong></td>
-                                   <td id="ilce_id_td"><strong>:</strong>  {{$firmaAdres->ilceler->adi}}</td>
+                                   <td id="ilce_id_td"><strong>:</strong> {{$firmaAdres->ilceler->adi}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>Semt</strong></td>
-                                   <td  id="semt_id_td"><strong>:</strong>  {{$firmaAdres->semtler->adi}}</td>
+                                   <td  id="semt_id_td"><strong>:</strong> {{$firmaAdres->semtler->adi}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>Telefon</strong></td>
-                                   <td><strong>:</strong>  {{$firma->iletisim_bilgileri->telefon}}</td>
+                                   <td><strong>:</strong> {{$firma->iletisim_bilgileri->telefon}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>Fax</strong></td>
-                                   <td><strong>:</strong>  {{$firma->iletisim_bilgileri->fax}}</td>
+                                   <td><strong>:</strong> {{$firma->iletisim_bilgileri->fax}}</td>
 
                                </tr>
                                <tr>
                                    <td><strong>Web Sayfası</strong></td>
-                                   <td><strong>:</strong>  {{$firma->iletisim_bilgileri->web_sayfasi}}</td>
+                                   <td><strong>:</strong> {{$firma->iletisim_bilgileri->web_sayfasi}}</td>
 
                                </tr>
                                </tr>
@@ -524,11 +496,9 @@
                </div>
                    <div class="panel-body">
                        @if($firma->tanitim_yazisi=="")
-                       <div class="bilgiEkle"> 
-                           
-                           <button style="margin-top:20px" id="btn-add-tanıtımyazısı" name="btn-add-tanıtımyazısı" class="btn btn-primary btn-xs" ><img src="{{asset('images/plus.png')}}">&nbsp;Bilgilerinizi Ekleyin</button>
-                           
-                       </div>
+                        <div class="bilgiEkle"> 
+                            <button style="margin-top:20px" id="btn-add-tanıtımyazısı" name="btn-add-tanıtımyazısı" class="btn btn-primary btn-xs" ><img src="{{asset('images/plus.png')}}">&nbsp;Bilgilerinizi Ekleyin</button>
+                        </div>
                        @else
                        <table class="table" >
                            <thead id="tasks-list" name="tasks-list">
@@ -542,7 +512,6 @@
                                </tr>
                            </thead>
                        </table>
-                       
                        @endif
                        <div class="modal fade" id="myModal-tanıtımyazısı" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                            <div class="modal-dialog">
@@ -557,8 +526,7 @@
                                            <label for="inputEmail3" class="col-sm-3 control-label">Tanıtım Yazısı</label>
                                              <label for="inputTask" style="text-align: right"class="col-sm-1 control-label">:</label>
                                            <div class="col-sm-8">  
-                                               <textarea id="tanitim_yazisi" name="tanitim_yazisi" rows="5" class="form-control ckeditor"  placeholder="{{$firma->tanitim_yazisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">&lt;p&gt; &lt;/p&gt; <?php echo $firma->tanitim_yazisi;?></textarea>
-                                        
+                                               <textarea id="tanitim_yazisi" name="tanitim_yazisi" rows="5" class="form-control ckeditor"  placeholder="{{$firma->tanitim_yazisi}}" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">&lt;p&gt; &lt;/p&gt; <?php echo $firma->tanitim_yazisi;?></textarea>                                        
                                                 <br>
                                                 <br>
                                            </div>
@@ -575,7 +543,7 @@
                            </div>
                        </div>
                     </div>
-           </div>
+            </div>
            <div class="panel panel-default">
                <div style="border-bottom: 3px solid transparent;border-color:#ddd" class="panel-heading">
                    <h4 class="panel-title">
@@ -589,13 +557,11 @@
                             }
                             else{
                                 $mali_bilgi="dolu";
-                                
                                 $checkboxCiro=$firma->mali_bilgiler->ciro_goster;
                                 $checkboxSermaye=$firma->mali_bilgiler->sermaye_goster;
                             }
                        ?>
                        @if($firma->mali_bilgiler->firma_id==0)
-                        
                        @else
                             <button style="float:right" id="btn-add-malibilgiler" name="btn-add-malibilgiler" onclick="populateMaliDD()" class="btn btn-primary btn-xs">Ekle / Düzenle</button>
                        @endif
@@ -612,25 +578,14 @@
                        <thead id="tasks-list" name="tasks-list">
                            <tr>
                                <td width="25%"><strong>Firma Ünvanı</strong></td>
-                               <?php
-                               
-                               if (!$firma->mali_bilgiler) {
-                                   $firma->mali_bilgiler = new App\MaliBilgi();
-                                   $firma->mali_bilgiler->vergi_daireleri = new App\VergiDairesi();
-                                   $firma->sirket_turleri = new App\SirketTuru();
-                               }
-                               ?>
                                <td width="75%"><strong>:</strong>{{$firma->mali_bilgiler->unvani}}</td>
                            </tr>
                            <tr>
                                <td><strong>Şirket Türü</strong></td>
-                               @foreach($sirketTurleri as $sirket)<?php
-                               if ($sirket->id == $firma->sirket_turu) {
-                                   ?>
-                                   <td id="sirket_id_td"><strong>:</strong>  {{$sirket->adi}}</td>
-                                   <?php
-                               }
-                               ?>
+                               @foreach($sirketTurleri as $sirket)
+                                @if($sirket->id == $firma->sirket_turu) 
+                                    <td id="sirket_id_td"><strong>:</strong>  {{$sirket->adi}}</td>
+                                @endif
                                @endforeach
                            </tr>
                            <tr>
@@ -798,32 +753,9 @@
                <div style="border-bottom: 3px solid transparent;border-color:#ddd" class="panel-heading">
                    <h4 class="panel-title">
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4"><img src="{{asset('images/tl.png')}}">&nbsp;<strong>Ticari Bilgiler</strong></a>
-                       <?php
-                       
-                       if (!$firma->ticari_bilgiler) {
-                           $firma->ticari_bilgiler = new App\TicariBilgi();
-                           $firma->ticari_bilgiler->ticaret_odalari = new App\TicaretOdasi();
-                           $firma->ticari_bilgiler->sektorler = new App\Sektor();
-
-                           $firma->firma_departmanlar = new App\FirmaDepartman();
-                           $firma->firma_departmanlar->departmanlar = new App\Departman();
-
-                           $firma->firma_sektorler = new App\FirmaSektor();
-                           $firma->firma_sektorler->sektorler = new App\Sektor();
-
-                           $firma->firma_satilan_markalar = new App\FirmaSatilanMarka();
-
-                           $firma->firma_faaliyetler = new App\FirmaFaaliyet();
-                           $firma->firma_faaliyetler->faaliyetler = new App\Faaliyet();
-                       }
-                       if (!$firma->uretilen_markalar) {
-                           $firma->uretilen_markalar = new App\UretilenMarka();
-                       }
-                       ?>
                        <button  style="float:right" id="btn-add-ticaribilgiler" onclick="populateTicaretDD()" name="btn-add-ticaribilgiler" class="btn btn-primary btn-xs">Ekle / Düzenle</button>
                    </h4>
                </div>
-
                <div class="panel-body">
                    <table class="table" >
                        <thead id="tasks-list" name="tasks-list">
@@ -837,27 +769,21 @@
                            </tr>
                            <tr>
                                <td><strong>Faaliyet Türü</strong></td>
-                               <td id="faaliyet_id_td" ><strong>:</strong>@foreach($firma->faaliyetler as $faaliyet)
-                                   {{$faaliyet->adi}}
+                               <td id="faaliyet_id_td" ><strong>:</strong>
+                                   @foreach($firma->faaliyetler as $faaliyet)
+                                    {{$faaliyet->adi}}
                                    @endforeach
                                </td>
                            </tr>
                            <tr>
                               <td><strong>Üst Sektör</strong></td>
-                              <td id="ust_id_td"> <strong>:</strong>
-                                @if ($firma->ticari_bilgiler->ust_sektor==1)
-                                     Sanayi
-                                @elseif($firma->ticari_bilgiler->ust_sektor==2)
-                                     Tarım
-                                @elseif($firma->ticari_bilgiler->ust_sektor==3)
-                                     Hizmet
-                                @endif
-                              </td>
+                              <td id="ust_id_td"> <strong>:</strong>{{$firma->getUstSektor()}}</td>
                            </tr>
                            <tr>
                                <td><strong>Faaliyet Gösterilen Sektörler</strong></td>
-                               <td  id="gfaaliyet_id_td"><strong>:</strong>@foreach($firma->sektorler as $sektor)
-                                   {{$sektor->adi}}
+                               <td  id="gfaaliyet_id_td"><strong>:</strong>
+                                   @foreach($firma->sektorler as $sektor)
+                                    {{$sektor->adi}}
                                    @endforeach
                                </td>
                            </tr>
@@ -873,19 +799,17 @@
                            <tr>
                                <td><strong>Firmanın Ürettiği Markalar</strong></td>
                                <td  id="urettigi_id_td"><strong>:</strong>
-                                   <?php $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get(); ?>
                                    @foreach($uretilenMarka as $marka)
-                                   {{$marka->adi}}
+                                        {{$marka->adi}}
                                    @endforeach
                                </td>
                            </tr>
                            <tr>
                                <td><strong>Firmanın Sattığı Markalar</strong></td>
                                <td id="sattıgı_id_td"><strong>:</strong>
-                                   <?php $satilanMarka = \App\FirmaSatilanMarka::where('firma_id', '=', $firma->id)->get(); ?>
                                     @if(count($satilanMarka) > 1)
                                         @foreach($firma->$satilanMarka as $satMarka)
-                                        {{$satMarka->satilan_marka_adi}}
+                                            {{$satMarka->satilan_marka_adi}}
                                         @endforeach
                                     @endif 
                                </td>
@@ -918,7 +842,7 @@
                                            <select class="form-control" name="ticaret_odasi" id="ticaret_odasi" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                <option selected disabled>Seçiniz</option>
                                                @foreach($ticaretodasi as $ticaret)
-                                               <option  value="{{$ticaret->id}}" >{{$ticaret->adi}}</option>
+                                                    <option  value="{{$ticaret->id}}" >{{$ticaret->adi}}</option>
                                                @endforeach
                                            </select>
                                        </div>
@@ -954,7 +878,7 @@
                                            <select class="form-control deneme"   name="faaliyet_sektorleri[]" id="custom-headers" multiple='multiple' >
                                                 <?php $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();  ?>
                                                 @foreach($ustsektor as $sektor)
-                                                <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                                    <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                                                 @endforeach
                                           </select>
                                            
@@ -1014,16 +938,8 @@
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse5"><img src="{{asset('images/kalite.png')}}">&nbsp;<strong>Kalite Belgeleri ve Referanslar</strong></a>
                    </h4>
                </div>
-              
                    <div class="panel-body">
                        <div class="panel-footer"><strong>Kalite Belgeleri</strong>
-                             <?php
-                                if (!$firma->kalite_belgeleri) {
-                                    $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();  
-                                }  
-                                $kaliteBelge= DB::table('firma_kalite_belgeleri')->where('firma_id', $firma->id)->count();
-                            ?>
-                        
                         @if($kaliteBelge==null)
                             <div class="bilgiEkle"> 
                                 <button style="margin-top:20px" id="btn-add-kalite" name="btn-add-kalite" class="btn btn-primary btn-xs"><img src="{{asset('images/plus.png')}}">&nbsp;Kalite Belgeleirnizi  Ekleyin</button>
@@ -1125,7 +1041,7 @@
                                                     <select class="form-control" name="kalite_belgeleri" id="kalite_belgeleri" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                         <option selected disabled>Seçiniz</option>
                                                         @foreach($kalite_belgeleri as $kalite)
-                                                        <option  value="{{$kalite->id}}">{{$kalite->adi}}</option>
+                                                            <option  value="{{$kalite->id}}">{{$kalite->adi}}</option>
                                                         @endforeach
                                                     </select>
                                                </div>
@@ -1138,7 +1054,6 @@
                                                    <input type="text" class="form-control " id="belge_no" name="belge_no" placeholder="Belge No" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!"/>
                                                </div>
                                            </div>
-                                           
                                            {!! Form::submit('Kaydet', array('url'=>'firmaProfili/kalite/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                            <br>
                                            <br>
@@ -1153,22 +1068,10 @@
                           
                        </div>
                        <div class="panel-footer "><strong>Referanslar</strong>
-
-                           <?php
-                           if (!$firma->firma_referanslar) {
-                               $firma->firma_referanslar = new App\FirmaReferans();
-                           } else {
-                               $firmaReferanslar = $firma->firma_referanslar()->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc')->get();
-                           }
-                           
-                           $referans= DB::table('firma_referanslar')->where('firma_id', $firma->id)->count();
-                           
-                           ?>
                            @if($referans==null)
                             <div class="bilgiEkle"> 
                                 <button style="margin-top:20px" id="btn-add-referanslar" name="btn-add-referanslar" class="btn btn-primary btn-xs"><img src="{{asset('images/plus.png')}}">&nbsp;Referanslarınızı  Ekleyin</button>
                             </div>
-                           
                            @else
                            <button style="float:right" id="btn-add-referanslar" name="btn-add-referanslar" class="btn btn-primary btn-xs" >Ekle</button>
                            <br>
@@ -1338,9 +1241,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
-                                           @endforeach
-
+                                        @endforeach
                                 </thead>
                              </table>
                            @endif
@@ -1449,14 +1350,6 @@
                
            </div>
            <div class="panel panel-default">
-                   <?php
-                        if (!$firma->firma_brosurler) {
-                            $firma->firma_brosurler = new App\FirmaBrosur();
-                            
-                        }
-                        $brosur=DB::table('firma_brosurler')->where('firma_id',$firma->id )->count();
-
-                     ?>
                 <div style="border-bottom: 3px solid transparent;border-color:#ddd" class="panel-heading">
                     <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"><img src="{{asset('images/brosur.png')}}">&nbsp;<strong>Firma Broşürü</strong></a>
@@ -1597,20 +1490,10 @@
                                   </div>
                               </div>
                    </div>
-               
            </div>
            <div class="panel panel-default">
                <div class="panel-heading">
                    <h4 class="panel-title">
-                       <?php
-                       if (!$firma->firma_calisma_bilgileri) {
-                           $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
-                           $calismaGunu = '';
-                       } else
-                           $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
-                       
-                       $calisan= DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-                       ?>
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse7"><img src="{{asset('images/calisan.png')}}">&nbsp;<strong>İdari Bilgiler</strong></a>
                        @if($calisan==null)
                        @else
@@ -1638,15 +1521,7 @@
                            </tr>
                            <tr>
                                <td><strong>Çalışan Profili</strong></td>
-                               <td id="profil_id_td"><strong>:</strong> 
-                                @if ($firma->firma_calisma_bilgileri->calisan_profili==1)
-                                  Mavi Yaka
-                                @elseif ($firma->firma_calisma_bilgileri->calisan_profili==2)
-                                  Beyaz Yaka
-                                @elseif($firma->firma_calisma_bilgileri->calisan_profili==3)
-                                   Mavi Yaka,Beyaz Yaka
-                                @endif
-                                </td>
+                               <td id="profil_id_td"><strong>:</strong>$firma->getCalisanProfil()</td>
                            </tr>
                            <tr>
                                <td><strong>Çalışan Sayısı</strong></td>
@@ -1654,8 +1529,9 @@
                            </tr>
                            <tr>
                                <td id="departman_id_td"><strong>Firma Departmanları</strong></td>
-                               <td><strong>:</strong>@foreach($firma->departmanlar as $departman)
-                                   {{$departman->adi}},
+                               <td><strong>:</strong>
+                                   @foreach($firma->departmanlar as $departman)
+                                     {{$departman->adi}}
                                    @endforeach
                                </td>
                            </tr>
@@ -1796,11 +1672,9 @@
     </div>
      <div class="col-sm-4" >
               <div  class="panel-group">
-                       
                          <div    class="panel panel-default">
                              <div style="background-color: #e5e5e5" class="panel-heading"><img src="{{asset('images/ayar.png')}}">&nbsp;Firma Profil Görünüm Ayarları</div>
                              <div class="panel-body">
-                                
                              </div>
                          </div>
                          <div class="panel panel-default">
@@ -1827,7 +1701,6 @@
                          <div class="panel panel-default">
                              <div  style="background-color: #e5e5e5;" class="panel-heading"><img src="{{asset('images/islem.png')}}">&nbsp;Firma Profili İşlemleri</div>
                              <div class="panel-body">
-                               
                              </div>
                          </div>
              </div>
@@ -1843,7 +1716,6 @@
    <script src="{{asset('js/selectDD.js')}}"></script>  
    <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
 <script> 
-    
     $("#firma_departmanlari").multipleSelect({
             width: 260,
             multiple: true,
@@ -1886,8 +1758,6 @@
           this.qs1.cache();
           this.qs2.cache();
         }
-        
-        
     });
     /////////////Bilgilendirme Checkbox buton kontrolü
     $('.bilgilendirme').click(function(){
@@ -1978,8 +1848,6 @@
         }
     });
   $('#presentation').restrictLength( $('#pres-max-length') );
-    
-   
     $(document).ready(function() {
          $.fn.datepicker.dates['tr'] = {
             days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],

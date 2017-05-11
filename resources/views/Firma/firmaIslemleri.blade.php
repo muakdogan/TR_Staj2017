@@ -38,75 +38,73 @@ tr:nth-child(even) {
     border-radius: 8px;
 }
    /* Pie Chart */
-                .progress-pie-chart {
-                width:200px;
-                height: 200px;
-                border-radius: 50%;
-                background-color: #E5E5E5;
-                position: relative;
-                }
-                .progress-pie-chart.gt-50 {
-                background-color: #81CE97;
-                }
+    .progress-pie-chart {
+    width:200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #E5E5E5;
+    position: relative;
+    }
+    .progress-pie-chart.gt-50 {
+    background-color: #81CE97;
+    }
 
-                .ppc-progress {
-                content: "";
-                position: absolute;
-                border-radius: 50%;
-                left: calc(50% - 100px);
-                top: calc(50% - 100px);
-                width: 200px;
-                height: 200px;
-                clip: rect(0, 200px, 200px, 100px);
-                }
-                .ppc-progress .ppc-progress-fill {
-                content: "";
-                position: absolute;
-                border-radius: 50%;
-                left: calc(50% - 100px);
-                top: calc(50% - 100px);
-                width: 200px;
-                height: 200px;
-                clip: rect(0, 100px, 200px, 0);
-                background: #81CE97;
-                transform: rotate(60deg);
-                }
-                .gt-50 .ppc-progress {
-                clip: rect(0, 100px, 200px, 0);
-                }
-                .gt-50 .ppc-progress .ppc-progress-fill {
-                clip: rect(0, 200px, 200px, 100px);
-                background: #E5E5E5;
-                }
+    .ppc-progress {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
+    clip: rect(0, 200px, 200px, 100px);
+    }
+    .ppc-progress .ppc-progress-fill {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
+    clip: rect(0, 100px, 200px, 0);
+    background: #81CE97;
+    transform: rotate(60deg);
+    }
+    .gt-50 .ppc-progress {
+    clip: rect(0, 100px, 200px, 0);
+    }
+    .gt-50 .ppc-progress .ppc-progress-fill {
+    clip: rect(0, 200px, 200px, 100px);
+    background: #E5E5E5;
+    }
 
-                .ppc-percents {
-                content: "";
-                position: absolute;
-                border-radius: 50%;
-                left: calc(50% - 173.91304px/2);
-                top: calc(50% - 173.91304px/2);
-                width: 173.91304px;
-                height: 173.91304px;
-                background: #fff;
-                text-align: center;
-                display: table;
-                }
-                .ppc-percents span {
-                display: block;
-                font-size: 2.6em;
-                font-weight: bold;
-                color: #81CE97;
-                }
+    .ppc-percents {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    left: calc(50% - 173.91304px/2);
+    top: calc(50% - 173.91304px/2);
+    width: 173.91304px;
+    height: 173.91304px;
+    background: #fff;
+    text-align: center;
+    display: table;
+    }
+    .ppc-percents span {
+    display: block;
+    font-size: 2.6em;
+    font-weight: bold;
+    color: #81CE97;
+    }
 
-                .pcc-percents-wrapper {
-                display: table-cell;
-                vertical-align: middle;
-                }
-
-                .progress-pie-chart {
-                margin: 50px auto 0;
-                }
-
+    .pcc-percents-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+    }
+    .progress-pie-chart {
+    margin: 50px auto 0;
+    }
 </style>
      <div class="container">
           <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
@@ -114,9 +112,6 @@ tr:nth-child(even) {
              <div class="row">
                  <div class="col-xs-12 col-sm-6 col-md-8">
                      <div class="panel-group">
-                         <?php $davetEdilIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); //davet edilen ilanları buluyoruz
-                                
-                         ?>
                         @if(count($davetEdilIlanlar) != 0) 
                             <div class="panel panel-default">
                                 <div class="panel-heading">Davet Edildiğim İlanlar</div>
@@ -128,30 +123,25 @@ tr:nth-child(even) {
                                             <th></th>
                                         </tr>
                                        @foreach($davetEdilIlanlar as $dvtIlan)
-                                       <?php $dIlan = App\Ilan::find($dvtIlan->ilan_id);
-                                            $dIlanTeklifsayısı = $dIlan->teklifler()->count();
-                                            if(Auth::guest()){
+                                       <?php 
+                                       
+                                         $dIlan = App\Ilan::find($dvtIlan->ilan_id);
+                                         $dIlanTeklifsayısı = $dIlan->teklifler()->count();
+                                           if(Auth::guest()){
 
                                            }
                                            else{
 
-                                                 $kullanici_id = Auth::user()->kullanici_id;
-
-                                                 $firmaKont=  App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id )
+                                                $kullanici_id = Auth::user()->id;
+                                                $firmaKont=  App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id )
                                                           ->select('firma_id')->get();
-                                                 $firmaKont=$firmaKont->toArray();
-
-                                                 $firma_id=$firmaKont[0]['firma_id'];
-
-
-
-                                                   $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
+                                                $firmaKont=$firmaKont->toArray();
+                                                $firma_id=$firmaKont[0]['firma_id'];
+                                                $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
                                                            ->where( 'firma_id', '=', $firma_id)
                                                            ->select('rol_id')->get();
                                                            $rol_id=$rol_id->toArray();
-
-
-                                                   $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
+                                                $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
                                                    ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
                                                    ->select('roller.adi as rolAdi')->get();
                                                    $querys=$querys->toArray();
@@ -174,17 +164,13 @@ tr:nth-child(even) {
                                                @else
                                                @endif
                                            @endif
-
                                         </tr>
                                        @endforeach
                                     </table>
-
                                 </div>
                             </div>
                         @endif
-                         <?php $ilanlarFirma = $firma->ilanlar()->
-                                orderBy('yayin_tarihi','desc')->limit('5')->get();
-                               ?>
+                        
                          <div class="panel panel-default">
                              <div class="panel-heading">Son İlanlarım</div>
                              <div class="panel-body">
@@ -195,14 +181,12 @@ tr:nth-child(even) {
                                          <th></th>
                                      </tr>
                                     @foreach($ilanlarFirma as $ilan)
-                                    <?php $ilanTeklifsayısı = $ilan->teklifler()->count();
-                                         
-                                    ?>
+                                    <?php $ilanTeklifsayısı = $ilan->teklifler()->count();?>
                                      <tr>
                                          <td>{{$ilan->adi}}</td>
                                          <td>{{$ilanTeklifsayısı}}</td>
                                          @if($ilan->yayinlanma_tarihi > time())
-                                         <td><a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button class="button"> Düzenle</button></a></td>
+                                                <td><a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button class="button"> Düzenle</button></a></td>
                                          @endif
                                      </tr>
                                     @endforeach
@@ -214,11 +198,7 @@ tr:nth-child(even) {
                          <div class="panel panel-default">
                              <div class="panel-heading">Son Başvurularım</div>
                              <div class="panel-body">
-                                 <?php $teklifler= DB::table('teklifler')->where('firma_id',$firma->id)
-                                         ->limit(5)
-                                         ->get(); 
-                                        
-                                   ?>
+                                 
                                  <table>
                                      <tr>
                                          <th>Başvuru İlan İsmi</th>
@@ -228,7 +208,7 @@ tr:nth-child(even) {
                                     @foreach($teklifler as $teklif)
                                      <?php 
                                         $ilanlar = App\Ilan::find($teklif->ilan_id);
-                                            $ilanTeklifcount= $ilanlar->teklifler()->count();
+                                        $ilanTeklifcount= $ilanlar->teklifler()->count();
                                      ?>
                                      <tr>
                                          <td>{{$ilanlar->adi}}</td>
@@ -253,7 +233,6 @@ tr:nth-child(even) {
                                      Toplam İlan Sayım: {{$firma->ilanlar()->count()}}
                                  </div>
                                  <div>
-                                      <?php $tekliflerCount= DB::table('teklifler')->where('firma_id',$firma->id)->count(); ?>
                                      Toplam Başvuru Sayım: {{$tekliflerCount}}
                                  </div>
                              </div>

@@ -13,32 +13,31 @@
      <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <style>
-    div#header{
-      width: 100%;
-      height: 100px;
-      background-image:url("{{asset('images/header.jpg')}}");
-      margin: 0;
-      padding: 5px;
-      z-index:1080;
-    }
-    div#contentarea{
-      padding: 10px;
-    }
-    body.sticky div#header{
-      position: fixed;
-      top: 0;
-      left: 0;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-    }
-    .yazi{
-      font-family:"Times New Roman";
-      background-color: #ccc;
-                
-     }
- </style>
-<script>
+    <style>
+        div#header{
+          width: 100%;
+          height: 100px;
+          background-image:url("{{asset('images/header.jpg')}}");
+          margin: 0;
+          padding: 5px;
+          z-index:1080;
+        }
+        div#contentarea{
+          padding: 10px;
+        }
+        body.sticky div#header{
+          position: fixed;
+          top: 0;
+          left: 0;
+          box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        .yazi{
+          font-family:"Times New Roman";
+          background-color: #ccc;
 
+         }
+   </style>
+<script>
 window.requestAnimationFrame = window.requestAnimationFrame
                                || window.mozRequestAnimationFrame
                                || window.webkitRequestAnimationFrame
@@ -92,6 +91,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 })(jQuery)
 </script>
 </head>
+
 <body id="app-layout">
       <nav  class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="position: relative;top:-69px;margin-bottom:-69px" >
         <div class="container">
@@ -120,17 +120,18 @@ window.requestAnimationFrame = window.requestAnimationFrame
                     </li>
                    @else
                         <li class="dropdown">
-                            <?php $firmaAdi = session()->get('firma_adi');
-                                  $firmaId = session()->get('firma_id');
+                            <?php
+                              $firmaAdi = session()->get('firma_adi');
+                              $firmaId = session()->get('firma_id');
                             ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ Auth::user()->name }} / {{$firmaAdi}}<span class="caret"></span>
+                               {{session()->get('kullanici_adi') }} / {{$firmaAdi}}<span class="caret"></span>
                             </a>
                            
                             <ul class="dropdown-menu">
                                 <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
                                     <?php                                   
-                                        $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+                                        $kullanici = App\Kullanici::find(Auth::user()->id);
                                         $kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
                                     ?>
                                     @foreach($kullaniciF as $kullanicifirma)
@@ -173,9 +174,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
     </footer>
     </div>
     <!-- JavaScripts -->
-    
-   
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    <script src="{{ elixir('js/app.js') }}"></script> 
      
  <script>
     var selected;
