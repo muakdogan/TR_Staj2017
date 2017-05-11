@@ -108,66 +108,57 @@ public function ilanUpdate(Request $request,$id,$ilan_id){
 
 
 public function ilanAdd(Request $request,$id){
-  $file = $request->file('teknik');
-  $file = array('teknik' => $request->file('teknik'));
-  $rules = array('teknik' => 'mimes:pdf|max:100000');
-  $validator = Validator::make($file, $rules);
-  if ($validator->fails()) {
-    return Redirect::to('firmaIlanOlustur/'.$request->id)->withInput()->withErrors($validator);
+  $firma = Firma::find($id);
+  $ilan = new Ilan;
+  $ilan->adi=Str::title(strtolower( $request->ilan_adi));
+  $ilan->ilan_sektor=$request->firma_sektor;
+  $ilan->yayin_tarihi=date('Y-m-d', strtotime($request->yayinlanma_tarihi));
+  $ilan->kapanma_tarihi= date('Y-m-d', strtotime($request->kapanma_tarihi));
+  $ilan->aciklama =Str::title(strtolower( $request->aciklama));
+  $ilan->ilan_turu= $request->ilan_turu;
+  $ilan->katilimcilar= $request->katilimcilar;
+  $ilan->rekabet_sekli= $request->rekabet_sekli;
+  $ilan->sozlesme_turu= $request->sozlesme_turu;
+  $ilan->odeme_turu_id=$request->odeme_turu;
+  $ilan->para_birimi_id=$request->para_birimi;
+  $ilan->kismi_fiyat=$request->kismi_fiyat;
+  $ilan->yaklasik_maliyet= $request->maliyet;
+  $ilan->komisyon_miktari=$request->yaklasik_maliyet;
+  $ilan->teslim_yeri_satici_firma= $request->teslim_yeri;
+  $ilan->teslim_yeri_il_id= $request->il_id;
+  $ilan->teslim_yeri_ilce_id= $request->ilce_id;
+  $ilan->isin_suresi= $request->isin_suresi;
+  $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
+  $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
+  $ilan->adi= $request->ilan_adi;
+  //foreach($request->firma_adi_gizli as $firma_adi_gizli){
+  $ilan->goster = $request->firma_adi_gizli;
+  //}
+  if($request->file('teknik'))
+  {
+    $file = $request->file('teknik');
+    $file = array('teknik' => $request->file('teknik'));
+    $destinationPath = 'Teknik';
+    $extension = $request->file('teknik')->getClientOriginalExtension();
+    $fileName = rand(11111, 99999) . '.' . $extension;
+    $ilan->teknik_sartname = $fileName;
+    $request->file('teknik')->move($destinationPath, $fileName);
+    Session::flash('success', 'Upload successfully');
+
   }
-  else {
-    if ($request->file('teknik')->isValid()) {
-      $destinationPath = 'Teknik';
-      $extension = $request->file('teknik')->getClientOriginalExtension();
-      $fileName = rand(11111, 99999) . '.' . $extension;
-      $firma = Firma::find($id);
-      $ilan = new Ilan();
-      $ilan->adi=Str::title(strtolower( $request->ilan_adi));
-      $ilan->ilan_sektor=$request->firma_sektor;
-      $ilan->yayin_tarihi=date('Y-m-d', strtotime($request->yayinlanma_tarihi));
-      $ilan->kapanma_tarihi= date('Y-m-d', strtotime($request->kapanma_tarihi));
-      $ilan->aciklama =Str::title(strtolower( $request->aciklama));
-      $ilan->ilan_turu= $request->ilan_turu;
-      $ilan->katilimcilar= $request->katilimcilar;
-      $ilan->rekabet_sekli= $request->rekabet_sekli;
-      $ilan->sozlesme_turu= $request->sozlesme_turu;
-      $ilan->odeme_turu_id=$request->odeme_turu;
-      $ilan->para_birimi_id=$request->para_birimi;
-      $ilan->kismi_fiyat=$request->kismi_fiyat;
-      $ilan->teknik_sartname = $fileName;
-      $ilan->yaklasik_maliyet= $request->maliyet;
-      $ilan->komisyon_miktari=$request->yaklasik_maliyet;
-      $ilan->teslim_yeri_satici_firma= $request->teslim_yeri;
-      $ilan->teslim_yeri_il_id= $request->il_id;
-      $ilan->teslim_yeri_ilce_id= $request->ilce_id;
-      $ilan->isin_suresi= $request->isin_suresi;
-      $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($request->is_baslama_tarihi));
-      $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($request->is_bitis_tarihi));
-      $ilan->adi= $request->ilan_adi;
-      $ilan->goster = $request->firma_adi_goster;
-      $ilan->statu = 0;
+  $ilan->statu = 0;
 
-      $firma->ilanlar()->save($ilan);
+  $firma->ilanlar()->save($ilan);
 
-      if($request->belirli_istekli!=null){
-        foreach($request->belirli_istekli as $belirli){
-          $belirli_istekliler= new \App\BelirlIstekli();
-          $belirli_istekliler->ilan_id = $ilan->id;
-          $belirli_istekliler->firma_id=$belirli;
-          $belirli_istekliler->save();
-        }
-      }
-      $request->file('teknik')->move($destinationPath, $fileName);
-      Session::flash('success', 'Upload successfully');
-      return Redirect::to('ilanEkle/'.$firma->id.'/'.$ilan->id);
-    }
-    else {
-      Session::flash('error', 'uploaded file is not valid');
-      return Redirect::to('firmaIlanOlustur/'.$firma->id)->withInput()->withErrors($validator);
+  if($request->belirli_istekli!=null){
+    foreach($request->belirli_istekli as $belirli){
+      $belirli_istekliler= new \App\BelirlIstekli();
+      $belirli_istekliler->ilan_id = $ilan->id;
+      $belirli_istekliler->firma_id=$belirli;
+      $belirli_istekliler->save();
     }
   }
-
-
+  return Redirect::to('ilanEkle/'.$firma->id.'/'.$ilan->id);
 }
 
 public function kalemlerListesiMalUpdate(Request $request,$id){

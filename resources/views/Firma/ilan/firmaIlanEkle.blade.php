@@ -178,7 +178,7 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Katılımcılar</strong></td>
-                                            <td><strong>:</strong> {{$ilan->getKatilimcilar()}}</td>
+                                            <td><strong>:</strong> {{$ilan->getKatilimciTur()}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>İlan Usulü</strong></td>
@@ -1388,7 +1388,8 @@ function GetIlce(il_id) {
     }
 function populateDD(){
   alert("girdim");
-    if({{$ilan->teslim_yeri_satici_firma === 'Satıcı Firma'}}){
+  var teslim_yeri = '{{$ilan->teslim_yeri_satici_firma}}';
+    if( teslim_yeri == 'Satıcı Firma' ){
       $(".teslim_il").hide();
       $(".teslim_ilce").hide();
     }
