@@ -23,4 +23,6 @@ class Puanlama extends Model
     {
         return $this->belongsTo('App\Kullanici', 'yorum_yapan_kullanici_id', 'id');
     }
+   
+  
 }

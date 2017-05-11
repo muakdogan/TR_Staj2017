@@ -34,10 +34,11 @@ a{
         }
         else{
             
-              $kullanici_id = Auth::user()->kullanici_id;
+              $kullanici_id = Auth::user()->id;
               $firma=  App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id )
                        ->select('firma_id')->get();
               $firma=$firma->toArray();
+              
               $firma_id=$firma[0]['firma_id'];
               
                 $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
@@ -66,7 +67,7 @@ a{
     <input type="hidden" name="totalCount" value='{{$ilanlar->total()}}'>
         
     @foreach($ilanlar as $ilan)
-        <?php $sektorAdi = App\Sektor::find($ilan->firma_sektor); 
+        <?php $sektorAdi = App\Sektor::find($ilan->ilan_sektor); 
                 if($ilan->ilan_turu == 1){
                     $ilan_turu="Mal";
                 }
