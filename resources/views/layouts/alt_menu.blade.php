@@ -13,30 +13,34 @@
                      <a class="navbar-brand" href="{{ URL::to('firmaIslemleri', array($firma->id), false)}}"><img src='{{asset('images/anasayfa.png')}}'></a>
                  </div>
                  <ul class="nav navbar-nav">
-                     
+
                      <li class=""><a href="{{ URL::to('firmaProfili', array($firma->id), false)}}">Firma Profili</a></li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="{{ URL::to('ilanlarim', array($firma->id), false)}}">İlanlarım</a></li>
-                             
+
                              <li><a href="{{ URL::to('ilanEkle', array($firma->id,'0'), false)}}">İlan Oluştur</a></li>
                          </ul>
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             
-                            
+
+
                              <li><a href="{{ URL::to('basvurularim', array($firma->id), false)}}">Başvurularım</a></li>
-                          
-                             
+
+
                              <li><a href="{{url('ilanAra/')}}">Başvur</a></li>
-                             
+
                          </ul>
                      </li>
                      <li class=""><a href="{{ URL::to('davetEdildigim', array($firma->id), false)}}">Davet Edildiğim İlanlar</a></li>
-                     <!--li><a href="#">Mesajlar</a></li-->
-                    
-                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanici İşlemleri</a></li>
+                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Firma Havuzu<span class="caret"></span></a>
+                         <ul class="dropdown-menu">
+                             <li><a href="#">Onaylı Tedarikçilerim</a></li>
+                             <li><a href="#">Tüm Firmalar</a></li>
+                         </ul>
+                     </li>
+                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanıcı İşlemleri</a></li>
                      <li><div class="deneme">
                              <a><p style="padding-top: 15px; padding-left: 25px;font-size: 16px; color:white"  class="firmaDavet" id="firmaDavetButton">Firma Davet Et !</p></a>
                                   <div class="modal fade" id="FirmaDavet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -65,12 +69,12 @@
                                                                     <input type="mail" class="form-control" id="mailAdres" name="mailAdres" placeholder="Mail Adres" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                                 </div>
                                                            </div>
-                                                        </div>    
+                                                        </div>
                                                       {!! Form::submit('Davet Et', array('url'=>'firmaProfili/iletisimAdd/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                                       <br>
                                                 {{ Form::close() }}
                                             </div>
-                                            <div class="modal-footer">                                                            
+                                            <div class="modal-footer">
                                             </div>
                                         </div>
                                     </div>
@@ -96,17 +100,17 @@ $('.firmaDavet').click(function(){
                 url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus, jqXHR) 
+                success:function(data, textStatus, jqXHR)
                 {
                     alert(data);
                     $('#FirmaDavet').modal('hide');
-                    
+
                 },
-                error: function(jqXHR, textStatus, errorThrown) 
+                error: function(jqXHR, textStatus, errorThrown)
                 {
-                    alert(textStatus + "," + errorThrown);     
+                    alert(textStatus + "," + errorThrown);
                 }
             });
             e.preventDefault(); //STOP default action
-        });   
+        });
 </script>
