@@ -810,7 +810,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     });
 
 });
-    $("#turkLirasi").turkLirasi();
+    //$("#turkLirasi").turkLirasi();
 
     $('#iskontoVal').on('input',function(){
         var iskontoOrani = parseInt($(this).val());

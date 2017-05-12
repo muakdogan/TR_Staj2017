@@ -1,4 +1,4 @@
- <?php 
+ <?php
     if(count($teklifler) != 0){
         $tekliflerCount = App\Teklif::where('ilan_id',$ilan->id)->count();
     }
@@ -9,7 +9,7 @@
 ?>
 @if(($ilan->sozlesme_turu == 0 || $ilan->sozlesme_turu == 1 )  && $ilan->kismi_fiyat == 0) <!--Kismi Teklife Kapalı -->
     <div class="demo">
-        <table class="table" id="table"> 
+        <table class="table" id="table">
             <thead>
 
                 <tr>
@@ -27,8 +27,8 @@
                             $firmaAdi = App\Firma::find($teklifFirma->firma_id);?>
                     <?php $j++;  ?>
                     <?php $verilenFiyat = $teklifFirma->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
-                        
-                    
+
+
                     ?>
                     <?php $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
                                             $kisKazanCount=0;
@@ -36,15 +36,15 @@
                                                 $kisKazanCount=1;
                                             }
                                         ?>
-                                          
+
                     @if(count($verilenFiyat) != 0)
                         @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $firmaAdi->id) <!--Kazanan firma kontrolü -->
                             <tr  class="kismiKazanan">
                         @else
                             <tr>
-                        @endif  
+                        @endif
                         @if(session()->get('firma_id') == $firmaAdi->id) <!--Teklifi veren firma ise -->
-                            <td class="highlight">{{$j}}</td>                            
+                            <td class="highlight">{{$j}}</td>
                             <td class="highlight">{{$firmaAdi->adi}}:</td>
                             <td class="highlight firmaFiyat" style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> &#8378;</td>
                             <td class="highlight"></td>
@@ -60,7 +60,7 @@
                                     $
                                 @else
                                     &#8364;
-                                @endif   
+                                @endif
                             </td>
                             @if($ilan->kapanma_tarihi > $dt)
                                 <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
@@ -81,19 +81,19 @@
                                     $
                                 @else
                                     &#8364;
-                                @endif    
-                            </td>                            
+                                @endif
+                            </td>
                             <td></td>
                         @endif
                         </tr>
-                    @endif    
-                    
+                    @endif
+
                 @endforeach
             </tbody>
         </table>
     </div>
 @elseif($ilan->sozlesme_turu == 0 && $ilan->kismi_fiyat == 1) <!--Kısmi teklife açık -->
-    <table class="table" id="table"> 
+    <table class="table" id="table">
             <thead>
 
                 <tr>
@@ -115,7 +115,7 @@
                                         ?>
                         @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0) <!--MAl -->
                             <?php $ilanMalCount = $ilan->ilan_mallar()->count();
-                            $teklifMallar=DB::select(DB::raw("SELECT * 
+                            $teklifMallar=DB::select(DB::raw("SELECT *
                                                 FROM teklifler t, mal_teklifler m
                                                 WHERE t.id = m.teklif_id
                                                 AND t.id ='$teklifFirma->id'
@@ -125,9 +125,9 @@
                                     $teklifMalCount++;
                                 }
                                   ?>
-                        @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) <!--Hizmet -->      
+                        @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) <!--Hizmet -->
                                <?php $ilanMalCount = $ilan->ilan_hizmetler()->count();
-                                $teklifHizmetler=DB::select(DB::raw("SELECT * 
+                                $teklifHizmetler=DB::select(DB::raw("SELECT *
                                                 FROM teklifler t, hizmet_teklifler h
                                                 WHERE t.id = h.teklif_id
                                                 AND t.id ='$teklifFirma->id'
@@ -139,7 +139,7 @@
                                   ?>
                         @elseif($ilan->ilan_turu == 3)<!-- Yapım İşi-->
                                 <?php $ilanMalCount = $ilan->ilan_yapim_isleri()->count();
-                                        $teklifYapimIsleri=DB::select(DB::raw("SELECT * 
+                                        $teklifYapimIsleri=DB::select(DB::raw("SELECT *
                                                         FROM teklifler t, yapim_isi_teklifler y
                                                         WHERE t.id = y.teklif_id
                                                         AND t.id ='$teklifFirma->id'
@@ -151,7 +151,7 @@
                                   ?>
                         @else <!-- Goturu Bedel-->
                             <?php $ilanMalCount = $ilan->ilan_goturu_bedeller()->count();
-                                        $teklifGoturuBedeller=DB::select(DB::raw("SELECT * 
+                                        $teklifGoturuBedeller=DB::select(DB::raw("SELECT *
                                                         FROM teklifler t, goturu_bedel_teklifler g
                                                         WHERE t.id = g.teklif_id
                                                         AND t.id ='$teklifFirma->id'
@@ -162,8 +162,8 @@
                                         }
                                   ?>
                         @endif
-                       
-            
+
+
                         @if($ilanMalCount == $teklifMalCount) <!-- Tüm kalemlere teklif verme kontrolü -->
                         <tr>
                             <?php $verilenFiyat = $teklifFirma->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
@@ -180,7 +180,7 @@
                                             $
                                         @else
                                             &#8364;
-                                        @endif   
+                                        @endif
                                     </td>
                                     <td class="highlight"></td>
                                 <?php $sessionF= session()->get('firma_id'); $sahibF=$ilan->firmalar->id; ?>
@@ -195,7 +195,7 @@
                                             $
                                         @else
                                             &#8364;
-                                        @endif   
+                                        @endif
                                     </td>
                                     @if($ilan->kapanma_tarihi > $dt)
                                         <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
@@ -209,21 +209,21 @@
                                 @else
                                     <td>{{$j}}</td>
                                     <td>X Firması</td>
-                                    <td style="text-align: right"><strong> {{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> 
+                                    <td style="text-align: right"><strong> {{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong>
                                         @if($ilan->para_birimleri->adi == "Türk Lirası")
                                             &#8378;
                                         @elseif($ilan->para_birimleri->adi == "Dolar")
                                             $
                                         @else
                                             &#8364;
-                                        @endif    
+                                        @endif
                                     </td>
                                     <td></td>
                                 @endif
                             @endif
                             </tr>
-                        @endif   
-                    
+                        @endif
+
                 @endforeach
                 <tr> <!--Minumum fiyat sorgusu -->
                         @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0) <!--MAl -->
@@ -237,14 +237,14 @@
                                 AND m.id
                                 IN (
 
-                                SELECT MAX( id ) 
+                                SELECT MAX( id )
                                 FROM mal_teklifler
                                 GROUP BY teklif_id, ilan_mal_id
                                 )
                                 GROUP BY ilan_mal_id
                                 )y"));
                             ?>
-                        @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) <!--Hizmet -->      
+                        @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) <!--Hizmet -->
                             <?php $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
                                 FROM (
                                 SELECT min( kdv_dahil_fiyat ) AS toplam
@@ -253,13 +253,13 @@
                                 AND t.ilan_id ='$ilan->id'
                                 AND h.id
                                 IN (
-                                SELECT MAX( id ) 
+                                SELECT MAX( id )
                                 FROM hizmet_teklifler
                                 GROUP BY teklif_id, ilan_hizmet_id
                                 )
                                 GROUP BY ilan_hizmet_id
                                 )y"));
-                            ?>  
+                            ?>
                         @elseif($ilan->ilan_turu == 3)<!-- Yapım İşi-->
                             <?php $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
                                 FROM (
@@ -269,13 +269,13 @@
                                 AND t.ilan_id ='$ilan->id'
                                 AND y.id
                                 IN (
-                                SELECT MAX( id ) 
+                                SELECT MAX( id )
                                 FROM yapim_isi_teklifler
                                 GROUP BY teklif_id, ilan_yapim_isleri_id
                                 )
                                 GROUP BY ilan_yapim_isleri_id
                                 )y"));
-                            ?>  
+                            ?>
                         @else <!-- Goturu Bedel-->
                             <?php $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
                                 FROM (
@@ -285,15 +285,15 @@
                                 AND t.ilan_id ='$ilan->id'
                                 AND g.id
                                 IN (
-                                SELECT MAX( id ) 
+                                SELECT MAX( id )
                                 FROM goturu_bedel_teklifler
                                 GROUP BY teklif_id, ilan_goturu_bedel_id
                                 )
                                 GROUP BY ilan_goturu_bedel_id
                                 )y"));
-                            ?>  
+                            ?>
                         @endif
-                        
+
                     <td class="minFiyat">{{$j=$j+1}}</td>
                     <td class="minFiyat" style="text-align: right"><strong><?php foreach ($minFiyat as $fyt) { echo number_format($fyt->deneme, 2, '.', ''); } ?></strong> &#8378;</td>
                     <td class="minFiyat">Optimum Fiyat</td>
@@ -327,7 +327,7 @@
                     alert(" Seçmiş Olduğunuz İlanın Kazanını Kaydedildi!");
                     $('.KapaliKazanan').hide();
                     successValue.parent().parent().addClass("kismiKazanan");
-                    successValue.parent().text("KAZANDI");  
+                    successValue.parent().text("KAZANDI");
                 }
             });
         }
@@ -350,8 +350,8 @@
                     alert(" Seçmiş Olduğunuz İlanın Kazanını Kaydedildi!");
                     $('.KapaliKazanan').hide();
                     successValue.parent().parent().addClass("kismiKazanan");
-                    successValue.parent().text("KAZANDI");  
-                    
+                    successValue.parent().text("KAZANDI");
+
                     for(var key=0; key <Object.keys(data).length;key++){
                         $('.kazan'+data[key]).hide();
                     }
@@ -362,4 +362,4 @@
             return false;
         }
     });
-</script>                     
+</script>
