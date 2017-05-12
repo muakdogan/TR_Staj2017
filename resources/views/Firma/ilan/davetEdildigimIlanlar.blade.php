@@ -37,19 +37,13 @@ tr:nth-child(even) {
     cursor: pointer;
     border-radius: 8px;
 }
-
 </style>
-
      <div class="container">
-         
         @include('layouts.alt_menu') 
              <div class="row">
                  <div class="col-xs-12 col-sm-6 col-md-8">
-
                      <div class="panel-group">
-                         <?php $davetEdilIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); //davet edilen ilanları buluyoruz
-                                
-                         ?>
+                        
                          <div class="panel panel-default">
                              <div class="panel-heading">Davet Edildiğim İlanlar</div>
                              <div class="panel-body">
@@ -59,54 +53,11 @@ tr:nth-child(even) {
                                          <th>Başvuru Sayısı</th>
                                          <th></th>
                                      </tr>
-                                    @foreach($davetEdilIlanlar as $dvtIlan)
-                                    <?php $dIlan = App\Ilan::find($dvtIlan->ilan_id);
-                                         $dIlanTeklifsayısı = $dIlan->teklifler()->count();
-                                         if(Auth::guest()){
-            
-                                        }
-                                        else{
-
-                                              $kullanici_id = Auth::user()->kullanici_id;
-
-                                              $firmaKont=  App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id )
-                                                       ->select('firma_id')->get();
-                                              $firmaKont=$firmaKont->toArray();
-
-                                              $firma_id=$firmaKont[0]['firma_id'];
-
-
-
-                                                $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
-                                                        ->where( 'firma_id', '=', $firma_id)
-                                                        ->select('rol_id')->get();
-                                                        $rol_id=$rol_id->toArray();
-
-
-                                                $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
-                                                ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
-                                                ->select('roller.adi as rolAdi')->get();
-                                                $querys=$querys->toArray();
-
-                                                $rol=$querys[0]['rolAdi'];
-
-                                            }
-                                    ?>
+                                    @foreach(App\BelirlIstekli::where('firma_id',$firma->id)->get() as $dvtIlan)
                                      <tr>
-                                         <td>{{$dIlan->adi}}</td>
-                                         <td>{{$dIlanTeklifsayısı}}</td>
-                                        @if(Auth::guest())
-                                        @else
-                                            @if ( $rol === 'Yönetici')
-                                                <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
-                                            @elseif ($rol ==='Satış')
-                                                <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
-                                            @elseif ($rol ==='Satın Alma / Satış')
-                                                <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
-                                            @else
-                                            @endif
-                                        @endif
-                                        
+                                         <td>{{$dvtIlan->dvtIlanAdi($dvtIlan->ilan_id)}}</td>
+                                         <td>{{$dvtIlan->dIlanTeklifsayısı($dvtIlan->ilan_id)}}</td>
+                                         <td><a href="{{ URL::to('teklifGor', array($firma->id,$dvtIlan->getdIlanId($dvtIlan->ilan_id)), false) }}"><button type="button" class="btn btn-primary" name="{{$dvtIlan->getdIlan($dvtIlan->ilan_id)}}" id="{{$dvtIlan->getdIlan($dvtIlan->ilan_id)}}" style='float:right'>Başvur</button></a><br><br></td>                                          
                                      </tr>
                                     @endforeach
                                  </table>
