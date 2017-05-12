@@ -1,6 +1,4 @@
 @extends('layouts.app')
-<?php use App\IletisimBilgi;
-use App\Il;?>
 @section('content')
 <head>
     <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
@@ -98,9 +96,8 @@ use App\Il;?>
                                         <div class="col-sm-1">:</div>
                                         <div class="col-sm-8">
                                           <select class="form-control deneme"   name="sektor_id[]" id="custom-headers" multiple='multiple' >
-                                                <?php $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();  ?>
                                                 @foreach($sektorler as $sektor)
-                                                <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                                        <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                                                 @endforeach
                                           </select>
 
@@ -131,7 +128,7 @@ use App\Il;?>
                                             'class'=>'form-control',
                                             'placeholder'=>'E-postanız',
                                             'data-validation'=>'email',
-                                             'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                            'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -143,18 +140,8 @@ use App\Il;?>
                                                 <select class="form-control input-sm" name="il_id" id="il_id" data-validation="required"
                                                       data-validation-error-msg="Lütfen bu alanı doldurunuz!" >
                                                     <option  value="Seçiniz" selected disabled>Seçiniz</option>
-
-                                                    <?php $iller_query= DB::select(DB::raw("SELECT *
-                                                            FROM  `iller`
-                                                            WHERE adi = 'İstanbul'
-                                                            OR adi =  'İzmir'
-                                                            OR adi =  'Ankara'
-                                                            UNION
-                                                            SELECT *
-                                                            FROM iller"));
-                                                            ?>
                                                     @foreach($iller_query as $il)
-                                                    <option value="{{$il->id}}">{{$il->adi}}</option>
+                                                           <option value="{{$il->id}}">{{$il->adi}}</option>
                                                     @endforeach
                                                 </select>
                                             <div class="ajax-loader">

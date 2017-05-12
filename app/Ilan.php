@@ -38,7 +38,7 @@ class Ilan extends Model
   {
     return $this->hasMany('App\IlanGoturuBedel', 'ilan_id', 'id');
   }
-  public function katilimcilar()
+  public function katilimci_firmalar()
   {
     return $this->hasMany('App\Katilimcilar', 'ilan_id', 'id');
   }
@@ -83,7 +83,7 @@ class Ilan extends Model
     else if ($this->ilan_turu == 3)
       return 'Yapım İşi';
   }
-  public function getKatilimcilar()
+  public function getKatilimciTur()
   {
     if($this->katilimcilar == 1)
       return 'Onaylı Tedarikçiler';

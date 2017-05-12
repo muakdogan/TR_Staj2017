@@ -1,8 +1,4 @@
 @extends('layouts.app')
-
-<?php use App\IletisimBilgi; 
-use App\Il;?>
-
 @section('content')
  <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
 <style>

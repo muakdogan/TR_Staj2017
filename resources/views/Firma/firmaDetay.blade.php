@@ -10,44 +10,42 @@
 <!DOCTYPE html>
 <html>
     <head>
-          <link rel="stylesheet" type="text/css" href="{{asset('css/firmaDetayProfil.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="{{asset('css/firmaDetayProfil.css')}}"/>
         <style>
             table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
             }
-
             td, th {
-
-            text-align: left;
-            padding: 5px;
+                text-align: left;
+                padding: 5px;
             }
             .button {
-            background-color: #555555; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 22px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 13px;
-            margin: 4px 2px;
-            cursor: pointer;
-            float:right;
+                background-color: #555555; /* Green */
+                border: none;
+                color: white;
+                padding: 10px 22px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 13px;
+                margin: 4px 2px;
+                cursor: pointer;
+                float:right;
             }
             .button1 {
-            background-color: #555555; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 22px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 13px;
-            margin: 4px 2px;
-            cursor: pointer;
-            float:left;
+                background-color: #555555; /* Green */
+                border: none;
+                color: white;
+                padding: 10px 22px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 13px;
+                margin: 4px 2px;
+                cursor: pointer;
+                float:left;
             }
             .puanlama {
                 background: #dddddd;
@@ -64,8 +62,8 @@
             }
             point { 
                 display: block;
-                    font-size: 26px;
-                    letter-spacing: -1px;
+                font-size: 26px;
+                letter-spacing: -1px;
                 margin-top: 0.1em;
                 margin-bottom: 1em;
                 margin-left: 0;
@@ -74,11 +72,11 @@
                 
             }
              .bilgiEkle{
-                  text-align: center;
-                  height:67px;
-                  border-width:2px;
-                  border-style:dotted;
-                  border-color:#ddd
+                text-align: center;
+                height:67px;
+                border-width:2px;
+                border-style:dotted;
+                border-color:#ddd
                   
               }
               .test + .tooltip > .tooltip-inner {
@@ -89,7 +87,7 @@
                 font-size: 12px;
              }
              .test + .tooltip.bottom > .tooltip-arrow {
-                    border-bottom: 5px solid green;
+                 border-bottom: 5px solid green;
              }
         </style>
    </head>
@@ -97,11 +95,6 @@
    <div class="container">
        <br>
       <div class="row">
-        <?php $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
-                        ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
-                        ->get();
-               $puanlar = $puanlar->toArray();
-        ?> 
         <div   class="col-sm-3">	
             <br>
             <br>
@@ -110,7 +103,6 @@
             </div>
             <br>
             <div   class="row" align="center">  
-               
                     <div class=" puanlama " >
                         <span  class="test" data-toggle="tooltip" data-placement="bottom" title="Ürün/Hizmet Kalitesi" style="font-size:10px;letter-spacing: 1px;">Kalite</span><point class="point">{{number_format($puanlar[0]['ortalama1'],1)}}</point>
                     </div>
@@ -123,13 +115,8 @@
                     <div class=" puanlama  " >
                         <span  class="test" data-toggle="tooltip" data-placement="bottom" title="İletişim ve Esneklik" style="font-size:10px;letter-spacing: 1px;">Esneklik</span><point class="point">{{number_format($puanlar[0]['ortalama4'],1)}}</point>
                     </div>
-                </div>
-          
+            </div>
         </div>
-        <?php
-            $yorumlar = App\Yorum::where('firma_id','=',$firma->id)->orderBy('tarih','DESC')->get();
-            $toplamYorum =App\Yorum::where('firma_id','=',$firma->id)->count();
-         ?>
         <div  id="exTab2"  class="col-sm-9">
             <ul class="nav nav-tabs">
                 <li class="active"><a  href="#1" data-toggle="tab"> <strong>{{$firma->adi}}</strong> Firma Profili</a>
@@ -142,7 +129,6 @@
                         @else
                          ({{$toplamYorum}})
                         @endif
-                    
                     </a>
                 </li>
             </ul>
@@ -157,17 +143,6 @@
                                                 <thead id="tasks-list" name="tasks-list">
                                                     <tr>
                                                         <td><strong>Adres</strong></td>
-                                                        <?php
-                                                        $firmaAdres = $firma->adresler()->where('tur_id', '=', '1')->first();
-                                                        if (!$firma->iletisim_bilgileri)
-                                                            $firma->iletisim_bilgileri = new IletisimBilgisi();
-                                                        if (!$firmaAdres) {
-                                                            $firmaAdres = new Adres();
-                                                            $firmaAdres->iller = new Il();
-                                                            $firmaAdres->ilceler = new Ilce();
-                                                            $firmaAdres->semtler = new Semt();
-                                                        }
-                                                        ?>
                                                         <td><strong>:</strong>  {{$firmaAdres->adres}}</td>
 
                                                     </tr>
@@ -228,11 +203,6 @@
                                     </div>
                                     @endif
                                     
-                                    <?php
-                                    if (!$firma->mali_bilgiler) {
-                                        $firma->mali_bilgiler = new App\MaliBilgi();
-                                    }
-                                    ?>
                                     @if($firma->mali_bilgiler->firma_id==0)
                                     @else
                                     <div class="panel panel-default">
@@ -242,33 +212,15 @@
                                                 <thead id="tasks-list" name="tasks-list">
                                                     <tr>
                                                         <td width="25%"><strong>Firma Ünvanı</strong></td>
-                                                        <?php
-                                                        $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
-                                                        if (!$firma->mali_bilgiler) {
-                                                            $firma->mali_bilgiler = new App\MaliBilgi();
-                                                            $firma->mali_bilgiler->vergi_daireleri = new App\VergiDairesi();
-                                                            $firma->sirket_turleri = new App\SirketTuru();
-                                                        }
-                                                        if (!$firmaFatura) {
-                                                            $firmaFatura = new Adres();
-                                                            $firmaFatura->iller = new Il();
-                                                            $firmaFatura->ilceler = new Ilce();
-                                                            $firmaFatura->semtler = new Semt();
-                                                        }
-                                                        $sirketTurleri=  \App\SirketTuru::all();
-                                                        ?>
                                                         <td width="75%"><strong>:</strong>{{$firma->mali_bilgiler->unvani}}</td>
                                                     </tr>
                                                     <tr>
                                                         
                                                         <td><strong>Şirket Türü</strong></td>
-                                                        @foreach($sirketTurleri as $sirket)<?php
-                                                        if ($sirket->id == $firma->sirket_turu) {
-                                                            ?>
-                                                            <td><strong>:</strong>  {{$sirket->adi}}</td>
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                        @foreach($sirketTurleri as $sirket)
+                                                            @if($sirket->id == $firma->sirket_turu)
+                                                                <td><strong>:</strong>  {{$sirket->adi}}</td>
+                                                            @endif
                                                         @endforeach
                                                     </tr>
                                                     <tr>
@@ -309,29 +261,6 @@
                                     </div>
                                     @endif
                                     <div class="panel panel-default">
-                                                <?php
-                                                $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
-                                                if (!$firma->ticari_bilgiler) {
-                                                    $firma->ticari_bilgiler = new App\TicariBilgi();
-                                                    $firma->ticari_bilgiler->ticaret_odalari = new App\TicaretOdasi();
-                                                    $firma->ticari_bilgiler->sektorler = new App\Sektor();
-
-                                                    $firma->firma_departmanlar = new App\FirmaDepartman();
-                                                    $firma->firma_departmanlar->departmanlar = new App\Departman();
-
-                                                    $firma->firma_sektorler = new App\FirmaSektor();
-                                                    $firma->firma_sektorler->sektorler = new App\Sektor();
-
-                                                    $firma->firma_satilan_markalar = new App\FirmaSatilanMarka();
-                                                    $firma->firma_satilan_markalar->satilan_markalar = new App\SatilanMarka();
-
-                                                    $firma->firma_faaliyetler = new App\FirmaFaaliyet();
-                                                    $firma->firma_faaliyetler->faaliyetler = new App\Faaliyet();
-                                                }
-                                                if (!$firma->uretilen_markalar) {
-                                                    $firma->uretilen_markalar = new App\UretilenMarka();
-                                                }
-                                                ?>
                                         <div style="padding: 0px;" class="panel-body">
                                             <h5> <img src="{{asset('images/tl.png')}}">&nbsp;<strong>Ticari Bilgiler</strong></h5>
                                             <table class="table" >
@@ -346,7 +275,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Üst Sektör</strong></td>
-                                                        <td><strong>:</strong>  {{$firma->ticari_bilgiler->sektorler->adi}}</td>
+                                                        <td><strong>:</strong> {{$firma->getUstSektor()}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Faliyet Sektör</strong></td>
@@ -365,22 +294,22 @@
                                                     <tr>
                                                         <td><strong>Kuruluş Tarihi</strong></td>
                                                         @if($firma->kurulus_tarihi=="0000-00-00")
-                                                        <td><strong>:</strong> </td>
+                                                            <td><strong>:</strong> </td>
                                                         @else
-                                                        <td><strong>:</strong> {{$firma->kurulus_tarihi}}</td>
+                                                            <td><strong>:</strong> {{$firma->kurulus_tarihi}}</td>
                                                         @endif
                                                     </tr> 
                                                     <tr>
                                                         <td><strong>Firma Faaliyet Türü</strong></td>
-                                                        <td><strong>:</strong>@foreach($firma->faaliyetler as $faaliyet)
-                                                            {{$faaliyet->adi}}
+                                                        <td><strong>:</strong>
+                                                            @foreach($firma->faaliyetler as $faaliyet)
+                                                                {{$faaliyet->adi}}
                                                             @endforeach
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Firmanın Ürettiği Markalar</strong></td>
                                                         <td><strong>:</strong>
-                                                            <?php $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get(); ?>
                                                             @foreach($uretilenMarka as $marka)
                                                             {{$marka->adi}}
                                                             @endforeach
@@ -388,9 +317,12 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Firmanın Sattığı Markalar</strong></td>
-                                                        <td><strong>:</strong>@foreach($firma->satilan_markalar as $satMarka)
-                                                            {{$satMarka->adi}}
-                                                            @endforeach
+                                                        <td id="sattıgı_id_td"><strong>:</strong>
+                                                             @if(count($satilanMarka) > 1)
+                                                                 @foreach($firma->$satilanMarka as $satMarka)
+                                                                     {{$satMarka->satilan_marka_adi}}
+                                                                 @endforeach
+                                                             @endif 
                                                         </td>
                                                     </tr>
                                                 </thead>
@@ -398,14 +330,7 @@
 
                                         </div>
                                     </div>
-                                    
-                                    
-                                    <?php
-                                    if (!$firma->kalite_belgeleri) {
-                                        $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();
-                                    }
-                                    $kaliteBelge = DB::table('firma_kalite_belgeleri')->where('firma_id', $firma->id)->count();
-                                    ?>
+                                 
                                     @if($kaliteBelge==null)
                                     @else 
                                     <div class="panel panel-default">
@@ -434,16 +359,7 @@
                                             </div>
                                          </div>
                                     </div>
-                                     @endif
-                                     <?php
-                                                if (!$firma->firma_referanslar) {
-                                                    $firma->firma_referanslar = new App\FirmaReferans();
-                                                } else {
-                                                    $firmaReferanslar = $firma->firma_referanslar()->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc')->get();
-                                                }
-
-                                                $referans = DB::table('firma_referanslar')->where('firma_id', $firma->id)->count();
-                                    ?>
+                                    @endif
                                     @if($referans==null)
                                     @else
                                     <div class="panel panel-default">
@@ -513,13 +429,7 @@
                                         </div>
                                     </div>
                                     @endif
-                                    
-                                     <?php
-                                        if (!$firma->firma_brosurler) {
-                                            $firma->firma_brosurler = new App\FirmaBrosur();
-                                        }
-                                        $brosur = DB::table('firma_brosurler')->where('firma_id', $firma->id)->count();
-                                     ?>
+                                   
                                     @if($brosur==null)
                                             
                                     @else
@@ -533,32 +443,24 @@
                                                 <th>Broşür Pdf:</th>
 
                                                 @foreach($firma->firma_brosurler as $firmaBrosur)
-                                                <tr>   
-                                                    <td>
-                                                        {{$firmaBrosur->adi}}
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ asset('brosur/'.$firmaBrosur->yolu) }}">{{$firmaBrosur->yolu}}</a>
-                                                    </td>
-                                                    <td>
-                                                  
-                                                    <input type="hidden" name="brosur_id"  id="brosur_id" value="{{$firmaBrosur->id}}"> 
-                                                        </tr>
-                                                        @endforeach
+                                                    <tr>   
+                                                        <td>
+                                                            {{$firmaBrosur->adi}}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ asset('brosur/'.$firmaBrosur->yolu) }}">{{$firmaBrosur->yolu}}</a>
+                                                        </td>
+                                                        <td>
+
+                                                        <input type="hidden" name="brosur_id"  id="brosur_id" value="{{$firmaBrosur->id}}"> 
+                                                    </tr>
+                                               @endforeach
                                                 </thead>
                                             </table>
                                        </div>
                                     </div>
                                      @endif
-                                      <?php
-                                                if (!$firma->firma_calisma_bilgileri) {
-                                                    $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
-                                                    $calismaGunu = '';
-                                                } else
-                                                    $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
-
-                                                $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-                                      ?>
+                                     
                                      @if($calisan==null)
 
                                      @else
@@ -592,7 +494,7 @@
                                     </div>
                                    @endif
                                    @if($firma->bilgilendirme_tercihi==null)
-                                    @else
+                                   @else
                                     <div class="panel panel-default">
                                      
                                         <div  style="padding: 0px;" class="panel-body">
@@ -637,39 +539,30 @@
                                         </strong>
                                     </div>
                                     @foreach($yorumlar as $yorum)
-                                    <div style="border: 1px solid #ddd;" class="panel-body">
-                                        <?php 
-                                        $yorumYapanFirma = App\Firma::find($yorum->yorum_yapan_firma_id);
-                                        $puanlar=  App\Puanlama::where('firma_id','=',$yorum->firma_id)
-                                                ->where('ilan_id','=',$yorum->ilan_id)
-                                                ->select('kriter1 as urunKalite','kriter2 as teslimat','kriter3 as teknik','kriter4 as iletisim')->get();
-                                        
-                                        ?>
-                                        <div class="row">
-                                             <div class="col-sm-4">
-                                                <div class="col-sm-12" >
-                                                    
-                                                    <img src="{{asset('uploads')}}/{{$yorumYapanFirma->logo}}" alt="HTML5 Icon" style="width:50px;height:50px;">
-                                                    <strong>{{$yorumYapanFirma->adi}}</strong>
+                                    
+                                        <div style="border: 1px solid #ddd;" class="panel-body">
+                                            <div class="row">
+                                                 <div class="col-sm-4">
+                                                    <div class="col-sm-12" >
+                                                        <img src="{{asset('uploads')}}/{{$yorum->getFirmaLogo($yorum->yorum_yapan_firma_id)}}" alt="HTML5 Icon" style="width:50px;height:50px;">
+                                                        <strong>{{$yorum->getFirmaAdi($yorum->yorum_yapan_firma_id)}}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                   <div  style="font-size:10px"class="col-sm-3">Kalite:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'ürünKalite')}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Teslimat:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'teslimat')}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Teknik:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'teknik')}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Esneklik:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'iletisim')}}</div>
+                                               </div>
+                                                <div class="col-sm-4">
+                                                    <div style="float:right" class="col-sm-6" >{{$yorum->tarih}}</div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                               <div  style="font-size:10px"class="col-sm-3">Kalite:{{$puanlar[0]['urunKalite']}}</div>
-                                               <div style="font-size:10px" class="col-sm-3">Teslimat:{{$puanlar[0]['teslimat']}}</div>
-                                               <div style="font-size:10px" class="col-sm-3">Teknik:{{$puanlar[0]['teknik']}}</div>
-                                               <div style="font-size:10px" class="col-sm-3">Esneklik:{{$puanlar[0]['iletisim']}}</div>
-                                           </div>
-                                                
-                                            <div class="col-sm-4">
-                                                <div style="float:right" class="col-sm-6" >{{$yorum->tarih}}</div>
-                                            </div>
-                                              
+                                            <div  style="text-align:center;"class="row">{{$yorum->yorum}}</div>
                                         </div>
-                                        <div  style="text-align:center;"class="row">{{$yorum->yorum}}</div>
-                                    </div>
                                 </div>
                                     @endforeach
-                                </div>
+                            </div>
                    </div> 
             </div>
         </div>

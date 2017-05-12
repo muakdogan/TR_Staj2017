@@ -9,6 +9,7 @@ use App\Sektor;
 use App\Firma;
 use App\FirmaReferans;
 use App\iletisim_bilgileri;
+use App\FirmaSatilanMarka;
 use App\Ilan;
 use App\Teklif;
 use Carbon\Carbon;
@@ -348,8 +349,78 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
   return view('Firma.firmalar')->with('firmalar', $firmalar);
 }]);
 Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
-  $firma=Firma::find($firmaid);
-  return view('Firma.firmaDetay')->with('firma', $firma);
+    $firma=Firma::find($firmaid);
+    $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
+        ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
+        ->get();
+   $puanlar = $puanlar->toArray();
+    if (!$firma->ticari_bilgiler) {
+         $firma->ticari_bilgiler = new TicariBilgi();
+         $firma->ticari_bilgiler->ticaret_odalari = new TicaretOdasi();
+         $firma->ticari_bilgiler->sektorler = new Sektor();
+     }
+    $yorumlar = App\Yorum::where('firma_id','=',$firma->id)->orderBy('tarih','DESC')->get();
+    $toplamYorum =App\Yorum::where('firma_id','=',$firma->id)->count();
+    $satilanMarka = FirmaSatilanMarka::where('firma_id', '=', $firma->id)->get();
+    $firmaAdres = $firma->adresler()->where('tur_id', '=', '1')->first();
+    if (!$firma->iletisim_bilgileri)
+        $firma->iletisim_bilgileri = new IletisimBilgisi();
+    if (!$firmaAdres) {
+        $firmaAdres = new Adres();
+        $firmaAdres->iller = new Il();
+        $firmaAdres->ilceler = new Ilce();
+        $firmaAdres->semtler = new Semt();
+    }
+    if (!$firma->mali_bilgiler) {
+        $firma->mali_bilgiler = new App\MaliBilgi();
+    }
+    $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
+    if (!$firma->mali_bilgiler) {
+        $firma->mali_bilgiler = new App\MaliBilgi();
+        $firma->mali_bilgiler->vergi_daireleri = new App\VergiDairesi();
+        $firma->sirket_turleri = new App\SirketTuru();
+    }
+    if (!$firmaFatura) {
+        $firmaFatura = new Adres();
+        $firmaFatura->iller = new Il();
+        $firmaFatura->ilceler = new Ilce();
+        $firmaFatura->semtler = new Semt();
+    }
+    $sirketTurleri=  \App\SirketTuru::all();
+    $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get();   
+    if (!$firma->kalite_belgeleri) {
+        $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();
+    }
+    $kaliteBelge = DB::table('firma_kalite_belgeleri')->where('firma_id', $firma->id)->count();   
+    if (!$firma->firma_referanslar) {
+        $firma->firma_referanslar = new App\FirmaReferans();
+    } else {
+        $firmaReferanslar = $firma->firma_referanslar()->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc')->get();
+    }
+
+    $referans = DB::table('firma_referanslar')->where('firma_id', $firma->id)->count();
+     if (!$firma->firma_brosurler) {
+        $firma->firma_brosurler = new App\FirmaBrosur();
+    }
+    $brosur = DB::table('firma_brosurler')->where('firma_id', $firma->id)->count();
+    
+    if (!$firma->firma_calisma_bilgileri) {
+        $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
+        $calismaGunu = '';
+    } else
+        $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
+
+    $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
+    
+   
+    
+     return view('Firma.firmaDetay')->with('firma', $firma)->with('puanlar', $puanlar)->with('yorumlar', $yorumlar)
+          ->with('toplamYorum', $toplamYorum)->with('satilanMarka', $satilanMarka)->with('firmaAdres', $firmaAdres)->with('firmaFatura', $firmaFatura)
+          ->with('sirketTurleri', $sirketTurleri)->with('uretilenMarka', $uretilenMarka)->with('kaliteBelge', $kaliteBelge)->with('firmaReferanslar', $firmaReferanslar)
+          ->with('referans', $referans)->with('brosur', $brosur)->with('calisan', $calisan)
+          ->with('calismaGunu', $calismaGunu)->with('puanlar', $puanlar);
+  
+  
 });
 Route::get('/davetEdildigim/{firmaid}', function ($firmaid) {
   $firma=Firma::find($firmaid);
@@ -363,8 +434,19 @@ Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
 
 Route::get('/firmaKayit' ,function () {
   $iller = App\Il::all();
-  $sektorler= App\Sektor::all();
-  return view('Firma.firmaKayit')->with('iller', $iller)->with('sektorler',$sektorler);
+ 
+  $iller_query= DB::select(DB::raw("SELECT *
+                                FROM  `iller`
+                                WHERE adi = 'İstanbul'
+                                OR adi =  'İzmir'
+                                OR adi =  'Ankara'
+                                UNION
+                                SELECT *
+                                FROM iller"));
+   $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();  
+  
+  
+  return view('Firma.firmaKayit')->with('iller', $iller)->with('sektorler',$sektorler)->with('iller_query',$iller_query);
 });
 
 Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
@@ -381,7 +463,13 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
   if (Gate::denies('show', $firma)) {
     return Redirect::to('/');
   }
-  return view('Firma.firmaIslemleri')->with('firma',$firma);
+  $davetEdilIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get();
+  $ilanlarFirma = $firma->ilanlar()->orderBy('yayin_tarihi','desc')->limit('5')->get();
+  $teklifler= DB::table('teklifler')->where('firma_id',$firma->id)->limit(5)->get(); 
+  $tekliflerCount= DB::table('teklifler')->where('firma_id',$firma->id)->count();
+  
+  return view('Firma.firmaIslemleri')->with('firma',$firma)->with('davetEdilIlanlar', $davetEdilIlanlar)
+          ->with('ilanlarFirma', $ilanlarFirma)->with('teklifler', $teklifler)->with('tekliflerCount', $tekliflerCount);
 }]);
 
 Route::post('/ilanAra', 'IlanController@showIlan');
@@ -673,10 +761,12 @@ Route::get('/basvuruControl/',function (){
   $basvuruControl = DB::table('teklifler')
   ->join('firmalar', 'firmalar.id', '=', 'teklifler.firma_id')
   ->join('ilanlar', 'ilanlar.id', '=', 'teklifler.ilan_id')
-  ->whereIn('ilanlar.firma_sektor', $sektorler)
+  ->whereIn('ilanlar.ilan_sektor', $sektorler)
   ->where('teklifler.ilan_id', '=', $ilan_id)
   ->where('teklifler.firma_id', '=', $firma_id);
   $basvuruControl = $basvuruControl->count();
+  
+  
   return Response::json($basvuruControl);
 
 });

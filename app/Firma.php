@@ -66,7 +66,7 @@ class Firma extends Model
     }
     public function sirket_turleri()
     {
-        return $this->belongsTo('App\SirketTuru', 'tur_id', 'id');
+        return $this->hasOne('App\SirketTuru', 'id', 'tur_id');
     }
     public function kullanicilar()
     {
@@ -108,6 +108,22 @@ class Firma extends Model
     {
         return $this->hasMany('App\Puanlama', 'yorum_yapan_firma_id', 'id');
     }
-
-
+    public function getUstSektor()
+    {
+      if($this->ticari_bilgiler->ust_sektor==1)
+        return 'Sanayi';
+      else if ($this->ticari_bilgiler->ust_sektor==2)
+        return 'Tarım';
+      else if ($this->ticari_bilgiler->ust_sektor==3)
+        return 'Hizmet';
+    }
+    public function getCalisanProfil()
+    {
+      if($this->firma_calisma_bilgileri->calisan_profili==1)
+        return 'Mavi Yaka';
+      else if ($this->firma_calisma_bilgileri->calisan_profili==2)
+        return 'Beyaz Yaka';
+      else if ($this->firma_calisma_bilgileri->calisan_profili==3)
+        return 'Mavi Yaka,Beyaz Yaka';
+    }
 }
