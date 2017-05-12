@@ -1,5 +1,5 @@
 @extends('layouts.app')
-<?php 
+<?php
     use Carbon\Carbon;
     $dt = Carbon::today();
     $time = Carbon::parse($dt);
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"></link>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
-    
+
  <style>
     table {
         font-family: arial, sans-serif;
@@ -200,27 +200,27 @@
     -moz-animation:2s blinker linear infinite;
     }
 
-    @-moz-keyframes blinker {  
+    @-moz-keyframes blinker {
      0% { opacity: 1.0; }
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
 
-    @-webkit-keyframes blinker {  
+    @-webkit-keyframes blinker {
      0% { opacity: 1.0; }
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
 
-    @keyframes blinker {  
+    @keyframes blinker {
      0% { opacity: 1.0; }
      50% { opacity: 0.0; }
      100% { opacity: 1.0; }
      }
     .test + .tooltip > .tooltip-inner {
-        background-color: #73AD21; 
-        color: #FFFFFF; 
-        border: 1px solid green; 
+        background-color: #73AD21;
+        color: #FFFFFF;
+        border: 1px solid green;
         padding: 10px;
         font-size: 12px;
      }
@@ -245,12 +245,11 @@
         <div class="row">
             <div class="col-sm-9">
                 <div class="panel panel-default">
-                    @foreach($aktif_count as $count)
-                        <div class="panel-heading"><strong>Aktif İlanlarım &nbsp;({{$count->count}} İlan)</strong></div>
-                    @endforeach
+                        <div class="panel-heading"><strong>Aktif İlanlarım &nbsp;({{$aktif_count}} İlan)</strong></div>
+
                     <div class="panel-body">
-                    @if($count->count!=0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->   
-                        
+                    @if($aktif_count!=0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->
+
                         <table  id="example" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size: 12px;">
                             <tr>
@@ -264,18 +263,17 @@
                         <tbody style="font_size:12px">
                             <?php  $i=1;?>
                             @foreach($aktif_ilanlar as $aktif_ilan)
-                                <?php $aIlan=  \App\Ilan::find($aktif_ilan->ilan_id);?>
-                                <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}'">
+                                <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}'">
                                     <td>{{$i++}}</td>
-                                    <td>{{$aktif_ilan->ilan_adi}}</td>
+                                    <td>{{$aktif_ilan->adi}}</td>
 
                                     <td>{{date('d-m-Y', strtotime($aktif_ilan->kapanma_tarihi))}}</td>
-                                    <td>{{$aIlan->teklifler()->count()}}</td>
+                                    <td>{{$aktif_ilan->teklifler()->count()}}</td>
 
-                                    @if($aktif_ilan->kapanma_tarihi > $dt || $aIlan->teklifler()->count() == 0)
-                                       <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
+                                    @if($aktif_ilan->kapanma_tarihi > $dt || $aktif_ilan->teklifler()->count() == 0)
+                                       <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
                                     @else
-                                    <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
+                                    <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
 
                                     @endif
                                 </tr>
@@ -283,13 +281,13 @@
                         </tbody>
                     </table>
                     @else
-                    
+
                         <p style="text-align:center">Henüz Aktif İlanınız Bulunmamamktadır.</p>
-                
-                    @endif 
+
+                    @endif
                     </div>
                 </div>
-                <?php 
+                <?php
                      $i=0;
                      $kullanici_id=Auth::user()->id;
                      $firma_id = session()->get('firma_id');
@@ -298,8 +296,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$sonuc_kapali}} İlan)</strong></div>
                     <div class="panel-body">
-                    @if($sonuc_kapali!=0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->   
-                        
+                    @if($sonuc_kapali!=0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->
+
                         <table id="sonuc" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size:12px">
                             <tr>
@@ -314,73 +312,30 @@
                         </thead>
                         <tbody>
                             @foreach($sonuc_ilanlar as $ilan)
-                            <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$ilan->ilan_id), false) }}'">
-                                <?php 
-                                    $sIlan =  \App\Ilan::find($ilan->ilan_id);
-                                    if(count($sIlan)!= 0){
-                                        $ilanTeklif= $sIlan->teklifler()->count();
-                                    }
-                                    else
-                                    {
-                                        $ilanTeklif=0;
-                                    }
-                                ?>
+                            <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}'">
                                 <td>{{ $j++}}</td>
-                                <td>{{$ilan->ilan_adi}}</td>
-                                @if($sIlan->kismi_fiyat == 1 ) <!--Kismi Açık -->
-                                    <?php 
-                                        $kazananFiyat=0;
-                                        $sonucTarihi = App\KismiAcikKazanan::where('ilan_id',$ilan->ilan_id)->get();
-                                    ?>
-                                    @foreach($sonucTarihi as $sonuclanma)
-                                        <?php $kazananFiyat+=$sonuclanma->kazanan_fiyat?>
-                                    @endforeach
-                                    
-                                     <td>{{date('d-m-Y', strtotime($sonuclanma->sonuclanma_tarihi))}}</td>
-                                    <?php 
-                                         if(count($sonucTarihi)!= 0){
-                                          $sonucFirma=  App\Firma::find($sonuclanma->kazanan_firma_id); 
-                                         }
-                                         else{
-                                             $sonucTarihi=" ";
-                                         }
-                                    ?>
+                                <td>{{$ilan->adi}}</td>
+                                @if($ilan->kismi_fiyat == 1 ) <!--Kismi Açık -->
+                                     <td>{{$ilan->sonuc_tarihi_acik()}}</td>
                                 @else<!--Kismi Kapali -->
-                                    <?php 
-                                       $sonucTarihiKapali = App\KismiKapaliKazanan::where('ilan_id',$ilan->ilan_id)->get();
-                                       $kontrol=$sonucTarihiKapali->count();
-                                       if(count($sonucTarihiKapali)!=0)
-                                       {
-                                           foreach ($sonucTarihiKapali as $sonucKapali){
-                                            $sonucFirma=  App\Firma::find($sonucKapali->kazanan_firma_id); 
-                                           }
-                                       }
-                                       else
-                                       {
-                                          $sonucTarihiKapali=" "; 
-                                       }
-                                    ?>
-                                    @foreach($sonucTarihiKapali as $sonucKapali)
-                                    
-                                    <td>{{date('d-m-Y', strtotime($sonucKapali->sonuclanma_tarihi))}}</td>
-                                    @endforeach
+                                      <td>{{$ilan->sonuc_tarihi_kapali()}}</td>
                                 @endif
-                                <td>{{$ilanTeklif}}</td>
-                               
-                                @if($sIlan->kismi_fiyat == 1 )
-                                    <td><strong> {{number_format($kazananFiyat,2,'.','')}}</strong> &#8378;</td>
+                                <td>{{$ilan->teklifler()->count()}}</td>
+
+                                @if($ilan->kismi_fiyat == 1 )
+                                    <td><strong> {{$ilan->kazananFiyatAcik()}}</strong> &#8378;</td>
                                     <td>Optimum Fiyat</td>
                                 @else
-                                    <td><strong> {{number_format($sonucKapali->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
-                                    <td>{{$sonucFirma->adi}}</td>
+                                    <td><strong> {{$ilan->kazananFiyatKapali()}}</strong> &#8378;</td>
+                                    <td>{{$ilan->kazananFirmaAdiKapali()}}</td>
                                 @endif
-                                <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->ilan_id)->where('firma_id',$sonucFirma)->get();  ///////////// Daha önce yorum
-                                        $existPuan = \App\Puanlama::where('ilan_id',$ilan->ilan_id)->where('firma_id',$sonucFirma)->get(); ///////yapılmış mı onun kontrolü
+                                <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->ilan_id)->where('firma_id',$ilan->kazananFirmaId())->get();  ///////////// Daha önce yorum
+                                        $existPuan = \App\Puanlama::where('ilan_id',$ilan->ilan_id)->where('firma_id',$ilan->kazananFirmaId())->get(); ///////yapılmış mı onun kontrolü
                                   ?>
                                 <td>
                                     @if(count($existPuan) != 0 || count($existYorum) != 0)
                                         @if($sIlan->kismi_fiyat == 1 )
-                                          <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->ilan_id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
+                                          <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
                                         @else
                                           <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
                                         @endif
@@ -396,8 +351,8 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="dialog" id="dialog{{$i++}}" style="display:none">
-                                                    
-                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$sonucFirma.'/'.$ilan->ilan_id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+
+                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$ilan->kazananFirmaId().'/'.$ilan->ilan_id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                                       <div class="row col-lg-12">
                                                         <div class="col-lg-3">
                                                             <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
@@ -405,14 +360,14 @@
                                                               <div class="sliders" id="k{{$i}}"></div>
                                                               <input type="hidden" id="puan1" name="puan1" value="5"/>
                                                           </div>
-                                                        </div>  
+                                                        </div>
                                                         <div class="col-lg-3" style="border-color:#ddd">
                                                             <label1 name="kriter2" type="text"><br>Teslimat</label1>
                                                           <div id="puanlama">
                                                               <div class="sliders" id="k{{$i+1}}"></div>
                                                               <input type="hidden" id="puan2" name="puan2" value="5"/>
                                                           </div>
-                                                        </div> 
+                                                        </div>
                                                         <div class="col-lg-3">
                                                             <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
                                                           <div id="puanlama">
@@ -426,7 +381,7 @@
                                                               <div class="sliders" id="k{{$i+3}}"></div>
                                                               <input type="hidden" id="puan4" name="puan4" value="5"/>
                                                           </div>
-                                                        </div> 
+                                                        </div>
                                                       </div>
                                                         <?php $i=$i+3; ?>
                                                       <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
@@ -434,7 +389,7 @@
                                                     {{ Form::close() }}
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">                                                            
+                                            <div class="modal-footer">
                                             </div>
                                         </div>
                                     </div>
@@ -445,20 +400,20 @@
                         </tbody>
                      </table>
                     @else
-                    
+
                         <p style="text-align:center">Henüz Sonuçlanmış  İlanınız Bulunmamamktadır.</p>
-                
+
                     @endif
                     </div>
                 </div>
-                
-                
-                
+
+
+
                 <div class="panel panel-default">
-                    <div class="panel-heading"><strong>Pasif İlanlarım &nbsp;({{App\Ilan::where('statu',2)->get()->count()}} İlan)</strong></div>
+                    <div class="panel-heading"><strong>Pasif İlanlarım &nbsp;({{$pasif_ilanlar->count()}} İlan)</strong></div>
                     <div class="panel-body">
-                    @if(App\Ilan::where('statu',2)->get()->count()!=0) <!-- Pasif ilanlar boş ise data table gözükmemesi kontrolü-->
-                 
+                    @if($pasif_ilanlar->count()!=0) <!-- Pasif ilanlar boş ise data table gözükmemesi kontrolü-->
+
                         <table  id="pasif" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size: 12px;">
                             <tr>
@@ -467,12 +422,12 @@
                                 <th>Kapanma Tarihi</th>
                                 <th>Verilen Teklif Sayısı</th>
                                 <th></th>
-                               
+
                             </tr>
                         </thead>
                         <tbody style="font_size:12px">
-                            <?php$i=1;?>
-                            @foreach(App\Ilan::where('statu',2)->get() as $pasif_ilan)
+                            <?php $i=1; ?>
+                            @foreach($pasif_ilanlar as $pasif_ilan)
                                 <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$pasif_ilan->id), false) }}'">
                                     <td>{{$i++}}</td>
                                     <td>{{$pasif_ilan->adi}}</td>
@@ -491,15 +446,15 @@
                         </tbody>
                     </table>
                     @else
-                    
+
                         <p style="text-align:center">Henüz Pasif Olan İlanınız Bulunmamamktadır.</p>
-                
+
                     @endif
-                    
+
                     </div>
                 </div>
-                
-               
+
+
             </div>
             <div class="col-sm-3">
                     <div class="panel panel-default">
@@ -507,15 +462,15 @@
                         <div style="background-color:#ccffb3" class="panel-body">
                             <table style="font-size:12px">
                                   <tr>
-                                   
+
                                     <th>İlan Adı</th>
                                   </tr>
                                 @foreach($aktif_ilanlar as $aktif_ilan)
                                   @if($aktif_ilan->kapanma_tarihi < $dt)
                                       <tr>
-                                        <td><a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->ilan_id), false) }}" class="test" data-toggle="tooltip" data-placement="bottom" title="Bu ilanın henüz kazananını belirlemediniz lütfen ilanın kazananını belirlemek için tıklayınız!">{{$aktif_ilan->ilan_adi}}</a></td>
+                                        <td><a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}" class="test" data-toggle="tooltip" data-placement="bottom" title="Bu ilanın henüz kazananını belirlemediniz lütfen ilanın kazananını belirlemek için tıklayınız!">{{$aktif_ilan->adi}}</a></td>
                                       </tr>
-                                  @else 
+                                  @else
                                   @endif
                                 @endforeach
                          </table>
@@ -524,12 +479,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading"><strong>İstatistik</strong></div>
                         <div  class="panel-body">
-                            @foreach($aktif_count as $count)
-                                <p><strong>Aktif İlan Sayısı:</strong>&nbsp;{{$count->count}}</p>
-                            @endforeach
+                                <p><strong>Aktif İlan Sayısı:</strong>&nbsp;{{$aktif_count}}</p>
                                 <p><strong>Sonuçlanmış İlan Sayısı:</strong>&nbsp;{{$sonuc_kapali}}</p>
-                            <?php $toplamIlan=$firma->ilanlar()->count(); ?>
-                            <p><strong>Toplam İlan Sayısı:</strong>&nbsp;{{$toplamIlan}}</p>
+                            <p><strong>Toplam İlan Sayısı:</strong>&nbsp;{{$firma->ilanlar()->count()}}</p>
                         </div>
                 </div>
             </div>
@@ -538,8 +490,8 @@
 <script>
 $(document).ready( function() {
 
-    $('[data-toggle="tooltip"]').tooltip();   
-    var table = $('#example').DataTable({  
+    $('[data-toggle="tooltip"]').tooltip();
+    var table = $('#example').DataTable({
         "language": {
             "sDecimal":        ",",
             "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
@@ -573,11 +525,11 @@ $(document).ready( function() {
     $('#example tbody')
         .on( 'mouseenter', 'td', function () {
             var colIdx = table.cell(this).index().column;
- 
+
             $( table.cells().nodes() ).removeClass( 'highlight' );
             $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
         } );
-var tableSonuc = $('#sonuc').DataTable({  
+var tableSonuc = $('#sonuc').DataTable({
         "language": {
             "sDecimal":        ",",
             "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
@@ -611,12 +563,12 @@ var tableSonuc = $('#sonuc').DataTable({
 $('#sonuc tbody')
         .on( 'mouseenter', 'td', function () {
             var colIdx = tableSonuc.cell(this).index().column;
- 
+
             $( tableSonuc.cells().nodes() ).removeClass( 'highlight' );
             $( tableSonuc.column( colIdx ).nodes() ).addClass( 'highlight' );
         } );
-        
-    var tablePasif = $('#pasif').DataTable({  
+
+    var tablePasif = $('#pasif').DataTable({
         "language": {
             "sDecimal":        ",",
             "sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
@@ -650,16 +602,16 @@ $('#sonuc tbody')
     $('#pasif tbody')
         .on( 'mouseenter', 'td', function () {
             var colIdx = tablePasif.cell(this).index().column;
- 
+
             $( tablePasif.cells().nodes() ).removeClass( 'highlight' );
             $( tablePasif.column( colIdx ).nodes() ).addClass( 'highlight' );
         } );
-        
-   
+
+
 var blink_speed = 1500;
 var t = setInterval(function () { var ele = document.getElementById("blinker"); ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden'); }, blink_speed);
 
-    
+
     var changeNumber="";
     var length={{$i}};
     for(var key=0; key<{{$i}}; key++){
@@ -676,10 +628,10 @@ var t = setInterval(function () { var ele = document.getElementById("blinker"); 
             $(this).addClass('active');
          }
        });
-    }   
+    }
     function closeMenu(){
       $('.dialog').fadeOut(200);
-      $('.add').removeClass('active');  
+      $('.add').removeClass('active');
     }
 
     $(document.body).click( function(e) {
@@ -764,11 +716,11 @@ var t = setInterval(function () { var ele = document.getElementById("blinker"); 
                 tooltip[idCount].style.backgroundColor = "#45c538";
                 tooltip[idCount].style.border = "1px solid #45c538";
             }
-            
-            
+
+
         });
     }
-        
+
 });
 
 
