@@ -263,24 +263,6 @@
                         <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
                     </div>
                 </div>
-
-                @if(Auth::guest())
-                    <?php $sektor_id = 0; ?>
-                @else
-                    <?php 
-                        $id = session()->get('firma_id');
-                        $firma = App\Firma::find($id);
-                    ?>
-                    @foreach($firma->sektorler as $sektor)
-                        <?php $sektor_id = $sektor->id ?>
-                    @endforeach
-                @endif
-                 @if (Auth::guest())
-                          <?php $davetEdildigimIlanlar = null; ?>
-                 @else
-                    <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); ?>
-                 @endif
-                 
                  @if(count($davetEdildigimIlanlar) != 0 )
                  <h3 style="text-shadow: 2px 2px 4px #fff">Davet Edildiğiniz İlanlar</h3>
                  <hr class="hr">
