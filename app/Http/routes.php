@@ -564,10 +564,37 @@ Route::get('basvurularim/{id}' ,function ($id) {
   if (Gate::denies('show', $firma)) {
     return Redirect::to('/');
   }
-  $teklifler=  \App\Teklif::all();
+    $basvurular = DB::select(DB::raw("SELECT * 
+                        FROM teklif_hareketler th1
+                        JOIN (
+                        SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
+                        FROM teklifler t, teklif_hareketler th
+                        WHERE t.id = th.teklif_id
+                        AND t.firma_id ='$firma->id'
+                        GROUP BY th.teklif_id
+                        )th2 ON th1.teklif_id = th2.teklif_id
+                        AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
+    $basvurular_count = DB::select(DB::raw("SELECT count(th1.id) as count
+                        FROM teklif_hareketler th1
+                        JOIN (
+                        SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
+                        FROM teklifler t, teklif_hareketler th
+                        WHERE t.id = th.teklif_id
+                        AND t.firma_id ='$firma->id'
+                        GROUP BY th.teklif_id
+                        )th2 ON th1.teklif_id = th2.teklif_id
+                        AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
+    $kazananKismi = App\KismiAcikKazanan::where('kazanan_firma_id',$firma->id)->get();
+    $kazananKismiCount= $kazananKismi->count();
+                    
+    $kazananKapali = App\KismiKapaliKazanan::where('kazanan_firma_id',$firma->id)->get();
+    $kazananKismiCount = $kazananKismiCount +($kazananKapali->count());
+    $teklifler=  \App\Teklif::all();
   //$kullanici = App\Kullanici::find($kul_id);
-  $detaylar = App\MalTeklif::all();
-  return view('Firma.ilan.basvurularim')->with('firma', $firma)->with('teklifler', $teklifler)->with('detaylar', $detaylar);
+    $detaylar = App\MalTeklif::all();
+    return view('Firma.ilan.basvurularim')->with('firma', $firma)->with('teklifler', $teklifler)->with('detaylar', $detaylar)
+         ->with('basvurular', $basvurular)->with('basvurular_count', $basvurular_count)
+         ->with('kazananKismi', $kazananKismi)->with('kazananKapali', $kazananKapali)->with('kazananKismiCount', $kazananKismiCount);
 
 });
 
@@ -685,22 +712,24 @@ Route::get('/email_girisControl/',function (){
 });
 
 Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) {
-  $firma = Firma::find(session()->get('firma_id'));
-  $ilan = Ilan::find($ilan_id);
-  $birimler=  \App\Birim::all();
-  $teklifler= DB::select(DB::raw("SELECT *
-    FROM teklif_hareketler th1
-    JOIN (
-      SELECT teklif_id, MAX( tarih ) tarih
-      FROM teklifler t, teklif_hareketler th
-      WHERE t.id = th.teklif_id
-      AND t.ilan_id ='$ilan_id'
-      GROUP BY th.teklif_id
-    )th2 ON th1.teklif_id = th2.teklif_id
-    AND th1.tarih = th2.tarih
-    ORDER BY kdv_dahil_fiyat ASC "));
+    $firma = Firma::find(session()->get('firma_id'));
+    $ilan = Ilan::find($ilan_id);
+    $birimler=  \App\Birim::all();
+    $teklifler= DB::select(DB::raw("SELECT *
+        FROM teklif_hareketler th1
+        JOIN (
+          SELECT teklif_id, MAX( tarih ) tarih
+          FROM teklifler t, teklif_hareketler th
+          WHERE t.id = th.teklif_id
+          AND t.ilan_id ='$ilan_id'
+          GROUP BY th.teklif_id
+        )th2 ON th1.teklif_id = th2.teklif_id
+        AND th1.tarih = th2.tarih
+        ORDER BY kdv_dahil_fiyat ASC "));
+    $kullanici = App\Kullanici::find(session()->get('kullanici_id'));
 
-    return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan', $ilan)->with('birimler',$birimler)->with('teklifler',$teklifler);
+    return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan', $ilan)
+            ->with('birimler',$birimler)->with('teklifler',$teklifler);
   }]);
 
   //firma profil route...
@@ -832,7 +861,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
   Route::get('teklifGor/{id}/{ilanid}' ,['middleware'=>'auth' ,function ($id,$ilan_id) {
     $firma = Firma::find($id);
     $ilan = Ilan::find($ilan_id);
-    $teklifler= DB::select(DB::raw("SELECT *
+  $teklifler = Ilan::with(['teklifler','teklifler.teklif_hareketler'])->get();
+            
+    /*$teklifler= DB::select(DB::raw("SELECT *
       FROM teklif_hareketler th1
       JOIN (
         SELECT teklif_id, MAX( tarih ) tarih
@@ -842,9 +873,38 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         GROUP BY th.teklif_id
       )th2 ON th1.teklif_id = th2.teklif_id
       AND th1.tarih = th2.tarih
-      ORDER BY kdv_dahil_fiyat ASC "));
-
-      return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler);
+      ORDER BY kdv_dahil_fiyat ASC ")); */
+    if (!$firma->ilanlar)
+        $firma->ilanlar = new App\Ilan();
+    if (!$firma->ilanlar->ilan_mallar)
+        $firma->ilanlar->ilan_mallar = new App\IlanMal();
+    if (!$firma->ilanlar->ilan_hizmetler)
+        $firma->ilanlar->ilan_hizmetler = new App\IlanHizmet();
+    if (!$firma->ilanlar->ilan_yapim_isleri)
+        $firma->ilanlar->ilan_yapim_isleri = new App\IlanYapimIsi();
+    
+    if (!$firma->ilanlar->ilan_goturu_bedeller)
+        $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
+    $firma_id = session()->get('firma_id'); 
+    $kullanici_id=Auth::user()->kullanici_id;
+    $teklif= App\Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();
+    
+    $firmaIlan=$ilan->firmalar;
+    $firmaAdres = $firmaIlan->adresler()->first();
+        if (!$firmaAdres) {
+            $firmaAdres = new Adres();
+            $firmaAdres->iller = new Il();
+            $firmaAdres->ilceler = new Ilce();
+            $firmaAdres->semtler = new Semt();
+        }
+    $dt = Carbon::today();
+    $time = Carbon::parse($dt);
+    $dt = $time->format('Y-m-d');
+    $kullanici = App\Kullanici::find(session()->get('kullanici_id'));                            
+      return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
+              ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
+              ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
+              ->with("dt",$dt);
 
     }]);
     ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////

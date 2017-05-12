@@ -120,4 +120,16 @@ class Ilan extends Model
     else
       return session()->get('firma_adi');
   }
+  public function getKalem ($kalem_id){
+        if($this->ilan_turu == 1 && $this->sozlesme_turu == 0){
+            $kalem = \App\IlanMal::find($kalem_id);
+        }elseif($this->ilan_turu == 2 && $this->sozlesme_turu == 0)  {
+            $kalem = App\IlanHizmet::find($kalem_id);
+        }elseif($this->ilan_turu == 3){
+            $kalem = App\IlanYapimIsi::find($kalem_id);
+        }else{
+            $kalem = \App\IlanGoturuBedel::find($kalem_id);
+        } 
+        return $kalem;
+  }
 }

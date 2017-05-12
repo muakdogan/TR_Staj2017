@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use App\MalTeklif;
 use Illuminate\Database\Eloquent\Model;
 
 class IlanMal extends Model
@@ -23,5 +23,8 @@ class IlanMal extends Model
     {
         return $this->hasMany('App\MalTeklif', 'ilan_mal_id', 'id');
     }
-    
+    public function getMalTeklif($ilan_mal_id,$teklif_id){
+        $malTeklif = MalTeklif::where('ilan_mal_id',$ilan_mal_id)->where('teklif_id',$teklif_id)->orderBy('id','DESC')->limit(1)->get();
+        return $malTeklif;
+    }
 }
