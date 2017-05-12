@@ -120,4 +120,18 @@ class Ilan extends Model
     else
       return session()->get('firma_adi');
   }
+  
+  public function ilanTeklif($ilan_id)
+  {
+        $sIlan =  $this->find($ilan_id);
+        
+        if(count($sIlan)!= 0){
+             return $ilanTeklif= $sIlan->teklifler()->count();
+        }
+        else
+        {
+           return $ilanTeklif=0;
+        }
+  }
+
 }

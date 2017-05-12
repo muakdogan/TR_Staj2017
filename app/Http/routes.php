@@ -641,10 +641,63 @@ Route::post('/yeniFirma/{id}', function (Request $request,$id) {
 
 Route::get('ilanlarim/{id}' ,function ($id) {
   $firma = Firma::find($id);
+  $model_ilanlar=  Ilan::all();
   if (Gate::denies('show', $firma)) {
     return Redirect::to('/');
   }
-  return view('Firma.ilan.ilanlarim')->with('firma', $firma);
+  
+   $aktif_ilanlar= DB::select(DB::raw("SELECT * , i.id AS ilan_id, i.adi AS ilan_adi
+                            FROM ilanlar i, firmalar f
+                            WHERE f.id = i.firma_id
+                            AND f.id ='$firma->id'
+                            AND NOT 
+                            EXISTS (
+
+                            SELECT * 
+                            FROM kismi_kapali_kazananlar kk
+                            WHERE kk.ilan_id = i.id 
+                            )
+                            AND NOT 
+                            EXISTS (
+
+                            SELECT * 
+                            FROM kismi_acik_kazananlar ka
+                            WHERE ka.ilan_id = i.id
+                            )
+                            ORDER BY i.kapanma_tarihi ASC "));
+                          
+    $aktif_count= DB::select(DB::raw("SELECT COUNT( i.id ) AS count
+        FROM ilanlar i, firmalar f
+        WHERE f.id = i.firma_id
+        AND f.id ='$firma->id'
+        AND NOT 
+        EXISTS (
+        SELECT * 
+        FROM kismi_acik_kazananlar ka, kismi_kapali_kazananlar kk
+        WHERE ka.ilan_id = i.id
+        OR kk.ilan_id = i.id
+        )"));
+    
+    $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
+    $sonuc_ilanlar=DB::select(DB::raw("SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
+                     FROM ilanlar i, firmalar f, kismi_kapali_kazananlar kk
+                     WHERE f.id = i.firma_id
+                     AND kk.ilan_id = i.id
+                     AND f.id ='$firma->id'
+                     UNION 
+                     SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
+                     FROM ilanlar i, firmalar f, kismi_acik_kazananlar ka
+                     WHERE f.id = i.firma_id
+                     AND ka.ilan_id = i.id
+                     AND f.id ='$firma->id'
+                     ORDER BY kapanma_tarihi ASC "));
+
+    $sonuc_kapali = 0;
+    foreach($sonuc_ilanlar as $sonucIla){
+      $sonuc_kapali++;
+    }
+    return view('Firma.ilan.ilanlarim')->with('firma', $firma)->with('aktif_ilanlar', $aktif_ilanlar)->with('aktif_count', $aktif_count)->with('ilanlarım', $ilanlarım)
+            ->with('sonuc_kapali', $sonuc_kapali)->with('sonuc_ilanlar', $sonuc_ilanlar)->with('model_ilanlar', $model_ilanlar);
 
 });
 Route::get('basvurularim/{id}' ,function ($id) {
