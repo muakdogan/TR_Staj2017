@@ -678,6 +678,7 @@ Route::get('ilanlarim/{id}' ,function ($id) {
         OR kk.ilan_id = i.id
         )"));
     
+    
     $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
     $sonuc_ilanlar=DB::select(DB::raw("SELECT i.id AS ilan_id, i.adi AS ilan_adi, i.kapanma_tarihi AS kapanma_tarihi
                      FROM ilanlar i, firmalar f, kismi_kapali_kazananlar kk
