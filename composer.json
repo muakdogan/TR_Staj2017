@@ -11,7 +11,8 @@
          "illuminate/html": "5.*",
         "yajra/laravel-datatables-oracle": "^6.21",
         "spatie/activitylog": "^2.4",
-        "google/apiclient": "2.0"
+        "google/apiclient": "2.0",
+        "barryvdh/laravel-debugbar": "^2.3"
     },
     
     "require-dev": {
