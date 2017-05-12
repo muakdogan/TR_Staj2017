@@ -149,6 +149,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         'Collective\Html\HtmlServiceProvider',
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -156,7 +157,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        
+
 
     ],
 
@@ -208,7 +209,7 @@ return [
         'Html' => 'Collective\Html\HtmlFacade',
         'Datatables'=> Yajra\Datatables\Datatables::class,
         'Activity' => 'Spatie\Activitylog\ActivitylogFacade',
-
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

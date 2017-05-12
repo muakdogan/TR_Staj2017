@@ -75,6 +75,11 @@ class Ilan extends Model
   {
     return $this->hasOne('App\Sektor', 'id', 'ilan_sektor');
   }
+  public function teklif_hareketler()
+  {
+   return $this->hasManyThrough('App\TeklifHareket', 'App\Teklif', 'ilan_id', 'teklif_id', 'id');
+  }
+
   public function getIlanTuru()
   {
     if($this->ilan_turu == 1)

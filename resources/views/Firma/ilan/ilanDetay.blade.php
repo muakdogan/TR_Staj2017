@@ -342,7 +342,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                              </tr>
                              <tr>
                                  <td>Sözleşme Türü:</td>
-                                 
+
                                  <td>{{$ilan->getSozlesmeTuru()}}</td>
                              </tr>
                              <tr>
@@ -753,6 +753,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     });
 
 });
+    //$("#turkLirasi").turkLirasi();
 
     $('#iskontoVal').on('input',function(){
         var iskontoOrani = parseInt($(this).val());
