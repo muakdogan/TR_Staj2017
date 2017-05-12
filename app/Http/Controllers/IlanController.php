@@ -8,6 +8,7 @@ use App\OdemeTuru;
 use App\Sektor;
 use App\BelirlIstekli;
 use DB;
+use App\Ilan;
 use Input;
 use View;
 use Carbon\Carbon;
@@ -35,8 +36,7 @@ class IlanController extends Controller
             }
             $davetEdildigimIlanlar = BelirlIstekli::where('firma_id',$fId)->get();
         }
-        $ilanlar = DB::table('ilanlar')
-                ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
+        $ilanlar = Ilan::join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
@@ -124,6 +124,8 @@ class IlanController extends Controller
         if($odeme != NULL){
             $ilanlar->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
+      
+        
         $ilanlar=$ilanlar->paginate(5);
         
         if (Request::ajax()) {
