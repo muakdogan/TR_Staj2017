@@ -1504,10 +1504,9 @@
 
                <div class="panel-body">
                    @if($calisan==null)
-                     <div class="bilgiEkle"> 
+                    <div class="bilgiEkle"> 
                             <button style="margin-top:20px" id="btn-add-firmacalisanbilgileri" name="btn-add-firmacalisanbilgileri" class="btn btn-primary btn-xs"><img src="{{asset('images/plus.png')}}">&nbsp;Bilgilerinizi Ekleyin</button>
                     </div>
-
                    @else
                    <table class="table" >
                        <thead id="tasks-list" name="tasks-list">
@@ -1521,7 +1520,7 @@
                            </tr>
                            <tr>
                                <td><strong>Çalışan Profili</strong></td>
-                               <td id="profil_id_td"><strong>:</strong>$firma->getCalisanProfil()</td>
+                               <td id="profil_id_td"><strong>:</strong> {{$firma->getCalisanProfil()}}</td>
                            </tr>
                            <tr>
                                <td><strong>Çalışan Sayısı</strong></td>

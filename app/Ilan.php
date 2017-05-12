@@ -1,9 +1,10 @@
 <?php
 
 namespace App;
-
+use App\Sektor;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Puanlama;
+use DB;
 class Ilan extends Model
 {
   //
@@ -137,4 +138,41 @@ class Ilan extends Model
         } 
         return $kalem;
   }
+  public function ilanTeklif($ilan_id){
+        $sIlan =  $this->find($ilan_id);
+        
+        if(count($sIlan)!= 0){
+             return $ilanTeklif= $sIlan->teklifler()->count();
+        }
+        else
+        {
+           return $ilanTeklif=0;
+        }
+  }
+ public function getIlanSektorAdi($ilan_sektor_id){
+        $sektorAdi=Sektor::find($ilan_sektor_id); 
+        return $sektorAdi->adi;
+ }
+ public function puanlamaOrtalama($firma_id){
+           $puan = Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                                   ->where('firma_id',$firma_id)
+                                   ->get();
+           $puan = $puan->toArray();
+           return number_format($puan[0]['ortalama'],1);
+    }
+ public function belirliIstekliControl($ilan_id ,$firma_id){
+       
+        $belirliFirmalar = App\BelirlIstekli::where('ilan_id',$ilan_id)->get();
+        $belirliFirma= 0;
+
+        foreach ($belirliFirmalar as $belirliIstekli){
+            if($belirliIstekli->firma_id == $firma_id ){
+                $belirliFirma = 1;
+            }
+        }
+        return $belirliFirma;
+ }
+
+  
+
 }

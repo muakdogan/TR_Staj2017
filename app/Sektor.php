@@ -18,4 +18,6 @@ class Sektor extends Model
     {
         return $this->belongsTo('App\Ilan', 'ilan_sektor', 'id');
     }
+    
+    
 }

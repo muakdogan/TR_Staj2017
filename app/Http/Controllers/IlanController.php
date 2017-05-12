@@ -6,13 +6,14 @@ use App\Il;
 use App\Firma;
 use App\OdemeTuru;
 use App\Sektor;
+use App\BelirlIstekli;
 use DB;
+use App\Ilan;
 use Input;
 use View;
 use Carbon\Carbon;
 use Response;
 use Illuminate\Support\Str;
-
 class IlanController extends Controller
 {
     //
@@ -24,8 +25,18 @@ class IlanController extends Controller
         $sektorler= Sektor::all();
         $odeme_turleri= OdemeTuru::all();
         $teklifler= \App\Teklif::all();
-        $ilanlar = DB::table('ilanlar')
-                ->join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
+        if(session()->get('firma_id') == null){ 
+            $sektor_id = 0;
+            $davetEdildigimIlanlar = null;
+        }else{
+            $fId = session()->get('firma_id');
+            $firmaSektor = Firma::find($fId);
+            foreach($firmaSektor->sektorler as $sektor){
+                        $sektor_id = $sektor->id;
+            }
+            $davetEdildigimIlanlar = BelirlIstekli::where('firma_id',$fId)->get();
+        }
+        $ilanlar = Ilan::join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
@@ -113,6 +124,8 @@ class IlanController extends Controller
         if($odeme != NULL){
             $ilanlar->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
+      
+        
         $ilanlar=$ilanlar->paginate(5);
         
         if (Request::ajax()) {
@@ -122,7 +135,7 @@ class IlanController extends Controller
         return View::make('Firma.ilan.ilanAra')-> with('ilanlar',$ilanlar)
                 ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
                 ->with('firma',$firma)->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('ilId',$ilId)->with('keyword',$keyword);
+                ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)->with('davetEdildigimIlanlar',$davetEdildigimIlanlar);
     
     }
 }

@@ -217,7 +217,7 @@
                                    <div class="mutliSelect">
                                        <ul>
                                            @foreach($iller as $il)
-                                           <li><input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
+                                                <li><input type="checkbox" value="{{$il->id}}" name="{{$il->adi}}" />{{$il->adi}}</li>
                                            @endforeach
                                        </ul>
                                    </div>
@@ -236,7 +236,7 @@
                     <div class="soldivler">
                         <h4>İlan Sektörü</h4>
                         @foreach($sektorler as $sektor)
-                         <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
+                            <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
                         @endforeach
                     </div>
                     <div class="soldivler" id="radioDiv">
@@ -263,60 +263,13 @@
                         <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
                     </div>
                 </div>
-
-                @if(Auth::guest())
-                    <?php $sektor_id = 0; ?>
-                @else
-                    <?php 
-                        $id = session()->get('firma_id');
-                        $firma = App\Firma::find($id);
-                    ?>
-                    @foreach($firma->sektorler as $sektor)
-                        <?php $sektor_id = $sektor->id ?>
-                    @endforeach
-                @endif
-                 @if (Auth::guest())
-                          <?php $davetEdildigimIlanlar = null; ?>
-                 @else
-                    <?php $davetEdildigimIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get(); ?>
-                 @endif
-                 
                  @if(count($davetEdildigimIlanlar) != 0 )
                  <h3 style="text-shadow: 2px 2px 4px #fff">Davet Edildiğiniz İlanlar</h3>
                  <hr class="hr">
                  <div class="col-sm-9 davetEdil">
-                            
-                            
                             @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
-                                    <?php $dIlan = App\Ilan::find($davetEdildigimIlan->ilan_id); ?>
-                                    <?php $sektorAdi = App\Sektor::find($dIlan->ilan_sektor); 
-                                        if($dIlan->ilan_turu == 1){
-                                            $ilan_turu="Mal";
-                                        }
-                                        else if($dIlan->ilan_turu == 2){
-                                            $ilan_turu="Hizmet";
-                                        }
-                                        else{
-                                            $ilan_turu  = "Yapım İşi";
-                                        }
-                                        if($dIlan->usulu == 1){
-                                            $usulu = "Tamrekabet";
-                                        }
-                                        else if($dIlan->usulu == 2){
-                                            $usulu ="Belirli İstekliler Arasında";
-                                        }
-                                        else{
-                                            $usulu = "Sadece Başvuru";
-                                        }
-                                         if($dIlan->sozlesme_turu == 0){
-                                            $sozlesme_turu="Birim Fiyatlı";
-                                        }
-                                        else{
-                                            $sozlesme_turu  = "Götürü Bedel";
-                                        }
-                                    ?>
-                            
-                                <div class="ilanDetayPop " name="{{$dIlan->id}}">
+                             
+                                <div class="ilanDetayPop " name="{{$davetEdildigimIlan->ilanlar->id}}">
                                     <div class="pop-up"  style="display: none;
                                                                 position: absolute;
                                                                 left: 200px;
@@ -328,39 +281,31 @@
                                                                 font-size: 90%;
                                                                 border-radius: 5px;
                                                                 z-index: 1000;">
-                                            <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$dIlan->ilanadi}}</p>
-                                            <p id="popIlanTuru"><img src="{{asset('images/ok.png')}}"><strong>İlan Türü :</strong> {{$ilan_turu}}</p>
-                                            <p id="popIlanUsulu"><img src="{{asset('images/ok.png')}}"><strong>Usulü : </strong>{{$usulu}}</p>
-                                            <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$sektorAdi->adi}}</p>
-                                            <p id="popIlanAciklama"><img src="{{asset('images/ok.png')}}"><strong>Açıklama : </strong>{{$dIlan->aciklama}}</p>
-                                            <p id="popIlanIsinSuresi"><img src="{{asset('images/ok.png')}}"><strong>İşin Süresi:</strong> {{$dIlan->isin_suresi}}</p>
-                                            <p id="popIlanSözlesmeTuru"><img src="{{asset('images/ok.png')}}"><strong>Sözleşme Türü : </strong>{{$sozlesme_turu}}</p>                                  
+                                            <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$davetEdildigimIlan->ilanlar->adi}}</p>
+                                            <p id="popIlanTuru"><img src="{{asset('images/ok.png')}}"><strong>İlan Türü :</strong> {{$davetEdildigimIlan->ilanlar->getIlanTuru()}}</p>
+                                            <p id="popIlanUsulu"><img src="{{asset('images/ok.png')}}"><strong>Usulü : </strong>{{$davetEdildigimIlan->ilanlar->getRekabet()}}</p>
+                                            <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$davetEdildigimIlan->ilanlar->getIlanSektorAdi($davetEdildigimIlan->ilanlar->ilan_sektor)}}</p>
+                                            <p id="popIlanAciklama"><img src="{{asset('images/ok.png')}}"><strong>Açıklama : </strong>{{$davetEdildigimIlan->ilanlar->aciklama}}</p>
+                                            <p id="popIlanIsinSuresi"><img src="{{asset('images/ok.png')}}"><strong>İşin Süresi:</strong> {{$davetEdildigimIlan->ilanlar->isin_suresi}}</p>
+                                            <p id="popIlanSözlesmeTuru"><img src="{{asset('images/ok.png')}}"><strong>Sözleşme Türü : </strong>{{$davetEdildigimIlan->ilanlar->getSozlesmeTuru()}}</p>                                  
                                     </div>
-                                    <?php $puan = App\Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
-                                                    ->where('firma_id',$dIlan->firmaid)
-                                                    ->get();
-                                           $puan = $puan->toArray();
-
-                                    ?>
-                                   
-                                    
-                                   
+                   
                                     <div class="col-sm-10">
-                                        <p><b>İlan Adı: {{$dIlan->adi}}</b></p>
-                                        @if(number_format($puan[0]['ortalama'],1)> 0)
-                                            <div class="puanlama">{{number_format($puan[0]['ortalama'],1)}}</div>
-                                            <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                        <p><b>İlan Adı: {{$davetEdildigimIlan->ilanlar->adi}}</b></p>
+                                        @if($davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->ilanlar->firma_id)> 0)
+                                            <div class="puanlama">{{$davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->firmaid)}}</div>
+                                            <p><a href="{{url('firmaDetay/'.$davetEdildigimIlan->ilanlar->firmalar->id)}}" >Firma: {{$davetEdildigimIlan->ilanlar->firmalar->adi}}</a></p>
                                         @else
-                                            <p><a href="{{url('firmaDetay/'.$dIlan->firmalar->id)}}" style="padding: 0px" >Firma: {{$dIlan->firmalar->adi}}</a></p>
+                                            <p><a href="{{url('firmaDetay/'.$davetEdildigimIlan->ilanlar->firmalar->id)}}" style="padding: 0px" >Firma: {{$davetEdildigimIlan->ilanlar->firmalar->adi}}</a></p>
                                         @endif
-                                        <p>{{$dIlan->adi}}</p>
+                                        <p>{{$davetEdildigimIlan->ilanlar->adi}}</p>
 
-                                        <p style="font-size: 13px;color: #999">{{date('d-m-Y', strtotime($dIlan->yayin_tarihi))}}</p>
+                                        <p style="font-size: 13px;color: #999">{{date('d-m-Y', strtotime($davetEdildigimIlan->ilanlar->yayin_tarihi))}}</p>
                                     </div>
                                     <div class="col-sm-2">
                                         @if(Auth::guest())
                                         @else
-                                            <a href="#"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right;margin-top:60px'>Başvur</button></a><br><br>
+                                            <a href="#"><button type="button" class="btn btn-primary" name="{{$davetEdildigimIlan->ilanlar->firmalar->id}} {{$davetEdildigimIlan->ilanlar->id}}" id="{{$davetEdildigimIlan->ilanlar->id}}" style='float:right;margin-top:60px'>Başvur</button></a><br><br>
                                         @endif
                                     </div>
                                    
