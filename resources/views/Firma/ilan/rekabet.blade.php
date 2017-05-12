@@ -1,6 +1,6 @@
  <?php
     if(count($teklifler) != 0){
-        $tekliflerCount = App\Teklif::where('ilan_id',$ilan->id)->count();
+        $tekliflerCount = $ilan->teklifler()->count();
     }
     else {
         $tekliflerCount = 0;
@@ -11,7 +11,6 @@
     <div class="demo">
         <table class="table" id="table">
             <thead>
-
                 <tr>
                     <th  class="anim:update anim:number"  width="10%">Sıra</th>
                     <th  class="anim:id" width="40%">Firma Adı</th>
@@ -20,11 +19,9 @@
                 </tr>
             </thead>
             <br>
-
             <tbody>
                 @foreach($teklifler as $teklif)
-                    <?php $teklifFirma = App\Teklif::find($teklif->teklif_id);
-                            $firmaAdi = App\Firma::find($teklifFirma->firma_id);?>
+                    <?php $teklifFirma = App\Teklif::find($teklif->id);?>
                     <?php $j++;  ?>
                     <?php $verilenFiyat = $teklifFirma->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
 
@@ -38,22 +35,22 @@
                                         ?>
 
                     @if(count($verilenFiyat) != 0)
-                        @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $firmaAdi->id) <!--Kazanan firma kontrolü -->
+                        @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $teklif->getFirma("id")) <!--Kazanan firma kontrolü -->
                             <tr  class="kismiKazanan">
                         @else
                             <tr>
-                        @endif
-                        @if(session()->get('firma_id') == $firmaAdi->id) <!--Teklifi veren firma ise -->
+                        @endif  
+                        @if(session()->get('firma_id') == $teklif->getFirma("id")) <!--Teklifi veren firma ise -->
                             <td class="highlight">{{$j}}</td>
-                            <td class="highlight">{{$firmaAdi->adi}}:</td>
-                            <td class="highlight firmaFiyat" style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong> &#8378;</td>
+                            <td class="highlight">{{$teklif->getFirma("adi")}}:</td>
+                            <td class="highlight firmaFiyat" style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong> &#8378;</td>
                             <td class="highlight"></td>
                         <?php $sessionF= session()->get('firma_id'); $sahibF=$ilan->firmalar->id; ?>
                         @elseif(session()->get('firma_id') == $ilan->firmalar->id) <!--İlan sahibi ise Kazananı belirlemek için -->
                             <?php $ilanSahibi= 1;?>
                             <td>{{$j}}</td>
-                            <td>{{$firmaAdi->adi}}</td>
-                            <td  style="text-align: right"><strong>{{number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','')}}</strong>
+                            <td>{{$teklif->getFirma("adi")}}</td>
+                            <td  style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong>
                                 @if($ilan->para_birimleri->adi == "Türk Lirası")
                                     &#8378;
                                 @elseif($ilan->para_birimleri->adi == "Dolar")
@@ -115,11 +112,7 @@
                                         ?>
                         @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0) <!--MAl -->
                             <?php $ilanMalCount = $ilan->ilan_mallar()->count();
-                            $teklifMallar=DB::select(DB::raw("SELECT *
-                                                FROM teklifler t, mal_teklifler m
-                                                WHERE t.id = m.teklif_id
-                                                AND t.id ='$teklifFirma->id'
-                                                GROUP BY m.ilan_mal_id"));
+                            $teklifMallar=$teklifFirma->getTeklifMallar();
                                 $teklifMalCount=0;
                                 foreach($teklifMallar as $teklifMal){
                                     $teklifMalCount++;
@@ -127,11 +120,7 @@
                                   ?>
                         @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0) <!--Hizmet -->
                                <?php $ilanMalCount = $ilan->ilan_hizmetler()->count();
-                                $teklifHizmetler=DB::select(DB::raw("SELECT *
-                                                FROM teklifler t, hizmet_teklifler h
-                                                WHERE t.id = h.teklif_id
-                                                AND t.id ='$teklifFirma->id'
-                                                GROUP BY h.ilan_hizmet_id"));
+                                $teklifHizmetler=$teklifFirma->getTeklifHizmetler();
                                 $teklifMalCount=0;
                                 foreach($teklifHizmetler as $teklifHizmet){
                                     $teklifMalCount++;
@@ -139,11 +128,7 @@
                                   ?>
                         @elseif($ilan->ilan_turu == 3)<!-- Yapım İşi-->
                                 <?php $ilanMalCount = $ilan->ilan_yapim_isleri()->count();
-                                        $teklifYapimIsleri=DB::select(DB::raw("SELECT *
-                                                        FROM teklifler t, yapim_isi_teklifler y
-                                                        WHERE t.id = y.teklif_id
-                                                        AND t.id ='$teklifFirma->id'
-                                                        GROUP BY y.ilan_yapim_isleri_id"));
+                                $teklifYapimIsleri=$teklifFirma->teklifYapimIsleri();
                                         $teklifMalCount=0;
                                         foreach($teklifYapimIsleri as $teklifYapimIsi){
                                             $teklifMalCount++;

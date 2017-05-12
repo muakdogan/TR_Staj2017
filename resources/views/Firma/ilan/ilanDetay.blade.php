@@ -1,10 +1,5 @@
 @extends('layouts.app')
 @section('content')
-<?php use Carbon\Carbon;
-    $dt = Carbon::today();
-    $time = Carbon::parse($dt);
-    $dt = $time->format('Y-m-d');
-    ?>
     <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
     <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
     <script src="{{asset('js/wNumb.js')}}"></script>
@@ -46,6 +41,39 @@
         cursor: pointer;
         float:left;
     }
+    .popup, .popup2, .bMulti {
+            background-color: #fff;
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: 0 0 25px 5px #999;
+            color: #111;
+            display: none;
+            min-width: 450px;
+            padding: 25px;
+            text-align: center;
+            }
+            .popup, .bMulti {
+                min-height: 150px;
+            }
+            .button.b-close, .button.bClose {
+                border-radius: 7px 7px 7px 7px;
+                box-shadow: none;
+                font: bold 131% sans-serif;
+                padding: 0 6px 2px;
+                position: absolute;
+                right: -7px;
+                top: -7px;
+            }
+            .button {
+                background-color: #2b91af;
+                border-radius: 10px;
+                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+            }
     .puanlama {
         background: #dddddd;
         width: 140px;
@@ -280,59 +308,17 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                     <div class="tab-content ">
                         <div class="tab-pane active" id="1">
                             <table class="table" >
-
-                            <?php $firma = $ilan->firmalar; ?>
-
                              <tr>
                                  <td>Firma Adı:</td>
-                                 <?php
-
-                                 $firma->firma_sektorler = new App\FirmaSektor();
-                                 $firma->firma_sektorler->sektorler = new App\Sektor();
-
-                                 if($firma->goster=="Göster"){
-                                 ?>
-                                  <td>{{$firma->adi}}</td>
-                                 <?php
-                                 }
-                                 else if($firma->goster=="Gizle"){
-                                 ?>
-                                 <td>{{$firma->adi}}(GİZLİ)</td>
-                                 <?php
-                                 }
-                                 ?>
-
+                                 <td>{{$ilan->getFirmaAdi()}}</td>
                              </tr>
-
                              <tr>
                                  <td>İlan Adı:</td>
-
-                                 <?php
-                                 $firmaAdres = $firma->adresler()->first();
-                                 if (!$firma->ilanlar)
-                                     $firma->ilanlar = new App\Ilan();
-
-                                 if (!$firmaAdres) {
-                                     $firmaAdres = new Adres();
-                                     $firmaAdres->iller = new Il();
-                                     $firmaAdres->ilceler = new Ilce();
-                                     $firmaAdres->semtler = new Semt();
-                                 }
-                                 ?>
                                  <td>{{$ilan->adi}}</td>
                              </tr>
                              <tr>
                                  <td>İlan Sektor:</td>
-                                 <?php $sektorler = App\Sektor::all();?>
-                                  @foreach($sektorler as $ilanSektor)
-                                      <?php
-                                if($ilanSektor->id == $ilan->firma_sektor){
-                                    ?>
-                                       <td>{{$ilanSektor->adi}}</td>
-                                       <?php
-                                }
-                                ?>
-                                @endforeach
+                                 <td>{{$ilan->ilan_sektor}}</td>
                              </tr>
                              <tr>
                                  <td>İlan Yayınlama Tarihi:</td>
@@ -348,42 +334,16 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                              </tr>
                              <tr>
                                  <td>ilan Türü:</td>
-                                 <?php if($ilan->ilan_turu == 1){
-                                            $ilanturu="Mal";
-                                        }
-                                        else if($ilan->ilan_turu == 2){
-                                            $ilanturu="Hizmet";
-                                        }
-                                        else{
-                                            $ilanturu="Yapım İşi";
-                                        }
-                                 ?>
-                                 <td>{{$ilanturu}}</td>
+                                 <td>{{$ilan->getIlanTuru()}}</td>
                              </tr>
                              <tr>
                                  <td>İlan Usulü:</td>
-                                 <?php if($ilan->usulu == 1){
-                                            $ilanusulu="Tamrekabet";
-                                        }
-                                        else if($ilan->usulu == 2){
-                                            $ilanusulu="Belirli İstekliler Arasında";
-                                        }
-                                        else{
-                                            $ilanusulu="Sadece Başvuru";
-                                        }
-                                 ?>
-                                 <td>{{$ilanusulu}}</td>
+                                 <td>{{$ilan->getRekabet()}}</td>
                              </tr>
                              <tr>
                                  <td>Sözleşme Türü:</td>
-                                 <?php if($ilan->sozlesme_turu == 0){
-                                            $ilansozlesme="Birim Fiyatlı";
-                                        }
-                                        else if($ilan->sozlesme_turu == 1){
-                                            $ilansozlesme="Götürü Bedel";
-                                        }
-                                 ?>
-                                 <td>{{$ilansozlesme}}</td>
+
+                                 <td>{{$ilan->getSozlesmeTuru()}}</td>
                              </tr>
                              <tr>
                                  <td>Teknik Şartname:</td>
@@ -395,19 +355,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                              </tr>
                              <tr>
                                  <td>Teslim Yeri:</td>
-                                 <?php
-                                 if ($ilan->teslim_yeri_satici_firma == NULL) {
-                                     ?>
-
-
-                                     <?php
-                                 } else {
-                                     ?>
                                      <td>{{$ilan->teslim_yeri_satici_firma}}</td>
-                                     <?php
-                                 }
-                                 ?>
-                             </tr>
+                                 </tr>
                              <tr>
                                  <td>İşin Süresi:</td>
                                  <td>{{$ilan->isin_suresi}}</td>
@@ -422,14 +371,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                              </tr>
                             </table>
                             @if($ilan->firma_id == session()->get('firma_id'))
-                            <a href="{{ URL::to('ilanEkle', array($firma->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
+                            <a href="{{ URL::to('ilanEkle', array($firmaIlan->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
                                 @endif
                         </div>
                         <div class="tab-pane" id="2">
-                            <?php $firma=$ilan->firmalar;?>
-                                <h3>{{$firma->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
+                                <h3>{{$firmaIlan->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
                                 <hr>
-                            @if(session()->get('firma_id') != $firma->id )
+                            @if(session()->get('firma_id') != $firmaIlan->id )
                                 @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
                                        @include('Firma.ilan.malTeklif')
                                 @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)
@@ -470,39 +418,35 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             </div>
         </div>
     </div>
-
-     <?php $j=0;$k=0;
-          $kullanici = App\Kullanici::find(session()->get('kullanici_id'));
-      ?>
-        <div class="modal fade" id="myModalSirketListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                     <h4 class="modal-title" id="myModalLabel">Lütfen Şirket Seçiniz!</h4>
-                </div>
-                <div class="modal-body">
-                    <p style="font-weight:bold;text-align: center;font-size:x-large">{{ Auth::user()->name }}  </p>
-                    <hr>
-                    <div id="radioDiv">
-                        @foreach($kullanici->firmalar as $kullanicifirma)
-                        <input type="radio" name="firmaSec" value="{{$kullanicifirma->id}}"> {{$kullanicifirma->adi}}<br>
-                        @endforeach
-                    </div>
-                    <button  style='float:right' type='button' class="firmaButton" class='btn btn-info'>Firma Seçiniz</button><br><br>
-                </div>
-                <div class="modal-footer">
-                </div>
-             </div>
+    <div class="modal fade" id="myModalSirketListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                 <h4 class="modal-title" id="myModalLabel">Lütfen Şirket Seçiniz!</h4>
             </div>
+            <div class="modal-body">
+                <p style="font-weight:bold;text-align: center;font-size:x-large">{{ Auth::user()->name }}  </p>
+                <hr>
+                <div id="radioDiv">
+                    @foreach($kullanici->firmalar as $kullanicifirma)
+                    <input type="radio" name="firmaSec" value="{{$kullanicifirma->id}}"> {{$kullanicifirma->adi}}<br>
+                    @endforeach
+                </div>
+                <button  style='float:right' type='button' class="firmaButton" class='btn btn-info'>Firma Seçiniz</button><br><br>
+            </div>
+            <div class="modal-footer">
+            </div>
+         </div>
         </div>
-        <br>
-        <br>
-       <hr>
+    </div>
+    <br>
+    <br>
+    <hr>
 
 </body>
 <script src="{{asset('js/sortAnimation.js')}}"></script>
-<script src="{{asset('js/jquery.turkLirasi.min.js')}}"></script>
+<script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
 <script>
     var fiyat;
     var temp=0;
@@ -715,7 +659,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             }
             var parabirimi = "{{$ilan->para_birimleri->adi}}";
             var symbolP;
-            console.log(parabirimi);
             if(parabirimi.indexOf("Lirası") !== -1){
                 symbolP = String.fromCharCode(8378);
             }
