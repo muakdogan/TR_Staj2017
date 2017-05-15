@@ -156,10 +156,18 @@
                     border-top: 1px solid #ddd;
                 
             }
-            
+            .trigger {
+    /* font: 16px/1 'roboto-m'; */
+    color: #333;
+    background: #eee;
+    display: block;
+    padding: 20px 15px 20px 45px;
+
             
    </style>
+ 
 <body style="overflow-x:hidden">
+  
     <div  class="container-fuild">
            <div  id ="header" class="row content ">
                <div  class="container">
@@ -233,11 +241,14 @@
                         <p>Bitiş Tarihi</p>
                         <input type="date" class="form-control datepicker" id="bitis_tarihi" name="bitis_tarihi" placeholder="" value="">
                     </div>
-                    <div class="soldivler">
-                        <h4>İlan Sektörü</h4>
+                    <div class="soldivler  ">
+                        
+                        <h4 class="trigger">İlan Sektörü</h4>
+                        
                         @foreach($sektorler as $sektor)
                             <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
                         @endforeach
+                       
                     </div>
                     <div class="soldivler" id="radioDiv">
                         <h4>İlan Türü</h4>
@@ -672,5 +683,6 @@
             alert('İlanlar Yüklenemiyor !!!  ');
         });
     }
+
 </script>
 @endsection
