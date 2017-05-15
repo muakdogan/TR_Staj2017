@@ -2,6 +2,9 @@
 
 namespace App;
 use App\Sektor;
+use App\KismiKapaliKazanan;
+use App\KismiAcikKazanan;
+use App\Firma;
 use Illuminate\Database\Eloquent\Model;
 use App\Puanlama;
 use DB;
@@ -135,12 +138,12 @@ class Ilan extends Model
             $kalem = App\IlanYapimIsi::find($kalem_id);
         }else{
             $kalem = \App\IlanGoturuBedel::find($kalem_id);
-        } 
+        }
         return $kalem;
   }
   public function ilanTeklif($ilan_id){
         $sIlan =  $this->find($ilan_id);
-        
+
         if(count($sIlan)!= 0){
              return $ilanTeklif= $sIlan->teklifler()->count();
         }
@@ -150,7 +153,7 @@ class Ilan extends Model
         }
   }
  public function getIlanSektorAdi($ilan_sektor_id){
-        $sektorAdi=Sektor::find($ilan_sektor_id); 
+        $sektorAdi=Sektor::find($ilan_sektor_id);
         return $sektorAdi->adi;
  }
  public function puanlamaOrtalama($firma_id){
@@ -161,7 +164,7 @@ class Ilan extends Model
            return number_format($puan[0]['ortalama'],1);
     }
  public function belirliIstekliControl($ilan_id ,$firma_id){
-       
+
         $belirliFirmalar = App\BelirlIstekli::where('ilan_id',$ilan_id)->get();
         $belirliFirma= 0;
 
@@ -172,7 +175,91 @@ class Ilan extends Model
         }
         return $belirliFirma;
  }
+ public function kazananFiyatAcik(){
+   $sonucTarihi = KismiAcikKazanan::where('ilan_id',$this->id)->get();
+   $kazananFiyat=0;
+   foreach($sonucTarihi as $sonuclanma){
+       $kazananFiyat+=$sonuclanma->kazanan_fiyat;
+   }
+   return number_format($kazananFiyat,2,'.','');
+ }
+ public function sonuc_tarihi_acik(){
+   $sonucTarihi = KismiAcikKazanan::where('ilan_id',$this->id)->get();
+   if(count($sonucTarihi)!=0)
+   {
+       foreach ($sonucTarihi as $sonucAcik){
+       }
+       $sonucTarihiAcik=date('d-m-Y', strtotime($sonucAcik->sonuclanma_tarihi));
+   }
+   else
+   {
+      $sonucTarihiAcik=" ";
+   }
+   return $sonucTarihiAcik;
+ }
 
-  
+ public function sonuc_tarihi_kapali(){
+        $sonucTarihiKapali = KismiKapaliKazanan::where('ilan_id',$this->id)->get();
+        if(count($sonucTarihiKapali)!=0)
+        {
+            foreach ($sonucTarihiKapali as $sonucKapali){
+            }
+            $sonucTarihiKapali=date('d-m-Y', strtotime($sonucKapali->sonuclanma_tarihi));
+        }
+        else
+        {
+           $sonucTarihiKapali=" ";
+        }
+        return $sonucTarihiKapali;
+  }
+
+  public function kazananFiyatKapali(){
+    $sonucTarihiKapali = KismiKapaliKazanan::where('ilan_id',$this->id)->get();
+    if(count($sonucTarihiKapali)!=0)
+    {
+        foreach ($sonucTarihiKapali as $sonucKapali){
+        }
+        $kazananFiyatKapali=number_format($sonucKapali->kazanan_fiyat,2,'.','');
+    }
+    else
+    {
+       $kazananFiyatKapali=" ";
+    }
+    return $kazananFiyatKapali;
+  }
+  public function kazananFirmaAdiKapali(){
+    $sonucTarihiKapali = KismiKapaliKazanan::where('ilan_id',$this->id)->get();
+    if(count($sonucTarihiKapali)!=0)
+    {
+      foreach ($sonucTarihiKapali as $sonucKapali){
+       $kazananFirmaAdiKapali= Firma::find($sonucKapali->kazanan_firma_id);
+      }
+        $kazananFirmaAdiKapali = $kazananFirmaAdiKapali->adi;
+    }
+    else
+    {
+       $kazananFirmaAdiKapali=" ";
+    }
+    return $kazananFirmaAdiKapali;
+  }
+  public function kazananFirmaId(){
+    $sonucKapali = KismiKapaliKazanan::where('ilan_id',$this->id)->get();
+    $sonucAcik = KismiAcikKazanan::where('ilan_id',$this->id)->get();
+    if(count($sonucKapali)!=0)
+    {
+      foreach ($sonucKapali as $sonucK){
+      }
+        $kazananFirmaId = $sonucK->kazanan_firma_id;
+    }else{ $kazananFirmaId = 0;}
+
+    if(count($sonucAcik)!=0)
+    {
+      foreach ($sonucAcik as $sonucA){
+      }
+      $kazananFirmaId= $sonucA->kazanan_firma_id;
+    }else{$kazananFirmaId =0;}
+
+    return $kazananFirmaId;
+  }
 
 }
