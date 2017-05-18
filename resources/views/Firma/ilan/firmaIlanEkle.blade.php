@@ -1171,12 +1171,12 @@
                                             <td> <button name="open-modal-yapim-isi"  value="{{$ilan_yapim_isi->id}}" class="btn btn-primary btn-xs open-modal-yapim-isi" >Düzenle</button></td>
                                             <td>
                                                 {{ Form::open(array('url'=>'yapim/'.$ilan_yapim_isi->id,'method' => 'DELETE', 'files'=>true)) }}
-                                    <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                        {{ Form::close() }}
-                                        </td>
-                                        <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}">
-                                            </tr>
+                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                                {{ Form::close() }}
+                                            </td>
+                                                    <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}">
+                                        </tr>
 
 
                                             <div class="modal fade" id="myModal-yapim_isleri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
