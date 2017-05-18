@@ -508,6 +508,10 @@ Route::post('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 
+Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
+Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
+Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
+
 Route::get('/kullaniciFirma',function () {
   $kullanici_id=Input::get('kullanici_id');
   $kullaniciFirma=  \App\Kullanici::find($kullanici_id);
