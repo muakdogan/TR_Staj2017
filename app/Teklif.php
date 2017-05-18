@@ -86,6 +86,8 @@ class Teklif extends Model
                                                 GROUP BY g.ilan_goturu_bedel_id"));
         return $teklifGoturuBedeller;
     }
-    
+    public function getIlanTeklifSayisi (){
+        return $this->ilanlar->teklifler()->count();
+    }
             
 }

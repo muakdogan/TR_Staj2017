@@ -142,11 +142,13 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                         $kullanici = App\Kullanici::find(Auth::user()->id);
                                         $kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
                                     ?>
-                                    @foreach($kullaniciF as $kullanicifirma)
-                                        <ul style="list-style-type:square">
-                                            <li ><a style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
-                                        </ul>
-                                    @endforeach
+                                    @if(count($kullaniciF) != 0)
+                                        @foreach($kullaniciF as $kullanicifirma)
+                                            <ul style="list-style-type:square">
+                                                <li ><a style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
+                                            </ul>
+                                        @endforeach
+                                    @endif    
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi">Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
@@ -199,30 +201,27 @@ window.requestAnimationFrame = window.requestAnimationFrame
     });
 
     $('.firmaSec').on('click', function() {
-
         selected = $(this).attr('name');
-        funcLocations();
         click=1;
+        funcLocations();
 
     });
     function funcLocations(){
+       if(click === 1){ //// sayfa her yüklendiğinde çalışmasın diye bu kontrol gerekli
+           $.ajax({
+                type:"GET",
+                url: "{{asset('set_session')}}",
+                data: { role: selected },
+                }).done(function(data){
+                    console.log(data);
+                    click=0;
+                    location.href="{{asset('firmaIslemleri')}}"+"/"+selected;
 
-           if(session_value === "" || click === 1){
-               $.ajax({
-                   type:"GET",
-                    url: "{{asset('set_session')}}",
-                    data: { role: selected },
-                    }).done(function(data){
-                               console.log(data);
+                }).fail(function(){
+                    alert('Yüklenemiyor !!!  ');
+                });
 
-                               if(click==1 ){
-                                 location.href="{{asset('firmaIslemleri')}}"+"/"+selected;
-                               }
-                               }).fail(function(){
-                                   alert('Yüklenemiyor !!!  ');
-                               });
-
-           }
+       }
     }
 
     </script>

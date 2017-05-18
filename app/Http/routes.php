@@ -465,7 +465,7 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
   }
   $davetEdilIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get();
   $ilanlarFirma = $firma->ilanlar()->orderBy('yayin_tarihi','desc')->limit('5')->get();
-  $teklifler= DB::table('teklifler')->where('firma_id',$firma->id)->limit(5)->get();
+  $teklifler= Teklif::where('firma_id',$firma->id)->limit(5)->get();
   $tekliflerCount= DB::table('teklifler')->where('firma_id',$firma->id)->count();
 
   return view('Firma.firmaIslemleri')->with('firma',$firma)->with('davetEdilIlanlar', $davetEdilIlanlar)
