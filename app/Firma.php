@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+Use DB;
+use App\Puanlama;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -125,5 +127,12 @@ class Firma extends Model
         return 'Beyaz Yaka';
       else if ($this->firma_calisma_bilgileri->calisan_profili==3)
         return 'Mavi Yaka,Beyaz Yaka';
+    }
+    public function puanlamaOrtalama(){
+              $puan = Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                                      ->where('firma_id',$this->id)
+                                      ->get();
+              $puan = $puan->toArray();
+              return number_format($puan[0]['ortalama'],1);
     }
 }

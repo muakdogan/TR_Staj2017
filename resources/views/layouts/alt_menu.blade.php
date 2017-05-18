@@ -34,10 +34,10 @@
                          </ul>
                      </li>
                      <li class=""><a href="{{ URL::to('davetEdildigim', array($firma->id), false)}}">Davet Edildiğim İlanlar</a></li>
-                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Firma Havuzu<span class="caret"></span></a>
+                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Firma Havuzu<span class="caret"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="#">Onaylı Tedarikçilerim</a></li>
-                             <li><a href="#">Tüm Firmalar</a></li>
+                             <li><a href="{{ URL::to('firmaHavuzu', false)}}">Tüm Firmalar</a></li>
                          </ul>
                      </li>
                      <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanıcı İşlemleri</a></li>
