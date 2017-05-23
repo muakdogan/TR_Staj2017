@@ -285,7 +285,7 @@
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
 
-                                                                <select class="form-control selectpicker" style="height:20px" data-live-search="true"  name="firma_sektor" id="firma_sektor" data-validation="required"
+                                                                <select  class="form-control selectpicker" style="height:20px" data-live-search="true"  name="firma_sektor" id="firma_sektor" data-validation="required"
                                                                 data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                                     <option  style="color:#eee"selected disabled>Seçiniz</option>
                                                                     @foreach($sektorler as $sektor)
@@ -357,7 +357,6 @@
                                                                     <select id='custom-headers' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" >
                                                                     </select>
                                                                </div>
-
                                                            </div>
                                                         </div>
                                                         <div class="form-group">
@@ -823,9 +822,9 @@
                                             <td> <button name="open-modal-hizmet"  value="{{$ilan_hizmet->id}}" class="btn btn-primary btn-xs open-modal-hizmet" >Düzenle</button></td>
                                             <td>
                                                 {{ Form::open(array('url'=>'hizmet/'.$ilan_hizmet->id,'method' => 'DELETE', 'files'=>true)) }}
-                                             <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                        {{ Form::close() }}
+                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                                {{ Form::close() }}
                                         </td>
                                         <input type="hidden" name="ilan_hizmet_id"  id="ilan_hizmet_id" value="{{$ilan_hizmet->id}}">
                                             </tr>
@@ -1171,12 +1170,12 @@
                                             <td> <button name="open-modal-yapim-isi"  value="{{$ilan_yapim_isi->id}}" class="btn btn-primary btn-xs open-modal-yapim-isi" >Düzenle</button></td>
                                             <td>
                                                 {{ Form::open(array('url'=>'yapim/'.$ilan_yapim_isi->id,'method' => 'DELETE', 'files'=>true)) }}
-                                    <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
-                                        {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
-                                        {{ Form::close() }}
-                                        </td>
-                                        <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}">
-                                            </tr>
+                                                <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
+                                                {{ Form::submit('Sil', ['class' => 'btn btn-primary btn-xs']) }}
+                                                {{ Form::close() }}
+                                            </td>
+                                                    <input type="hidden" name="ilan_yapim_isi_id"  id="ilan_yapim_isi_id" value="{{$ilan_yapim_isi->id}}">
+                                        </tr>
 
 
                                             <div class="modal fade" id="myModal-yapim_isleri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1426,6 +1425,8 @@ $(function() {
         $('#maliyet').val(option);
     });
 });
+
+
     var select_count=0;
     var multiselectCount=0;
 $(function() {
@@ -2029,14 +2030,6 @@ $("#yapim_up_kayit").submit(function(e)
             });
             e.preventDefault();
     });
-
-
-
-
-
-
-
-
 
 
 </script>
