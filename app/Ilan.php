@@ -82,7 +82,14 @@ class Ilan extends Model
   {
    return $this->hasManyThrough('App\TeklifHareket', 'App\Teklif', 'ilan_id', 'teklif_id', 'id');
   }
-
+  public function kismi_acik_kazananlar()
+  {
+   return $this->hasMany('App\KismiAcikKazanan', 'ilan_id', 'id');
+  }
+  public function kismi_kapali_kazananlar()
+  {
+   return $this->hasMany('App\KismiKapaliKazanan', 'ilan_id', 'id');
+  }
   public function getIlanTuru()
   {
     if($this->ilan_turu == 1)
@@ -141,17 +148,10 @@ class Ilan extends Model
         }
         return $kalem;
   }
-  public function ilanTeklif($ilan_id){
-        $sIlan =  $this->find($ilan_id);
-
-        if(count($sIlan)!= 0){
-             return $ilanTeklif= $sIlan->teklifler()->count();
-        }
-        else
-        {
-           return $ilanTeklif=0;
-        }
+  public function getIlanTeklifSayisi(){
+    return $ilanTeklif= $this->teklifler()->count();
   }
+  
  public function getIlanSektorAdi($ilan_sektor_id){
         $sektorAdi=Sektor::find($ilan_sektor_id);
         return $sektorAdi->adi;

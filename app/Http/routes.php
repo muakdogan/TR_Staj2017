@@ -79,14 +79,11 @@ Route::post('/updateTree', function () {
 });
 Route::get('/findChildrenTree', function () {
   $id = Input::get('id');
-  $sektor_id = 1;
-  $turu = 1;
-  Debugbar::info($id);
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
     (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
-    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif
+    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif, nace_kodu
     FROM kalemler as k1
-    where k1.parent_id = $id and k1.sektor_id=$sektor_id and k1.turu=$turu"));
+    where k1.parent_id = '$id'" ));
 
     return Response::json($kalemler);
 
@@ -468,7 +465,7 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
   }
   $davetEdilIlanlar = App\BelirlIstekli::where('firma_id',$firma->id)->get();
   $ilanlarFirma = $firma->ilanlar()->orderBy('yayin_tarihi','desc')->limit('5')->get();
-  $teklifler= DB::table('teklifler')->where('firma_id',$firma->id)->limit(5)->get();
+  $teklifler= Teklif::where('firma_id',$firma->id)->limit(5)->get();
   $tekliflerCount= DB::table('teklifler')->where('firma_id',$firma->id)->count();
 
   return view('Firma.firmaIslemleri')->with('firma',$firma)->with('davetEdilIlanlar', $davetEdilIlanlar)
@@ -482,6 +479,7 @@ Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
+Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikciler');
 
 Route::get('/kullaniciFirma',function () {
   $kullanici_id=Input::get('kullanici_id');
@@ -760,13 +758,44 @@ Route::get('/basvuruDetay/',function (){
   return Response::json($detaylar);
 });
 
-Route::get('/belirli/',function (){
-  $sektorBelirli = Input::get('sektorBelirli');
+Route::get('/onayli/',function (){
+  $sektorOnayli = Input::get('sektorOnayli');
+  $firma_id = session()->get('firma_id');
 
   $sektorControl = DB::table('firmalar')
   ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
-  ->where('firma_sektorler.sektor_id', '=',$sektorBelirli)
+  ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
+  ->where('onayli_tedarikciler.firma_id', '=',$firma_id)
+  ->where('firma_sektorler.sektor_id', '=',$sektorOnayli)
   ->select('firmalar.adi')
+  ->orderBy('adi','asc');
+
+  $sektorControl = $sektorControl->get();
+
+  return Response::json($sektorControl);
+});
+Route::get('/belirli/',function (){
+  $sektorOnayli = Input::get('sektorOnayli');
+  $sektorControl = DB::table('firmalar')
+  ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+  ->where('firma_sektorler.sektor_id', '=',$sektorOnayli)
+  ->select('firmalar.adi')
+  ->orderBy('adi','asc');
+
+  $sektorControl = $sektorControl->get();
+  return Response::json($sektorControl);
+});
+Route::get('/tumFirmalar/',function (){
+  $sektorTumFirma = Input::get('sektorTumFirma');
+  $firma_id = session()->get('firma_id');
+  $sektorControl = DB::table('firmalar')
+  ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+  ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
+  ->where('onayli_tedarikciler.firma_id', '!=',$firma_id)
+  ->where('firma_sektorler.sektor_id', '=',$sektorTumFirma)
+
+  ->select('firmalar.adi')
+
   ->orderBy('adi','asc');
 
   $sektorControl = $sektorControl->get();
@@ -987,7 +1016,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         GROUP BY th.teklif_id
       )th2 ON th1.teklif_id = th2.teklif_id
       AND th1.tarih = th2.tarih
-      ORDER BY kdv_dahil_fiyat ASC ")); */
+      ORDER BY kdv_dahil_fiyat ASC "));
+
+     * Debugbar::info('mete');     */
     if (!$firma->ilanlar)
         $firma->ilanlar = new App\Ilan();
     if (!$firma->ilanlar->ilan_mallar)

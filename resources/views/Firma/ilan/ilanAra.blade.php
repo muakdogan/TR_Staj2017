@@ -156,10 +156,18 @@
                     border-top: 1px solid #ddd;
                 
             }
-            
+            .trigger {
+    /* font: 16px/1 'roboto-m'; */
+    color: #333;
+    background: #eee;
+    display: block;
+    padding: 20px 15px 20px 45px;
+
             
    </style>
+   <link href="{{asset('css/multiple-select.css')}}" rel="stylesheet"/>
 <body style="overflow-x:hidden">
+  
     <div  class="container-fuild">
            <div  id ="header" class="row content ">
                <div  class="container">
@@ -235,9 +243,11 @@
                     </div>
                     <div class="soldivler">
                         <h4>İlan Sektörü</h4>
-                        @foreach($sektorler as $sektor)
-                            <input type="checkbox" class="checkboxClass" value="{{$sektor->id}}" name="{{$sektor->adi}}"> {{$sektor->adi}}<br>
-                        @endforeach
+                        <select id="sektorler"   name="sektorler[]" multiple="multiple">
+                            @foreach($sektorler as $sektor)
+                                <option data-toggle="tooltip" data-placement="bottom" title="{{$sektor->adi}}" value="{{$sektor->id}}">{{$sektor->adi}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="soldivler" id="radioDiv">
                         <h4>İlan Türü</h4>
@@ -323,8 +333,37 @@
                 </div>
             </div> 
         </div>
-</body>           
+</body>  
+ <script src="{{asset('js/multiple-select.js')}}"></script>
 <script type="text/javascript">
+    var sektor = new Array();
+    $("#sektorler").multipleSelect({
+            width: 260,
+            multiple: true,
+            multipleWidth: 200,
+            placeholder: "Seçiniz",
+            filter: true,
+            onClick: function() {
+                var sonSecilen;
+                var id=0;
+                
+                console.log($(this));
+                alert('itemClik');
+                $('#sektorler option:selected').each(function() {
+                    sonSecilen = $(this).text();
+                    alert(sonSecilen+"each");
+                    id=$(this).val();
+                    if(jQuery.inArray(sonSecilen, sektor) === -1){
+                        sektor.push(sonSecilen);
+                        return false;
+                    }
+                });
+                console.log(sonSecilen);
+
+                getIlanlar(1);
+                doldurma(sonSecilen,"s"+id);
+            }
+    });
     $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
 
        $(".silmeButton").each(function(){
@@ -360,7 +399,6 @@
                 getIlanlar(1);
             }
             if(name === "BirimFiyatlı" || name === "GötürüBedel"){
-                alert("ozge");
                 $("#radioDiv4 input[type='radio']").each(function(){
 
                     $(this).prop('checked', false);
@@ -391,7 +429,16 @@
                 getIlanlar(1);
 
             }
-            else{
+            if(name.substring(0,1) === "s"){
+                var id = name.substring(1,name.length);
+                $('#sektorler option:selected').each(function() {
+                    if($(this).val()=== id){
+                        alert("silme sektor");
+                        $(this).removeAttr("selected");
+                    }
+                });
+                getIlanlar(1);
+            }else{
                 $('.mutliSelect input[type="checkbox"]').each(function(){
                     var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
                     title = $(this).attr('name');
@@ -402,12 +449,14 @@
                  getIlanlar(1);
             }
         }
-    function doldurma(name){
+    function doldurma(name,code){
             var key=0;
             var birlesmisName;
             $("#multisel"+key).empty();
-
-            var name1 = name.split(" "); /// Birden fazla kelime kontrolü
+            if(code.length === 0){
+                alert("undefi");
+            }
+            var name1 = code.split(" "); /// Birden fazla kelime kontrolü
             if(name1.length === 1){
                 birlesmisName = name1[0];
             }
@@ -423,7 +472,7 @@
             $("#multiSel"+key).append(html);                                     
     }
     $('#button').click(function(){
-        doldurma($('#search').val());
+        doldurma($('#search').val(),$('#search').val());
         getIlanlar(1);
     });
     $('#il_id').change(function(){
@@ -435,32 +484,32 @@
             });
         }
         getIlanlar(1);
-        doldurma(il);
+        doldurma(il,il);
     });
     $('#baslangic_tarihi').change(function(){
         var bas=$('#baslangic_tarihi').val()+"başlangıç";
         getIlanlar(1);
-        doldurma(bas);
+        doldurma(bas,bas);
         });
     $('#bitis_tarihi').change(function(){
         var bit=$('#bitis_tarihi').val()+"bitiş";
         getIlanlar(1);
-        doldurma(bit);
+        doldurma(bit,bit);
     });
     $('.tur').click(function(){
         var tur=$("#radioDiv input[type='radio']:checked").val();
         getIlanlar(1);
-        doldurma(tur);
+        doldurma(tur,tur);
     });
     $('.usul').click(function(){
         var usul=$("#radioDiv2 input[type='radio']:checked").val();
         getIlanlar(1);
-        doldurma(usul);
+        doldurma(usul,usul);
     });
     $('.sozlesme').click(function(){
         var sozlesme=$("#radioDiv4 input[type='radio']:checked").val();
         getIlanlar(1);
-        doldurma(sozlesme);
+        doldurma(sozlesme,sozlesme);
     });
     var odeme = new Array();
     $('.checkboxClass2').click(function(){ ///////////odeme turu /////////////////
@@ -478,25 +527,10 @@
 
         }
         getIlanlar(1);
-        doldurma(sonSecilen);
+        doldurma(sonSecilen,sonSecilen);
     });
-    var sektor = new Array();
-    $('.checkboxClass').click(function(){  ////////////////////sektor //////////////
-        var sonSecilen;
-        var n = jQuery('.checkboxClass:checked').length;
-            if (n > 0){
-                jQuery('.checkboxClass:checked').each(function(){
-                sonSecilen = $(this).attr('name');
-                if(jQuery.inArray(sonSecilen, sektor) === -1){
-                    sektor.push(sonSecilen);
-                    return false;
-                }
-                });
-            console.log(sonSecilen);
-        }
-        getIlanlar(1);
-        doldurma(sonSecilen);
-    });
+    
+    
     $(".dropdown dt a").on('click', function() {
         $(".dropdown dd ul").slideToggle('fast');
     });
@@ -523,7 +557,7 @@
           $('.multiSel').append(html);
           $(".hida").hide();
           getIlanlar(1);
-          doldurma(title);
+          doldurma(title,title);
         } else {
           $('span[title="' + title + '"]').remove();
           var ret = $(".hida");
@@ -549,13 +583,13 @@
                     var html = '<span title="' + title + '">' + title + '</span>';
                     $(".hida").append(title+",");
                     $(this).prop( "checked", true );
-                    doldurma(title);
+                    doldurma(title,title);
                 }
             });
         }
         if(keyword != ""){
             $("#search").val(keyword);
-            doldurma(keyword);
+            doldurma(keyword,keyword);
             $("#radioDiv3 input[type='radio']").each(function(){
                 if($(this).val() == "tum"){
                     $(this).prop("checked",true);
@@ -563,25 +597,25 @@
             });
         }
         if(sektorID != ""){
-            jQuery(".checkboxClass").each(function(){
-                if($(this).val() == sektorID){
-                    $(this).prop("checked",true);
+            var sektor = new Array();
+            alert("girdi");
+            $("#sektorler").multipleSelect("setSelects", [sektorID]);
+              
+            var sonSecilen;
+            var id=0;
+            $('#sektorler option:selected').each(function() {
+                alert();
+                sonSecilen = $(this).text();
+                id=$(this).val();
+                if(jQuery.inArray(sonSecilen, sektor) === -1){
+                    sektor.push(sonSecilen);
+                    return false;
                 }
             });
-            var sonSecilen;
-            var n = jQuery('.checkboxClass:checked').length;
-                if (n > 0){
-                    jQuery('.checkboxClass:checked').each(function(){
-                    sonSecilen = $(this).attr('name');
-                    if(jQuery.inArray(sonSecilen, sektor) === -1){
-                        sektor.push(sonSecilen);
-                        return false;
-                    }
-                    });
-                console.log(sonSecilen);
-            }
+            console.log(sonSecilen,"s"+id);
+            
             getIlanlar(1);
-            doldurma(sonSecilen);
+            doldurma(sonSecilen,"s"+id);
         }
     });
 
@@ -590,12 +624,12 @@
         var basTar=$('#baslangic_tarihi').val();
         var bitTar=$('#bitis_tarihi').val();
         var selectedSektor = new Array();
-        var n = jQuery(".checkboxClass:checked").length;  ///////////sektor /////////////
+        var n = $('#sektorler option:selected').length;  ///////////sektor /////////////
         if (n > 0){
-            jQuery(".checkboxClass:checked").each(function(){
-                    selectedSektor.push($(this).val());
-                    var html = '<span title="' + selectedSektor + '">' + selectedSektor + '</span>';
-                });
+            $('#sektorler option:selected').each(function() {
+                 selectedSektor.push($(this).val());
+            });
+            alert(selectedSektor);
         }
         var selectedIl = new Array(); /////////// iller //////////////
         var n = jQuery('.mutliSelect input[type="checkbox"]').length;
@@ -670,7 +704,9 @@
             $('.ajax-loader').css("visibility", "hidden");
         }).fail(function(){ 
             alert('İlanlar Yüklenemiyor !!!  ');
+            $('.ajax-loader').css("visibility", "hidden");
         });
     }
+
 </script>
 @endsection

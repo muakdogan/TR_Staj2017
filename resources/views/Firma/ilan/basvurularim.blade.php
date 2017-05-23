@@ -109,13 +109,13 @@ table.dataTable{width:100%;margin:0 auto;clear:both;border-collapse:separate;bor
                             <tbody style="font_size:12px">
                                 @foreach($kazananKismi as $sonucAcik)
                                     <?php  $ilan= App\Ilan::find($sonucAcik->ilan_id); ?>
-                                <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}'">
+                                <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$sonucAcik->ilanlar->id), false) }}'">
                                         <td>{{$i++}}</td>
-                                        <td>{{$ilan->adi}} ilanının {{$ilan->getKalem($sonucAcik->kalem_id)->marka}} kalemi</td>
+                                        <td>{{$sonucAcik->ilanlar->adi}} ilanının {{$sonucAcik->ilanlar->getKalem($sonucAcik->kalem_id)->marka}} kalemi</td>
                                         <td>{{date('d-m-Y', strtotime($sonucAcik->sonuclanma_tarihi))}}</td>
                                         <td><strong> {{number_format($sonucAcik->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
                                         <td>
-                                            <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Detay Görüntele</button></a>
+                                            <a href="{{ URL::to('teklifGor', array($firma->id,$sonucAcik->ilanlar->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Detay Görüntele</button></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -123,13 +123,11 @@ table.dataTable{width:100%;margin:0 auto;clear:both;border-collapse:separate;bor
                                     <?php $ilan= App\Ilan::find($sonucKapali->ilan_id); ?>
                                     <tr>
                                         <td>{{$i++}}</td>
-                                        <td>{{$ilan->adi}}</td>
+                                        <td>{{$sonucKapali->ilanlar->adi}}</td>
                                         <td>{{$sonucKapali->sonuclanma_tarihi}}</td>
                                         <td><strong> {{number_format($sonucKapali->kazanan_fiyat,2,'.','')}}</strong> &#8378;</td>
                                         <td>
-                                            @if ( $rol === 'Yönetici' || $rol ==='Satış' || $rol ==='Satın Alma / Satış')
-                                                <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Detay Görüntele</button></a>
-                                            @endif
+                                            <a href="{{ URL::to('teklifGor', array($firma->id,$sonucKapali->ilanlar->id), false) }}"><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Detay Görüntele</button></a>
                                         </td>
                                     </tr>
                                 @endforeach
