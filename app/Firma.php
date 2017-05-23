@@ -1,6 +1,9 @@
 <?php
 
 namespace App;
+Use DB;
+use App\Puanlama;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -126,4 +129,16 @@ class Firma extends Model
       else if ($this->firma_calisma_bilgileri->calisan_profili==3)
         return 'Mavi Yaka,Beyaz Yaka';
     }
+    public function puanlamaOrtalama(){
+              $puan = Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                                      ->where('firma_id',$this->id)
+                                      ->get();
+              $puan = $puan->toArray();
+              return number_format($puan[0]['ortalama'],1);
+    }
+    /*public function getSehirAdi(){
+              $adres = $this->adresler()->where('tur_id',1)->first();
+              Debugbar::info($adres);
+              return $adres->iller->adi;
+    }*/
 }

@@ -14,7 +14,7 @@ class Il extends Model
     }
     public function adresler()
     {
-        return $this->hasMany('App\Adres', 'il_id', 'id');
+        return $this->hasMany('App\Adres', 'id', 'il_id');
     }
      public function ilanlar()
     {

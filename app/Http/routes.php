@@ -476,6 +476,11 @@ Route::post('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 
+Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
+Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
+Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
+Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikciler');
+
 Route::get('/kullaniciFirma',function () {
   $kullanici_id=Input::get('kullanici_id');
   $kullaniciFirma=  \App\Kullanici::find($kullanici_id);
@@ -980,7 +985,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         GROUP BY th.teklif_id
       )th2 ON th1.teklif_id = th2.teklif_id
       AND th1.tarih = th2.tarih
-      ORDER BY kdv_dahil_fiyat ASC ")); */
+      ORDER BY kdv_dahil_fiyat ASC ")); 
+
+     * Debugbar::info('mete');     */
     if (!$firma->ilanlar)
         $firma->ilanlar = new App\Ilan();
     if (!$firma->ilanlar->ilan_mallar)

@@ -430,6 +430,7 @@
                         $(this).removeAttr("selected");
                     }
                 });
+                getIlanlar(1);
             }else{
                 $('.mutliSelect input[type="checkbox"]').each(function(){
                     var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
@@ -696,6 +697,7 @@
             $('.ajax-loader').css("visibility", "hidden");
         }).fail(function(){ 
             alert('İlanlar Yüklenemiyor !!!  ');
+            $('.ajax-loader').css("visibility", "hidden");
         });
     }
 </script>

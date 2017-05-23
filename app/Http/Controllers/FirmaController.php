@@ -11,15 +11,22 @@ use App\TicaretOdasi;
 use App\FirmaSatilanMarka;
 use App\Ilce;
 use App\Semt;
+use App\OdemeTuru;
+use Input;
 use Session;
 use File;
 use Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
-use App\Http\Requests;
+use App\OnayliTedarikci;
+use Barryvdh\Debugbar\Facade as Debugbar;
+//use Illuminate\Http\Request;
+//use App\Http\Requests;
+use Response;
 use Illuminate\Support\Str;
 use DB;
+use Request;
+use View;
 
 class FirmaController extends Controller
 {
@@ -53,15 +60,15 @@ class FirmaController extends Controller
                 $firma->ticari_bilgiler->sektorler = new Sektor();
         }
          if (!$firma->kalite_belgeleri) {
-                      $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();  
-        } 
+                      $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();
+        }
         if (!$firma->firma_referanslar) {
            $firma->firma_referanslar = new App\FirmaReferans();
         } else {
            $firmaReferanslar = $firma->firma_referanslar()->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc')->get();
         }
         if (!$firma->firma_brosurler) {
-                 $firma->firma_brosurler = new App\FirmaBrosur();              
+                 $firma->firma_brosurler = new App\FirmaBrosur();
         }
         if (!$firma->firma_calisma_bilgileri) {
                $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
@@ -70,7 +77,7 @@ class FirmaController extends Controller
                $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
         }
         $calisan= DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-        $brosur=DB::table('firma_brosurler')->where('firma_id',$firma->id )->count();            
+        $brosur=DB::table('firma_brosurler')->where('firma_id',$firma->id )->count();
         $referans= DB::table('firma_referanslar')->where('firma_id', $firma->id)->count();
         $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get();
         $satilanMarka = FirmaSatilanMarka::where('firma_id', '=', $firma->id)->get();
@@ -93,6 +100,102 @@ class FirmaController extends Controller
                 ->with('firmaReferanslar',$firmaReferanslar)->with('referans',$referans)->with('brosur',$brosur)
                 ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan);
     }
+    public function showFirmalar(){
+        Debugbar::info("girdi");
+        $iller = Il::all();
+        $sektorler= Sektor::all();
+        $firma = Firma::find(session()->get("firma_id"));
+        
+        $il_id = Input::get('il');
+        $sektorlerInput = Input::get('sektor');
+        $radSearch= Input::get('radSearch');
+        $input= Input::get('input');
+        /*SELECT *, (select case 
+           when exists (
+              SELECT 1 
+              FROM onayli_tedarikciler o 
+              WHERE o.tedarikci_id = f.id 
+                 AND o.firma_id = 9
+           ) 
+           then 1 
+           else 0 
+        end)
+        FROM firmalar f */
+        //$firmalar=Firma::select("*");
+        $firmalar = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
+                ->join('iller', 'adresler.il_id', '=', 'iller.id')
+                ->where('adresler.tur_id', '=' , 1)
+                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi",DB::raw("(case 
+                when exists (
+                   SELECT 1 
+                   FROM onayli_tedarikciler o 
+                   WHERE o.tedarikci_id = firmalar.id 
+                      AND o.firma_id = 9
+                ) 
+                then 1 
+                else 0 
+             end)as onay"));
+        if($radSearch != NULL){
+            if($radSearch == "sektor"){
+                $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')->where('sektorler.adi',$input);
+            }
+            else if($radSearch == "sehir"){
+                DebugBar::info($input);
+                $firmalar=$firmalar->where('iller.adi',Str::upper($input));
+            }
+            else if($radSearch == "firma"){
+                $firmalar=$firmalar->where('firmalar.adi', 'like', '%' . $input . '%');
+            }
+            
+        }
+        if($radSearch == ""){
+            if($input != NULL){
+                Debugbar::info("girdi Else");
+                $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                        ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')
+                        ->where('sektorler.adi',$input)
+                        ->orWhere('iller.adi',Str::upper($input));
+            }
+        }
+        if($il_id != NULL){
+            $firmalar=$firmalar->whereIn('adresler.il_id',$il_id);
+        }
+         
+        if($sektorlerInput != NULL){
+            $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')->whereIn('sektorler.id',$sektorlerInput);
+        }
+        
+        $firmalar=$firmalar->paginate(5);
+         DebugBar::info($firmalar);
+        if (Request::ajax()) {
+            return Response::json(View::make('Firma.firmalar',array('firmalar'=> $firmalar))->render());
+        }
+
+        return View::make('Firma.firmaHavuzu')-> with('firmalar',$firmalar)
+                ->with('iller', $iller)->with('sektorler',$sektorler)
+                ->with('firma',$firma);
+
+    }
+    public function onayliTedarikciler(){ //// onayli tedarikçi ekle kaldır
+        $tedarikci_id = Input::get('firma_id');
+        
+        $kontrol = OnayliTedarikci::where('firma_id',session()->get('firma_id'))->where('tedarikci_id',$tedarikci_id)->first();
+        if(count($kontrol) > 0){
+            $tedarikci = OnayliTedarikci::find($kontrol[0]['id']);
+            $tedarikci->delete();
+        }
+        else{
+            $tedarikci = new OnayliTedarikci();
+
+            $tedarikci->firma_id = session()->get('firma_id');
+            $tedarikci->tedarikci_id = $tedarikci_id;
+
+            $tedarikci ->save();
+        }    
+    }
+
     public function uploadImage(Request $request) {
 
 
@@ -263,7 +366,7 @@ class FirmaController extends Controller
                 $satilan->firma_id = $firma->id;
                 $satilan->satilan_marka_adi = $request->firmanin_sattigi_markalar;
                 $satilan->save();
-            }    
+            }
             foreach($request->firma_faaliyet_turu as $faaliyetTur){
                 $kayitKontrol = \App\FirmaFaaliyet::where('firma_id',$firma->id)->where('faaliyet_id',$faaliyetTur)->get();
                 if(count($kayitKontrol) == 0){
@@ -536,7 +639,7 @@ class FirmaController extends Controller
         }
 
      }
-   
+
     public function deleteKalite(Request $request,$id){
 
          $Firmakaliter = \App\FirmaKaliteBelgesi::where('belge_id',$id)->where('firma_id',$request->firma_id)->get();
