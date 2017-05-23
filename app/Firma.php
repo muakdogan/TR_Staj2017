@@ -3,6 +3,7 @@
 namespace App;
 Use DB;
 use App\Puanlama;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -135,4 +136,9 @@ class Firma extends Model
               $puan = $puan->toArray();
               return number_format($puan[0]['ortalama'],1);
     }
+    /*public function getSehirAdi(){
+              $adres = $this->adresler()->where('tur_id',1)->first();
+              Debugbar::info($adres);
+              return $adres->iller->adi;
+    }*/
 }

@@ -18,8 +18,11 @@ use File;
 use Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\OnayliTedarikci;
+use Barryvdh\Debugbar\Facade as Debugbar;
 //use Illuminate\Http\Request;
 //use App\Http\Requests;
+use Response;
 use Illuminate\Support\Str;
 use DB;
 use Request;
@@ -98,106 +101,101 @@ class FirmaController extends Controller
                 ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan);
     }
     public function showFirmalar(){
+        Debugbar::info("girdi");
         $iller = Il::all();
         $sektorler= Sektor::all();
-        $odeme_turleri= OdemeTuru::all();
-        $teklifler= \App\Teklif::all();
         $firma = Firma::find(session()->get("firma_id"));
-        $firmalar = Firma::select("*");
-        $ilId = Input::get('ilAdi');
-        $keyword = Input::get('keyword');
+        
         $il_id = Input::get('il');
-        $bas_tar = Input::get('bas_tar');
-        $bit_tar = Input::get('bit_tar');
         $sektorlerInput = Input::get('sektor');
-        $tur = Input::get('tur');
-        $usul= Input::get('usul');
         $radSearch= Input::get('radSearch');
         $input= Input::get('input');
-        $sozlesme= Input::get('sozles');
-        $odeme= Input::get('odeme');
-
+        /*SELECT *, (select case 
+           when exists (
+              SELECT 1 
+              FROM onayli_tedarikciler o 
+              WHERE o.tedarikci_id = f.id 
+                 AND o.firma_id = 9
+           ) 
+           then 1 
+           else 0 
+        end)
+        FROM firmalar f */
+        //$firmalar=Firma::select("*");
+        $firmalar = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
+                ->join('iller', 'adresler.il_id', '=', 'iller.id')
+                ->where('adresler.tur_id', '=' , 1)
+                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi",DB::raw("(case 
+                when exists (
+                   SELECT 1 
+                   FROM onayli_tedarikciler o 
+                   WHERE o.tedarikci_id = firmalar.id 
+                      AND o.firma_id = 9
+                ) 
+                then 1 
+                else 0 
+             end)as onay"));
         if($radSearch != NULL){
-            if($radSearch == "tum"){
-                $sektorler = Sektor::all();
-                foreach ($sektorler as $sektor){
-                    if($sektor->adi == $input){
-                        $sektor_id = $sektor->id;
-                    }
-                    else{
-                        $sektor_id = 0;
-                    }
-                }
-                $ilanlar->where('ilanlar.adi',$input )->where('ilanlar.goster',1);
-                        //->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
-                        //->orWhere('ilanlar.kapanma_tarihi', $input )
-                        //->orWhere('firmalar.adi',$input )
-                        //->orWhere('ilanlar.firma_sektor',$sektor_id)
-                        //->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
+            if($radSearch == "sektor"){
+                $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')->where('sektorler.adi',$input);
             }
-            else if($radSearch == "ilan_baslık"){
-                $ilanlar->where('ilanlar.adi', $input);
+            else if($radSearch == "sehir"){
+                DebugBar::info($input);
+                $firmalar=$firmalar->where('iller.adi',Str::upper($input));
             }
-            else{
-                $ilanlar->where('firmalar.adi', $input);
+            else if($radSearch == "firma"){
+                $firmalar=$firmalar->where('firmalar.adi', 'like', '%' . $input . '%');
+            }
+            
+        }
+        if($radSearch == ""){
+            if($input != NULL){
+                Debugbar::info("girdi Else");
+                $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                        ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')
+                        ->where('sektorler.adi',$input)
+                        ->orWhere('iller.adi',Str::upper($input));
             }
         }
-        if($ilId != NULL){
-            $ilanlar->where('adresler.il_id',$ilId);
+        if($il_id != NULL){
+            $firmalar=$firmalar->whereIn('adresler.il_id',$il_id);
         }
-        if($keyword != NULL){
-            $sektorler = Sektor::all();
-            foreach ($sektorler as $sektor){
-                if($sektor->adi == $keyword){
-                    $sektor_id = $sektor->id;
-                }
-                else{
-                    $sektor_id = 0;
-                }
-            }
-            //$ilanlar->where('ilanlar.adi' ,$keyword )
-            //->Where('firmalar.adi',$keyword )->where('ilanlar.goster',1)
-            //->Where('ilanlar.firma_sektor',$sektor_id);
-        }
-        if($il_id != NULL)
-            {
-             $ilanlar->whereIn('adresler.il_id',$il_id);
-            }
-        if ($bas_tar != NULL) {
-            $ilanlar->where('ilanlar.yayin_tarihi','>=', $bas_tar);
-        }
-        if ($bit_tar != NULL) {
-            $ilanlar->where('ilanlar.kapanma_tarihi','<=',$bit_tar);
-        }
+         
         if($sektorlerInput != NULL){
-            $ilanlar->whereIn('ilanlar.ilan_sektor',$sektorlerInput);
+            $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')->whereIn('sektorler.id',$sektorlerInput);
         }
-        if($tur != NULL){
-            $ilanlar->where('ilanlar.ilan_turu',$tur);
-        }
-        if($usul != NULL){
-            $ilanlar->where('ilanlar.usulu',$usul);
-        }
-        if($sozlesme != NULL){
-            $ilanlar->where('ilanlar.sozlesme_turu',$sozlesme);
-        }
-        if($odeme != NULL){
-            $ilanlar->whereIn('ilanlar.odeme_turu_id',$odeme);
-        }
-
-
+        
         $firmalar=$firmalar->paginate(5);
-
+         DebugBar::info($firmalar);
         if (Request::ajax()) {
             return Response::json(View::make('Firma.firmalar',array('firmalar'=> $firmalar))->render());
         }
 
         return View::make('Firma.firmaHavuzu')-> with('firmalar',$firmalar)
-                ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('firma',$firma)->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('ilId',$ilId)->with('keyword',$keyword);
+                ->with('iller', $iller)->with('sektorler',$sektorler)
+                ->with('firma',$firma);
 
     }
+    public function onayliTedarikciler(){ //// onayli tedarikçi ekle kaldır
+        $tedarikci_id = Input::get('firma_id');
+        
+        $kontrol = OnayliTedarikci::where('firma_id',session()->get('firma_id'))->where('tedarikci_id',$tedarikci_id)->first();
+        if(count($kontrol) > 0){
+            $tedarikci = OnayliTedarikci::find($kontrol[0]['id']);
+            $tedarikci->delete();
+        }
+        else{
+            $tedarikci = new OnayliTedarikci();
+
+            $tedarikci->firma_id = session()->get('firma_id');
+            $tedarikci->tedarikci_id = $tedarikci_id;
+
+            $tedarikci ->save();
+        }    
+    }
+
     public function uploadImage(Request $request) {
 
 
