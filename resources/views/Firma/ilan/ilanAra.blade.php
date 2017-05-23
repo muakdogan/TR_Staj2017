@@ -156,11 +156,18 @@
                     border-top: 1px solid #ddd;
                 
             }
-            
+            .trigger {
+    /* font: 16px/1 'roboto-m'; */
+    color: #333;
+    background: #eee;
+    display: block;
+    padding: 20px 15px 20px 45px;
+
             
    </style>
    <link href="{{asset('css/multiple-select.css')}}" rel="stylesheet"/>
 <body style="overflow-x:hidden">
+  
     <div  class="container-fuild">
            <div  id ="header" class="row content ">
                <div  class="container">
@@ -700,5 +707,6 @@
             $('.ajax-loader').css("visibility", "hidden");
         });
     }
+
 </script>
 @endsection

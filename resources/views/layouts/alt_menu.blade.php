@@ -19,7 +19,7 @@
                          <ul class="dropdown-menu">
                              <li><a href="{{ URL::to('ilanlarim', array($firma->id), false)}}">İlanlarım</a></li>
 
-                             <li><a href="{{ URL::to('ilanEkle', array($firma->id,'0'), false)}}">İlan Oluştur</a></li>
+                             <li><a href="{{ URL::to('ilanOlustur', array($firma->id,'0'), false)}}">İlan Oluştur</a></li>
                          </ul>
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
