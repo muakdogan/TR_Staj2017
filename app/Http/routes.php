@@ -79,11 +79,14 @@ Route::post('/updateTree', function () {
 });
 Route::get('/findChildrenTree', function () {
   $id = Input::get('id');
+  $sektor_id = 1;
+  $turu = 1;
+  Debugbar::info($id);
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
     (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
-    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif, nace_kodu
+    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif
     FROM kalemler as k1
-    where k1.parent_id = '$id'" ));
+    where k1.parent_id = $id and k1.sektor_id=$sektor_id and k1.turu=$turu"));
 
     return Response::json($kalemler);
 
