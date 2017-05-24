@@ -850,33 +850,29 @@
   $('#presentation').restrictLength( $('#pres-max-length') );
   
   
-   //$("#msform").validate();
-    //$("#ilan").click(function() {
-       // alert("Valid: " + $("#msform").valid());
-       // return false;
-    //});
-    $("#ilan").bind("click", function(e) {
-        
-        //If the form is valid then go to next else don't
-        var valid = true;
-        // this will cycle through all visible inputs and attempt to validate all of them.
-        // if validations fail 'valid' is set to false
-            $('[data-validate] input:visible').each(function() {
-               
-              var settings = window.ClientSideValidations.forms[this.form.id];
-              if (!$(this).isValid(settings.validators)) {
-                valid = false;
-                   
-              }
-            });
-        if(valid){
-           
-          //code to go to next step
-        }
-        
-        // if any of the inputs are invalid we want to disrupt the click event
-        return valid;
-      });
+   $("#msform").validate();
+    $("#ilan").click(function() {
+        $("#test").validate({              
+            rules: {
+                     name: "required", // simple rule, converted to {required:true}
+                     email: {// compound rule
+                         required: true,
+                         email: true
+                     },
+                     comment: {
+                         required: true
+                     }
+                 },
+                 message: {
+                     comment: "Please enter a comment."
+                 }
+             });
+
+
+});
+        return false;
+    });
+    
      
     
     
