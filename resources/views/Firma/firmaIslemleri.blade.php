@@ -123,48 +123,11 @@ tr:nth-child(even) {
                                             <th></th>
                                         </tr>
                                        @foreach($davetEdilIlanlar as $dvtIlan)
-                                       <?php 
-                                       
-                                         $dIlan = App\Ilan::find($dvtIlan->ilan_id);
-                                         $dIlanTeklifsayısı = $dIlan->teklifler()->count();
-                                           if(Auth::guest()){
-
-                                           }
-                                           else{
-
-                                                $kullanici_id = Auth::user()->id;
-                                                $firmaKont=  App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id )
-                                                          ->select('firma_id')->get();
-                                                $firmaKont=$firmaKont->toArray();
-                                                $firma_id=$firmaKont[0]['firma_id'];
-                                                $rol_id  = App\FirmaKullanici::where( 'kullanici_id', '=', $kullanici_id)
-                                                           ->where( 'firma_id', '=', $firma_id)
-                                                           ->select('rol_id')->get();
-                                                           $rol_id=$rol_id->toArray();
-                                                $querys = App\Rol::join('firma_kullanicilar', 'firma_kullanicilar.rol_id', '=', 'roller.id')
-                                                   ->where( 'firma_kullanicilar.rol_id', '=', $rol_id[0]['rol_id'])
-                                                   ->select('roller.adi as rolAdi')->get();
-                                                   $querys=$querys->toArray();
-
-                                                   $rol=$querys[0]['rolAdi'];
-
-                                               }
-                                       ?>
-                                        <tr>
-                                            <td>{{$dIlan->adi}}</td>
-                                            <td>{{$dIlanTeklifsayısı}}</td>
-                                           @if(Auth::guest())
-                                           @else
-                                               @if ( $rol === 'Yönetici')
-                                                   <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
-                                               @elseif ($rol ==='Satış')
-                                                   <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
-                                               @elseif ($rol ==='Satın Alma / Satış')
-                                                   <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
-                                               @else
-                                               @endif
-                                           @endif
-                                        </tr>
+                                         <tr>
+                                             <td>{{$dvtIlan->ilanlar->adi}}</td>
+                                             <td>{{$dvtIlan->ilanlar->teklifler()->count()}}</td>
+                                             <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
+                                         </tr>
                                        @endforeach
                                     </table>
                                 </div>
@@ -181,10 +144,9 @@ tr:nth-child(even) {
                                          <th></th>
                                      </tr>
                                     @foreach($ilanlarFirma as $ilan)
-                                    <?php $ilanTeklifsayısı = $ilan->teklifler()->count();?>
                                      <tr>
                                          <td>{{$ilan->adi}}</td>
-                                         <td>{{$ilanTeklifsayısı}}</td>
+                                         <td>{{$ilan->teklifler()->count()}}</td>
                                          @if($ilan->yayinlanma_tarihi > time())
                                                 <td><a href="{{ URL::to('firmaIlanOlustur', array($firma->id,$ilan->id), false) }}"><button class="button"> Düzenle</button></a></td>
                                          @endif
@@ -206,13 +168,9 @@ tr:nth-child(even) {
                                          <th></th>
                                      </tr>
                                     @foreach($teklifler as $teklif)
-                                     <?php 
-                                        $ilanlar = App\Ilan::find($teklif->ilan_id);
-                                        $ilanTeklifcount= $ilanlar->teklifler()->count();
-                                     ?>
                                      <tr>
-                                         <td>{{$ilanlar->adi}}</td>
-                                         <td>{{$ilanTeklifcount}}</td>
+                                         <td>{{$teklif->ilanlar->adi}}</td>
+                                         <td>{{$teklif->getIlanTeklifSayisi()}}</td>
                                          <td><button class="button">Düzenle</button></td>
                                      </tr>
                                     @endforeach 
