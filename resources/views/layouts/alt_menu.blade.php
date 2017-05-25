@@ -8,39 +8,39 @@
 <nav class="navbar navbar-inverse">
              <div class="container-fluid">
                  <div class="navbar-header">
-                      <?php $firmaAdi = session()->get('firma_adi');
+                      <?php $firmaAdi = session()->get('firma_adi'); $firmaId = session()->get('firma_id');
                             ?>
-                     <a class="navbar-brand" href="{{ URL::to('firmaIslemleri', array($firma->id), false)}}"><img src='{{asset('images/anasayfa.png')}}'></a>
+                     <a class="navbar-brand" href="{{ URL::to('firmaIslemleri', array($firmaId), false)}}"><img src='{{asset('images/anasayfa.png')}}'></a>
                  </div>
                  <ul class="nav navbar-nav">
 
-                     <li class=""><a href="{{ URL::to('firmaProfili', array($firma->id), false)}}">Firma Profili</a></li>
+                     <li class=""><a href="{{ URL::to('firmaProfili', array($firmaId), false)}}">Firma Profili</a></li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             <li><a href="{{ URL::to('ilanlarim', array($firma->id), false)}}">İlanlarım</a></li>
+                             <li><a href="{{ URL::to('ilanlarim', array($firmaId), false)}}">İlanlarım</a></li>
 
-                             <li><a href="{{ URL::to('ilanOlustur', array($firma->id,'0'), false)}}">İlan Oluştur</a></li>
+                             <li><a href="{{ URL::to('ilanOlustur', array($firmaId,'0'), false)}}">İlan Oluştur</a></li>
                          </ul>
                      </li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
 
 
-                             <li><a href="{{ URL::to('basvurularim', array($firma->id), false)}}">Başvurularım</a></li>
+                             <li><a href="{{ URL::to('basvurularim', array($firmaId), false)}}">Başvurularım</a></li>
 
 
                              <li><a href="{{url('ilanAra/')}}">Başvur</a></li>
 
                          </ul>
                      </li>
-                     <li class=""><a href="{{ URL::to('davetEdildigim', array($firma->id), false)}}">Davet Edildiğim İlanlar</a></li>
+                     <li class=""><a href="{{ URL::to('davetEdildigim', array($firmaId), false)}}">Davet Edildiğim İlanlar</a></li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Firma Havuzu<span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             <li><a href="#">Onaylı Tedarikçilerim</a></li>
+                             <li><a href="{{ URL::to('onayliTedarikcilerim',false)}}">Onaylı Tedarikçilerim</a></li>
                              <li><a href="{{ URL::to('firmaHavuzu', false)}}">Tüm Firmalar</a></li>
                          </ul>
                      </li>
-                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firma->id), false)}}">Kullanıcı İşlemleri</a></li>
+                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firmaId), false)}}">Kullanıcı İşlemleri</a></li>
                      <li><div class="deneme">
                              <a><p style="padding-top: 15px; padding-left: 25px;font-size: 16px; color:white"  class="firmaDavet" id="firmaDavetButton">Firma Davet Et !</p></a>
                                   <div class="modal fade" id="FirmaDavet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -57,7 +57,7 @@
                                                                 <label class="col-lg-4 control-label">Davet Edeceğiniz Firmanın İsmi:</label>
                                                                 <div class='col-lg-8'>
                                                                     <input type="text" class="form-control" id="isim" name="isim" placeholder="Firma İsmi" value="" data-validation="required"  data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                                    <input type="hidden" class="form-control" id="firma_id" name="firma_id" value='{{$firma->id}}'>
+                                                                    <input type="hidden" class="form-control" id="firma_id" name="firma_id" value='{{$firmaId}}'>
                                                                 </div>
                                                            </div>
                                                         </div>
@@ -70,7 +70,7 @@
                                                                 </div>
                                                            </div>
                                                         </div>
-                                                      {!! Form::submit('Davet Et', array('url'=>'firmaProfili/iletisimAdd/'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                                      {!! Form::submit('Davet Et', array('url'=>'firmaProfili/iletisimAdd/'.$firmaId,'style'=>'float:right','class'=>'btn btn-danger')) !!}
                                                       <br>
                                                 {{ Form::close() }}
                                             </div>

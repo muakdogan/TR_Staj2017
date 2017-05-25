@@ -178,10 +178,10 @@ class FirmaController extends Controller
                 ->with('firma',$firma);
 
     }
-    public function onayliTedarikciler(){ //// onayli tedarikçi ekle kaldır
+    public function onayliTedarikcilerEkleCıkar(){ //// onayli tedarikçi ekle kaldır tüm firmalar için
         $tedarikci_id = Input::get('firma_id');
         
-        $kontrol = OnayliTedarikci::where('firma_id',session()->get('firma_id'))->where('tedarikci_id',$tedarikci_id)->first();
+        $kontrol = OnayliTedarikci::where('firma_id',session()->get('firma_id'))->where('tedarikci_id',$tedarikci_id)->get();
         if(count($kontrol) > 0){
             $tedarikci = OnayliTedarikci::find($kontrol[0]['id']);
             $tedarikci->delete();
@@ -194,6 +194,21 @@ class FirmaController extends Controller
 
             $tedarikci ->save();
         }    
+    }
+    public function onayliTedarikcilerim(){ 
+        $onayli_tedarikciler  = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
+                ->join('iller', 'adresler.il_id', '=', 'iller.id')
+                ->where('adresler.tur_id', '=' , 1)
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw("*"))
+                          ->from('onayli_tedarikciler')
+                          ->whereRaw('onayli_tedarikciler.firma_id ='+session()->get("firma_id"))
+                          ->whereRaw('onayli_tedarikciler.tedarikci_id = firmalar.id');
+                })
+                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get(); 
+                
+            Debugbar::info($onayli_tedarikciler);
+        return View::make('Firma.onayliTedarikciler')-> with('onayli_tedarikciler',$onayli_tedarikciler);
     }
 
     public function uploadImage(Request $request) {

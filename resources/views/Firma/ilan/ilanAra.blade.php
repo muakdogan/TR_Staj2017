@@ -169,7 +169,7 @@
 <body style="overflow-x:hidden">
   
     <div  class="container-fuild">
-           <div  id ="header" class="row content ">
+           <div class='row content' id ="header" >
                <div  class="container">
                    <div class="col-sm-4" id="ilanCount">
                        
@@ -348,10 +348,10 @@
                 var id=0;
                 
                 console.log($(this));
-                alert('itemClik');
+              
                 $('#sektorler option:selected').each(function() {
                     sonSecilen = $(this).text();
-                    alert(sonSecilen+"each");
+             
                     id=$(this).val();
                     if(jQuery.inArray(sonSecilen, sektor) === -1){
                         sektor.push(sonSecilen);
@@ -433,7 +433,7 @@
                 var id = name.substring(1,name.length);
                 $('#sektorler option:selected').each(function() {
                     if($(this).val()=== id){
-                        alert("silme sektor");
+                    
                         $(this).removeAttr("selected");
                     }
                 });
@@ -454,7 +454,7 @@
             var birlesmisName;
             $("#multisel"+key).empty();
             if(code.length === 0){
-                alert("undefi");
+                
             }
             var name1 = code.split(" "); /// Birden fazla kelime kontrolü
             if(name1.length === 1){
@@ -598,13 +598,13 @@
         }
         if(sektorID != ""){
             var sektor = new Array();
-            alert("girdi");
+           
             $("#sektorler").multipleSelect("setSelects", [sektorID]);
               
             var sonSecilen;
             var id=0;
             $('#sektorler option:selected').each(function() {
-                alert();
+            
                 sonSecilen = $(this).text();
                 id=$(this).val();
                 if(jQuery.inArray(sonSecilen, sektor) === -1){
@@ -629,7 +629,7 @@
             $('#sektorler option:selected').each(function() {
                  selectedSektor.push($(this).val());
             });
-            alert(selectedSektor);
+           
         }
         var selectedIl = new Array(); /////////// iller //////////////
         var n = jQuery('.mutliSelect input[type="checkbox"]').length;

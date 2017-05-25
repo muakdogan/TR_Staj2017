@@ -1,6 +1,7 @@
 <?php
 use App\Form;
 use App\iller;
+use App\Il;
 use App\ilceler;
 use App\semtler;
 use App\adresler;
@@ -29,6 +30,33 @@ Route::get('/sessionKill', function () {
   Session::flush();
   return Redirect::to('/');
 
+});
+
+Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
+  $firma = Firma::find($id);
+  $ilan = Ilan::find($ilan_id);
+  
+  if (Gate::denies('show', $firma)) {
+    return redirect()->intended();
+  }
+  /*if (Gate::denies('createIlan')) {
+    return redirect()->intended();
+  }*/
+  
+     if (!$ilan)
+    $ilan = new App\Ilan();
+if (!$ilan->ilan_yapim_isleri)
+    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+                                          
+  $sektorler= \App\ Sektor::all();
+  $maliyetler=  \App\Maliyet::all();
+  $odeme_turleri= \App\OdemeTuru::all();
+  $para_birimleri= \App\ParaBirimi::all();
+  $iller = Il::all();
+  $birimler=  \App\Birim::all();
+
+  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
+         
 });
 
 Route::group(['middleware' => ['web']], function () {
@@ -479,7 +507,8 @@ Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
-Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikciler');
+Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikcilerEkleCıkar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikcilerim',  'FirmaController@onayliTedarikcilerim'); /// onayli firmalar sekmesinin controller fonksiyonu
 
 Route::get('/kullaniciFirma',function () {
   $kullanici_id=Input::get('kullanici_id');

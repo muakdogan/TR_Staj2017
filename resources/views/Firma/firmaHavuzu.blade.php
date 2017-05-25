@@ -240,24 +240,26 @@
             placeholder: "Seçiniz",
             filter: true,
             onClick: function() {
-                var sonSecilen;
+                var sonSecilen="";
                 var id=0;
                 
                 console.log($(this));
-                alert('itemClik');
                 $('#sektorler option:selected').each(function() {
                     sonSecilen = $(this).text();
-                    alert(sonSecilen+"each");
                     id=$(this).val();
                     if(jQuery.inArray(sonSecilen, sektor) === -1){
                         sektor.push(sonSecilen);
+                       
                         return false;
                     }
+                    
                 });
                 console.log(sonSecilen);
-
+                if(sonSecilen !== ""){
+                    doldurma(sonSecilen,"s"+id);
+                }
                 getFirmalar(1);
-                doldurma(sonSecilen,"s"+id);
+                
             }
     });
     
@@ -273,7 +275,6 @@
             var sektorName = $('li[name='+name+']').find('span').text();
             $('li[name='+name+']').remove();    
             
-            alert(sektorName);
             if($('#search').val() !== null){
                 $("#radioDiv3 input[type='radio']").each(function(){
                     $(this).prop('checked', false);
@@ -286,14 +287,11 @@
                 
                 $('#sektorler option:selected').each(function() {
                     if($(this).val()=== id){
-                        alert("silme sektor");
-                        console.log($(this));
-                        $('input:checkbox[value='+id+']').prop('checked',false);
-                        $("#sektorler").multipleSelect("uncheckAll");
+                        console.log($('input:checkbox[data-name="selectItemsektorler[]"][value="' + id + '"]'));
+                       $('input:checkbox[data-name="selectItemsektorler[]"][value="' + id + '"]').trigger("click");
                        
                     }
                 });
-                getFirmalar(1);
             }else{
                 $('.mutliSelect input[type="checkbox"]').each(function(){
                     var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
@@ -310,7 +308,7 @@
             var birlesmisName;
             $("#multisel"+key).empty();
             if(code.length === 0){
-                alert("undefi");
+               
             }
             var name1 = code.split(" "); /// Birden fazla kelime kontrolü
             if(name1.length === 1){
@@ -384,7 +382,7 @@
             $('#sektorler option:selected').each(function() {
                  selectedSektor.push($(this).val());
             });
-            alert(selectedSektor);
+            
         }
         var selectedIl = new Array(); /////////// iller //////////////
         var n = jQuery('.mutliSelect input[type="checkbox"]').length;

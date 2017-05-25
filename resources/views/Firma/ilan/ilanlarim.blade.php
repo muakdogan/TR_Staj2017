@@ -619,7 +619,7 @@ var t = setInterval(function () { var ele = document.getElementById("blinker"); 
             var j = $(this).attr('id');
           e.stopPropagation();
          if ($(this).hasClass('active')){
-             alert("girdi");
+         
             $('#dialog'+j).fadeOut(200);
             $(this).removeClass('active');
          } else {
