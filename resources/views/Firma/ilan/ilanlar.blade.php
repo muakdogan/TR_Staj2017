@@ -105,13 +105,11 @@ a{
    var deneme;
    $(".btn-primary").click(function(){
        name=$(this).attr("name");
-       alert("geldim");
-       alert(name);
+      
        deneme=name.split(" ");
        firma_id=deneme[0];
        ilan_id=deneme[1];
-       alert(firma_id);
-       alert(ilan_id);
+     
      
        funcIlanFirma();
        

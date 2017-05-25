@@ -132,7 +132,7 @@ tr:nth-child(even) {
     var toplamFiyat=0; 
 
     $('#kdv').on('change', function() {
-        alert("kdv");
+   
         var kdv=parseFloat(this.value);
         var result;
 
@@ -143,15 +143,12 @@ tr:nth-child(even) {
             result=(fiyat+(fiyat*kdv)/100)*miktar;
             toplamFiyat += result;
             var name=$(this).attr('name');
-            alert("miktar:" + miktar);
-            alert("fiyat:" + fiyat);
-            alert("kdv:" + kdv);
-            alert("name:" + name);
+           
             $(this).parent().next().next().next().children().next().text(result);
             $("#toplamFiyatLabel").text("Toplam Fiyat: " + toplamFiyat);
             $("#toplamFiyatL").text(toplamFiyat);
             $("#toplamFiyat").val(toplamFiyat);
-            alert(toplamFiyat);
+            
         }  
     });
 
@@ -167,12 +164,12 @@ tr:nth-child(even) {
             result=(fiyat+(fiyat*kdv)/100)*miktar;
             toplamFiyat += result;
             var name=$(this).attr('name');
-            alert(name);
+           
             $("#"+name).text(result);
             $("label[for='toplamFiyatLabel']").text("Toplam Fiyat: " + toplamFiyat);
             $("label[for='toplamFiyatL']").text(toplamFiyat);
             $("label[for='toplamFiyat']").val(toplamFiyat);
-            alert(toplamFiyat);
+            
         }
     });
 
