@@ -654,8 +654,7 @@
        var nameArray = name.split('_');
        var kalemId = nameArray[0];
        var kazananFiyat = nameArray[1];
-       alert(kalemId);
-       alert(kazananFiyat);
+      
        var kazananFirmaId=$(this).attr("id");
        var ilanID={{$ilan->id}};
        var successValue = $(this);

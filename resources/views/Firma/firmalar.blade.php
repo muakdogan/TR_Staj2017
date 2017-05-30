@@ -100,7 +100,8 @@ function tedarikci(){
         cache: false,
         success: function(data){
             console.log(data);
-               alert("başarılı");
+             
+               location.reload();
             }
         });
     }

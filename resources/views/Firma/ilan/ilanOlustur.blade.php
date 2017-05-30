@@ -849,37 +849,6 @@
   });
   $('#presentation').restrictLength( $('#pres-max-length') );
   
-  
-   //$("#msform").validate();
-    //$("#ilan").click(function() {
-       // alert("Valid: " + $("#msform").valid());
-       // return false;
-    //});
-    $("#ilan").bind("click", function(e) {
-        
-        //If the form is valid then go to next else don't
-        var valid = true;
-        // this will cycle through all visible inputs and attempt to validate all of them.
-        // if validations fail 'valid' is set to false
-            $('[data-validate] input:visible').each(function() {
-               
-              var settings = window.ClientSideValidations.forms[this.form.id];
-              if (!$(this).isValid(settings.validators)) {
-                valid = false;
-                   
-              }
-            });
-        if(valid){
-           
-          //code to go to next step
-        }
-        
-        // if any of the inputs are invalid we want to disrupt the click event
-        return valid;
-      });
-     
-    
-    
  $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();
       $('#onayli_tedarikciler').hide();
@@ -1151,7 +1120,7 @@ function funcTumFirmalar(){
  $(function() {
     $("#katilimcilar").change(function(){
        option = $('option:selected', this).attr('value');
-        alert(option);
+     
         if(sektor!==0){
             if(option==="1"){
                 $('#custom-headers').multiSelect('deselect_all');
@@ -1190,7 +1159,7 @@ var sozlesme_turu;
 
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
-        alert(ilan_turu);
+    
         if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1223,7 +1192,7 @@ $('#ilan_turu').on('change', function (e) {
 
 $('#sozlesme_turu').on('change', function (e) {
              sozlesme_turu = e.target.value;
-             alert(sozlesme_turu);
+         
              if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1321,22 +1290,22 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
 });
 //kalemleri silme 
 $('#mal_table').on('click', '.sil', function(e) {
-     alert("geldim");
+    
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#hizmet_table').on('click', '.sil', function(e) {
-    alert("hizmet");
+   
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#goturu_table').on('click', '.sil', function(e) {
-    alert("hizmet");
+ 
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#yapim_table').on('click', '.sil', function(e) {
-    alert("yapim");
+   
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });

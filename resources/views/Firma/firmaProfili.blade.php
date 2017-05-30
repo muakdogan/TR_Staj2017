@@ -2422,8 +2422,6 @@
         
        var total_dolu_row=dolu_row;
        
-       //alert(total_dolu_row);
-       //alert(total_row);
        var hesaplama=(total_dolu_row/total_row)*100;
        total_yuzde=hesaplama.toFixed(0);
        
@@ -2531,8 +2529,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(formURL);
-                alert(postData);
+              
             
             $.ajax(
             {
@@ -2573,8 +2570,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert("kalite girdi");
-                alert(formURL);
+                
             
             $.ajax(
             {
@@ -2615,8 +2611,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(" kalite up girdi");
-                alert(formURL);
+          
             
             $.ajax(
             {
@@ -2657,8 +2652,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(" ref girdi");
-                alert(formURL);
+              
             
             $.ajax(
             {
@@ -2699,8 +2693,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(" ref add girdi");
-                alert(formURL);
+               
             
             $.ajax(
             {
@@ -2741,8 +2734,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert("brosur girdi");
-                alert(formURL);
+              
             
             $.ajax(
             {
@@ -2783,8 +2775,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(" brosur up girdi");
-                alert(formURL);
+               
             
             $.ajax(
             {
@@ -2825,8 +2816,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(" calisma girdi");
-                alert(formURL);
+           
             
             $.ajax(
             {
@@ -2867,8 +2857,7 @@ $("#iletisim_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-                alert(" bilgilendirme girdi");
-                alert(formURL);
+               
             
             $.ajax(
             {

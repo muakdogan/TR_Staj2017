@@ -1,6 +1,7 @@
 <?php
 use App\Form;
 use App\iller;
+use App\Il;
 use App\ilceler;
 use App\semtler;
 use App\adresler;
@@ -11,7 +12,6 @@ use App\FirmaReferans;
 use App\iletisim_bilgileri;
 use App\FirmaSatilanMarka;
 use App\Ilan;
-use App\Il;
 use App\Teklif;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
@@ -29,6 +29,33 @@ Route::get('/sessionKill', function () {
   Auth::logout();
   Session::flush();
   return Redirect::to('/');
+
+});
+
+Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
+  $firma = Firma::find($id);
+  $ilan = Ilan::find($ilan_id);
+
+  if (Gate::denies('show', $firma)) {
+    return redirect()->intended();
+  }
+  /*if (Gate::denies('createIlan')) {
+    return redirect()->intended();
+  }*/
+
+     if (!$ilan)
+    $ilan = new App\Ilan();
+if (!$ilan->ilan_yapim_isleri)
+    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+
+  $sektorler= \App\ Sektor::all();
+  $maliyetler=  \App\Maliyet::all();
+  $odeme_turleri= \App\OdemeTuru::all();
+  $para_birimleri= \App\ParaBirimi::all();
+  $iller = Il::all();
+  $birimler=  \App\Birim::all();
+
+  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
 
 });
 
@@ -80,14 +107,11 @@ Route::post('/updateTree', function () {
 });
 Route::get('/findChildrenTree', function () {
   $id = Input::get('id');
-  $sektor_id = 1;
-  $turu = 1;
-  Debugbar::info($id);
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
     (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
-    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif
+    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif, nace_kodu
     FROM kalemler as k1
-    where k1.parent_id = $id and k1.sektor_id=$sektor_id and k1.turu=$turu"));
+    where k1.parent_id = '$id'" ));
 
     return Response::json($kalemler);
 
@@ -437,6 +461,7 @@ Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
 }]);
 
 Route::get('/firmaKayit' ,function () {
+  $iller = App\Il::all();
 
   $iller_query= DB::select(DB::raw("SELECT *
                                 FROM  `iller`
@@ -449,7 +474,7 @@ Route::get('/firmaKayit' ,function () {
    $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();
 
 
-  return view('Firma.firmaKayit2')->with('sektorler',$sektorler)->with('iller_query',$iller_query);
+  return view('Firma.firmaKayit')->with('iller', $iller)->with('sektorler',$sektorler)->with('iller_query',$iller_query);
 });
 
 Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
@@ -482,7 +507,8 @@ Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
-Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikciler');
+Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikcilerEkleCıkar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikcilerim',  'FirmaController@onayliTedarikcilerim'); /// onayli firmalar sekmesinin controller fonksiyonu
 
 Route::get('/kullaniciFirma',function () {
   $kullanici_id=Input::get('kullanici_id');
@@ -804,33 +830,6 @@ Route::get('/tumFirmalar/',function (){
   $sektorControl = $sektorControl->get();
 
   return Response::json($sektorControl);
-});
-
-Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
-  $firma = Firma::find($id);
-  $ilan = Ilan::find($ilan_id);
-
-  if (Gate::denies('show', $firma)) {
-    return redirect()->intended();
-  }
-  /*if (Gate::denies('createIlan')) {
-    return redirect()->intended();
-  }*/
-
-     if (!$ilan)
-    $ilan = new App\Ilan();
-if (!$ilan->ilan_yapim_isleri)
-    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
-
-  $sektorler= \App\ Sektor::all();
-  $maliyetler=  \App\Maliyet::all();
-  $odeme_turleri= \App\OdemeTuru::all();
-  $para_birimleri= \App\ParaBirimi::all();
-  $iller = Il::all();
-  $birimler=  \App\Birim::all();
-
-  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
-
 });
 
 Route::get('/basvuruControl/',function (){

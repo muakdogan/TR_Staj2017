@@ -643,7 +643,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                 parseFloat(n);
                 kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
             });
-            alert(kdvsizToplamFiyat);
+            
             if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
                 $('#iskontoLabel').text(" İskonto Ver");
                 $('#iskonto').prop("type", "checkbox");
@@ -761,10 +761,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         if(isNaN(iskontoOrani)) {
             iskontoOrani = 0;
         }
-        alert("dif");
+       
         var iskontoluToplamFiyatKdvsiz = kdvsizToplamFiyat.toFixed(2)- (kdvsizToplamFiyat.toFixed(2)* iskontoOrani)/100;
         var iskontoluToplamFiyatKdvli = toplamFiyat.toFixed(2)- (toplamFiyat.toFixed(2)* iskontoOrani)/100;
-        alert(iskontoluToplamFiyatKdvsiz);
+       
         $("#iskontoluToplamFiyatLabel").text("İskontolu KDV Dahil Toplam Fiyat: " + iskontoluToplamFiyatKdvli.toFixed(2));
         $("#iskontoluToplamFiyatL").text("İskontolu KDV Hariç Toplam Fiyat: "+iskontoluToplamFiyatKdvsiz.toFixed(2));
         $("#iskontoluToplamFiyatKdvli").val(iskontoluToplamFiyatKdvli.toFixed(2));
