@@ -11,6 +11,7 @@ use App\FirmaReferans;
 use App\iletisim_bilgileri;
 use App\FirmaSatilanMarka;
 use App\Ilan;
+use App\Il;
 use App\Teklif;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
@@ -436,7 +437,6 @@ Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
 }]);
 
 Route::get('/firmaKayit' ,function () {
-  $iller = App\Il::all();
 
   $iller_query= DB::select(DB::raw("SELECT *
                                 FROM  `iller`
@@ -449,7 +449,7 @@ Route::get('/firmaKayit' ,function () {
    $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();
 
 
-  return view('Firma.firmaKayit')->with('iller', $iller)->with('sektorler',$sektorler)->with('iller_query',$iller_query);
+  return view('Firma.firmaKayit2')->with('sektorler',$sektorler)->with('iller_query',$iller_query);
 });
 
 Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
@@ -804,6 +804,33 @@ Route::get('/tumFirmalar/',function (){
   $sektorControl = $sektorControl->get();
 
   return Response::json($sektorControl);
+});
+
+Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
+  $firma = Firma::find($id);
+  $ilan = Ilan::find($ilan_id);
+
+  if (Gate::denies('show', $firma)) {
+    return redirect()->intended();
+  }
+  /*if (Gate::denies('createIlan')) {
+    return redirect()->intended();
+  }*/
+
+     if (!$ilan)
+    $ilan = new App\Ilan();
+if (!$ilan->ilan_yapim_isleri)
+    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+
+  $sektorler= \App\ Sektor::all();
+  $maliyetler=  \App\Maliyet::all();
+  $odeme_turleri= \App\OdemeTuru::all();
+  $para_birimleri= \App\ParaBirimi::all();
+  $iller = Il::all();
+  $birimler=  \App\Birim::all();
+
+  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
+
 });
 
 Route::get('/basvuruControl/',function (){
