@@ -5,7 +5,6 @@
     <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
     </head>
     <div class="container">
-        <h1>TAMREKABET'E HOŞGELDİNİZ</h1>
         <h1>ÜYELİK OLUŞTUR</h1>
         <br>
         <div class="row">
