@@ -5,6 +5,7 @@ use App\ilceler;
 use App\semtler;
 use App\adresler;
 use App\adres_turleri;
+use App\Il;
 use App\Sektor;
 use App\Firma;
 use App\FirmaReferans;
@@ -77,6 +78,36 @@ Route::post('/updateTree', function () {
 
   $kalem->save();
 });
+
+Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
+  $firma = Firma::find($id);
+  $ilan = Ilan::find($ilan_id);
+  
+  if (Gate::denies('show', $firma)) {
+    return redirect()->intended();
+  }
+  /*if (Gate::denies('createIlan')) {
+    return redirect()->intended();
+  }*/
+  
+     if (!$ilan)
+    $ilan = new App\Ilan();
+if (!$ilan->ilan_yapim_isleri)
+    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+                                          
+  $sektorler= \App\ Sektor::all();
+  $maliyetler=  \App\Maliyet::all();
+  $odeme_turleri= \App\OdemeTuru::all();
+  $para_birimleri= \App\ParaBirimi::all();
+  $iller = Il::all();
+  $birimler=  \App\Birim::all();
+
+  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
+         
+});
+
+
+
 Route::get('/findChildrenTree', function () {
   $id = Input::get('id');
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',

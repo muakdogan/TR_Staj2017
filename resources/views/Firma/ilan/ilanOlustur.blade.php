@@ -16,6 +16,14 @@
         <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
+        <!--kalem agacı -->
+        <link href="{{asset('../resources/views/admin/skin-bootstrap/ui.fancytree.css')}}" rel="stylesheet" class="skinswitcher">
+        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.js')}}"></script>
+        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.glyph.js')}}"></script>
+        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.dnd.js')}}"></script>
+        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.edit.js')}}"></script>
+        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.filter.js')}}"></script>
+        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.table.js')}}"></script>
         <style>
             .popup, .popup2, .bMulti {
             background-color: #fff;
@@ -260,16 +268,17 @@
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
     <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js"></script>
 
     <div class="container">
         <br>
         <br>
            <?php $i=1;?>
          @include('layouts.alt_menu')
-        <h2  >İlan Oluştur</h2>
+        <h2>İlan Oluştur</h2>
         
         <div class="box effect8">
             <h3><button style="font-size:30px;color: #337ab7;background-color: #ffffff;border-color: #ffffff;"  id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="">İlan Oluşturmaya Başlayın</button></h3>
@@ -290,9 +299,9 @@
                                 </ul>
                         </div>
                         <div class="modal-body">
-                            <form id="msform"  data-validate>
+                            <form id="msform" >
                                
-                                <fieldset>
+                                <fieldset  id="ilan" >
                                         <h2 style=" text-align: center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>İLAN BİLGİLERİ OLUŞTUR</strong></h2>
                                         <br>
                                         
@@ -349,8 +358,8 @@
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Yayınlama Tarihi</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                               <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text" data-validation="required"
-                                                                data-validation-error-msg="Lütfen bu alanı doldurunuz!" />
+                                                               <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text"
+                                                                />
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -586,10 +595,10 @@
                                             </div>
                                           </div>
                                         </div>
-                                            <input  style="float:right" id="ilan" type="button" name="next" class="next action-button" value="İleri" />
+                                            <input  style="float:right"  type="button" name="next" class="next action-button" value="İleri" />
                                         
                                 </fieldset>
-                                 <fieldset>
+                                 <fieldset id="kalem">
                                   
                                             <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>KALEM BİLGİLERİ OLUŞTUR</strong></h2>
                                         
@@ -785,7 +794,7 @@
                                         <input style="float:right" type="button" class="action-button" id="btn2" value="Kalem Ekle" />
                                        
                                 </fieldset>
-                                <fieldset>
+                                <fieldset id="onay">
                                         <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>ONAYLA VE GÖNDER</strong></h2>
                                         <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>Sözleşme-1</strong></h2>
                                           <div class="info-box eula-container ">
@@ -804,90 +813,29 @@
                     </div>
                 </div>
            </div>
-           <!--kalemler tree modalı -->
-         <div class="modal fade" id="myModal-mal_birimfiyat_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalemler Listesi</strong></h4>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                     <br>
-                     <br>
-                    <div class="modal-footer">
-                    </div>
-                </div>
-            </div>
-        </div>
+         <!--kalemler tree modalı -->
+           @include('Firma.ilan.kalemAgaci')
     </div>
-     <!-- jQuery -->
-   
     <!-- jQuery easing plugin -->
     <script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
     <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     
-
 <script charset="utf-8">
     var firmaCount = 0;
     var multiselectCount=0;
     var yayinlanma;
     $("#yayinlanma_tarihi" ).change(function() {
         yayinlanma= this.value;
-       
    });
-   
- $.validate({
-    modules : 'location, date, security, file',
-    onModulesLoaded : function() {
-      $('#country').suggestCountry();
-    }
-  });
-  $('#presentation').restrictLength( $('#pres-max-length') );
-  
-  
-   $("#msform").validate();
-    $("#ilan").click(function() {
-        $("#test").validate({              
-            rules: {
-                     name: "required", // simple rule, converted to {required:true}
-                     email: {// compound rule
-                         required: true,
-                         email: true
-                     },
-                     comment: {
-                         required: true
-                     }
-                 },
-                 message: {
-                     comment: "Please enter a comment."
-                 }
-             });
 
+ //jQuery time
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
 
-});
-        return false;
-    });
-    
-     
-    
-    
- $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-      $('#onayli_tedarikciler').hide();
-      $('#belirli-istekliler').hide();
-        $('#il_id').on('change', function (e) {
-            var il_id = e.target.value;
-            GetIlce(il_id);
-            //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
-            //$("#semt_id")[0].selectedIndex=0;
-        });   
-});
-
+ 
         $.fn.datepicker.dates['tr'] = {
             days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
             daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
@@ -900,7 +848,7 @@
         var date_ka=$('input[class="form-control date kapanma"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
-            format: 'dd-mm-yyyy',
+            format: 'dd/mm/yyyy',
             language:"tr",
             container: container,
             weekStart:1,
@@ -914,20 +862,240 @@
         });
       
         date_ka.datepicker({ 
-            format: 'dd-mm-yyyy',
+            format: 'dd/mm/yyyy',
             language:"tr",
             container: container,
             weekStart:1,
             todayHighlight: true,
             autoclose: true,
-            startDate:yayinlanma
+            startDate: '"' +yayinlanma + '"'
             
         }).on('change', function() {
             $(this).validate();  // triggers the validation test
         // '$(this)' refers to '$("#datepicker")'
         });
         
-        
+        $(document).ready(function(){
+           $('[data-toggle="tooltip"]').tooltip();
+           $('#onayli_tedarikciler').hide();
+           $('#belirli-istekliler').hide();
+             $('#il_id').on('change', function (e) {
+                 var il_id = e.target.value;
+                 GetIlce(il_id);
+                 //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
+                 //$("#semt_id")[0].selectedIndex=0;
+             });
+
+         });
+    
+    
+        $.validator.addMethod("turkishDateFormat",
+            function(value, element) {
+                alert(value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/));
+                return value.match(/^dd?-dd?-dd$/);
+        },"Please enter a date in the format dd-mm-yyyy.");
+   
+ 
+        $(".next").click(function(){
+				var form = $("#msform");
+				form.validate({
+					errorElement: 'span',
+					errorClass: 'help-block',
+					highlight: function(element, errorClass, validClass) {
+						$(element).closest('.form-group').addClass("has-error");
+					},
+					unhighlight: function(element, errorClass, validClass) {
+						$(element).closest('.form-group').removeClass("has-error");
+					},
+					rules: {
+						firma_adi_goster: {
+                                                        required: true,
+
+                                                },
+                                                ilan_adi: {
+                                                        required: true,
+
+                                                },
+                                                ilan_turu: {
+                                                        required: true,
+
+                                                },
+                                                firma_sektor: {
+                                                        required: true,
+
+                                                },
+                                                yayinlanma_tarihi: {
+                                                     required: true,
+                                                     date: false,
+                                                     dateITA: true
+
+                                                },
+                                                kapanma_tarihi: {
+                                                       required: true,
+                                                        date: false,
+                                                        dateITA: true
+
+                                                },
+                                                is_suresi: {
+                                                        required: true,
+                                                        
+
+                                                },
+                                                is_baslama_tarihi: {
+                                                       required: true,
+                                                        date: false,
+                                                        dateITA: true
+
+                                                },
+                                                is_bitis_tarihi: {
+                                                        required: true,
+                                                        date: false,
+                                                        dateITA: true
+
+                                                },
+                                                katilimcilar: {
+                                                        required: true,
+
+                                                },
+                                                rekabet_sekli: {
+                                                        required: true,
+
+                                                },
+                                                sozlesme_turu:{
+                                                        required: true,
+
+                                                },
+                                                kismi_fiyat: {
+                                                        required: true,
+
+                                                },
+                                                yaklasik_maliyet: {
+                                                        required: true,
+
+                                                },
+                                                odeme_turu: {
+                                                        required: true,
+
+                                                },
+                                                para_birimi: {
+                                                        required: true,
+
+                                                },
+                                                teslim_yeri: {
+                                                        required: true,
+
+                                                },
+                                                aciklama: {
+                                                        required: true,
+
+                                                }
+						
+					},
+					messages: {
+						firma_adi_goster: {
+                                                        required: "Username required",
+
+                                                },
+                                                ilan_adi: {
+                                                        required: "Username required",
+
+                                                },
+                                                ilan_turu: {
+                                                        required: "Username required",
+
+                                                },
+                                                firma_sektor: {
+                                                        required: "Username required",
+
+                                                },
+                                                yayinlanma_tarihi: {
+                                                          required: "Username required",
+
+                                                },
+                                                kapanma_tarihi: {
+                                                          required: "Username required",
+
+                                                },
+                                                is_suresi: {
+                                                          required: "Username required",
+
+                                                },
+                                                is_baslama_tarihi: {
+                                                          required: "Username required",
+
+                                                },
+                                                is_bitis_tarihi: {
+                                                          required: "Username required",
+
+                                                },
+                                                katilimcilar: {
+                                                        required: "Username required",
+
+                                                },
+                                                rekabet_sekli: {
+                                                        required: "Username required",
+
+                                                },
+                                                sozlesme_turu:{
+                                                        required: "Username required",
+
+                                                },
+                                                kismi_fiyat: {
+                                                        required: "Username required",
+
+                                                },
+                                                yaklasik_maliyet: {
+                                                        required: "Username required",
+
+                                                },
+                                                odeme_turu: {
+                                                        required: "Username required",
+
+                                                },
+                                                para_birimi: {
+                                                        required: "Username required",
+
+                                                },
+                                                teslim_yeri: {
+                                                        required: "Username required",
+
+                                                },
+                                                aciklama: {
+                                                        required: "Username required",
+                                                }
+					}
+				});
+				if (form.valid() === true){
+					if ($('#ilan').is(":visible")){
+						current_fs = $('#ilan');
+						next_fs = $('#kalem');
+					}else if($('#kalem').is(":visible")){
+						current_fs = $('#kalem');
+						next_fs = $('#onay');
+					}
+					
+					next_fs.show(); 
+					current_fs.hide();
+				}
+			});
+
+			$('.previous').click(function(){
+				if($('#kalem').is(":visible")){
+					current_fs = $('#kalem');
+					next_fs = $('#ilan');
+				}else if ($('#onay').is(":visible")){
+					current_fs = $('#onay');
+					next_fs = $('#kalem');
+				}
+				next_fs.show(); 
+				current_fs.hide();
+			});
+                        $(".submit").click(function(){
+                                return false;
+                        });
+                        
+                        
+    
 function GetIlce(il_id) {
         if (il_id > 0) {
             $("#ilce_id").get(0).options.length = 0;
@@ -1349,86 +1517,9 @@ $("#yapim_kalem").click(function(){
 $("#goturu_kalem").click(function(){
     $('#myModal-mal_birimfiyat_add').modal('show');
 });
-   
-    
-//jQuery time
-var current_fs, next_fs, previous_fs; //fieldsets
-var left, opacity, scale; //fieldset properties which we will animate
-var animating; //flag to prevent quick multi-click glitches
 
-$(".next").click(function(){
-	if(animating) return false;
-	animating = true;
-	
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
-	
-	//activate next step on progressbar using the index of next_fs
-	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-	
-	//show the next fieldset
-	next_fs.show(); 
-	//hide the current fieldset with style
-	current_fs.animate({opacity: 0}, {
-		step: function(now, mx) {
-			//as the opacity of current_fs reduces to 0 - stored in "now"
-			//1. scale current_fs down to 80%
-			scale = 1 - (1 - now) * 0.2;
-			//2. bring next_fs from the right(50%)
-			left = (now * 50)+"%";
-			//3. increase opacity of next_fs to 1 as it moves in
-			opacity = 1 - now;
-			current_fs.css({'transform': 'scale('+scale+')'});
-			next_fs.css({'left': left, 'opacity': opacity});
-		}, 
-		duration: 800, 
-		complete: function(){
-			current_fs.hide();
-			animating = false;
-		}, 
-		//this comes from the custom easing plugin
-		easing: 'easeInOutBack'
-	});
-});
 
-$(".previous").click(function(){
-	if(animating) return false;
-	animating = true;
-	
-	current_fs = $(this).parent();
-	previous_fs = $(this).parent().prev();
-	
-	//de-activate current step on progressbar
-	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-	
-	//show the previous fieldset
-	previous_fs.show(); 
-	//hide the current fieldset with style
-	current_fs.animate({opacity: 0}, {
-		step: function(now, mx) {
-			//as the opacity of current_fs reduces to 0 - stored in "now"
-			//1. scale previous_fs from 80% to 100%
-			scale = 0.8 + (1 - now) * 0.2;
-			//2. take current_fs to the right(50%) - from 0%
-			left = ((1-now) * 50)+"%";
-			//3. increase opacity of previous_fs to 1 as it moves in
-			opacity = 1 - now;
-			current_fs.css({'left': left});
-			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
-		}, 
-		duration: 800, 
-		complete: function(){
-			current_fs.hide();
-			animating = false;
-		}, 
-		//this comes from the custom easing plugin
-		easing: 'easeInOutBack'
-	});
-});
-
-$(".submit").click(function(){
-	return false;
-});
+ 
 
 
 
