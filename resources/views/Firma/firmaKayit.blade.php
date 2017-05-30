@@ -611,7 +611,7 @@
 
             beforeSend:( function(){
                 $('.ajax-loader').css("visibility", "visible");
-                alert("yukleniyor");
+               
             });
 
             $('#semt_id').empty();

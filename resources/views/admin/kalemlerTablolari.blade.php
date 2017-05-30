@@ -5,7 +5,7 @@
 <html>
 <head>
  <meta charset="utf-8">
- 
+
   <link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
   <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
@@ -52,9 +52,8 @@ var CLIPBOARD = null;
      ]}
   ];
 */
-
 $(function(){
-  
+
   $("#tree").fancytree({
     checkbox: false,
     titlesTabbable: true,     // Add all node titles to TAB chain
@@ -66,7 +65,6 @@ $(function(){
         dataType:'json'
     },
     extensions: ["edit", "dnd", "table", "gridnav"],
-
     dnd: {
       preventVoidMoves: true,
       preventRecursiveMoves: true,
@@ -101,13 +99,12 @@ $(function(){
       autofocusInput: false,
       handleCursorKeys: true
     },
-
     lazyLoad: function(event, data){
 		var node = data.node;
 		console.log(node.key);
         data.result = {
 		  url: "{{asset('findChildrenTree')}}",
-		 
+
 		  data: {id: node.key},
                   dataType:'json',
           cache: false
@@ -116,7 +113,6 @@ $(function(){
     createNode: function(event, data) {
       var node = data.node,
         $tdList = $(node.tr).find(">td");
-
       // Span the remaining columns if it's a folder.
       // We can do this in createNode instead of renderColumns, because
       // the `isFolder` status is unlikely to change later
@@ -129,7 +125,6 @@ $(function(){
     renderColumns: function(event, data) {
       var node = data.node,
         $tdList = $(node.tr).find(">td");
-
       // (Index #0 is rendered by fancytree by adding the checkbox)
       // Set column #1 info from node data:
       $tdList.eq(0).find("input").prop('checked', node.data.is_aktif);
@@ -139,7 +134,6 @@ $(function(){
       // Set column #3 info from node data:
       $tdList.eq(3).find("input").val(node.key);
       $tdList.eq(4).find("input").val(node.data.nace_kodu);
-
       // Static markup (more efficiently defined as html row template):
       // $tdList.eq(3).html("<input type='input' value='" + "" + "'>");
       // ...
@@ -150,7 +144,6 @@ $(function(){
     var refNode, moveMode,
       tree = $(this).fancytree("getTree"),
       node = tree.getActiveNode();
-
     switch( data.cmd ) {
     case "moveUp":
       refNode = node.getPrevSibling();
@@ -223,7 +216,6 @@ $(function(){
       alert("Unhandled command: " + data.cmd);
       return;
     }
-
     }).on("focusout", function(e){
         var node = $.ui.fancytree.getNode(e);
         var column;
@@ -245,10 +237,8 @@ $(function(){
             value = e.target.value;
             $ajaxCall(value,node.key,column);
         }
-
   }).on("keydown", function(e){
     var cmd = null;
-
     // console.log(e.type, $.ui.fancytree.eventToString(e));
     switch( $.ui.fancytree.eventToString(e) ) {
     case "ctrl+shift+n":
@@ -299,7 +289,6 @@ $(function(){
       return false;
     }
   });
-
   /*
    * Tooltips
    */
@@ -308,7 +297,6 @@ $(function(){
   //     return $(this).attr("title");
   //   }
   // });
-
   /*
    * Context menu (https://github.com/mar10/jquery-ui-contextmenu)
    */
@@ -343,24 +331,23 @@ $(function(){
  $ajaxCall=function(value,id,column){
             jQuery.ajax({
                    type: "POST",
-                   url: "{{asset('updateTree')}}", 
+                   url: "{{asset('updateTree')}}",
                    data:{value:value, id:id , type: column},
                     success: function(){
                        alert("başarılı");
                     }
                 });
         }
-
 </script>
 </head>
 
 <body class="example">
-    
+
         <div class="col-md-10 col-md-offset-1">
              @include('layouts.admin_alt_menu')
             <div class="panel panel-default">
                     <div class="panel-heading">Kalemler Listesi Tabloları</div>
-                      
+
                     <div class="panel-body">
                         <table id="tree" style="width: 60%">
                             <colgroup>
@@ -392,10 +379,10 @@ $(function(){
                               </tr>
                             </tbody>
                         </table>
-                    </div>          
+                    </div>
                 </div>
         </div>
-   
+
 </body>
 </html>
 @endsection

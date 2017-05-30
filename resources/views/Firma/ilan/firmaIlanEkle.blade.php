@@ -1386,7 +1386,7 @@ function GetIlce(il_id) {
         }
     }
 function populateDD(){
-  alert("girdim");
+
   var teslim_yeri = '{{$ilan->teslim_yeri_satici_firma}}';
     if( teslim_yeri == 'Satıcı Firma' ){
       $(".teslim_il").hide();
@@ -1433,7 +1433,7 @@ $(function() {
     $("#firma_sektor").change(function(){
       sektor = $('option:selected', this).attr('value');
       select_count++;
-      alert("girdi:"+select_count);
+   
       if(select_count>1){
 
       }
@@ -1473,7 +1473,7 @@ $(function() {
     $("#rekabet_sekli").change(function(){
         var option = $('option:selected', this).attr('value');
         if(sektor!==0){
-            alert(option);
+        
             if(option==="2"){
                 $('#belirli-istekliler').show();
             }
@@ -1665,8 +1665,7 @@ $("#fiyatlandirma_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+          
 
             $.ajax(
             {
@@ -1690,7 +1689,7 @@ $("#fiyatlandirma_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                      
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1706,8 +1705,7 @@ $("#mal_add_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+       
 
             $.ajax(
             {
@@ -1731,7 +1729,7 @@ $("#mal_add_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                        
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1747,8 +1745,7 @@ $("#mal_up_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+         
 
             $.ajax(
             {
@@ -1772,7 +1769,7 @@ $("#mal_up_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                      
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1788,8 +1785,7 @@ $("#hizmet_up_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+           
 
             $.ajax(
             {
@@ -1813,7 +1809,7 @@ $("#hizmet_up_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                       
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1829,8 +1825,7 @@ $("#hizmet_add_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+         
 
             $.ajax(
             {
@@ -1854,7 +1849,7 @@ $("#hizmet_add_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                      
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1870,8 +1865,7 @@ $("#goturu_add_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+      
 
             $.ajax(
             {
@@ -1895,7 +1889,7 @@ $("#goturu_add_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                      
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1911,8 +1905,7 @@ $("#goturu_up_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+         
 
             $.ajax(
             {
@@ -1936,7 +1929,7 @@ $("#goturu_up_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                        
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1952,8 +1945,7 @@ $("#yapim_add_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+         
 
             $.ajax(
             {
@@ -1977,7 +1969,7 @@ $("#yapim_add_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                     
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();
@@ -1993,8 +1985,7 @@ $("#yapim_up_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert("girdi");
-            alert(formURL);
+        
 
             $.ajax(
             {
@@ -2018,7 +2009,7 @@ $("#yapim_up_kayit").submit(function(e)
                         setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
                     }
                     else{
-                         alert("calisti");
+                    
                          setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
                     }
                         e.preventDefault();

@@ -15,6 +15,12 @@ glyph_opts = {
     loading: "glyphicon glyphicon-refresh glyphicon-spin"
   }
 };
+
+var sektor =  $("#firma_seltor").val(); //document.getElementById(firma_sektor);
+//var sektor_id=sektor.options[sektor.selectedIndex].value;
+
+
+alert(sektor);
 $(function(){
   // Initialize Fancytree
   $("#tree").fancytree({
@@ -25,7 +31,7 @@ $(function(){
     selectMode: 1,
     source: {
       data:{id:0},
-      url: "{{asset('findChildrenTree')}}",
+      url: "{{asset('findChildrenTree')}}"+sektor,
       dataType:'json', debugDelay: 1000
     },
     filter: {

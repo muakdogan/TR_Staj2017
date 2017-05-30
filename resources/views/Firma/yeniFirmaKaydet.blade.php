@@ -232,7 +232,7 @@ $('#ilce_id').on('change', function (e) {
         
         beforeSend:( function(){
             $('.ajax-loader').css("visibility", "visible");
-            alert("yukleniyor");
+           
         });
         
         $('#semt_id').empty();
@@ -258,7 +258,7 @@ $('#semt_id').on('change', function (e) {
         
           beforeSend:( function(){
             $('.ajax-loader').css("visibility", "visible");
-            alert("yukleniyor");
+           
         });
         $('#semt_id').empty();
         $.each(data, function (index, subcatObj) {
@@ -275,7 +275,7 @@ $("#yeni_kayit").submit(function(e)
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert(formURL );
+        
             $.ajax(
             {
                 beforeSend: function(){
@@ -304,7 +304,7 @@ $("#yeni_kayit").submit(function(e)
                             transitionClose: 'slideBack',
                             autoClose: 5000 
                         });
-                        alert("calisti");
+                       
                         setTimeout(function(){ location.href="{{asset('/')}}"}, 1000);
                     }
                         e.preventDefault();

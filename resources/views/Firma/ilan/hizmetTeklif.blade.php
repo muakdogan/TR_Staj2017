@@ -143,7 +143,7 @@
     $("#teklifForm").submit(function(e){
         var postData = $(this).serialize();
         var formURL = $(this).attr('action');
-        alert("girdi");
+    
         $.ajax(
         {
             beforeSend: function(){

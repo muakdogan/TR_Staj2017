@@ -1,11 +1,11 @@
 <?php
 use App\Form;
 use App\iller;
+use App\Il;
 use App\ilceler;
 use App\semtler;
 use App\adresler;
 use App\adres_turleri;
-use App\Il;
 use App\Sektor;
 use App\Firma;
 use App\FirmaReferans;
@@ -29,6 +29,33 @@ Route::get('/sessionKill', function () {
   Auth::logout();
   Session::flush();
   return Redirect::to('/');
+
+});
+
+Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
+  $firma = Firma::find($id);
+  $ilan = Ilan::find($ilan_id);
+
+  if (Gate::denies('show', $firma)) {
+    return redirect()->intended();
+  }
+  /*if (Gate::denies('createIlan')) {
+    return redirect()->intended();
+  }*/
+
+     if (!$ilan)
+    $ilan = new App\Ilan();
+if (!$ilan->ilan_yapim_isleri)
+    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+
+  $sektorler= \App\ Sektor::all();
+  $maliyetler=  \App\Maliyet::all();
+  $odeme_turleri= \App\OdemeTuru::all();
+  $para_birimleri= \App\ParaBirimi::all();
+  $iller = Il::all();
+  $birimler=  \App\Birim::all();
+
+  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
 
 });
 
@@ -78,43 +105,14 @@ Route::post('/updateTree', function () {
 
   $kalem->save();
 });
-
-Route::get('/ilanOlustur/{id}/{ilan_id}',function ($id,$ilan_id) {
-  $firma = Firma::find($id);
-  $ilan = Ilan::find($ilan_id);
-  
-  if (Gate::denies('show', $firma)) {
-    return redirect()->intended();
-  }
-  /*if (Gate::denies('createIlan')) {
-    return redirect()->intended();
-  }*/
-  
-     if (!$ilan)
-    $ilan = new App\Ilan();
-if (!$ilan->ilan_yapim_isleri)
-    $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
-                                          
-  $sektorler= \App\ Sektor::all();
-  $maliyetler=  \App\Maliyet::all();
-  $odeme_turleri= \App\OdemeTuru::all();
-  $para_birimleri= \App\ParaBirimi::all();
-  $iller = Il::all();
-  $birimler=  \App\Birim::all();
-
-  return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
-         
-});
-
-
-
-Route::get('/findChildrenTree', function () {
-  $id = Input::get('id');
+Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
+  //$id = Input::get('id');
+  $id=0;
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
     (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
-    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif, nace_kodu
+    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif
     FROM kalemler as k1
-    where k1.parent_id = '$id'" ));
+    where k1.parent_id = '$id' AND sektor_id= '$sektor_id'"  ));
 
     return Response::json($kalemler);
 
@@ -510,7 +508,8 @@ Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
-Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikciler');
+Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikcilerEkleCıkar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikcilerim',  'FirmaController@onayliTedarikcilerim'); /// onayli firmalar sekmesinin controller fonksiyonu
 
 Route::get('/kullaniciFirma',function () {
   $kullanici_id=Input::get('kullanici_id');
@@ -792,7 +791,7 @@ Route::get('/basvuruDetay/',function (){
 Route::get('/onayli/',function (){
   $sektorOnayli = Input::get('sektorOnayli');
   $firma_id = session()->get('firma_id');
-  
+
   $sektorControl = DB::table('firmalar')
   ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
   ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
@@ -824,9 +823,9 @@ Route::get('/tumFirmalar/',function (){
   ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
   ->where('onayli_tedarikciler.firma_id', '!=',$firma_id)
   ->where('firma_sektorler.sektor_id', '=',$sektorTumFirma)
-  
+
   ->select('firmalar.adi')
-          
+
   ->orderBy('adi','asc');
 
   $sektorControl = $sektorControl->get();
@@ -1047,7 +1046,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         GROUP BY th.teklif_id
       )th2 ON th1.teklif_id = th2.teklif_id
       AND th1.tarih = th2.tarih
-      ORDER BY kdv_dahil_fiyat ASC ")); 
+      ORDER BY kdv_dahil_fiyat ASC "));
 
      * Debugbar::info('mete');     */
     if (!$firma->ilanlar)

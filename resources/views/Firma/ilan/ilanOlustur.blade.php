@@ -17,6 +17,8 @@
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
         <!--kalem agacı -->
+         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="//cdn.jsdelivr.net/jquery.ui-contextmenu/1/jquery.ui-contextmenu.min.js"></script>
         <link href="{{asset('../resources/views/admin/skin-bootstrap/ui.fancytree.css')}}" rel="stylesheet" class="skinswitcher">
         <script src="{{asset('../resources/views/admin/js/jquery.fancytree.js')}}"></script>
         <script src="{{asset('../resources/views/admin/js/jquery.fancytree.glyph.js')}}"></script>
@@ -1315,7 +1317,7 @@ function funcTumFirmalar(){
  $(function() {
     $("#katilimcilar").change(function(){
        option = $('option:selected', this).attr('value');
-        alert(option);
+     
         if(sektor!==0){
             if(option==="1"){
                 $('#custom-headers').multiSelect('deselect_all');
@@ -1354,7 +1356,7 @@ var sozlesme_turu;
 
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
-        alert(ilan_turu);
+    
         if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1387,7 +1389,7 @@ $('#ilan_turu').on('change', function (e) {
 
 $('#sozlesme_turu').on('change', function (e) {
              sozlesme_turu = e.target.value;
-             alert(sozlesme_turu);
+         
              if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1485,28 +1487,28 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
 });
 //kalemleri silme 
 $('#mal_table').on('click', '.sil', function(e) {
-     alert("geldim");
+    
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#hizmet_table').on('click', '.sil', function(e) {
-    alert("hizmet");
+   
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#goturu_table').on('click', '.sil', function(e) {
-    alert("hizmet");
+ 
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#yapim_table').on('click', '.sil', function(e) {
-    alert("yapim");
+   
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 //kalem tree modaliını açma.
 $("#mal_kalem").click(function(){
-    $('#myModal-mal_birimfiyat_add').modal('show');
+    $('#m_kalemAgaci').modal('show');
 });
 $("#hizmet_kalem").click(function(){
     $('#myModal-mal_birimfiyat_add').modal('show');
