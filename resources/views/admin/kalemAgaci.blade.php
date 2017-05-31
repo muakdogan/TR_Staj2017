@@ -88,7 +88,6 @@ $(function(){
     $("span#matches").text("(" + n + " matches)");
   }).focus();
   $("button#btnResetSearch").click(function(e){
-    alert("özge");
     $("input[name=search]").val("");
     $("span#matches").text("");
     tree.clearFilter();

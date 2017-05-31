@@ -108,24 +108,24 @@
              .test + .tooltip.bottom > .tooltip-arrow {
                     border-bottom: 5px solid green;
              }
-             
+
              /*custom font*/
-             
+
 
                 #msform {
                         width: 100%;
-                        
-                       
+
+
                         position: relative;
                 }
                 #msform fieldset {
-                    
+
                 }
                 /*Hide all except first fieldset*/
                 #msform fieldset:not(:first-of-type) {
                         display: none;
                 }
-        
+
                 /*buttons*/
                 #msform .action-button {
                         width: 100px;
@@ -156,7 +156,7 @@
                 }
                 /*progressbar*/
                 #progressbar {
-                     
+
                         overflow: hidden;
                         /*CSS counters to number the steps*/
                         counter-reset: step;
@@ -196,7 +196,7 @@
                         z-index: -1; /*put it behind the numbers*/
                 }
                 #progressbar li:first-child:after {
-                        content: none; 
+                        content: none;
                 }
                 #progressbar li.active:before,  #progressbar li.active:after{
                         background: #27AE60;
@@ -281,19 +281,19 @@
            <?php $i=1;?>
          @include('layouts.alt_menu')
         <h2>İlan Oluştur</h2>
-        
+
         <div class="box effect8">
             <h3><button style="font-size:30px;color: #337ab7;background-color: #ffffff;border-color: #ffffff;"  id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="">İlan Oluşturmaya Başlayın</button></h3>
         </div>
     </div>
     <div class="container">
              <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div style="width:1000px" class="modal-dialog">
+                <div style="width:1050px" class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>İlan Bilgileri</strong></h4>
-                            
+
                                 <ul  style="margin-bottom:0px;margin-top:0px" id="progressbar">
                                     <li class="active"><strong>İLAN BİLGİLERİ</strong></li>
                                         <li><strong>KALEM BİLGİLERİ</strong></li>
@@ -302,11 +302,11 @@
                         </div>
                         <div class="modal-body">
                             <form id="msform" >
-                               
+
                                 <fieldset  id="ilan" >
                                         <h2 style=" text-align: center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>İLAN BİLGİLERİ OLUŞTUR</strong></h2>
                                         <br>
-                                        
+
                                         <div class="row">
                                                     <div class="col-sm-6">
                                                          <div class="form-group">
@@ -458,7 +458,7 @@
                                                                </div>
                                                            </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group">
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Rekabet Şekli</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
@@ -471,7 +471,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                               
+
                                                         <div class="form-group">
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Sözleşme Türü</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
@@ -582,7 +582,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                   
+
                                                     </div>
                                                 </div>
                                         <div class="row">
@@ -598,12 +598,12 @@
                                           </div>
                                         </div>
                                             <input  style="float:right"  type="button" name="next" class="next action-button" value="İleri" />
-                                        
+
                                 </fieldset>
                                  <fieldset id="kalem">
-                                  
+
                                             <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>KALEM BİLGİLERİ OLUŞTUR</strong></h2>
-                                        
+
                                             <div  id="mal"  >
                                              <table  id="mal_table" class="table" >
                                                  <thead id="tasks-list" name="tasks-list">
@@ -618,7 +618,7 @@
                                                     <th>Birim</th>
                                                     <th></th>
                                                 </tr>
-                                       
+
                                                 <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control" id="mal_kalem" name="mal_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>
@@ -626,12 +626,12 @@
                                                     <td>
                                                        <input type="text" class="form-control" id="model" name="model" placeholder="Model" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                     </td>
-                                                   
+
                                                     <td>
                                                         <textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required"
                                                                     data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea>
                                                     </td>
-                                                    
+
                                                     <td> <input type="text" class="form-control" id="ambalaj" name="ambalaj" placeholder="ambalaj" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>
 
                                                     <td>
@@ -649,13 +649,13 @@
                                                     <td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>
                                                </tr>
                                           </thead>
-                                        </table>               
+                                        </table>
                                              </div>
                                             <div id="hizmet" >
                                              <table id="hizmet_table" class="table" >
                                                <thead id="tasks-list" name="tasks-list"
                                                 <tr style="text-align:center">
-                                                       
+
                                                     <th>Sıra</th>
                                                     <th>Kalem Ekle</th>
                                                     <th>Açıklama</th>
@@ -666,16 +666,16 @@
                                                     <th></th>
 
                                                 </tr>
-                                                <tr>  
+                                                <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control" id="hizmet_kalem" name="hizmet_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>
                                                       <td>
                                                          <textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required"
                                                                     data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea>
-                                                     </td> 
+                                                     </td>
                                                      <td>
                                                          <input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                     </td> 
+                                                     </td>
                                                      <td>
                                                         <select class="form-control selectpicker"  data-live-search="true"  name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                             <option selected disabled>Seçiniz</option>
@@ -686,7 +686,7 @@
                                                      </td>
                                                      <td>
                                                         <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                     </td>    
+                                                     </td>
                                                      <td>
                                                         <select class="form-control selectpicker"  data-live-search="true"  name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                             <option selected disabled>Seçiniz</option>
@@ -694,19 +694,19 @@
                                                             <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>
                                                             @endforeach
                                                         </select>
-                                                     </td> 
+                                                     </td>
                                                      <td><a href="#"  class="sil"><img src="{{asset("images/sil1.png")}}"></a></td>
                                                         <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                                 </tr>
                                                  </thead>
                                               </table>
                                             </div>
-                                            
+
                                             <div id="goturu" >
                                                 <table id="goturu_table" class="table" >
                                                <thead id="tasks-list" name="tasks-list"
                                                 <tr style="text-align:center">
-                                                       
+
                                                     <th>Sıra</th>
                                                     <th>Kalem Ekle</th>
                                                     <th>Açıklama</th>
@@ -715,17 +715,17 @@
                                                     <th></th>
 
                                                 </tr>
-                                                <tr>  
+                                                <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control" id="goturu_kalem" name="hizmet_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>
                                                       <td>
                                                          <textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required"
                                                                     data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea>
-                                                     </td> 
-                                                   
+                                                     </td>
+
                                                      <td>
                                                         <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                     </td>    
+                                                     </td>
                                                      <td>
                                                         <select class="form-control selectpicker"  data-live-search="true" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                             <option selected disabled>Seçiniz</option>
@@ -733,19 +733,19 @@
                                                             <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>
                                                             @endforeach
                                                         </select>
-                                                     </td> 
+                                                     </td>
                                                      <td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>
                                                         <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                                 </tr>
                                                  </thead>
-                                              </table> 
+                                              </table>
                                             </div>
-                                            
+
                                             <div id="yapim" >
                                               <table id="yapim_table" class="table" >
                                                <thead id="tasks-list" name="tasks-list"
                                                 <tr style="text-align:center">
-                                                       
+
                                                     <th>Sıra</th>
                                                     <th>Kalem Ekle</th>
                                                     <th>Açıklama</th>
@@ -756,16 +756,16 @@
                                                     <th></th>
 
                                                 </tr>
-                                                <tr>  
+                                                <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control" id="yapim_kalem" name="yapim_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>
                                                       <td>
                                                          <textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required"
                                                                     data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea>
-                                                     </td> 
+                                                     </td>
                                                      <td>
                                                          <input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                     </td> 
+                                                     </td>
                                                      <td>
                                                         <select class="form-control selectpicker" data-live-search="true"  name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                             <option selected disabled>Seçiniz</option>
@@ -776,7 +776,7 @@
                                                      </td>
                                                      <td>
                                                         <input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
-                                                     </td>    
+                                                     </td>
                                                      <td>
                                                         <select class="form-control selectpicker"  data-live-search="true" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                                                             <option selected disabled>Seçiniz</option>
@@ -784,7 +784,7 @@
                                                             <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>
                                                             @endforeach
                                                         </select>
-                                                     </td> 
+                                                     </td>
                                                      <td><a href="#" class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>
                                                         <input type="hidden" name="firma_id"  id="firma_id" value="{{$firma->id}}">
                                                 </tr>
@@ -794,7 +794,7 @@
                                          <input style="float:right" type="button" name="next" class="next action-button" value="İleri" />
                                         <input style="float:right" type="button" name="previous" class="previous action-button" value="Geri" />
                                         <input style="float:right" type="button" class="action-button" id="btn2" value="Kalem Ekle" />
-                                       
+
                                 </fieldset>
                                 <fieldset id="onay">
                                         <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>ONAYLA VE GÖNDER</strong></h2>
@@ -802,14 +802,14 @@
                                           <div class="info-box eula-container ">
 
                                           </div>
-                                        <input type="checkbox" name="sozlesme_1" value=""><strong>Sözleşmeyi Okudum Onaylıyorum</strong> 
+                                        <input type="checkbox" name="sozlesme_1" value=""><strong>Sözleşmeyi Okudum Onaylıyorum</strong>
                                         <input  style="width:140px;float:right" type="submit" name="submit" class="submit action-button" value="Onayla ve Gönder "/>
                                         <input  style="float:right"  type="button" name="previous" class="previous action-button" value="Geri" />
-                                        
+
                                 </fieldset>
                            </form>
                         </div>
-                            
+
                         <div class="modal-footer">
                         </div>
                     </div>
@@ -823,7 +823,7 @@
     <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-    
+
 <script charset="utf-8">
     var firmaCount = 0;
     var multiselectCount=0;
@@ -837,7 +837,7 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
- 
+
         $.fn.datepicker.dates['tr'] = {
             days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
             daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
@@ -857,13 +857,13 @@ var animating; //flag to prevent quick multi-click glitches
             todayHighlight: true,
             autoclose: true,
             startDate: new Date()
-            
+
         }).on('change', function() {
             $(this).validate();  // triggers the validation test
         // '$(this)' refers to '$("#datepicker")'
         });
-      
-        date_ka.datepicker({ 
+
+        date_ka.datepicker({
             format: 'dd/mm/yyyy',
             language:"tr",
             container: container,
@@ -871,12 +871,12 @@ var animating; //flag to prevent quick multi-click glitches
             todayHighlight: true,
             autoclose: true,
             startDate: '"' +yayinlanma + '"'
-            
+
         }).on('change', function() {
             $(this).validate();  // triggers the validation test
         // '$(this)' refers to '$("#datepicker")'
         });
-        
+
         $(document).ready(function(){
            $('[data-toggle="tooltip"]').tooltip();
            $('#onayli_tedarikciler').hide();
@@ -889,15 +889,7 @@ var animating; //flag to prevent quick multi-click glitches
              });
 
          });
-    
-    
-        $.validator.addMethod("turkishDateFormat",
-            function(value, element) {
-                alert(value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/));
-                return value.match(/^dd?-dd?-dd$/);
-        },"Please enter a date in the format dd-mm-yyyy.");
-   
- 
+
         $(".next").click(function(){
 				var form = $("#msform");
 				form.validate({
@@ -940,7 +932,7 @@ var animating; //flag to prevent quick multi-click glitches
                                                 },
                                                 is_suresi: {
                                                         required: true,
-                                                        
+
 
                                                 },
                                                 is_baslama_tarihi: {
@@ -991,7 +983,7 @@ var animating; //flag to prevent quick multi-click glitches
                                                         required: true,
 
                                                 }
-						
+
 					},
 					messages: {
 						firma_adi_goster: {
@@ -1076,8 +1068,8 @@ var animating; //flag to prevent quick multi-click glitches
 						current_fs = $('#kalem');
 						next_fs = $('#onay');
 					}
-					
-					next_fs.show(); 
+
+					next_fs.show();
 					current_fs.hide();
 				}
                                 
@@ -1098,15 +1090,15 @@ var animating; //flag to prevent quick multi-click glitches
 					current_fs = $('#onay');
 					next_fs = $('#kalem');
 				}
-				next_fs.show(); 
+				next_fs.show();
 				current_fs.hide();
 			});
                         $(".submit").click(function(){
                                 return false;
                         });
-                        
-                        
-    
+
+
+
 function GetIlce(il_id) {
         if (il_id > 0) {
             $("#ilce_id").get(0).options.length = 0;
@@ -1235,8 +1227,8 @@ $('#belirliIstek').multiSelect({
     var select_count=0;
     var multiselectCount=0;
     var option;
- 
- 
+
+
 $(function(){
     $("#firma_sektor").change(function(){
       sektor = $('option:selected', this).attr('value');
@@ -1326,7 +1318,7 @@ function funcTumFirmalar(){
  $(function() {
     $("#katilimcilar").change(function(){
        option = $('option:selected', this).attr('value');
-     
+
         if(sektor!==0){
             if(option==="1"){
                 $('#custom-headers').multiSelect('deselect_all');
@@ -1334,7 +1326,7 @@ function funcTumFirmalar(){
                 funcTumFirmalar();
                 $('#onayli_tedarikciler').show();
                 $('#belirli-istekliler').hide();
-                
+
             }
             else if (option==="2"){
                  $('#belirliIstek').multiSelect('deselect_all');
@@ -1358,14 +1350,14 @@ function funcTumFirmalar(){
              });
         }
     });
-});  
+});
 
 var ilan_turu;
 var sozlesme_turu;
 
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
-    
+
         if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1381,11 +1373,11 @@ $('#ilan_turu').on('change', function (e) {
                 }
              else if(sozlesme_turu=="1")
                 {
-                  
+
                    $('#hizmet').hide()
                    $('#mal').hide()
                    $('#yapim').hide();
-                  
+
                 }
             else if(ilan_turu=="3")
                 {
@@ -1398,7 +1390,7 @@ $('#ilan_turu').on('change', function (e) {
 
 $('#sozlesme_turu').on('change', function (e) {
              sozlesme_turu = e.target.value;
-         
+
              if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1449,8 +1441,9 @@ $(function() {
 });
 var i="{{$i}}";
 $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
+  alert("mete");
    i++;
-    
+
     if(ilan_turu=="1" &&sozlesme_turu=="0")
     {
         $("#mal_table").append(['<tr>','<td>i</td>','<td> <input type="text"  style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px"class="form-control" id="mal_kalem" name="mal_kalem" placeholder="Kalem Ekle" readonly value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
@@ -1461,62 +1454,63 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
                       '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
                        '<td><select class="form-control" name="birim" id="birim" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $birimleri) <option  value="{{$birimleri->id}}" >{{$birimleri->adi}}</option> @endforeach </select></td>',
                        '<td><a href="#" class="sil" ><img src="{{asset("images/sil1.png")}}"></a></td>','</tr>'].join(''));
-        
+
     }
     else if(ilan_turu=="2" && sozlesme_turu=="0"){
     $("#hizmet_table").append(['<tr>','<td>i</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control" id="hizmet_kalem" name="hizmet_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
-            '<td><input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>', 
+            '<td><input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control" name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
-            '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',   
+            '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
-            '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>','</tr>'].join(''));     
+            '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>','</tr>'].join(''));
     }
     else if(sozlesme_turu=="1"){
      $("#goturu_table").append(['<tr>','<td>i</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control" id="goturu_kalem" name="goturu_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
-            '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',   
+            '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
-            '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>','</tr>'].join(''));  
-    
+            '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a></td>','</tr>'].join(''));
+
     }
     else if(ilan_turu=="3"){
       $("#yapim_table").append(['<tr>','<td>i</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control" id="yapim_kalem" name="yapim_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea  rows="1" id="aciklama" name="aciklama" rows="5" class="form-control " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
-            '<td><input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>', 
+            '<td><input type="text" class="form-control" id="fiyat_standardi" name="fiyat_standardi" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control" name="fiyat_standardi_birimi" id="fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
-            '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',   
+            '<td><input type="text" class="form-control" id="miktar" name="miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control" name="miktar_birim_id" id="miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
             '<td><a href="#" class="sil" > <img src="{{asset("images/sil1.png")}}"></a></td>','</tr>'].join(''));
-    }  
-    
+    }
+
 });
-//kalemleri silme 
+//kalemleri silme
 $('#mal_table').on('click', '.sil', function(e) {
-    
+
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#hizmet_table').on('click', '.sil', function(e) {
-   
+
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#goturu_table').on('click', '.sil', function(e) {
- 
+
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 $('#yapim_table').on('click', '.sil', function(e) {
-   
+
     e.preventDefault();
     $(this).parents('tr').first().remove();
 });
 //kalem tree modaliını açma.
 $("#mal_kalem").click(function(){
+    alert("mete");
     $('#m_kalemAgaci').modal('show');
 });
 $("#hizmet_kalem").click(function(){
@@ -1530,7 +1524,7 @@ $("#goturu_kalem").click(function(){
 });
 
 
- 
+
 
 
 
