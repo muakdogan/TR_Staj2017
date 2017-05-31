@@ -288,7 +288,7 @@
     </div>
     <div class="container">
              <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div style="width:1000px" class="modal-dialog">
+                <div style="width:1050px" class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
