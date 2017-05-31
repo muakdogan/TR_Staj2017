@@ -31,7 +31,7 @@ $(function(){
     selectMode: 1,
     source: {
       data:{id:0},
-      url: "{{asset('findChildrenTree')}}"+sektor,
+      url: "{{asset('findChildrenTree')}}"+"/"+sektor,
       dataType:'json', debugDelay: 1000
     },
     filter: {
