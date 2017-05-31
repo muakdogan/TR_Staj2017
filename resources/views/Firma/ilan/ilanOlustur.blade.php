@@ -1066,6 +1066,7 @@ var animating; //flag to prevent quick multi-click glitches
                                                         required: "Username required",
                                                 }
 					}
+                                        
 				});
 				if (form.valid() === true){
 					if ($('#ilan').is(":visible")){
@@ -1079,6 +1080,14 @@ var animating; //flag to prevent quick multi-click glitches
 					next_fs.show(); 
 					current_fs.hide();
 				}
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
 			});
 
 			$('.previous').click(function(){
