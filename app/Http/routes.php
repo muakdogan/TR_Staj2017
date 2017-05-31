@@ -105,24 +105,14 @@ Route::post('/updateTree', function () {
 
   $kalem->save();
 });
-Route::get('/findChildrenTree', function () {
-  $id = Input::get('id');
+Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
+  //$id = Input::get('id');
+  $id=0;
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
     (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
     (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif
     FROM kalemler as k1
-    where k1.parent_id = '$id'" ));
-
-    return Response::json($kalemler);
-
-  });
-Route::get('/findChildrenTree2', function () {
-  $id = Input::get('id');
-  $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
-    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k2 where k1.id= k2.parent_id)  as folder,
-    (SELECT (CASE WHEN COUNT(*) > 0 THEN 'true' END) from kalemler as k3 where k1.id= k3.parent_id)  as lazy, is_aktif, nace_kod
-    FROM kalemler as k1
-    where k1.parent_id = '$id'" ));
+    where k1.parent_id = '$id' AND sektor_id= '$sektor_id'"  ));
 
     return Response::json($kalemler);
 
