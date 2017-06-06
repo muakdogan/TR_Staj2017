@@ -1448,7 +1448,7 @@ function funcBelirliIstekler(){
     $.ajax({
         type:"GET",
         url: "{{asset('belirli')}}",
-        data:{sektorBelirli:sektor },
+        data:{sektorBelirli:sektor},
         cache: false,
         success: function(data){
            console.log(data);
