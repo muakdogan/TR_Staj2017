@@ -126,7 +126,7 @@ tr:nth-child(even) {
                                          <tr>
                                              <td>{{$dvtIlan->ilanlar->adi}}</td>
                                              <td>{{$dvtIlan->ilanlar->teklifler()->count()}}</td>
-                                             <td><a href="{{ URL::to('teklifGor', array($firma->id,$dIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dIlan->ilan_id}}" id="{{$dIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
+                                             <td><a href="{{ URL::to('teklifGor', array($firma->id,$dvtIlan->id), false) }}"><button type="button" class="btn btn-primary" name="{{$dvtIlan->ilan_id}}" id="{{$dvtIlan->ilan_id}}" style='float:right'>Başvur</button></a><br><br></td>
                                          </tr>
                                        @endforeach
                                     </table>

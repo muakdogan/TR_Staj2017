@@ -4,9 +4,11 @@ namespace App;
 use App\Sektor;
 use App\KismiKapaliKazanan;
 use App\KismiAcikKazanan;
+use App\BelirlIstekli;
 use App\Firma;
 use Illuminate\Database\Eloquent\Model;
 use App\Puanlama;
+use App\Yorum;
 use DB;
 class Ilan extends Model
 {
@@ -165,7 +167,7 @@ class Ilan extends Model
     }
  public function belirliIstekliControl($ilan_id ,$firma_id){
 
-        $belirliFirmalar = App\BelirlIstekli::where('ilan_id',$ilan_id)->get();
+        $belirliFirmalar = BelirlIstekli::where('ilan_id',$ilan_id)->get();
         $belirliFirma= 0;
 
         foreach ($belirliFirmalar as $belirliIstekli){
@@ -260,6 +262,14 @@ class Ilan extends Model
     }else{$kazananFirmaId =0;}
 
     return $kazananFirmaId;
+  }
+  public function existsYorum($firma_id){
+    $existsYorum = Yorum::where('ilan_id',$this->id)->where('firma_id',$firma_id)->get();
+    return $existsYorum;
+  }
+  public function existsPuan($firma_id){
+    $existsPuan = Puanlama::where('ilan_id',$this->id)->where('firma_id',$firma_id)->get();
+    return $existsPuan;
   }
 
 }

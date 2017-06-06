@@ -208,7 +208,7 @@
                            <input type="text" name="search" id="search" placeholder="Anahtar Kelime"><input type="button" id="button"  value="ARA">
                        </div>
                        <div>
-                          <input type="radio" name="searchBox" value="tum"> Tüm İlanda<br>
+                          <input type="radio" name="searchBox" value="tum" checked="checked"> Tüm İlanda<br>
                           <input type="radio" name="searchBox" value="ilan_baslık"> Sadece İlan Başlığında<br>
                           <input type="radio" name="searchBox" value="firma"> Sadece Firma Adında Ara
                        </div>
@@ -344,7 +344,7 @@
             placeholder: "Seçiniz",
             filter: true,
             onClick: function() {
-                var sonSecilen;
+                var sonSecilen="";
                 var id=0;
                 
                 console.log($(this));
@@ -359,9 +359,10 @@
                     }
                 });
                 console.log(sonSecilen);
-
+                if(sonSecilen !== ""){
+                    doldurma(sonSecilen,"s"+id);
+                }
                 getIlanlar(1);
-                doldurma(sonSecilen,"s"+id);
             }
     });
     $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
@@ -433,8 +434,9 @@
                 var id = name.substring(1,name.length);
                 $('#sektorler option:selected').each(function() {
                     if($(this).val()=== id){
-                    
-                        $(this).removeAttr("selected");
+                        console.log($('input:checkbox[data-name="selectItemsektorler[]"][value="' + id + '"]'));
+                       $('input:checkbox[data-name="selectItemsektorler[]"][value="' + id + '"]').trigger("click");
+                       
                     }
                 });
                 getIlanlar(1);
@@ -449,7 +451,7 @@
                  getIlanlar(1);
             }
         }
-    function doldurma(name,code){
+    function doldurma(name,code){ // sektorleri kontrol etmek için 2 attribute alıyorum.
             var key=0;
             var birlesmisName;
             $("#multisel"+key).empty();
@@ -467,12 +469,12 @@
                 birlesmisName=name1[0]+name1[1]+name1[2];
             }
 
-            var html = '<li class="li" name="'+name+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
+            var html = '<li class="li" name="'+birlesmisName+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
 
             $("#multiSel"+key).append(html);                                     
     }
     $('#button').click(function(){
-        doldurma($('#search').val(),$('#search').val());
+        doldurma("anahtar kelime:"+$('#search').val(),$('#search').val());
         getIlanlar(1);
     });
     $('#il_id').change(function(){

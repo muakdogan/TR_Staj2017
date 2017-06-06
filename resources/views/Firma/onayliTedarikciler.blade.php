@@ -81,9 +81,9 @@ table.dataTable{width:100%;margin:0 auto;clear:both;border-collapse:separate;bor
                                         <td>{{$onayliFirma->adi}}</td>
                                         <td><img src="{{asset('uploads')}}/{{$onayliFirma->logo}}" alt="HTML5 Icon" width="80" height="80" class="img-responsive " style="padding-top:16px;padding-bottom: 10px"></td>
                                         <td>{{$onayliFirma->iladi}}</td>
-                                        <td></td>
+                                        <td><ul type="circle">@foreach($onayliFirma->sektorler as $sektor) <li>{{$sektor->adi}} </li> @endforeach </ul></td>
                                         <td>
-                                            <a href=""><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Tedarikçilerimden Çıkar</button></a>
+                                            <a href=""><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Tedarikçilerimden<br>Çıkar</button></a>
                                         </td>
                                     </tr>
                                 @endforeach

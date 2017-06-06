@@ -50,8 +50,7 @@ class Teklif extends Model
         }
     }
     public function verilenFiyat(){
-        $firma = Firma::find($this->firma_id);
-        $verilenFiyat = $firma->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
+        $verilenFiyat = $this->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
         return number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','');
     }
     public function getTeklifMallar(){
@@ -88,6 +87,50 @@ class Teklif extends Model
     }
     public function getIlanTeklifSayisi (){
         return $this->ilanlar->teklifler()->count();
+    }
+    public function teklifMalCount($ilan){
+        
+        if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){ //MAl -->
+            $ilanMalCount = $ilan->ilan_mallar()->count();
+            $teklifMallar=$this->getTeklifMallar();
+                $teklifMalCount=0;
+                foreach($teklifMallar as $teklifMal){
+                    $teklifMalCount++;
+                }
+        }else if($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0){ //--Hizmet -->
+                $ilanMalCount = $ilan->ilan_hizmetler()->count();
+                $teklifHizmetler=$this->getTeklifHizmetler();
+                $teklifMalCount=0;
+                foreach($teklifHizmetler as $teklifHizmet){
+                    $teklifMalCount++;
+                }
+        }elseif($ilan->ilan_turu == 3){//<!-- Yapım İşi-->
+                $ilanMalCount = $ilan->ilan_yapim_isleri()->count();
+                $teklifYapimIsleri=$this->teklifYapimIsleri();
+                        $teklifMalCount=0;
+                        foreach($teklifYapimIsleri as $teklifYapimIsi){
+                            $teklifMalCount++;
+                        }
+        }
+        else{ //<!-- Goturu Bedel-->
+            $ilanMalCount = $ilan->ilan_goturu_bedeller()->count();
+                        $teklifGoturuBedeller=DB::select(DB::raw("SELECT *
+                                        FROM teklifler t, goturu_bedel_teklifler g
+                                        WHERE t.id = g.teklif_id
+                                        AND t.id ='$this->firma_id'
+                                        GROUP BY g.ilan_goturu_bedel_id"));
+                        $teklifMalCount=0;
+                        foreach($teklifGoturuBedeller as $teklifGoturuBedel){
+                            $teklifMalCount++;
+                        }
+        }
+        if($ilanMalCount == $teklifMalCount){
+            return true;
+        }
+        else{
+            return false;
+        }
+               
     }
             
 }
