@@ -2464,7 +2464,7 @@ $("#iletisim_kayit").submit(function(e)
                     $('.ajax-loader').css("visibility", "hidden");
                     if(data=="error"){
                         
-                         $('#mesaj').bPopup({
+                        $('#mesaj').bPopup({
                             speed: 650,
                             transition: 'slideIn',
                             transitionClose: 'slideBack',
