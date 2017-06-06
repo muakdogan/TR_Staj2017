@@ -44,14 +44,10 @@ class CreateIlanlarTable extends Migration {
             $table->string('yaklasik_maliyet');
             $table->float('komisyon_miktari');
             $table->string('fiyatlandirma_sekli');
-            $table->string('goster');
+            $table->tinyInteger('goster');
+            $table->tinyInteger('statu');
+            $table->tinyInteger('sozlesme_onay');
             $table->timestamps();
-
-
-
-
-
-
         });
     }
 

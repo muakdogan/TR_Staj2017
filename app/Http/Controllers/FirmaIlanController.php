@@ -198,7 +198,7 @@ public function kalemlerListesiHizmetUpdate(Request $request,$id){
     $hizmetler->miktar_birim_id=$request->miktar_birim_id;
     $hizmetler->save();
     DB::commit();
-    // all good
+    //all good
   } catch (\Exception $e) {
     $error="error";
     DB::rollback();
