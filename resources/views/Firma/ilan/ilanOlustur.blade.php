@@ -1617,7 +1617,37 @@ $(function() {
     var is_tarihi_start= new Date();
     $('input[name="ilan_tarihi_araligi"]').daterangepicker({
                 locale: {
-                  format: 'DD/MM/YYYY'
+                  format: 'DD/MM/YYYY',
+                    "applyLabel": "Uygula",
+                    "cancelLabel": "Vazgeç",
+                    "fromLabel": "Dan",
+                    "toLabel": "a",
+                    "customRangeLabel": "Seç",
+                    "daysOfWeek": [
+                        "Pt",
+                        "Sl",
+                        "Çr",
+                        "Pr",
+                        "Cm",
+                        "Ct",
+                        "Pz"
+                    ],
+                    "monthNames": [
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık"
+                    ],
+                    "firstDay": 1
+    
                 },
                     startDate: new Date(),
                     endDate: dt
@@ -1627,8 +1657,37 @@ $(function() {
            
           $('input[name="is_tarihi_araligi"]').daterangepicker({
                     locale: {
-                      format: 'DD/MM/YYYY'
-                    },
+                      format: 'DD/MM/YYYY',
+                     "applyLabel": "Uygula",
+                    "cancelLabel": "Vazgeç",
+                    "fromLabel": "Dan",
+                    "toLabel": "a",
+                    "customRangeLabel": "Seç",
+                    "daysOfWeek": [
+                        "Pt",
+                        "Sl",
+                        "Çr",
+                        "Pr",
+                        "Cm",
+                        "Ct",
+                        "Pz"
+                    ],
+                    "monthNames": [
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık"
+                    ],
+                    "firstDay": 1
+                },
                     startDate: is_tarihi_start,
                     endDate: is_tarihi_end
 
@@ -1637,7 +1696,37 @@ $(function() {
     
     $('input[name="is_tarihi_araligi"]').daterangepicker({
                 locale: {
-                  format: 'DD/MM/YYYY'
+                  format: 'DD/MM/YYYY',
+                   "applyLabel": "Uygula",
+                    "cancelLabel": "Vazgeç",
+                    "fromLabel": "Dan",
+                    "toLabel": "a",
+                    "customRangeLabel": "Seç",
+                    "daysOfWeek": [
+                        "Pt",
+                        "Sl",
+                        "Çr",
+                        "Pr",
+                        "Cm",
+                        "Ct",
+                        "Pz"
+                    ],
+                    "monthNames": [
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık"
+                    ],
+                    "firstDay": 1
+  
                 },
                 startDate:new Date(),
                 endDate: dt
