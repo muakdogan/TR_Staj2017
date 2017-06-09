@@ -8,6 +8,7 @@ use App\Firma;
 use Illuminate\Database\Eloquent\Model;
 use App\Puanlama;
 use DB;
+use App\BelirlIstekli;
 class Ilan extends Model
 {
   //
@@ -165,7 +166,7 @@ class Ilan extends Model
     }
  public function belirliIstekliControl($ilan_id ,$firma_id){
 
-        $belirliFirmalar = App\BelirlIstekli::where('ilan_id',$ilan_id)->get();
+        $belirliFirmalar = BelirlIstekli::where('ilan_id',$ilan_id)->get();
         $belirliFirma= 0;
 
         foreach ($belirliFirmalar as $belirliIstekli){

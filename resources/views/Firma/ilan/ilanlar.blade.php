@@ -76,7 +76,7 @@ a{
                     <div class="col-sm-2">
                         @if(Auth::guest())
                         @else
-                            @if(($ilan->usulu == 2 && $ilan->belirliIstekliControl($ilan_id,$firma_id) == 1) || $ilan->usulu == 1) <!-- Eğer bir firma davet edilmediyse o ilanda başvuru butonu çıkmaz-->
+                            @if(($ilan->usulu == 2 && $ilan->belirliIstekliControl($ilan->ilan_id,$firma_id) == 1) || $ilan->usulu == 1) <!-- Eğer bir firma davet edilmediyse o ilanda başvuru butonu çıkmaz-->
                                 
                                   <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->firma_id}} {{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right;margin-top:60px'>Başvur</button></a><br><br>
                                

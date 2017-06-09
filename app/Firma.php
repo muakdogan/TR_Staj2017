@@ -141,4 +141,13 @@ class Firma extends Model
               Debugbar::info($adres);
               return $adres->iller->adi;
     }*/
+    
+    public function onayliTedarikciler()
+    {
+        return $this->belongsToMany('App\Firma', 'onayli_tedarikciler', 'firma_id', 'tedarikci_id');
+    }
+    public function tedarikEttigiFirmalar()
+    {
+        return $this->belongsToMany('App\Firma', 'onayli_tedarikciler', 'tedarikci_id', 'firma_id');
+    }
 }

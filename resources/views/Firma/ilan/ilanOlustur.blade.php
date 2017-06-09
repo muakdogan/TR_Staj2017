@@ -27,6 +27,7 @@
         <script src="{{asset('../resources/views/admin/js/jquery.fancytree.edit.js')}}"></script>
         <script src="{{asset('../resources/views/admin/js/jquery.fancytree.filter.js')}}"></script>
         <script src="{{asset('../resources/views/admin/js/jquery.fancytree.table.js')}}"></script>
+        
         <style>
             .popup, .popup2, .bMulti {
             background-color: #fff;
@@ -274,12 +275,16 @@
     <script src="{{asset('js/jquery.multi-select.js')}}" type="text/javascript"></script>
     <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/jquery.validate.js')}}"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js"></script>
+    <script type="text/javascript" src="{{asset('js/additional-methods.js')}}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
     <div class="container">
         <br>
         <br>
-           <?php $i=1;?>
+         <?php $i=1;?>
          @include('layouts.alt_menu')
         <h2>İlan Oluştur</h2>
 
@@ -350,18 +355,12 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Yayınlama Tarihi</label>
+                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlanın Tarih Aralığı</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                               <input class="form-control date" id="yayinlanma_tarihi" name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Kapanma Tarihi</label>
-                                                            <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control date kapanma" id="kapanma_tarihi" name="kapanma_tarihi" placeholder="Kapanma Tarihi" value="">
+                                                                <input type="text" name="ilan_tarihi_araligi"  id="ilan_tarihi_araligi"  readonly value="" class="form-control  filled-in"
+                                                                       data-toggle="tooltip" data-placement="bottom" title="İlan Yayinlama - Kapanma Tarihleri"/>
+                                                               <!--input class="form-control date" id="yayinlanma_tarihi"  readonly   name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text" /-->
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -376,19 +375,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İş Başlama Tarihi</label>
+                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İş Tarih Aralığı</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control date is_baslama" id="is_baslama_tarihi" name="is_baslama_tarihi" placeholder="İş Başlama Tarihi" value="" >
+                                                                <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class=" form-control  filled-in"  
+                                                                       data-toggle="tooltip" data-placement="bottom" title="İş Başlama - Bitiş Tarihleri"/>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İş Bitiş Tarihi</label>
-                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control date is_bitis" id="is_bitis_tarihi" name="is_bitis_tarihi" placeholder="İş Bitiş Tarihi" value="">
-                                                            </div>
-                                                        </div>
+                                                     
                                                          <div class="form-group">
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teknik Şartname</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
@@ -475,7 +469,7 @@
                                                             <label for="inputEmail3"   style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">FiyatlandırmaŞekli</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <select class="form-control " name="kismi_fiyat" id="kismi_fiyat" >
+                                                                <select class="form-control  required" name="kismi_fiyat" id="kismi_fiyat" >
                                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
                                                                     <option   value="1">Kısmi Fiyat Teklifine Açık</option>
                                                                     <option  value="0">Kısmi Fiyat Teklifine Kapalı</option>
@@ -573,8 +567,7 @@
                                                 <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-1 control-label">Açıklama</label>
                                                 <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px" class=" col-sm-1 control-label">:</label>
                                                 <div class="col-sm-10">
-                                                    <textarea id="aciklama" name="aciklama" rows="5" class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." data-validation="required"
-                                                    data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea>
+                                                    <textarea id="aciklama" name="aciklama" rows="5" class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
                                                 </div>
                                             </div>
                                           </div>
@@ -615,7 +608,7 @@
                                                     <td> <input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj[0]" placeholder="Ambalaj" value="" ></td>
 
                                                     <td>
-                                                        <input type="text" class="form-control  required" id="mal_miktar" name="mal_miktar[0]" placeholder="Miktar" value=""  >
+                                                        <input type="number" class="form-control  required" id="mal_miktar" name="mal_miktar[0]" placeholder="Miktar" value=""  >
 
                                                     </td>
                                                     <td>
@@ -666,7 +659,7 @@
                                                         </select>
                                                      </td>
                                                      <td>
-                                                        <input type="text" class="form-control required" id="hizmet_miktar" name="hizmet_miktar[0]" placeholder="Miktar" value="" >
+                                                        <input type="number" class="form-control required" id="hizmet_miktar" name="hizmet_miktar[0]" placeholder="Miktar" value="" >
                                                      </td>
                                                      <td>
                                                         <select class="form-control selectpicker required"  data-live-search="true"  name="hizmet_miktar_birim_id[0]" id="hizmet_miktar_birim_id" >
@@ -704,7 +697,7 @@
                                                      </td>
 
                                                      <td>
-                                                        <input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar[0]" placeholder="Miktar" value="" >
+                                                        <input type="number" class="form-control required" id="goturu_miktar" name="goturu_miktar[0]" placeholder="Miktar" value="" >
                                                      </td>
                                                      <td>
                                                         <select class="form-control selectpicker required"  data-live-search="true" name="goturu_miktar_birim_id[0]" id="goturu_miktar_birim_id" >
@@ -754,7 +747,7 @@
                                                         </select>
                                                      </td>
                                                      <td>
-                                                        <input type="text" class="form-control required" id="yapim_miktar" name="yapim_miktar[0]" placeholder="Miktar" value="">
+                                                        <input type="number" class="form-control required" id="yapim_miktar" name="yapim_miktar[0]" placeholder="Miktar" value="">
                                                      </td>
                                                      <td>
                                                         <select class="form-control selectpicker required"  data-live-search="true" name="yapim_miktar_birim_id[0]" id="yapim_miktar_birim_id" >
@@ -808,14 +801,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     
 <script charset="utf-8">
+
 var firmaCount = 0;
 var sektor=0;
 var multiselectCount=0;
-var yayinlanma;
-$("#yayinlanma_tarihi" ).change(function() {
-    yayinlanma= this.value;
-   
-});
+
 $.fn.datepicker.dates['tr'] = {
     days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
     daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
@@ -840,7 +830,7 @@ date_input.datepicker({
     startDate: new Date()
 }).on('changeDate', function (selected) {
     var setdate=0;
-    $(this).validate();
+    $(this).valid();
     date_ka.datepicker('setDate',setdate);
     var minDate = new Date(selected.date.valueOf());
     date_ka.datepicker('setStartDate', minDate);
@@ -856,8 +846,7 @@ date_ka.datepicker({
     todayHighlight: true,
     autoclose: true
 }).on('changeDate', function() {
-    $(this).validate();
-   
+   $(this).valid();
 });
 
 date_bas.datepicker({
@@ -869,7 +858,7 @@ date_bas.datepicker({
     autoclose: true
 }).on('changeDate', function(selected) {
     
-    $(this).validate();
+    $(this).valid();
     var setbit=0;
     date_bit.datepicker('setDate',setbit);
     var minDateBit = new Date(selected.date.valueOf());
@@ -885,8 +874,7 @@ date_bit.datepicker({
     todayHighlight: true,
     autoclose: true
 }).on('changeDate', function() {
-    $(this).validate();
-   
+    $(this).valid();
 });
 
 
@@ -900,15 +888,16 @@ $(document).ready(function(){
          //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
          //$("#semt_id")[0].selectedIndex=0;
      });
+    jQuery.validator.methods["date"] = function (value, element) { return true; } ;
 
  });
- 
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 $(".next").click(function(){
-    
+      
+  
     var form = $("#msform");
         form.validate({
                 errorElement: 'span',
@@ -920,6 +909,8 @@ $(".next").click(function(){
                         $(element).closest('.form-group').removeClass("has-error");
                 },
                 rules: {
+                  
+                    
                         yayinlanma_tarihi: {
                              required: true,
                              date: false,
@@ -930,7 +921,6 @@ $(".next").click(function(){
                                 date: false,
                                 dateITA: true
                         },
-                        is_suresi: "required",
                         is_baslama_tarihi: {
                                required: true,
                                 date: false,
@@ -945,26 +935,7 @@ $(".next").click(function(){
                                 required: true
                         },
                 },
-                messages: {
-                        yayinlanma_tarihi: {
-                                  required: "Lütfen Bu Alanı Doldurunuz",
-                        },
-                        kapanma_tarihi: {
-                                required: "Lütfen Bu Alanı Doldurunuz",
-                        },
-                        is_suresi: {
-                                required: "Lütfen Bu Alanı Doldurunuz",
-                        },
-                        is_baslama_tarihi: {
-                                required: "Lütfen Bu Alanı Doldurunuz",
-                        },
-                        is_bitis_tarihi: {
-                                required: "Lütfen Bu Alanı Doldurunuz",
-                        },
-                        sozlesme_onay: {
-                                required: "Sözleşmeyi Onaylayın"
-                        },
-                }       
+                     
         });
         if (form.valid() === true){
                 if ($('#ilan').is(":visible")){
@@ -979,6 +950,7 @@ $(".next").click(function(){
                 current_fs.hide();
 
         }
+        
         kalemAgaci();
  });
 $('.previous').click(function(){
@@ -1234,10 +1206,9 @@ var ilan_turu;
 var sozlesme_turu;
 
 $('#ilan_turu').on('change', function (e) {
-    
         ilan_turu = e.target.value;
         getSektor(ilan_turu);
-
+        alert(ilan_turu);
         if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1270,7 +1241,7 @@ $('#ilan_turu').on('change', function (e) {
 
 $('#sozlesme_turu').on('change', function (e) {
              sozlesme_turu = e.target.value;
-
+             alert(sozlesme_turu);
              if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1639,6 +1610,40 @@ $("#onayButton").click(function(){
                 autoClose: 5000 
           });*/
     }
+});
+$(function() {
+    var dt = new Date();
+    dt.setDate(dt.getDate() + 3);
+    var is_tarihi_start= new Date();
+    $('input[name="ilan_tarihi_araligi"]').daterangepicker({
+                locale: {
+                  format: 'DD/MM/YYYY'
+                },
+                    startDate: new Date(),
+                    endDate: dt
+      },function(start, end, label) {
+            is_tarihi_start=end.format('DD/MM/YYYY');
+            var is_tarihi_end=end.format('DD/MM/YYYY');
+           
+          $('input[name="is_tarihi_araligi"]').daterangepicker({
+                    locale: {
+                      format: 'DD/MM/YYYY'
+                    },
+                    startDate: is_tarihi_start,
+                    endDate: is_tarihi_end
+
+        });
+    });
+    
+    $('input[name="is_tarihi_araligi"]').daterangepicker({
+                locale: {
+                  format: 'DD/MM/YYYY'
+                },
+                startDate:new Date(),
+                endDate: dt
+                
+     });
+    
 });
 </script>
 </body>
