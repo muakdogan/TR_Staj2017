@@ -11,7 +11,6 @@ use App\TicaretOdasi;
 use App\FirmaSatilanMarka;
 use App\Ilce;
 use App\Semt;
-use App\OdemeTuru;
 use Input;
 use Session;
 use File;
@@ -152,10 +151,16 @@ class FirmaController extends Controller
         if($radSearch == ""){
             if($input != NULL){
                 Debugbar::info("girdi Else");
-                $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
-                        ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')
-                        ->where('sektorler.adi',$input)
-                        ->orWhere('iller.adi',Str::upper($input));
+                $firmalar = $firmalar->where(function ($query) use ($input) {
+                        $query->whereExists(function ($q) use($input) {
+                            $q->select(DB::raw(1))
+                            ->join('sektorler', 'sektorler.id', '=', 'firma_sektorler.sektor_id')
+                            ->from('firma_sektorler')
+                            ->whereRaw('firmalar.id = firma_sektorler.firma_id')->where('sektorler.adi',$input);
+                        })
+                        ->orWhere('iller.adi',Str::upper($input))
+                        ->orWhere('firmalar.adi', 'like', '%' . $input . '%');
+                    });
             }
         }
         if($il_id != NULL){

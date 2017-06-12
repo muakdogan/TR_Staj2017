@@ -1,3 +1,4 @@
+<?php use Barryvdh\Debugbar\Facade as Debugbar; ?>
 <div id="mal">
     <h4>Fiyat İstenen Kalemler Listesi</h4>
     {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'post')) }}  
@@ -5,14 +6,14 @@
             <thead>
                 <tr>
                     <?php $i=1; ?>
-                    <th width="4%" >Sıra:</th>
-                    <th width="9%">Marka:</th>
+                    <th width="3%" >Sıra:</th>
+                    <th width="8%">Marka:</th>
                     <th width="9%">Model:</th>
                     <th width="9%">Adı:</th>
                     <th width="9%">Ambalaj:</th>
                     <th width="4%">Miktar:</th>
                     <th width="9%">Birim:</th>
-                    <th width="10%">KDV Oranı:</th>
+                    <th width="12%">KDV Oranı:</th>
                     <th width="14%">Birim Fiyat:</th>
                     <th width="1%"></th><!--Fiyat hesaplaması için gerekli -->
                     <th width="11%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
@@ -21,7 +22,8 @@
             </thead>
                 @foreach($ilan->ilan_mallar as $ilan_mal)
                     @if(count($teklif) != 0)
-                        <?php $malTeklif= $ilan_mal->getMalTeklif($ilan_mal->id,$teklif[0]['id']);?>
+                        <?php $malTeklif= $ilan_mal->getMalTeklif($ilan_mal->id,$teklif[0]['id']);Debugbar::info($ilan_mal);?>
+                        
                     @endif   
                 <tr>
                     <td>
@@ -34,7 +36,7 @@
                         {{$ilan_mal->model}}
                     </td>
                     <td>
-                        {{$ilan_mal->adi}}
+                        {{$ilan_mal->kalem_adi}}
                     </td>
                     <td>
                         {{$ilan_mal->ambalaj}}
@@ -47,7 +49,7 @@
                     </td>
 
                     <td>
-                        <select style="margin-top: 0px" class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
+                        <select style="margin-top: 0px" class="select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
                             <option value="-1" selected hidden>Seçiniz</option>
                             @if(count($teklif)!=0 && count($malTeklif) != 0 && $malTeklif[0]['kdv_orani'] == 0)
                                  <option  value="0"  selected>%0</option>
@@ -77,7 +79,7 @@
                     <td>
                         @if($ilan->kismi_fiyat == 0)
                             @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}" required>
+                                <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}"  required>
                             @else
                                 <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
                             @endif

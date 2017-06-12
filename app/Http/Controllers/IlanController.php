@@ -13,6 +13,7 @@ use Input;
 use View;
 use Carbon\Carbon;
 use Response;
+use Barryvdh\Debugbar\Facade as Debugbar;
 use Illuminate\Support\Str;
 class IlanController extends Controller
 {
@@ -57,7 +58,7 @@ class IlanController extends Controller
         $sozlesme= Input::get('sozles');
         $odeme= Input::get('odeme');
         
-        if($radSearch != NULL){
+        if($input != NULL){
             if($radSearch == "tum"){
                 $sektorler = Sektor::all();
                 foreach ($sektorler as $sektor){
@@ -68,12 +69,16 @@ class IlanController extends Controller
                         $sektor_id = 0;
                     }
                 }
-                $ilanlar->where('ilanlar.adi',$input )->where('ilanlar.goster',1);
-                        //->orWhere('ilanlar.ilan_turu',$input)->orWhere('ilanlar.yayin_tarihi',$input )
-                        //->orWhere('ilanlar.kapanma_tarihi', $input )
-                        //->orWhere('firmalar.adi',$input )
-                        //->orWhere('ilanlar.firma_sektor',$sektor_id)
-                        //->orWhere('ilanlar.sozlesme_turu',$input)->orWhere('ilanlar.usulu', $input);
+                Debugbar::info($input);
+                $ilanlar->where('ilanlar.goster',1)
+                    ->where(function ($query) use ($input,$sektor_id) {
+                        $query->where('ilanlar.adi', 'like', '%' . $input . '%')
+                            ->orWhere('firmalar.adi', 'like', '%' . $input . '%')
+                            ->orWhere('ilanlar.aciklama', 'like', '%' . $input . '%')
+                            ->orWhere('iller.adi', 'like', '%' . $input . '%')
+                            ->orWhere('ilanlar.ilan_sektor',$sektor_id);
+                    });
+                        
             }
             else if($radSearch == "ilan_baslık"){
                 $ilanlar->where('ilanlar.adi', $input);
@@ -86,6 +91,7 @@ class IlanController extends Controller
             $ilanlar->where('adresler.il_id',$ilId);
         }
         if($keyword != NULL){
+            Debugbar::info("girdi keyword1");
             $sektorler = Sektor::all();
             foreach ($sektorler as $sektor){
                 if($sektor->adi == $keyword){
@@ -95,9 +101,14 @@ class IlanController extends Controller
                     $sektor_id = 0;
                 }
             }
-            //$ilanlar->where('ilanlar.adi' ,$keyword )
-            //->Where('firmalar.adi',$keyword )->where('ilanlar.goster',1)
-            //->Where('ilanlar.firma_sektor',$sektor_id);
+            Debugbar::info($keyword);
+            /*$ilanlar->where(function ($query) use ($sektor_id,$keyword) {
+                        Debugbar::info("girdi keyword");
+                        $query->where('ilanlar.adi' ,$keyword )
+                                ->orWhere('firmalar.adi',$keyword )
+                                ->orWhere('ilanlar.ilan_sektor',$sektor_id);
+                        });*/
+             
         }
         if($il_id != NULL)
             {

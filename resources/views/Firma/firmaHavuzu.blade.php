@@ -97,6 +97,7 @@
               list-style: none;
               height: 170px;
               overflow: auto;
+              z-index: 1;
             }
 
             .dropdown span.value {
@@ -272,7 +273,6 @@
     });
     function silme(name){
             console.log($('li[name='+name+']').find('span').text());
-            var sektorName = $('li[name='+name+']').find('span').text();
             $('li[name='+name+']').remove();    
             
             if($('#search').val() !== null){
@@ -327,7 +327,7 @@
     }
     
     $('#button').click(function(){
-        doldurma($('#search').val(),$('#search').val());
+        doldurma("Anahtar kelime:"+$('#search').val(),$('#search').val());
         getFirmalar(1);
     });
     $('#il_id').change(function(){

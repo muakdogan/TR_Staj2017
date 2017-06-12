@@ -1275,21 +1275,8 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
   Route::get('teklifGor/{id}/{ilanid}' ,['middleware'=>'auth' ,function ($id,$ilan_id) {
     $firma = Firma::find($id);
     $ilan = Ilan::find($ilan_id);
-  $teklifler = Ilan::with(['teklifler','teklifler.teklif_hareketler'])->get();
-
-    /*$teklifler= DB::select(DB::raw("SELECT *
-      FROM teklif_hareketler th1
-      JOIN (
-        SELECT teklif_id, MAX( tarih ) tarih
-        FROM teklifler t, teklif_hareketler th
-        WHERE t.id = th.teklif_id
-        AND t.ilan_id ='$ilan_id'
-        GROUP BY th.teklif_id
-      )th2 ON th1.teklif_id = th2.teklif_id
-      AND th1.tarih = th2.tarih
-      ORDER BY kdv_dahil_fiyat ASC "));
-
-     * Debugbar::info('mete');     */
+    $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->paginate();
+    Debugbar::info($teklifler);
     if (!$firma->ilanlar)
         $firma->ilanlar = new App\Ilan();
     if (!$firma->ilanlar->ilan_mallar)
@@ -1317,10 +1304,91 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $time = Carbon::parse($dt);
     $dt = $time->format('Y-m-d');
     $kullanici = App\Kullanici::find(session()->get('kullanici_id'));
+     $kazanK = null;
+    if($ilan->kismi_fiyat == 0){
+        $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
+        $kisKazanCount=0;
+       
+        foreach($kazananKapali as $kazanK){
+            $kisKazanCount=1;
+        }
+    }
+    else{
+        $kazananKapali = App\KismiAcikKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
+        $kisKazanCount=0;
+        foreach($kazananKapali as $kazanK){
+            $kisKazanCount=1;
+        }
+    }
+    if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){ //<!--MAl -->
+        $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+            FROM (
+
+            SELECT min( kdv_dahil_fiyat ) AS toplam
+            FROM teklifler t, mal_teklifler m
+            WHERE t.id = m.teklif_id
+            AND t.ilan_id ='$ilan->id'
+            AND m.id
+            IN (
+
+            SELECT MAX( id )
+            FROM mal_teklifler
+            GROUP BY teklif_id, ilan_mal_id
+            )
+            GROUP BY ilan_mal_id
+            )y"));
+    }elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0){ //<!--Hizmet -->
+        $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+            FROM (
+            SELECT min( kdv_dahil_fiyat ) AS toplam
+            FROM teklifler t, hizmet_teklifler h
+            WHERE t.id = h.teklif_id
+            AND t.ilan_id ='$ilan->id'
+            AND h.id
+            IN (
+            SELECT MAX( id )
+            FROM hizmet_teklifler
+            GROUP BY teklif_id, ilan_hizmet_id
+            )
+            GROUP BY ilan_hizmet_id
+            )y"));
+    }elseif($ilan->ilan_turu == 3){ //<!-- Yapım İşi-->
+        $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+            FROM (
+            SELECT min( kdv_dahil_fiyat ) AS toplam
+            FROM teklifler t, yapim_isi_teklifler y
+            WHERE t.id = y.teklif_id
+            AND t.ilan_id ='$ilan->id'
+            AND y.id
+            IN (
+            SELECT MAX( id )
+            FROM yapim_isi_teklifler
+            GROUP BY teklif_id, ilan_yapim_isleri_id
+            )
+            GROUP BY ilan_yapim_isleri_id
+            )y"));
+    }else{ //<!-- Goturu Bedel-->
+        $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+            FROM (
+            SELECT min( kdv_dahil_fiyat ) AS toplam
+            FROM teklifler t, goturu_bedel_teklifler g
+            WHERE t.id = g.teklif_id
+            AND t.ilan_id ='$ilan->id'
+            AND g.id
+            IN (
+            SELECT MAX( id )
+            FROM goturu_bedel_teklifler
+            GROUP BY teklif_id, ilan_goturu_bedel_id
+            )
+            GROUP BY ilan_goturu_bedel_id
+            )y"));
+    }
+                                     
       return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
               ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
               ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
-              ->with("dt",$dt);
+              ->with("dt",$dt)->with('kazananKapali',$kazananKapali)->with("kisKazanCount",$kisKazanCount)
+              ->with("kazanK",$kazanK)->with("minFiyat",$minFiyat);
 
     }]);
     ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////
@@ -1414,18 +1482,12 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
           });
           ///////////////////////////////////// Rekabet //////////////////////////////////////
           Route::get('rekabet/{ilan_id}' ,function ($ilanid) {
+            Debugbar::info("girdi");
             $ilan = App\Ilan::find($ilanid);
-            $teklifler= DB::select(DB::raw("SELECT *
-              FROM teklif_hareketler th1
-              JOIN (
-                SELECT teklif_id, MAX( tarih ) tarih
-                FROM teklifler t, teklif_hareketler th
-                WHERE t.id = th.teklif_id
-                AND t.ilan_id ='$ilanid'
-                GROUP BY th.teklif_id
-              )th2 ON th1.teklif_id = th2.teklif_id
-              AND th1.tarih = th2.tarih
-              ORDER BY kdv_dahil_fiyat ASC "));
+            Debugbar::info("rekabet");
+            $teklifler = null;//$ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->paginate();
+    
+            
               return Response::json(View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilan'=>$ilan))->render());
 
 
@@ -1550,7 +1612,6 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                     $i++;
                   }
                 }
-                $firma_kullanici = DB::table('firma_kullanicilar')->where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->get();
                 //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
                 $teklifHareket = new App\TeklifHareket;
                 $teklifHareket->kdv_haric_fiyat=$request->toplamFiyatKdvsiz;
@@ -1564,6 +1625,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 $teklif->teklif_hareketler()->save($teklifHareket);
 
                 DB::commit();
+                return Response::json("başarılı");
                 // all good
               } catch (\Exception $e) {
                 $error="error";

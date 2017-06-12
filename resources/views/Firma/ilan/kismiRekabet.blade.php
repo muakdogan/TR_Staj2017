@@ -16,7 +16,7 @@
                 </thead>
                     <?php 
                     $kismiCount =1;
-                    $kullanici_id=Auth::user()->kullanici_id;
+                    $kullanici_id=Auth::user()->id;
                     $firma_id = session()->get('firma_id');?>
                     
                     @foreach($ilan->ilan_mallar as $ilan_mal)
@@ -49,24 +49,7 @@
                         <td colspan="8" class="hiddenRow">
                             <div class="accordian-body collapse" id="kalem{{$kismiCount}}">
                                                                                         <!--Mal kalemleri çekme sorgusu -->
-                                <?php 
-                                $malIdTeklifler= DB::select(DB::raw("SELECT * 
-                                    FROM mal_teklifler mt, teklifler t
-                                    WHERE ilan_mal_id ='$ilan_mal->id'
-                                    AND t.id = mt.teklif_id
-                                    AND t.ilan_id ='$ilan->id'
-                                    AND mt.id
-                                    IN (
-
-                                    SELECT MAX( id ) 
-                                    FROM mal_teklifler
-                                    GROUP BY teklif_id, ilan_mal_id
-                                    )
-                                    ORDER BY kdv_dahil_fiyat ASC "));
-                                    $malIdCount=1;
-                                    
-                                ?>
-                                
+                                <?php $malIdCount=1;?>
                                 <table>
                                     <thead>
                                         <tr>
@@ -78,28 +61,19 @@
                                         </tr>
                                     </thead>
                                         
-                                        @foreach($malIdTeklifler as $malIdTeklif)
-                                        <?php 
-                                            $firmaMalId = App\Teklif::find($malIdTeklif->teklif_id);
-                                            $firmaMal = App\Firma::find($firmaMalId->firma_id);
-                                        ?>
-                                        <?php $kazanan = App\KismiAcikKazanan::where("ilan_id",$ilan->id)->where("kalem_id",$malIdTeklif->ilan_mal_id)->get();
-                                            $kisKazanCount=0;
-                                            foreach($kazanan as $kazan){
-                                                $kisKazanCount=1;
-                                            }
-                                        ?>
-                                        @if($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaMal->id)
+                                        @foreach($ilan_mal->malIdTeklifler($ilan_mal->id,$ilan->id) as $malIdTeklif)
+                                        
+                                        @if($ilan_mal->kisKazanCount() == 1 && $ilan_mal->kisKazananFirmaId() == $ilan_mal->getFirmaId($malIdTeklif->teklif_id))
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle kismiKazanan">
                                         @else
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
                                         @endif    
-                                            @if(session()->get('firma_id') == $firmaMal->id) <!--Teklifi veren firma ise -->   
+                                            @if(session()->get('firma_id') == $ilan_mal->getFirmaId($malIdTeklif->teklif_id)) <!--Teklifi veren firma ise -->   
                                                 <td class="highlight">
                                                     {{$malIdCount++}}
                                                 </td>
                                                 <td class="highlight">
-                                                    {{$firmaMal->adi}}
+                                                    {{$ilan_mal->getFirmaAdi($malIdTeklif->teklif_id)}}
                                                 </td>
                                                 <td class="highlight">
                                                     {{$malIdTeklif->kdv_orani}}
@@ -115,7 +89,7 @@
                                                     {{$malIdCount++}}
                                                 </td>
                                                 <td>
-                                                    {{$firmaMal->adi}}
+                                                    {{$ilan_mal->getFirmaAdi($malIdTeklif->teklif_id)}}
                                                 </td>
                                                 <td>
                                                     {{$malIdTeklif->kdv_orani}}
@@ -130,12 +104,12 @@
                                                 @if($ilan->kapanma_tarihi > $dt)
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
-                                                    @if($kisKazanCount == 0)
-                                                        <td><button  style="float:right" name="{{$malIdTeklif->ilan_mal_id}}_{{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaMal->id}}" type="button" class="btn btn-info kazanan kazan{{$malIdTeklif->ilan_mal_id}}">Kazanan</button></td>
-                                                    @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaMal->id)
+                                                    @if($ilan_mal->kisKazanCount() == 0)
+                                                        <td><button  style="float:right" name="{{$malIdTeklif->ilan_mal_id}}_{{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$ilan_mal->getFirmaId($malIdTeklif->teklif_id)}}" type="button" class="btn btn-info kazanan kazan{{$malIdTeklif->ilan_mal_id}}">Kazanan</button></td>
+                                                    @elseif($ilan_mal->kisKazanCount() == 1 && $ilan_mal->kisKazananFirmaId() == $ilan_mal->getFirmaId($malIdTeklif->teklif_id))
                                                         <td>KAZANDI</td>
-                                                        <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->id)->where('firma_id',$firmaMal->id)->get();  ///////////// Daha önce yorum
-                                                              $existPuan = \App\Puanlama::where('ilan_id',$ilan->id)->where('firma_id',$firmaMal->id)->get(); ///////yapılmış mı onun kontrolü
+                                                        <?php $existYorum = $ilan->existsYorum($ilan_mal->getFirmaId($malIdTeklif->teklif_id));  ///////////// Daha önce yorum
+                                                              $existPuan = $ilan->existsPuan($ilan_mal->getFirmaId($malIdTeklif->teklif_id)); ///////yapılmış mı onun kontrolü
                                                         ?>
                                                         @if(count($existPuan) != 0 || count($existYorum) != 0)
                                                             <td>
@@ -151,7 +125,7 @@
                                                                         <div class="modal-body">
                                                                             <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
 
-                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$firmaMal->id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$ilan_mal->getFirmaId($malIdTeklif->teklif_id).'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                                                                   <div class="row col-lg-12">
                                                                                     <div class="col-lg-3">
                                                                                         <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
@@ -238,8 +212,7 @@
                     </tr>
                 </thead>
                     <?php $kismiCount =1;?>
-                    <?php $puanCount=0; 
-                    $i = 0;?>
+                    <?php $puanCount=0;  $i = 0;?>
                     @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
 
                     <tr style="background-color:#e6e0d4 "data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
@@ -266,23 +239,7 @@
                         <td colspan="8" class="hiddenRow">
                             <div class="accordian-body collapse" id="kalem{{$kismiCount}}"> 
                                 <!--Hizmet kalemleri çekme sorgusu -->
-                                <?php 
-                                $hizmetIdTeklifler= DB::select(DB::raw("SELECT * 
-                                    FROM hizmet_teklifler ht , teklifler t
-                                    WHERE ilan_hizmet_id ='$ilan_hizmet->id'
-                                    AND ht.teklif_id = t.id 
-                                    AND t.ilan_id = '$ilan->id'
-                                    AND ht.id
-                                    IN (
-                                        
-                                    SELECT MAX( id ) 
-                                    FROM hizmet_teklifler
-                                    GROUP BY teklif_id, ilan_hizmet_id
-                                    )
-                                    ORDER BY kdv_dahil_fiyat ASC  "));
-                                    $hizmetIdCount=1;
-                                ?>
-                                
+                                <?php  $hizmetIdCount=1; ?>
                                 <table>
                                     <thead>
                                         <tr>
@@ -294,23 +251,14 @@
                                         </tr>
                                     </thead>
                                     
-                                        @foreach($hizmetIdTeklifler as $hizmetIdTeklif)
-                                        <?php 
-                                            $firmaHizmetId = App\Teklif::find($hizmetIdTeklif->teklif_id);
-                                            $firmaHizmet = App\Firma::find($firmaHizmetId->firma_id);
-                                        ?>
-                                        <?php $kazanan = App\KismiAcikKazanan::where("ilan_id",$ilan->id)->where("kalem_id",$hizmetIdTeklif->ilan_hizmet_id)->get();
-                                            $kisKazanCount=0;
-                                            foreach($kazanan as $kazan){
-                                                $kisKazanCount=1;
-                                            }
-                                        ?>
-                                        @if($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaHizmet->id)
+                                        @foreach($ilan_hizmet->hizmetIdTeklifler() as $hizmetIdTeklif)
+                                        
+                                        @if($ilan_hizmet->kisKazanCount() == 1 && $ilan_hizmet->kisKazananFirmaId() == $ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id))
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle kismiKazanan">
                                         @else
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
                                         @endif
-                                            @if(session()->get('firma_id') == $firmaHizmet->id) <!--Teklifi veren firma ise -->   
+                                            @if(session()->get('firma_id') == $ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id)) <!--Teklifi veren firma ise -->   
                                                 <td class="highlight">
                                                     @if($hizmetIdCount == 1)
                                                         <img src="{{asset('images/rightOk.png')}}" width="40" height="20">
@@ -318,7 +266,7 @@
                                                     {{$hizmetIdCount++}}
                                                 </td>
                                                 <td class="highlight">
-                                                    {{$firmaHizmet->adi}}
+                                                    {{$ilan_hizmet->getFirmaAdi($hizmetIdTeklif->teklif_id)}}
                                                 </td>
                                                 <td class="highlight">
                                                     {{$hizmetIdTeklif->kdv_orani}}
@@ -334,7 +282,7 @@
                                                     {{$hizmetIdCount++}}
                                                 </td>
                                                 <td>
-                                                    {{$firmaHizmet->adi}}
+                                                    {{$ilan_hizmet->getFirmaAdi($hizmetIdTeklif->teklif_id)}}
                                                 </td>
                                                 <td>
                                                     {{$hizmetIdTeklif->kdv_orani}}
@@ -348,12 +296,12 @@
                                                 @if($ilan->kapanma_tarihi > $dt)
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
-                                                    @if($kisKazanCount == 0)
-                                                        <td><button  style="float:right" name="{{$hizmetIdTeklif->ilan_hizmet_id}}_{{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaHizmet->id}}" type="button" class="btn btn-info kazanan kazan{{$hizmetIdTeklif->ilan_hizmet_id}}">Kazanan</button></td>
-                                                    @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaHizmet->id)
+                                                    @if($ilan_hizmet->kisKazanCount() == 0)
+                                                        <td><button  style="float:right" name="{{$hizmetIdTeklif->ilan_hizmet_id}}_{{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id)}}" type="button" class="btn btn-info kazanan kazan{{$hizmetIdTeklif->ilan_hizmet_id}}">Kazanan</button></td>
+                                                    @elseif($ilan_hizmet->kisKazanCount() == 1 && $ilan_hizmet->kisKazananFirmaId == $ilan_hizmet->getFirmaId())
                                                         <td>KAZANDI</td>
-                                                        <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->id)->where('firma_id',$firmaHizmet->id)->get();  ///////////// Daha önce yorum
-                                                              $existPuan = \App\Puanlama::where('ilan_id',$ilan->id)->where('firma_id',$firmaHizmet->id)->get(); ///////yapılmış mı onun kontrolü
+                                                        <?php $existYorum = $ilan->existsYorum($ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id));  ///////////// Daha önce yorum
+                                                              $existPuan = $ilan->existsPuan($ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id)); ///////yapılmış mı onun kontrolü
                                                         ?>
                                                         @if(count($existPuan) != 0 || count($existYorum) != 0)
                                                             <td>
@@ -369,7 +317,7 @@
                                                                         <div class="modal-body">
                                                                             <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
 
-                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$firmaHizmet->id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id).'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                                                                   <div class="row col-lg-12">
                                                                                     <div class="col-lg-3">
                                                                                         <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
@@ -474,23 +422,7 @@
                         <td colspan="8" class="hiddenRow">
                             <div class="accordian-body collapse" id="kalem{{$kismiCount}}"> 
                                 <!--Hizmet kalemleri çekme sorgusu -->
-                                <?php 
-                                $yapimIsiIdTeklifler= DB::select(DB::raw("SELECT * 
-                                    FROM yapim_isi_teklifler yt, teklifler t
-                                    WHERE ilan_yapim_isleri_id ='$ilan_yapim_isi->id'
-                                    AND t.id = yt.teklif_id
-                                    AND t.ilan_id = '$ilan->id'
-                                    AND yt.id
-                                    IN (
-                                        
-                                    SELECT MAX( id ) 
-                                    FROM yapim_isi_teklifler
-                                    GROUP BY teklif_id, ilan_yapim_isleri_id
-                                    )
-                                    ORDER BY kdv_dahil_fiyat ASC  "));
-                                    $yapimIsiIdCount=1;
-                                ?>
-                                
+                                <?php  $yapimIsiIdCount=1;?>
                                 <table>
                                     <thead>
                                         <tr>
@@ -502,29 +434,20 @@
                                         </tr>
                                     </thead>
                                     
-                                        @foreach($yapimIsiIdTeklifler as $yapimIsiIdTeklif)
-                                        <?php 
-                                            $firmaYapimIsiId = App\Teklif::find($yapimIsiIdTeklif->teklif_id);
-                                            $firmaYapimIsi = App\Firma::find($firmaYapimIsiId->firma_id);
-                                        ?>
-                                        <?php $kazanan = App\KismiAcikKazanan::where("ilan_id",$ilan->id)->where("kalem_id",$yapimIsiIdTeklif->ilan_yapim_isleri_id)->get();
-                                            $kisKazanCount=0;
-                                            foreach($kazanan as $kazan){
-                                                $kisKazanCount=1;
-                                            }
-                                        ?>
-                                        @if($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaYapimIsi->id)
+                                    @foreach($ilan_yapim_isi->$hizmetIdTeklifler($ilan->id) as $yapimIsiIdTeklif)
+                                        
+                                        @if($ilan_yapim_isi->kisKazanCount() == 1 && $ilan_yapim_isi->kisKazananFirmaId() == $ilan_yapim_isi->getFirmaId($yapimIsiIdTeklif->teklif_id))
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle kismiKazanan">
                                         @else
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
                                         @endif    
                                         <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle">
-                                            @if(session()->get('firma_id') == $firmaYapimIsi->id) <!--Teklifi veren firma ise -->   
+                                            @if(session()->get('firma_id') == $ilan_yapim_isi->getFirmaId($yapimIsiIdTeklif->teklif_id)) <!--Teklifi veren firma ise -->   
                                                 <td class="highlight">
                                                     {{$yapimIsiIdCount++}}
                                                 </td>
                                                 <td class="highlight">
-                                                    {{$firmaYapimIsi->adi}}
+                                                    {{$ilan_yapim_isi->getFirmaAdi($yapimIsiIdTeklif->teklif_id)}}
                                                 </td>
                                                 <td class="highlight">
                                                     {{$yapimIsiIdTeklif->kdv_orani}}
@@ -540,7 +463,7 @@
                                                     {{$yapimIsiIdCount++}}
                                                 </td>
                                                 <td>
-                                                    {{$firmaYapimIsi->adi}}
+                                                    {{$ilan_yapim_isi->getFirmaAdi($yapimIsiIdTeklif->teklif_id)}}
                                                 </td>
                                                 <td>
                                                     {{$yapimIsiIdTeklif->kdv_orani}}
@@ -554,12 +477,12 @@
                                                 @if($ilan->kapanma_tarihi > $dt)
                                                     <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                                 @else
-                                                    @if($kisKazanCount == 0)
-                                                        <td><button  style="float:right" name="{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}_{{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$firmaYapimIsi->id}}" type="button" class="btn btn-info kazanan kazan{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}">Kazanan</button></td>
-                                                    @elseif($kisKazanCount == 1 && $kazan->kazanan_firma_id == $firmaYapimIsi->id)
+                                                    @if($ilan_yapim_isi->kisKazanCount() == 0)
+                                                        <td><button  style="float:right" name="{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}_{{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}}" id="{{$ilan_yapim_isi->getFirmaId($yapimIsiIdTeklif->teklif_id)}}" type="button" class="btn btn-info kazanan kazan{{$yapimIsiIdTeklif->ilan_yapim_isleri_id}}">Kazanan</button></td>
+                                                    @elseif($ilan_yapim_isi->kisKazanCount() == 1 && $kazan->kazanan_firma_id == $ilan_yapim_isi->getFirmaId($yapimIsiIdTeklif->teklif_id))
                                                         <td>KAZANDI</td>
-                                                        <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->id)->where('firma_id',$firmaYapimIsi->id)->get();  ///////////// Daha önce yorum
-                                                              $existPuan = \App\Puanlama::where('ilan_id',$ilan->id)->where('firma_id',$firmaYapimIsi->id)->get(); ///////yapılmış mı onun kontrolü
+                                                        <?php $existYorum = $ilan->existsYorum($ilan_yapim_isi->getFirmaId($yapimIsiIdTeklif->teklif_id));  ///////////// Daha önce yorum
+                                                              $existPuan = $ilan->existsPuan($ilan_yapim_isi->getFirmaId($yapimIsiIdCount->teklif_id)); ///////yapılmış mı onun kontrolü
                                                         ?>
                                                         @if(count($existPuan) != 0 || count($existYorum) != 0)
                                                             <td>
@@ -574,7 +497,7 @@
                                                                         <div class="modal-body">
                                                                             <div class="dialog" id="dialog{{$puanNumber++}}" style="display:none">
 
-                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$firmaYapimIsi->id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                                                {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$ilan_yapim_isi->getFirmaId($yapimIsiIdTeklif->teklif_id).'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                                                                   <div class="row col-lg-12">
                                                                                     <div class="col-lg-3">
                                                                                         <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>

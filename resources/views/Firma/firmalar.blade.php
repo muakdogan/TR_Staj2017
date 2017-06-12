@@ -31,17 +31,19 @@ a{
                             <div class="center"><div class="puanlama ">{{$firma->puanlamaOrtalama()}}</div></div>
                         @endif
                         </div>
-                        <div class="col-sm-4"><p style="font-size:18px ; color:#666 ;font-weight:bold" >{{$firma->adi}}</p>
+                        <div class="col-sm-3"><p style="font-size:18px ; color:#666 ;font-weight:bold" >{{$firma->adi}}</p>
                             <p>{{$firma->iladi}}</p>
-                            <p>@foreach($firma->sektorler as $sektor) {{$sektor->adi}}, @endforeach </p>
-                        </div>
                             
+                        </div>
+                        <div class="col-sm-5">
+                            <ul type="circle">@foreach($firma->sektorler as $sektor) <li>{{$sektor->adi}} </li> @endforeach </ul>
+                        </div>
 
                     </div>
                     <div class="col-sm-2">
                         @if(Auth::guest())
                         @else
-                            <a href="#"><button type="button" class="btn btn-primary" name="{{$firma->id}}" id="tedarikci" onclick="tedarikci()" style='float:right;margin-top:60px'>@if($firma->onay == 0)Onaylı Tedarikçi Ekle @else Tedarikçilerimden Çıkar @endif</button></a><br><br>
+                            <a href="#"><button type="button" class="btn btn-primary btn-md" name="{{$firma->id}}" id="tedarikci" onclick="tedarikci()" style='float:right;margin-top:60px'>@if($firma->onay == 0)Onaylı Tedarikçi Ekle @else Tedarikçilerimden<br>Çıkar @endif</button></a><br><br>
                         @endif
                     </div>
 
