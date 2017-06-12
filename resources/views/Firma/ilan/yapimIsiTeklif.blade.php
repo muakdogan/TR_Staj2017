@@ -1,21 +1,21 @@
 <div id="yapim" >
-    {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'post')) }}  
+    {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.Auth::user()->id)) }}  
         <table class="table" >
         <thead id="tasks-list" name="tasks-list">
             <tr id="firma{{$firma->id}}">
                 <?php $i=1; ?>
             <tr>
-                <th>Sıra:</th>
-                <th>Adı:</th>
-                <th>Miktar:</th>
-                <th>Birim:</th>
-                <th>KDV Oranı:</th>
-                <th>Birim Fiyat:</th>
-                <th>Para Birimi</th>
-                <th>Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
+                <th width="4%">Sıra:</th>
+                <th width="30%">Adı:</th>
+                <th width="7%">Miktar:</th>
+                <th width="5%">Birim:</th>
+                <th width="15%">KDV Oranı:</th>
+                <th width="18%">Birim Fiyat:</th>
+                <th width="1%"></th>
+                <th width="20%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
             </tr>
             @foreach($ilan->ilan_yapim_isleri as $ilan_yapim_isi)
-                @if(count($teklif) != 0){
+                @if(count($teklif) != 0)
                     <?php  $yapimIsiTeklif = $ilan_yapim_isi->getYapimIsiTeklif($ilan_yapim_isi->id,$teklif[0]["id"]); ?> <!-- Bu satır aşağıdaki if kontrolleri için gerekli -->
                 @endif
             <tr>
@@ -23,7 +23,7 @@
                     {{$i++}}
                 </td>
                 <td>
-                    {{$ilan_yapim_isi->adi}}
+                    {{$ilan_yapim_isi->kalem_adi}}
                 </td>
                 <td>
                     {{$ilan_yapim_isi->miktar}}
@@ -32,7 +32,7 @@
                     {{$ilan_yapim_isi->birimler->adi}}
                 </td>
                 <td>
-                    <select style="margin-top: 0px" class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
+                    <select style="margin-top: 0px" class="select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
                         <option value="-1" selected hidden>Seçiniz</option>
                         @if(count($teklif)!=0 && count($yapimIsiTeklif) != 0 && $yapimIsiTeklif[0]['kdv_orani'] == 0)
                              <option  value="0"  selected>%0</option>
@@ -82,14 +82,14 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="8"></td>
+                <td colspan="5"></td>
                 <td colspan="3" style="text-align:right">
                     <label for="" id="toplamFiyatL" class="control-label toplam" ></label>
                     <input type="hidden" name="toplamFiyatKdvsiz"  id="toplamFiyatKdvsiz" value="">
                 </td>
             </tr>
             <tr>
-                <td colspan="8">
+                <td colspan="5">
                           <input type="hidden" id="iskonto"><label id="iskontoLabel"></label>
                           <input style="width: 60px" type="hidden" name="iskontoVal" id="iskontoVal" value="" placeholder="yüzde">   
                 </td> 
@@ -114,9 +114,9 @@
     <div align="right">
          @if($ilan->kapanma_tarihi > $dt)
                     @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
-                        {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger btn-info')) !!}
+                        {!! Form::submit('Teklif Güncelle', array('class'=>'btn btn-danger btn-info')) !!}
                     @else
-                        {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-danger btn-info')) !!}
+                        {!! Form::submit('Teklif Gönder', array('class'=>'btn btn-danger btn-info')) !!}
                     @endif
          @else
             Bu ilanın KAPANMA SÜRESİ geçmiştir.O yüzden teklif günceleyemezsiniz !           
@@ -129,44 +129,3 @@
             <h2 style="color:red"> Üzgünüz.. !!!</h2>
             <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
 </div>
-<script>
-    var firmaId='{{$firma->id}}';
-    $("#teklifForm").submit(function(e){
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-        //console.log($(this).attr("url"));
-        $.ajax(
-        {
-            beforeSend: function(){
-                $('.ajax-loader').css("visibility", "visible");
-            },
-            url : formURL,
-            type: "POST",
-            data : postData,
-            success:function(data, textStatus, jqXHR) 
-            {
-                console.log(data);
-                $('.ajax-loader').css("visibility", "hidden");
-                if(data==="error"){
-                    $('#mesaj').bPopup({
-                        speed: 650,
-                        transition: 'slideIn',
-                        transitionClose: 'slideBack',
-                        autoClose: 5000 
-                    });
-                    setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 5000);
-                }
-                else{
-
-                    setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 1000);
-                }
-                    e.preventDefault();
-            },
-            error: function(jqXHR, textStatus, errorThrown) 
-            {
-                alert(textStatus + "," + errorThrown);     
-            }
-        });
-        e.preventDefault(); //STOP default action
-    });
-</script>

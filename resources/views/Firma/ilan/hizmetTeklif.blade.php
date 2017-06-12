@@ -1,23 +1,23 @@
 <div  id="hizmet">
-    {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'post')) }}
+    {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.Auth::user()->id)) }}
     <table class="table">
         <thead id="tasks-list" name="tasks-list">
             <tr id="firma{{$firma->id}}">
                 <?php $i=1; ?>
             <tr>
-                <th>Sıra:</th>
-                <th>Adı:</th>
-                <th>Fiyat Standartı:</th>
-                <th>Fiyat Standartı Birimi:</th>
-                <th>Miktar:</th>
-                <th>Miktar Birimi:</th>
-                <th>KDV Oranı:</th>
-                <th>Birim Fiyat:</th>
-                <th></th><!-- Fiyat hesaplanması için gerekli-->
-                <th>Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
+                <th width="2%">Sıra:</th>
+                <th width="18%">Adı:</th>
+                <th width="6%">Fiyat Standartı:</th>
+                <th width="6%">Fiyat Standartı Birimi:</th>
+                <th width="4%">Miktar:</th>
+                <th width="4%">Miktar Birimi:</th>
+                <th width="25">KDV Oranı:</th>
+                <th width="14%">Birim Fiyat:</th>
+                <th width="1%"></th><!-- Fiyat hesaplanması için gerekli-->
+                <th width="10%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
             </tr>
             @foreach($ilan->ilan_hizmetler as $ilan_hizmet)
-                @if(count($teklif) != 0){
+                @if(count($teklif) != 0)
                     <?php  $hizmetTeklif = $ilan_hizmet->getHizmetTeklif($ilan_hizmet->id, $teklif[0]['id']); ?>
                 @endif
             <tr>
@@ -26,7 +26,7 @@
                 </td>
 
                 <td>
-                    {{$ilan_hizmet->adi}}
+                    {{$ilan_hizmet->kalem_adi}}
                 </td>
                 <td>
                     {{$ilan_hizmet->fiyat_standardi}}
@@ -41,7 +41,7 @@
                     {{$ilan_hizmet->miktar_birimler->adi}}
                 </td>
                 <td>
-                    <select style="margin-top: 0px" class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
+                    <select style="margin-top: 0px" class="select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
                         <option value="-1" selected hidden>Seçiniz</option>
                         @if(count($teklif)!=0 && count($hizmetTeklif) != 0 && $hizmetTeklif[0]['kdv_orani'] == 0)
                              <option  value="0"  selected>%0</option>
@@ -123,9 +123,9 @@
     <div align="right">
          @if($ilan->kapanma_tarihi > $dt)
             @if(count($teklif)!= 0) <!--Teklif varsa buton güncelleme kontrolu -->
-                {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
+                {!! Form::submit('Teklif Güncelle', array('class'=>'btn btn-info')) !!}
             @else
-                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
+                {!! Form::submit('Teklif Gönder', array('class'=>'btn btn-info')) !!}
             @endif
          @else
                     Bu ilanın KAPANMA SÜRESİ geçmiştir.O yüzden teklif günceleyemezsiniz !
@@ -138,44 +138,3 @@
     <h2 style="color:red"> Üzgünüz.. !!!</h2>
     <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
 </div>
-<script>
-    var firmaId='{{$firma->id}}';
-    $("#teklifForm").submit(function(e){
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-    
-        $.ajax(
-        {
-            beforeSend: function(){
-                $('.ajax-loader').css("visibility", "visible");
-            },
-            url : formURL,
-            type: "POST",
-            data : postData,
-            success:function(data, textStatus, jqXHR) 
-            {
-                console.log(data);
-                $('.ajax-loader').css("visibility", "hidden");
-                if(data=== "error"){
-                     $('#mesaj').bPopup({
-                        speed: 650,
-                        transition: 'slideIn',
-                        transitionClose: 'slideBack',
-                        autoClose: 5000 
-                    });
-                    setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 5000);
-                }
-                else{
-
-                    setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 1000);
-                }
-                    e.preventDefault();
-            },
-            error: function(jqXHR, textStatus, errorThrown) 
-            {
-                alert(textStatus + "," + errorThrown);     
-            }
-        });
-        e.preventDefault(); //STOP default action
-    });
-</script>

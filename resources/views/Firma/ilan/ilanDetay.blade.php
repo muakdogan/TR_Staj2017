@@ -629,7 +629,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             result=((fiyat+(fiyat*kdv)/100)*miktar).toFixed(2);
             toplamFiyat += result;
             $(this).parent().next().next().next().children().html(result);
-            alert($(this).parent().next().next().next().children().html(result));
+            //alert($(this).parent().next().next().next().children().html(result));
             //alert($(this).parent().next().next().next().children().html(result.formatMoney(2)));
             toplamFiyat=0;
             $("span.kalem_toplam").each(function(){
@@ -854,7 +854,6 @@ var n = this,
             var postData = $(this).serialize();
             var formURL = $(this).attr('action');
             var ilan_id = {{$ilan->id}};
-            alert(formURL);
             //console.log($(this).attr("url"));
             $.ajax(
             {
@@ -868,7 +867,7 @@ var n = this,
                 {
                     $.ajax(
                         {
-                            url : "{{asset('rekabet')}}" + ilan_id,
+                            url : "{{asset('rekabet')}}" +"/"+ ilan_id,
                             type: "GET",
                             success:function(data, textStatus, jqXHR)
                             {
@@ -878,6 +877,7 @@ var n = this,
                             error: function(jqXHR, textStatus, errorThrown)
                             {
                                 alert(textStatus + "," + errorThrown);
+                                $('.ajax-loader').css("visibility", "hidden");
                             }
                         });
                         e.preventDefault();

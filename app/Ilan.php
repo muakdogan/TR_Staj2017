@@ -264,13 +264,80 @@ class Ilan extends Model
 
     return $kazananFirmaId;
   }
-  public function existsYorum($firma_id){
-    $existsYorum = Yorum::where('ilan_id',$this->id)->where('firma_id',$firma_id)->get();
-    return $existsYorum;
-  }
-  public function existsPuan($firma_id){
-    $existsPuan = Puanlama::where('ilan_id',$this->id)->where('firma_id',$firma_id)->get();
-    return $existsPuan;
-  }
+    public function existsYorum($firma_id){
+      $existsYorum = Yorum::where('ilan_id',$this->id)->where('firma_id',$firma_id)->get();
+      return $existsYorum;
+    }
+    public function existsPuan($firma_id){
+      $existsPuan = Puanlama::where('ilan_id',$this->id)->where('firma_id',$firma_id)->get();
+      return $existsPuan;
+    }
+    public function minFiyat(){
+        if($this->ilan_turu == 1 && $this->sozlesme_turu == 0){ //<!--MAl -->
+          $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+              FROM (
+
+              SELECT min( kdv_dahil_fiyat ) AS toplam
+              FROM teklifler t, mal_teklifler m
+              WHERE t.id = m.teklif_id
+              AND t.ilan_id ='$this->id'
+              AND m.id
+              IN (
+
+              SELECT MAX( id )
+              FROM mal_teklifler
+              GROUP BY teklif_id, ilan_mal_id
+              )
+              GROUP BY ilan_mal_id
+              )y"));
+        }elseif($this->ilan_turu == 2 && $this->sozlesme_turu == 0){ //<!--Hizmet -->
+            $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+                FROM (
+                SELECT min( kdv_dahil_fiyat ) AS toplam
+                FROM teklifler t, hizmet_teklifler h
+                WHERE t.id = h.teklif_id
+                AND t.ilan_id ='$this->id'
+                AND h.id
+                IN (
+                SELECT MAX( id )
+                FROM hizmet_teklifler
+                GROUP BY teklif_id, ilan_hizmet_id
+                )
+                GROUP BY ilan_hizmet_id
+                )y"));
+        }elseif($this->ilan_turu == 3){ //<!-- Yapım İşi-->
+            $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+                FROM (
+                SELECT min( kdv_dahil_fiyat ) AS toplam
+                FROM teklifler t, yapim_isi_teklifler y
+                WHERE t.id = y.teklif_id
+                AND t.ilan_id ='$this->id'
+                AND y.id
+                IN (
+                SELECT MAX( id )
+                FROM yapim_isi_teklifler
+                GROUP BY teklif_id, ilan_yapim_isleri_id
+                )
+                GROUP BY ilan_yapim_isleri_id
+                )y"));
+        }else{ //<!-- Goturu Bedel-->
+            $minFiyat = DB::select(DB::raw("SELECT SUM( toplam ) AS deneme
+                FROM (
+                SELECT min( kdv_dahil_fiyat ) AS toplam
+                FROM teklifler t, goturu_bedel_teklifler g
+                WHERE t.id = g.teklif_id
+                AND t.ilan_id ='$this->id'
+                AND g.id
+                IN (
+                SELECT MAX( id )
+                FROM goturu_bedel_teklifler
+                GROUP BY teklif_id, ilan_goturu_bedel_id
+                )
+                GROUP BY ilan_goturu_bedel_id
+                )y"));
+        }
+        return $minFiyat;
+
+    }
 
 }

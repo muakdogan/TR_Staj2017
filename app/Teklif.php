@@ -4,7 +4,7 @@ namespace App;
 use App\Firma;
 use DB;
 use Illuminate\Database\Eloquent\Model;
-
+use Barryvdh\Debugbar\Facade as Debugbar;
 class Teklif extends Model
 {
     //
@@ -57,15 +57,16 @@ class Teklif extends Model
         $teklifMallar=DB::select(DB::raw("SELECT * 
                                                 FROM teklifler t, mal_teklifler m
                                                 WHERE t.id = m.teklif_id
-                                                AND t.id ='$this->firma_id'
+                                                AND t.id ='$this->id'
                                                 GROUP BY m.ilan_mal_id"));
         return $teklifMallar;
     }
     public function getTeklifHizmetler(){
+        Debugbar::info($this->firma_id);
         $teklifHizmetler=DB::select(DB::raw("SELECT * 
                                                 FROM teklifler t, hizmet_teklifler h
                                                 WHERE t.id = h.teklif_id
-                                                AND t.id ='$this->firma_id'
+                                                AND t.id ='$this->id'
                                                 GROUP BY h.ilan_hizmet_id"));
         return $teklifHizmetler;
     }
@@ -73,7 +74,7 @@ class Teklif extends Model
         $teklifYapimIsleri=DB::select(DB::raw("SELECT * 
                                                 FROM teklifler t, hizmet_teklifler h
                                                 WHERE t.id = h.teklif_id
-                                                AND t.id ='$this->firma_id'
+                                                AND t.id ='$this->id'
                                                 GROUP BY h.ilan_hizmet_id"));
         return $teklifYapimIsleri;
     }
@@ -81,7 +82,7 @@ class Teklif extends Model
         $teklifGoturuBedeller=DB::select(DB::raw("SELECT * 
                                                 FROM teklifler t, goturu_bedel_teklifler g
                                                 WHERE t.id = g.teklif_id
-                                                AND t.id ='$this->firma_id'
+                                                AND t.id ='$this->id'
                                                 GROUP BY g.ilan_goturu_bedel_id"));
         return $teklifGoturuBedeller;
     }
@@ -99,11 +100,16 @@ class Teklif extends Model
                 }
         }else if($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0){ //--Hizmet -->
                 $ilanMalCount = $ilan->ilan_hizmetler()->count();
-                $teklifHizmetler=$this->getTeklifHizmetler();
+                $teklifHizmetler=DB::select(DB::raw("SELECT * 
+                                                FROM teklifler t, hizmet_teklifler h
+                                                WHERE t.id = h.teklif_id
+                                                AND t.id ='$this->id'
+                                                GROUP BY h.ilan_hizmet_id"));
                 $teklifMalCount=0;
                 foreach($teklifHizmetler as $teklifHizmet){
                     $teklifMalCount++;
                 }
+                Debugbar::info($teklifHizmetler);
         }elseif($ilan->ilan_turu == 3){//<!-- Yapım İşi-->
                 $ilanMalCount = $ilan->ilan_yapim_isleri()->count();
                 $teklifYapimIsleri=$this->teklifYapimIsleri();
@@ -117,7 +123,7 @@ class Teklif extends Model
                         $teklifGoturuBedeller=DB::select(DB::raw("SELECT *
                                         FROM teklifler t, goturu_bedel_teklifler g
                                         WHERE t.id = g.teklif_id
-                                        AND t.id ='$this->firma_id'
+                                        AND t.id ='$this->id'
                                         GROUP BY g.ilan_goturu_bedel_id"));
                         $teklifMalCount=0;
                         foreach($teklifGoturuBedeller as $teklifGoturuBedel){

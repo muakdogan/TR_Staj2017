@@ -1,19 +1,19 @@
 <div  id="goturu">
-    {{ Form::open(array('url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.$kullanici_id,'method' => 'POST')) }}
+    {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.Auth::user()->id))}}
     <table class="table" >
         <thead id="tasks-list" name="tasks-list">
             <?php $i=1;?>
             <tr>
-                  <th>Sıra:</th>
-                  <th>İşin Adı:</th>
-                  <th>Miktar Türü:</th>
-                  <th>KDV Oranı:</th>
-                  <th>Fiyat:</th>
-                  <th>Para Birimi</th>
-                  <th>Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
+                  <th width="4%">Sıra:</th>
+                  <th width="30%">İşin Adı:</th>
+                  <th width="10%">Miktar Türü:</th>
+                  <th width="20%">KDV Oranı:</th>
+                  <th width="25%">Fiyat:</th>
+                  <th width="1%"></th>
+                  <th width="10%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
             </tr>
             @foreach($ilan->ilan_goturu_bedeller as $ilan_goturu_bedel)
-                @if(count($teklif) != 0){
+                @if(count($teklif) != 0)
                     <?php $goturuBedelTeklif = $ilan_goturu_bedel->getGoturuBedelTeklif($ilan_goturu_bedel->id,$teklif[0]["id"]); ?>
                 @endif
                 <tr>
@@ -22,13 +22,13 @@
                     </td>
 
                     <td>
-                        {{$ilan_goturu_bedel->isin_adi}}
+                        {{$ilan_goturu_bedel->kalem_adi}}
                     </td>
                     <td>
-                        {{$ilan_goturu_bedel->miktar_turu}}
+                        {{$ilan_goturu_bedel->miktar_birimler->adi}}
                     </td>
                     <td>
-                        <select class="form-control select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
+                        <select class="select kdv" name="kdv[]" id="kdv{{$i-2}}"  required>
                             <option value="-1" selected hidden>Seçiniz</option>
                             @if(count($teklif)!=0 && count($goturuBedelTeklif) != 0 && $goturuBedelTeklif[0]['kdv_orani'] == 0)
                                  <option  value="0"  selected>%0</option>
@@ -80,14 +80,14 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="8"></td>
+                <td colspan="4"></td>
                 <td colspan="3" style="text-align:right">
                     <label for="" id="toplamFiyatL" class="control-label toplam" ></label>
                     <input type="hidden" name="toplamFiyatKdvsiz"  id="toplamFiyatKdvsiz" value="">
                 </td>
             </tr>
             <tr>
-                <td colspan="8"></td>
+                <td colspan="4"></td>
                 <td colspan="3" style="text-align:right">
                     <label for="toplamFiyatLabel" id="toplamFiyatLabel" class="control-label toplam" ></label>
                     <input type="hidden" name="toplamFiyat"  id="toplamFiyat" value="">
@@ -98,9 +98,9 @@
     <div align="right">
          @if($ilan->kapanma_tarihi > $dt)
             @if(count($teklif)!=0) <!--Teklif varsa buton güncelleme kontrolu -->
-                {!! Form::submit('Teklif Güncelle', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
+                {!! Form::submit('Teklif Güncelle', array('class'=>'btn btn-info')) !!}
             @else
-                {!! Form::submit('Teklif Gönder', array('url'=>'teklifGonder/'.$firma_id.'/'.$ilan->id.'/'.$kullanici_id,'class'=>'btn btn-info')) !!}
+                {!! Form::submit('Teklif Gönder', array('class'=>'btn btn-info')) !!}
             @endif
          @else
             Bu ilanın KAPANMA SÜRESİ geçmiştir.O yüzden teklif günceleyemezsiniz !   
@@ -114,44 +114,3 @@
     <h2 style="color:red"> Üzgünüz.. !!!</h2>
     <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
 </div>
-<script>
-    var firmaId='{{$firma->id}}'
-    $("#teklifForm").submit(function(e){
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-        //console.log($(this).attr("url"));
-        $.ajax(
-        {
-            beforeSend: function(){
-                $('.ajax-loader').css("visibility", "visible");
-            },
-            url : formURL,
-            type: "POST",
-            data : postData,
-            success:function(data, textStatus, jqXHR) 
-            {
-                console.log(data);
-                $('.ajax-loader').css("visibility", "hidden");
-                if(data=="error"){
-                     $('#mesaj').bPopup({
-                        speed: 650,
-                        transition: 'slideIn',
-                        transitionClose: 'slideBack',
-                        autoClose: 5000 
-                    });
-                    setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 5000);
-                }
-                else{
-
-                    setTimeout(function(){ location.href="{{asset('firmaIslemleri')}}"+"/"+firmaId}, 1000);
-                }
-                    e.preventDefault();
-            },
-            error: function(jqXHR, textStatus, errorThrown) 
-            {
-                alert(textStatus + "," + errorThrown);     
-            }
-        });
-        e.preventDefault(); //STOP default action
-    });
-</script>
