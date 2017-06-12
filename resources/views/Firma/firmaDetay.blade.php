@@ -11,6 +11,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaDetayProfil.css')}}"/>
+        
         <style>
             table {
                 font-family: arial, sans-serif;
@@ -89,6 +90,26 @@
              .test + .tooltip.bottom > .tooltip-arrow {
                  border-bottom: 5px solid green;
              }
+             .w3-right {
+                float: right!important;
+            }
+           
+            .w3-margin-right {
+                margin-right: 16px!important;
+            }
+           
+            .w3-badge {
+                border-radius: 50%;
+            }
+           
+            .w3-badge, .w3-tag {
+                background-color: #000;
+                color: #fff;
+                display: inline-block;
+                padding-left: 8px;
+                padding-right: 8px;
+                text-align: center;
+            }
         </style>
    </head>
    <body>
@@ -121,13 +142,13 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a  href="#1" data-toggle="tab"> <strong>{{$firma->adi}}</strong> Firma Profili</a>
                 </li>
-                <li><a href="#2" data-toggle="tab">XXX</a>
+                <li><a href="#2" data-toggle="tab">Onaylı Tedarikciler &nbsp; <span class="w3-badge w3-right w3-margin-right">{{$firma->onayliTedarikciler->count()}}</span></a>
                 </li>
-                <li><a href="#3" data-toggle="tab">Yorumlar&nbsp;
+                <li><a href="#3" data-toggle="tab">Yorumlar &nbsp;
                         @if($toplamYorum==0)
-                            (Henüz bu firma için yorum yapılmamıştır)
+                           <span class="w3-badge w3-right w3-margin-right">0</span>
                         @else
-                         ({{$toplamYorum}})
+                          <span class="w3-badge w3-right w3-margin-right">{{$toplamYorum}}</span>
                         @endif
                     </a>
                 </li>
@@ -421,8 +442,8 @@
                                                             </tr>
                                                             @endforeach
 
-                                                            </thead>
-                                                            </table>
+                                                      </thead>
+                                                   </table>
                                                            
                                                   <input type="hidden" name="add"  id="add" value="add"> 
                                              </div>
@@ -518,19 +539,19 @@
                    
                 </div>
                  <div class="tab-pane" id="2">
-                    <h3>Notice the gap between the content and tab after applying a background color</h3>
+                     <br>
+                     @foreach($firma->onayliTedarikciler as $onayli)
+                        <a href="{{url('firmaDetay/'.$onayli->id)}}" ><p>{{$onayli->adi}}</p></a>
+                     @endforeach
                 </div>
-                
                 <div class="tab-pane" id="3">
                     <br>
-                   
                             <div class="col-sm-12">
-                                 
                                 <div class="panel panel-default">
-                                   
                                     <div style="background-color:#ddd;border-color: #ddd" class="panel-heading">
                                         <strong>Firmaya Yapılan Yorumlar &nbsp;
                                             @if($toplamYorum==0)
+                                            
                                                (Henüz bu firma için yorum yapılmamıştır)
                                             @else
                                              ({{$toplamYorum}})

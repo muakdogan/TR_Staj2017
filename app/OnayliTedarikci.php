@@ -9,4 +9,7 @@ class OnayliTedarikci extends Model
     //
     protected $table = 'onayli_tedarikciler';
     
+    
+    
+    
 }
