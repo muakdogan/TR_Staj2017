@@ -1058,12 +1058,9 @@ function funcTumFirmalar(){
         success: function(data){
             console.log(data);
             $("#custom-headers option").remove();
-           /* for(var c=0; c<multiselectCount; c++){
-                $("#"+(c+48)+"-selectable").remove();
-            }*/
+        
             for(var key=0; key <Object.keys(data).length;key++)
             {
-                //multiselectCount++;
                 $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
             }
         },
