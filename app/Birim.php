@@ -29,5 +29,9 @@ class Birim extends Model
     {
         return $this->hasMany('App\IlanHizmet', 'miktar_birim_id', 'id');
     }
+     public function ilan_goturu_bedeller_miktar()
+    {
+        return $this->hasMany('App\IlanGoturuBedel', 'miktar_birim_id', 'id');
+    }
     
 }

@@ -200,14 +200,14 @@ class FirmaController extends Controller
             $tedarikci ->save();
         }    
     }
-    public function onayliTedarikcilerim(){ 
+    public function onayliTedarikcilerim(){
         $onayli_tedarikciler  = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
                 ->whereExists(function ($query) {
                     $query->select(DB::raw("*"))
                           ->from('onayli_tedarikciler')
-                          ->whereRaw('onayli_tedarikciler.firma_id ='+session()->get("firma_id"))
+                          ->whereRaw('onayli_tedarikciler.firma_id',session()->get("firma_id"))
                           ->whereRaw('onayli_tedarikciler.tedarikci_id = firmalar.id');
                 })
                 ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get(); 

@@ -220,7 +220,7 @@
                             {{$kismiCount}}
                         </td>
                         <td>
-                            {{$ilan_hizmet->adi}}
+                            {{$ilan_hizmet->kalem_adi}}
                         </td>
                         <td>
                             {{$ilan_hizmet->fiyat_standardi}}
@@ -251,7 +251,7 @@
                                         </tr>
                                     </thead>
                                     
-                                        @foreach($ilan_hizmet->hizmetIdTeklifler() as $hizmetIdTeklif)
+                                    @foreach($ilan_hizmet->hizmetIdTeklifler($ilan->id) as $hizmetIdTeklif)
                                         
                                         @if($ilan_hizmet->kisKazanCount() == 1 && $ilan_hizmet->kisKazananFirmaId() == $ilan_hizmet->getFirmaId($hizmetIdTeklif->teklif_id))
                                             <tr data-toggle="collapse" data-target="#kalem{{$kismiCount}}" class="accordion-toggle kismiKazanan">
