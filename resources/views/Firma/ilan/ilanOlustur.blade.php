@@ -803,80 +803,9 @@
 <script charset="utf-8">
 
 var firmaCount = 0;
-var sektor=0;
+var sektor = 0;
 var multiselectCount=0;
-
-$.fn.datepicker.dates['tr'] = {
-    days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
-    daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
-    daysMin: ["Pz", "Pzt", "Sa", "Çr", "Pr", "Cu", "Ct", "Pz"],
-    months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-    monthsShort: ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
-    today: "Bugün"
-};
-var date_input=$('input[class="form-control date"]'); //our date input has the name "date"
-var date_ka=$('input[class="form-control date kapanma"]'); //our date input has the name "date"
-var date_bas=$('input[class="form-control date is_baslama"]'); //our date input has the name "date"
-var date_bit=$('input[class="form-control date is_bitis"]'); //our date input has the name "date"
 var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-
-date_input.datepicker({
-    format: 'dd/mm/yyyy',
-    language:"tr",
-    container: container,
-    weekStart:1,
-    todayHighlight: true,
-    autoclose: true,
-    startDate: new Date()
-}).on('changeDate', function (selected) {
-    var setdate=0;
-    $(this).valid();
-    date_ka.datepicker('setDate',setdate);
-    var minDate = new Date(selected.date.valueOf());
-    date_ka.datepicker('setStartDate', minDate);
-    date_bas.datepicker('setStartDate', minDate);
-       
-});
-
-date_ka.datepicker({
-    format: 'dd/mm/yyyy',
-    language:"tr",
-    container: container,
-    weekStart:1,
-    todayHighlight: true,
-    autoclose: true
-}).on('changeDate', function() {
-   $(this).valid();
-});
-
-date_bas.datepicker({
-    format: 'dd/mm/yyyy',
-    language:"tr",
-    container: container,
-    weekStart:1,
-    todayHighlight: true,
-    autoclose: true
-}).on('changeDate', function(selected) {
-    
-    $(this).valid();
-    var setbit=0;
-    date_bit.datepicker('setDate',setbit);
-    var minDateBit = new Date(selected.date.valueOf());
-    date_bit.datepicker('setStartDate', minDateBit);;
-   
-});
-
-date_bit.datepicker({
-    format: 'dd/mm/yyyy',
-    language:"tr",
-    container: container,
-    weekStart:1,
-    todayHighlight: true,
-    autoclose: true
-}).on('changeDate', function() {
-    $(this).valid();
-});
-
 
 $(document).ready(function(){
    $('[data-toggle="tooltip"]').tooltip();
@@ -896,8 +825,6 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 $(".next").click(function(){
-      
-  
     var form = $("#msform");
         form.validate({
                 errorElement: 'span',
@@ -909,28 +836,6 @@ $(".next").click(function(){
                         $(element).closest('.form-group').removeClass("has-error");
                 },
                 rules: {
-                  
-                    
-                        yayinlanma_tarihi: {
-                             required: true,
-                             date: false,
-                             dateITA: true
-                        },
-                        kapanma_tarihi: {
-                               required: true,
-                                date: false,
-                                dateITA: true
-                        },
-                        is_baslama_tarihi: {
-                               required: true,
-                                date: false,
-                                dateITA: true
-                        },
-                        is_bitis_tarihi: {
-                                required: true,
-                                date: false,
-                                dateITA: true
-                        },
                         sozlesme_onay: {
                                 required: true
                         },
@@ -947,12 +852,12 @@ $(".next").click(function(){
                 }
                 $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
                  next_fs.show();
-                current_fs.hide();
+                 current_fs.hide();
 
         }
         
         kalemAgaci();
- });
+});
 $('.previous').click(function(){
         if($('#kalem').is(":visible")){
                 current_fs = $('#kalem');
@@ -1208,7 +1113,7 @@ var sozlesme_turu;
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
         getSektor(ilan_turu);
-        alert(ilan_turu);
+      
         if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
@@ -1241,14 +1146,12 @@ $('#ilan_turu').on('change', function (e) {
 
 $('#sozlesme_turu').on('change', function (e) {
              sozlesme_turu = e.target.value;
-             alert(sozlesme_turu);
+            
              if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#hizmet').hide()
                    $('#goturu').hide()
                    $('#yapim').hide()
-                  
-
                 }
              else if(ilan_turu=="2" && sozlesme_turu=="0")
                 {
@@ -1275,7 +1178,6 @@ $('#sozlesme_turu').on('change', function (e) {
                 }
             else{}
  });
-
 $( "#teslim_yeri" ).change(function() {
         var teslim_yeri= $('#teslim_yeri').val();
         if(teslim_yeri=="Satıcı Firma"){
@@ -1303,7 +1205,6 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
    i++;
    
    kalem_num++;
-   alert(kalem_num);
 
     if(ilan_turu=="1" &&sozlesme_turu=="0")
     {

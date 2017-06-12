@@ -396,26 +396,27 @@
         regex.push("[$@$!%*#?&]"); //Special Character.
 
         var passed = 0;
-
+        var color = "";
+        var strength = "";
         //Validate for each Regular Expression.
         for (var i = 0; i < regex.length; i++) {
             if (new RegExp(regex[i]).test(password)) {
                 passed++;
             }
         }
-
+        
         //Validate for length of Password.
         if (passed > 6 && password.length > 12) {
             passed++;
+            
         }
-
+      
         //Display status.
-        var color = "";
-        var strength = "";
         switch (passed) {
             case 0:
+            
             case 1:
-                strength = "Şifre en az 6 karakterden oluşmalıdır";
+                strength = "Zayıf";
                 color = "red";
                 break;
             case 2:
@@ -423,6 +424,7 @@
                 color = "darkorange";
                 break;
             case 3:
+             
             case 4:
                 strength = "Güçlü";
                 color = "green";
@@ -431,6 +433,12 @@
                 strength = "Çok Güçlü";
                 color = "darkgreen";
                 break;
+        }
+        
+        var  password_deneme=$('#password').val().length;
+        if(password_deneme<6){
+            strength = "Şifre en az 6 karakterden oluşmalıdır işiş";
+            color = "red";
         }
         password_strength.innerHTML = strength;
         password_strength.style.color = color;

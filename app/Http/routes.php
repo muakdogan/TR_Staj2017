@@ -933,7 +933,6 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
   
   Route::post('/ilanOlusturEkle/{id}', function (Request $request,$id) {
         //ilan bilgileri kaydediliyor.
-      
         
         $firma = Firma::find($id);
         $ilan = new Ilan;
@@ -941,12 +940,34 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         $ilan->ilan_sektor=$request->firma_sektor;
         
         $ilan_tarihi= explode(" - ", $request->ilan_tarihi_araligi);
-        $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi[0]));
-        $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi[1]));
+        DebugBar::info($ilan_tarihi);
+        
+        $ilan_tarihi_replace1=$ilan_tarihi[0];
+        $ilan_tarihi_replace1 = str_replace('/', '-', $ilan_tarihi_replace1);
+        $ilan_tarihi_replace2=$ilan_tarihi[1];
+        $ilan_tarihi_replace2 = str_replace('/', '-', $ilan_tarihi_replace2);
+        
+        DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace1)));
+        DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace2)));
+         
+        $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi_replace1));
+        $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi_replace2));
+       
         
         $is_tarihi= explode(" - ", $request->is_tarihi_araligi);
-        $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi[0]));
-        $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi[1]));
+        DebugBar::info($is_tarihi);
+        
+        $is_tarihi_replace1=$is_tarihi[0];
+        $is_tarihi_replace1 = str_replace('/', '-', $is_tarihi_replace1);
+        $is_tarihi_replace2=$is_tarihi[1];
+        $is_tarihi_replace2 = str_replace('/', '-', $is_tarihi_replace2);
+        
+        
+        $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
+        DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace1)));
+        
+        $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi_replace2));
+        DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace2)));
         
         $ilan->aciklama =Str::title(strtolower( $request->aciklama));
         $ilan->ilan_turu= $request->ilan_turu;
@@ -966,7 +987,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         $ilan->adi= $request->ilan_adi;
         $ilan->sozlesme_onay= $request->sozlesme_onay;
         //foreach($request->firma_adi_gizli as $firma_adi_gizli){
-        $ilan->goster = $request->firma_adi_gizli;
+          $ilan->goster = $request->firma_adi_goster;
         //}
         if($request->file('teknik'))
         {
@@ -1000,8 +1021,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             $onayli_tedarikciler->save();
           }
         }
-        DebugBar::info($ilan->ilan_turu);
-        DebugBar::info($ilan->sozlesme_turu);
+        
         //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
         if($ilan->ilan_turu==1 && $ilan->sozlesme_turu==0){
             
@@ -1026,7 +1046,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             foreach($request->mal_miktar as $miktar){
                   $arrayMiktar[] = $miktar;
             }
-             DebugBar::info($request->mal_birim);
+            
             foreach($request->mal_birim as $birim){
                   $arrayBirim[] = $birim;
             }
@@ -1048,7 +1068,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
               }
         }
         else if($ilan->ilan_turu==2 && $ilan->sozlesme_turu==0){
-            DebugBar::info("burdayım");
+          
             
             foreach($request->hizmet_id as $hizmetId){
                   $arrayHizmetId[] = $hizmetId;
