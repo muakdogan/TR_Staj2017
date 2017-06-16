@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Puanlama;
 use App\Yorum;
 use DB;
-
 class Ilan extends Model
 {
   //

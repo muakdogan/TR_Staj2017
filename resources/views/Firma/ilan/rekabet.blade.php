@@ -24,6 +24,7 @@
                 @foreach($teklifler as $teklif)
                     <?php  $j++; ?>
                     @if(count($teklif->verilenFiyat()) != 0)
+                    <?php Debugbar::info($teklif->teklifler->verilenFiyat()); ?>
                         @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $teklif->teklifler->getFirma("id")) <!--Kazanan firma kontrolü -->
                             <tr  class="kismiKazanan">
                         @else
@@ -32,14 +33,15 @@
                         @if(session()->get('firma_id') == $teklif->teklifler->getFirma("id")) <!--Teklifi veren firma ise -->
                             <td class="highlight">{{$j}}</td>
                             <td class="highlight">{{$teklif->teklifler->getFirma("adi")}}:</td>
-                            <td class="highlight firmaFiyat" style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong> &#8378;</td>
+                            <td class="highlight firmaFiyat" style="text-align: right"><strong>{{$teklif->teklifler->verilenFiyat()}}</strong> &#8378;</td>
                             <td class="highlight"></td>
                         <?php $sessionF= session()->get('firma_id'); $sahibF=$ilan->firmalar->id; ?>
                         @elseif(session()->get('firma_id') == $ilan->firmalar->id) <!--İlan sahibi ise Kazananı belirlemek için -->
                             <?php $ilanSahibi= 1;?>
+                            <?php  $i++; ?>
                             <td>{{$j}}</td>
                             <td>{{$teklif->teklifler->getFirma("adi")}}</td>
-                            <td  style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong>
+                            <td style="text-align: right"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
                                 @if($ilan->para_birimleri->adi == "Türk Lirası")
                                     &#8378;
                                 @elseif($ilan->para_birimleri->adi == "Dolar")
@@ -52,15 +54,17 @@
                                 <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                             @else
                                 @if($kisKazanCount == 0)
-                                    <td><button name="{{$teklif->teklifler->getFirma("id")}}" id="{{$teklif->verilenFiyat()}}" style="float:right" type="button" class="btn btn-info KapaliKazanan">Kazanan</button></td>
+                                    <td><button name="{{$teklif->teklifler->getFirma("id")}}" id="{{$teklif->teklifler->verilenFiyat()}}" style="float:right" type="button" class="btn btn-info KapaliKazanan">Kazanan</button></td>
                                 @elseif($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $teklif->teklifler->getFirma("id"))
                                     <td>KAZANDI</td>
                                 @endif
                             @endif
                         @else  <!-- Diğer teklif veren firmalar -->
+                            <?php  $i++; ?>
                             <td>{{$j}}</td>
                             <td>X Firması</td>
-                            <td style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong>
+                            
+                            <td  style="text-align: right"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
                                 @if($ilan->para_birimleri->adi == "Türk Lirası")
                                     &#8378;
                                 @elseif($ilan->para_birimleri->adi == "Dolar")
@@ -93,7 +97,7 @@
             <tbody>
                 
                 @foreach($teklifler as $teklif)
-                   <?php Debugbar::info($teklif->verilenFiyat()); ?>
+                   <?php Debugbar::info($teklif->teklifler->verilenFiyat()); ?>
                         @if($teklif->teklifler->teklifMalCount($ilan)) <!-- Tüm kalemlere teklif verme kontrolü -->
                         <tr>
                             <?php  $j++; ?>
@@ -101,7 +105,7 @@
                                 @if(session()->get('firma_id') == $teklif->teklifler->getFirma("id"))
                                     <td class="highlight">{{$j}}</td>
                                     <td class="highlight">{{$teklif->teklifler->getFirma("adi")}}</td>
-                                    <td class="highlight" style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong>
+                                    <td class="highlight" style="text-align: right"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
                                         @if($ilan->para_birimleri->adi == "Türk Lirası")
                                             &#8378;
                                         @elseif($ilan->para_birimleri->adi == "Dolar")
@@ -113,10 +117,11 @@
                                     <td class="highlight"></td>
                                 <?php $sessionF= session()->get('firma_id'); $sahibF=$ilan->firmalar->id; ?>
                                 @elseif(session()->get('firma_id') == $ilan->firmalar->id)
+                                    <?php  $i++; ?>
                                     <?php $ilanSahibi= 1;?>
                                     <td>{{$j}}</td>
                                     <td>{{$teklif->teklifler->getFirma("adi")}}:</td>
-                                    <td  style="text-align: right"><strong>{{$teklif->verilenFiyat()}}</strong>
+                                    <td style="text-align: right"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
                                         @if($ilan->para_birimleri->adi == "Türk Lirası")
                                             &#8378;
                                         @elseif($ilan->para_birimleri->adi == "Dolar")
@@ -129,15 +134,16 @@
                                         <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
                                     @else
                                         @if($kisKazanCount == 0)
-                                            <td><button name="{{$teklif->teklifler->getFirma("id")}}" id="{{$teklif->verilenFiyat()}}" style="float:right" type="button" class="btn btn-info KapaliAcikRekabetKazanan">Kazanan</button></td>
+                                            <td><button name="{{$teklif->teklifler->getFirma("id")}}" id="{{$teklif->teklifler->verilenFiyat()}}" style="float:right" type="button" class="btn btn-info KapaliAcikRekabetKazanan">Kazanan</button></td>
                                         @elseif($kisKazanCount == 1)
                                             <td></td>
                                         @endif
                                     @endif
                                 @else
+                                    <?php  $i++; ?>
                                     <td>{{$j}}</td>
                                     <td>X Firması</td>
-                                    <td style="text-align: right"><strong> {{$teklif->verilenFiyat()}}</strong>
+                                    <td  style="text-align: right"><strong class="currency"> {{$teklif->teklifler->verilenFiyat()}}</strong>
                                         @if($ilan->para_birimleri->adi == "Türk Lirası")
                                             &#8378;
                                         @elseif($ilan->para_birimleri->adi == "Dolar")
@@ -156,17 +162,18 @@
                 <tr> <!--Minumum fiyat sorgusu -->
                     <td class="minFiyat">{{$j=$j+1}}</td>
                     <td class="minFiyat">Optimum Fiyat</td>
-                    <td class="minFiyat" style="text-align: right"><strong><?php foreach ($minFiyat as $fyt) { echo number_format($fyt->deneme, 2, '.', ''); } ?></strong> &#8378;</td>
+                    <td class="minFiyat" style="text-align: right"><strong class="currency"><?php foreach ($minFiyat as $fyt) { echo number_format($fyt->deneme, 2, '.', ''); } ?></strong> &#8378;</td>
                     <td class="minFiyat"></td>
                 </tr>
             </tbody>
         </table>
 @endif 
 <script>
+    
     var tcount ={{$tekliflerCount}};
     var i = {{$i}};
     var ilanSahibi = {{$ilanSahibi}};
-    if(tcount === i && ilanSahibi !== 1) { ///ilan sahibi teklif vermediyse hide edilmesi
+    if(tcount === i && ilanSahibi !== 1) { ///ilan sahibi değilse  ve teklif vermediyse hide edilmesi
         $('#3').hide();
         $('.kismiDiv').hide();
         $('.kismiRekabet').hide();

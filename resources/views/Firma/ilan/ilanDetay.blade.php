@@ -282,6 +282,68 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
      .test + .tooltip.bottom > .tooltip-arrow {
             border-bottom: 5px solid green;
      }
+     .eula-container {
+                        padding: 15px 20px;
+                        height: 250px;
+                        overflow: auto;
+                        border: 2px solid #ebebeb;
+                        color: #7B7B7B;
+                        font-size: 12pt;
+                        font-weight: 700;
+                        background-color: #fff;
+                        background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+                        background-image: -webkit-linear-gradient(top, rgba(231,231,231,0.55) 0%, rgba(255,255,255,0.63) 17%, #feffff 100%);
+                        background-image: linear-gradient(to bottom, rgba(231,231,231,0.55) 0%, rgba(255,255,255,0.63) 17%, #feffff 100%);
+                        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8ce7e7e7', endColorstr='#feffff',GradientType=0 );
+                        background-clip: border-box;
+                        border-radius: 4px;
+                 }
+     .info-box {
+       margin: 0 0 15px;
+     }
+     .box h3{
+        text-align:center;
+              position:relative;
+              top:80px;
+      }
+      .box {
+              width:100%;
+              height:200px;
+              background:#FFF;
+              margin:40px auto;
+      }
+      .effect8
+        {
+                position:relative;
+            -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+               -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+                    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+        }
+        .effect8:before, .effect8:after
+        {
+                content:"";
+            position:absolute;
+            z-index:-1;
+            -webkit-box-shadow:0 0 20px rgba(0,0,0,0.8);
+            -moz-box-shadow:0 0 20px rgba(0,0,0,0.8);
+            box-shadow:0 0 20px rgba(0,0,0,0.8);
+            top:10px;
+            bottom:10px;
+            left:0;
+            right:0;
+            -moz-border-radius:100px / 10px;
+            border-radius:100px / 10px;
+        }
+        .effect8:after
+        {
+                right:10px;
+            left:auto;
+            -webkit-transform:skew(8deg) rotate(3deg);
+               -moz-transform:skew(8deg) rotate(3deg);
+                -ms-transform:skew(8deg) rotate(3deg);
+                 -o-transform:skew(8deg) rotate(3deg);
+                    transform:skew(8deg) rotate(3deg);
+        }
 
 </style>
 <body>
@@ -377,17 +439,17 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
                         <div class="tab-pane" id="2">
                                 <h3>{{$firmaIlan->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
                                 <hr>
-                            @if(session()->get('firma_id') != $firmaIlan->id )
-                                @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
-                                       @include('Firma.ilan.malTeklif')
-                                @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)
-                                       @include('Firma.ilan.hizmetTeklif')
-                                @elseif($ilan->ilan_turu == 3)
-                                       @include('Firma.ilan.yapimIsiTeklif')
-                                @else
-                                       @include('Firma.ilan.goturuBedelTeklif')
-                                @endif
+                            
+                            @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
+                                   @include('Firma.ilan.malTeklif')
+                            @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)
+                                   @include('Firma.ilan.hizmetTeklif')
+                            @elseif($ilan->ilan_turu == 3)
+                                   @include('Firma.ilan.yapimIsiTeklif')
+                            @else
+                                   @include('Firma.ilan.goturuBedelTeklif')
                             @endif
+                            
                         </div>
                         <div class="tab-pane kismiRekabet" id="3">
                             @if($ilan->kismi_fiyat == 1)
@@ -440,10 +502,36 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
          </div>
         </div>
     </div>
+
     <br>
     <br>
     <hr>
-
+    <!-- Modal -->
+        <div class="modal fade" id="onaylamaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Onayla ve Gönder</h4>
+              </div>
+              <div class="modal-body">
+                    <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>Sözleşme-1</strong></h2>
+                    <div class="info-box eula-container ">
+                        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                    </div>
+                   
+              </div>
+              <input type="checkbox"  id='sozlesme_onay' name="sozlesme_onay" value="1"><strong>Sözleşmeyi Okudum, Onaylıyorum</strong>
+                                        
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary onaylamaButton">Okudum,Onaylıyorum</button>
+              </div>
+            </div>
+          </div>
+        </div>
 </body>
 <script src="{{asset('js/sortAnimation.js')}}"></script>
 <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
@@ -455,6 +543,17 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     var kdvsizToplamFiyat;
     var ilan_turu={{$ilan->ilan_turu}};
     var sozlesme_turu={{$ilan->sozlesme_turu}};
+    
+    Number.prototype.formatMoney = function(c, d, t){
+    var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "," : d, 
+        t = t == undefined ? "." : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
     $(function() {
     var updating = false;
     $("#toplamFiyatLabel").on('fnLabelChanged', function(){
@@ -510,12 +609,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
         var b = $.text([b]);
         var a = $.text([a]);
-
         var arrA = a.split(' ');
         var arrB = b.split(' ');
 
             a = arrA[0];
             b = arrB[0];
+            a = toFloat(a); a=parseFloat(a);
+            b = toFloat(b); b=parseFloat(b);
 
         if (isNumber(a) && isNumber(b)) {
             return parseInt(b) - parseInt(a);
@@ -605,7 +705,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         }
     }
 
-    // Do the work!
+   
 
     $('.kdv').on('input', function() {
         var kdv=parseFloat(this.value);
@@ -626,24 +726,25 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             if(isNaN(fiyat)) {
                 fiyat = 0;
             }
-            result=((fiyat+(fiyat*kdv)/100)*miktar).toFixed(2);
+            result=((fiyat+(fiyat*kdv)/100)*miktar);
             toplamFiyat += result;
-            $(this).parent().next().next().next().children().html(result);
+            $(this).parent().next().next().next().children().html(result.formatMoney(2));
             //alert($(this).parent().next().next().next().children().html(result));
             //alert($(this).parent().next().next().next().children().html(result.formatMoney(2)));
             toplamFiyat=0;
             $("span.kalem_toplam").each(function(){
-                var n = new Number($(this).html());
+                var n = toFloat($(this).html());
+                n=parseFloat(n);
                 toplamFiyat += n;
             });
             kdvsizToplamFiyat=0;
             var y = 0;
             $(".kdvsizFiyat").each(function(){
-                var n = new Number($(this).val());
+                var n = toFloat($(this).val());
                 if(n == 0){
                     y = 1
                 }
-                parseFloat(n);
+                n=parseFloat(n);
                 kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
             });
             
@@ -679,16 +780,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
         }
     });
-Number.prototype.formatMoney = function(c, d, t){
-var n = this, 
-    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-    d = d == undefined ? "," : d, 
-    t = t == undefined ? "." : t, 
-    s = n < 0 ? "-" : "", 
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-    j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
+     // Do the work!
+    $('.currency').each(function(){
+        //var n = new Number($(this).html());
+        var n1 = parseFloat($(this).html());
+        $(this).html(n1.formatMoney(2));
+    });
     $('.fiyat').on('input', function() {
         var fiyat = toFloat(this.value);
         if(isNaN(fiyat)) {
@@ -712,12 +809,13 @@ var n = this,
             if(isNaN(fiyat)) {
                 fiyat = 0;
             }
-            result=((fiyat+(fiyat*kdv)/100)*miktar).toFixed(2);
+            result=((fiyat+(fiyat*kdv)/100)*miktar);
             toplamFiyat += result;
-            $(this).parent().next().next().children().html(result);
+            $(this).parent().next().next().children().html(result.formatMoney(2));
             toplamFiyat=0;
             $("span.kalem_toplam").each(function(){
-                var n = new Number($(this).html());
+                var n = toFloat($(this).html());
+                n= parseFloat(n);
                 toplamFiyat += n;
             });
             
@@ -726,11 +824,12 @@ var n = this,
             $(".kdvsizFiyat").each(function(){
 
                 var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
-                var n = new Number($(this).val());
+                var n = toFloat($(this).val());
+                
                 if(n == 0){
                     y = 1
                 }
-                parseFloat(n);
+                n=parseFloat(n);
                 kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
             });
             if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
@@ -849,46 +948,59 @@ var n = this,
             }
         });
 
-        $("#teklifForm").submit(function(e)
+        $("#gonder").click(function(e)
         {
-            var postData = $(this).serialize();
-            var formURL = $(this).attr('action');
+            $("#onaylamaModal").modal("show");
+            var postData = $("#teklifForm").serialize();
+            var formURL = $("#teklifForm").attr('action');
             var ilan_id = {{$ilan->id}};
-            //console.log($(this).attr("url"));
-            $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
+            $(".onaylamaButton").click(function(e){
+                if($("#sozlesme_onay").is(':checked')){
+                    $("#onaylamaModal").modal("hide");
                     $.ajax(
+                    {
+                        beforeSend: function(){
+                            $('.ajax-loader').css("visibility", "visible");
+                        },
+                        url : formURL,
+                        type: "POST",
+                        data : postData,
+                        success:function(data, textStatus, jqXHR)
                         {
-                            url : "{{asset('rekabet')}}" +"/"+ ilan_id,
-                            type: "GET",
-                            success:function(data, textStatus, jqXHR)
-                            {
-                                $('.rekabet').html(data);
-                                $('.ajax-loader').css("visibility", "hidden");
-                            },
-                            error: function(jqXHR, textStatus, errorThrown)
-                            {
-                                alert(textStatus + "," + errorThrown);
-                                $('.ajax-loader').css("visibility", "hidden");
-                            }
-                        });
-                        e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                    $('.ajax-loader').css("visibility", "hidden");
+                            $.ajax(
+                                {
+                                    url : "{{asset('rekabet')}}" +"/"+ ilan_id,
+                                    type: "GET",
+                                    success:function(data, textStatus, jqXHR)
+                                    {
+                                        $('.rekabet').html(data);
+                                        $('.ajax-loader').css("visibility", "hidden");
+                                        $('.currency').each(function(){
+                                            //var n = new Number($(this).html());
+                                            var n1 = parseFloat($(this).html());
+                                            $(this).html(n1.formatMoney(2));
+                                        });
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown)
+                                    {
+                                        alert(textStatus + "," + errorThrown);
+                                        $('.ajax-loader').css("visibility", "hidden");
+                                    }
+                                });
+                                e.preventDefault();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown)
+                        {
+                            alert(textStatus + "," + errorThrown);
+                            $('.ajax-loader').css("visibility", "hidden");
+                        }
+                    });
+                    e.preventDefault(); //STOP default action
+                }
+                else{
+                    alert("Sözleşmeyi onaylayınız !");
                 }
             });
-            e.preventDefault(); //STOP default action
         });
     });
     function canselIskontoVal(){
