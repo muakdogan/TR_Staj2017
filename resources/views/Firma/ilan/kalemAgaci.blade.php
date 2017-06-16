@@ -3,14 +3,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title" id="myModalLabel">Kalem Ağacı</h4>
+                <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>Kalem Ağacı</strong></h4>
             </div>
             <div class="modal-body">
                    <div class="panel panel-default">
                           <input name="search" placeholder="Filter..." autocomplete="off">
                           <button id="btnResetSearch">&times;</button>
                           <span id="matches"></span>
-                          <div class="panel-body">
+                          <div class="panel-body ftree">
                               <div id="tree" class="panel-body fancytree-colorize-hover ">
                               </div>
                           </div>

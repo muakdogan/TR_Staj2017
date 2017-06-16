@@ -20,13 +20,13 @@
         <!--kalem agacı -->
          <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script src="//cdn.jsdelivr.net/jquery.ui-contextmenu/1/jquery.ui-contextmenu.min.js"></script>
-        <link href="{{asset('../resources/views/admin/skin-bootstrap/ui.fancytree.css')}}" rel="stylesheet" class="skinswitcher">
-        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.js')}}"></script>
-        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.glyph.js')}}"></script>
-        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.dnd.js')}}"></script>
-        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.edit.js')}}"></script>
-        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.filter.js')}}"></script>
-        <script src="{{asset('../resources/views/admin/js/jquery.fancytree.table.js')}}"></script>
+        <link href="{{asset('css/skin-bootstrap/ui.fancytree.css')}}" rel="stylesheet" class="skinswitcher">
+        <script src="{{asset('js/jquery.fancytree.js')}}"></script>
+        <script src="{{asset('js/jquery.fancytree.glyph.js')}}"></script>
+        <script src="{{asset('js/jquery.fancytree.dnd.js')}}"></script>
+        <script src="{{asset('js/jquery.fancytree.edit.js')}}"></script>
+        <script src="{{asset('js/jquery.fancytree.filter.js')}}"></script>
+        <script src="{{asset('js/jquery.fancytree.table.js')}}"></script>
         
         <style>
             .popup, .popup2, .bMulti {
@@ -266,6 +266,9 @@
                              -o-transform:skew(8deg) rotate(3deg);
                                 transform:skew(8deg) rotate(3deg);
                     }
+                  
+                  
+                   
         </style>
 
 </head>
@@ -297,7 +300,7 @@
                 <div style="width:1050px" class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <button type="button" class="close"data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             <h4 class="modal-title" id="myModalLabel"><img src="{{asset('images/arrow.png')}}">&nbsp;<strong>İlan Bilgileri</strong></h4>
 
                                 <ul  style="margin-bottom:0px;margin-top:0px" id="progressbar">
@@ -319,9 +322,9 @@
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
 
-                                                                 <input type="radio" class="filled-in firma_goster  required"  name="firma_adi_goster" value="1"  data-validation-error-msg="Lütfen birini seçiniz!" /> Göster
+                                                                <input type="radio" class="filled-in firma_goster  required"  name="firma_adi_goster" value="1"  data-validation-error-msg="Lütfen birini seçiniz!" ><label> Göster</label> </input>
                                                                  <input type="radio" data-toggle="tooltip" data-placement="bottom" title="İlanda firmaisminin gözükmemesi satıcı firma tarafında belirsizlikler yaratabilir!"
-                                                                        class="filled-in test firma_goster"  name="firma_adi_goster" value="0" data-validation-error-msg="Lütfen birini seçiniz!" /> Gizle
+                                                                        class="filled-in test firma_goster"  name="firma_adi_goster" value="0" data-validation-error-msg="Lütfen birini seçiniz!"><label>Gizle</label> </input>
 
                                                             </div>
                                                         </div>
@@ -378,7 +381,7 @@
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İş Tarih Aralığı</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class=" form-control  filled-in"  
+                                                                <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class="form-control filled-in"  
                                                                        data-toggle="tooltip" data-placement="bottom" title="İş Başlama - Bitiş Tarihleri"/>
                                                             </div>
                                                         </div>
@@ -554,7 +557,6 @@
                                                             <div class="col-sm-8">
                                                                 <select class="form-control required" name="ilce_id" id="ilce_id" >
                                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
-
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -562,12 +564,12 @@
                                                     </div>
                                                 </div>
                                         <div class="row">
-                                          <div class="col-sm-12">
+                                          <div class="col-sm-12" >
                                             <div class="form-group">
                                                 <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-1 control-label">Açıklama</label>
                                                 <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px" class=" col-sm-1 control-label">:</label>
-                                                <div class="col-sm-10">
-                                                    <textarea id="aciklama" name="aciklama" rows="5" class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
+                                                <div class="col-sm-10" >
+                                                    <textarea id="aciklama" name="aciklama" rows="5"  class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
                                                 </div>
                                             </div>
                                           </div>
@@ -687,7 +689,7 @@
                                                     <th>Miktar</th>
                                                     <th>Birim</th>
                                                     <th></th>
-
+                                                    
                                                 </tr>
                                                 <tr>
                                                     <td>{{$i}}</td>
@@ -763,7 +765,7 @@
                                                  </thead>
                                               </table>
                                             </div>
-                                        <input style="float:right" type="button" name="next" class="next action-button" value="İleri" />
+                                        <input style="float:right" type="button" name="next" class="next action-button next2"  value="İleri" />
                                         <input style="float:right" type="button" name="previous" class="previous action-button" value="Geri" />
                                         <input style="float:right" type="button" class="action-button" id="btn2" value="Kalem Ekle" />
 
@@ -772,7 +774,7 @@
                                         <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>ONAYLA VE GÖNDER</strong></h2>
                                         <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>Sözleşme-1</strong></h2>
                                         <div class="info-box eula-container ">
-
+                                            <h3>İlan Bilgileri</h3>
                                         </div>
                                         <input type="checkbox"  id='sozlesme_onay' name="sozlesme_onay" value="1"><strong>Sözleşmeyi Okudum Onaylıyorum</strong>
                                         {!! Form::submit('Onayla ve Gönder', array('id'=>'onayButton','style'=>'width:140px;float:right;font-size: 14px','class'=>'action-button')) !!}
@@ -789,11 +791,11 @@
            </div>
          <!--kalemler tree modalı -->
            @include('Firma.ilan.kalemAgaci')
-            <div id="mesaj" class="popup">
+            <!--div id="mesaj" class="popup">
                 <span class="button b-close"><span>X</span></span>
 
                 <h3>Lütfen Sözleşmeyi Okuyunuz ve Onaylayınız!</h3>
-            </div>
+            </div-->
     </div>
     <script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
     <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
@@ -802,10 +804,38 @@
     
 <script charset="utf-8">
 
+var findName;
+
+$(".next2").click(function(){
+    alert($( "input[type='radio']:checked").text());
+    $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$( "input[type='radio']:checked").next('label:first').html+'</li'); 
+    $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li'); 
+    $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li');
+    $(".info-box").append('<li style="list-style-type:circle">İlan Sektörü: '+$( "#firma_sektor option:selected" ).text()+'</li');
+    $(".info-box").append('<li style="list-style-type:circle">İlan Yayın-Kapanma Tarihi: '+$( "#ilan_tarihi_araligi option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">İş Süresi: '+$( "#isin_suresi option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">İş Başlama-Bitiş Tarihi: '+$( "#is_tarihi_araligi option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Teknik Şartname: '+$( "#teknik" ).val()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Katılımcılar: '+$( "#katilimcilar option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Rekabet Şekli: '+$( "#rekabet_sekli option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Sözleşme Türü: '+$( "#sozlesme_turu option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Fiyatlandırma Şekli: '+$( "#kismi_fiyat option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Yaklaşık Maliyet: '+$( "#yaklasik_maliyet option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Ödeme Türü: '+$("#odeme_turu option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Para Birimi: '+$("#para_birimi option:selected" ).text()+'</li');
+     $(".info-box").append('<li style="list-style-type:circle">Teslim Yeri: '+$( "#teslim_yeri option:selected" ).text()+'</li');
+});
+
 var firmaCount = 0;
 var sektor = 0;
 var multiselectCount=0;
 var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+
+$( ".box" ).click(function() {
+   $('#cke_1_contents').each(function(){
+       $('#cke_1_contents').css('height', '100px');
+   });
+});
 
 $(document).ready(function(){
    $('[data-toggle="tooltip"]').tooltip();
@@ -820,11 +850,72 @@ $(document).ready(function(){
     jQuery.validator.methods["date"] = function (value, element) { return true; } ;
 
  });
+var ilan_turu;
+var sozlesme_turu;
+
+$('#ilan_turu').on('change', function (e) {
+        ilan_turu = e.target.value;
+        getSektor(ilan_turu);
+        
+       
+});
+
+$('#sozlesme_turu').on('change', function (e) {
+             sozlesme_turu = e.target.value;  
+               if(sozlesme_turu=="1")
+                {
+                   $('.fiyatlandirma').hide();
+
+                }else if(sozlesme_turu=="0")
+                 {
+                    $('.fiyatlandirma').show();
+                 }
+ });
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 $(".next").click(function(){
+    
+    
+         if(ilan_turu=="1" && sozlesme_turu=="0")
+                {
+                   $('#mal').show();
+                   $('#hizmet').hide();
+                   $('#goturu').hide();
+                   $('#yapim').hide();
+
+                }
+             else if(ilan_turu=="2" && sozlesme_turu=="0")
+                {
+                    
+                   $('#hizmet').show();
+                   $('#mal').hide();
+                   $('#goturu').hide();
+                   $('#yapim').hide();
+                }
+             else if(sozlesme_turu=="1")
+                {
+                    
+                   $('#goturu').show();
+                   $('#hizmet').hide();
+                   $('#mal').hide();
+                   $('#yapim').hide();
+                   $('.fiyatlandirma').hide();
+
+                }
+            else if(ilan_turu=="3")
+                {
+                   $('#yapim').show();
+                   $('#hizmet').hide();
+                   $('#goturu').hide();
+                   $('#mal').hide();
+                }
+            else if(sozlesme_turu=="0")
+                 {
+                    $('.fiyatlandirma').show();
+                 }
+                 
     var form = $("#msform");
         form.validate({
                 errorElement: 'span',
@@ -853,10 +944,9 @@ $(".next").click(function(){
                 $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
                  next_fs.show();
                  current_fs.hide();
-
         }
-        
-        kalemAgaci();
+    
+       
 });
 $('.previous').click(function(){
         if($('#kalem').is(":visible")){
@@ -905,7 +995,6 @@ $("#yaklasik_maliyet").change(function(){
     var option = $('option:selected', this).attr('name');
     $('#maliyet').val(option);
 });
-
 $('#custom-headers').multiSelect({
   selectableHeader: "<p style='font-size:12px;color:red'>Tüm firmalar</p><input style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
   selectionHeader: "<p style='font-size:12px;color:red'>Onaylı Tedarikciler</p><input  style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
@@ -991,8 +1080,6 @@ $('#belirliIstek').multiSelect({
   }
 
 });
-
-
 var multiselectCount=0;
 var option;
 
@@ -1104,77 +1191,7 @@ $("#katilimcilar").change(function(){
     }
 });
 
-var ilan_turu;
-var sozlesme_turu;
 
-$('#ilan_turu').on('change', function (e) {
-        ilan_turu = e.target.value;
-        getSektor(ilan_turu);
-      
-        if(ilan_turu=="1" && sozlesme_turu=="0")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-
-                }
-             else if(ilan_turu=="2" && sozlesme_turu=="0")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="1")
-                {
-
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-
-                }
-            else if(ilan_turu=="3")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
-
-});
-
-$('#sozlesme_turu').on('change', function (e) {
-             sozlesme_turu = e.target.value;
-            
-             if(ilan_turu=="1" && sozlesme_turu=="0")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(ilan_turu=="2" && sozlesme_turu=="0")
-                {
-                   $('#mal').hide()
-                   $('#goturu').hide()
-                   $('#yapim').hide()
-                }
-             else if(sozlesme_turu=="1")
-                {
-                   $('#hizmet').hide()
-                   $('#mal').hide()
-                   $('#yapim').hide();
-                   $('.fiyatlandirma').hide();
-                }
-            else if(ilan_turu=="3")
-                {
-                   $('#hizmet').hide()
-                   $('#goturu').hide()
-                   $('#mal').hide()
-                }
-            else if(sozlesme_turu=="0")
-                {
-                   $('.fiyatlandirma').show();
-                }
-            else{}
- });
 $( "#teslim_yeri" ).change(function() {
         var teslim_yeri= $('#teslim_yeri').val();
         if(teslim_yeri=="Satıcı Firma"){
@@ -1216,7 +1233,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
 
     }
     else if(ilan_turu=="2" && sozlesme_turu=="0"){
-    $("#hizmet_table").append(['<tr>','<td>i</td>',
+    $("#hizmet_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control hizmet_show required" id="hizmet_kalem'+kalem_num+'" name="hizmet_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea  rows="1" id="hizmet_aciklama" name="hizmet_aciklama['+kalem_num+']" rows="5" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="hizmet_fiyat_standardi" name="hizmet_fiyat_standardi['+kalem_num+']" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
@@ -1226,7 +1243,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
             '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="hizmet_id['+kalem_num+']"  id="hizmet_id'+kalem_num+'" value=""></td>','</tr>'].join(''));
     }
     else if(sozlesme_turu=="1"){
-     $("#goturu_table").append(['<tr>','<td>i</td>',
+     $("#goturu_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem'+kalem_num+'" name="goturu_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea  rows="1" id="goturu_aciklama" name="goturu_aciklama['+kalem_num+']" rows="5" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
@@ -1235,7 +1252,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
 
     }
     else if(ilan_turu=="3"){
-      $("#yapim_table").append(['<tr>','<td>i</td>',
+      $("#yapim_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control yapim_show required" id="yapim_kalem'+kalem_num+'" name="yapim_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea  rows="1" id="yapim_aciklama" name="yapim_aciklama['+kalem_num+']" rows="5" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="yapim_fiyat_standardi" name="yapim_fiyat_standardi['+kalem_num+']" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
@@ -1269,21 +1286,25 @@ $('#yapim_table').on('click', '.sil', function(e) {
 });
 //kalem tree modaliını açma.
 $('#mal_table').on('click', '.mal_show', function(event) {
+     kalemAgaci();
   var input_id=event.target.id;
   $(".m_kalemAgaci #input_mal_id").val(input_id);
   $('.m_kalemAgaci').modal('show');
 });
 $('#hizmet_table').on('click', '.hizmet_show', function(event) {
+     kalemAgaci();
     var input_id=event.target.id;
     $(".m_kalemAgaci #input_hizmet_id").val(input_id);
     $('.m_kalemAgaci').modal('show');
 });
 $('#goturu_table').on('click', '.goturu_show', function(event) {
+     kalemAgaci();
     var input_id=event.target.id;
     $(".m_kalemAgaci #input_goturu_id").val(input_id);
     $('.m_kalemAgaci').modal('show');
 });
 $('#yapim_table').on('click', '.yapim_show', function(event) {
+     kalemAgaci();
     var input_id=event.target.id;
     $(".m_kalemAgaci #input_yapim_id").val(input_id);
     $('.m_kalemAgaci').modal('show');
@@ -1340,8 +1361,10 @@ glyph_opts = {
     loading: "glyphicon glyphicon-refresh glyphicon-spin"
   }
 };
-
 function kalemAgaci(){
+
+    $("#tree").remove();
+    $(".ftree").append('<div id="tree"></div>');
   // Initialize Fancytree
   $("#tree").fancytree({
     extensions: ["filter", "glyph"],
@@ -1373,14 +1396,18 @@ function kalemAgaci(){
     },
     lazyLoad: function(event, data){
 		var node = data.node;
+               
 		console.log(node.key);
+                
         data.result = {
 		  url: "{{asset('findChildrenTree')}}"+"/"+sektor,
+                  
         debugDelay: 1000,
                     data: {id: node.key},
                     dataType:'json',
           cache: false
         }
+        
       }
   });
   $(".fancytree-container").toggleClass("fancytree-connectors");
@@ -1441,12 +1468,12 @@ $("#tamamBtn").click(function(){
       var sel_key= $.map(kalem_id,function(node){
         var mal_kalem_id=$("#input_mal_id").val();
           $("#"+mal_kalem_id).val(node.title);
-        var id = mal_kalem_id.substring(9,mal_kalem_id.lenght);
+           var id = mal_kalem_id.substring(9,mal_kalem_id.lenght);
            $("#mal_id"+id).val(node.key);
          });
         $('.m_kalemAgaci').modal('hide');
         $("#tree").fancytree("getTree").visit(function(node){
-          node.setSelected(false);
+           node.setSelected(false);
         });
     }
     else if(ilan_turu==2 && sozlesme_turu==0){
