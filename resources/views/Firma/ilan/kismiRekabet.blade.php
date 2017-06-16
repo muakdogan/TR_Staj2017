@@ -81,7 +81,7 @@
                                                 <td class="highlight">
                                                     {{$malIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td class="highlight">
+                                                <td class="highlight currency">
                                                     {{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                             @elseif(session()->get('firma_id') == $ilan->firmalar->id)<!--İlan sahibi ise Kazananı belirlemek için -->
@@ -97,7 +97,7 @@
                                                 <td>
                                                     {{$malIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td>
+                                                <td class="currency">
                                                     {{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                                 
@@ -185,7 +185,7 @@
                                                 <td>
                                                     {{$malIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td>
+                                                <td class="currency">
                                                     {{number_format($malIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                             @endif    
@@ -274,7 +274,7 @@
                                                 <td class="highlight">
                                                     {{$hizmetIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td class="highlight">
+                                                <td class="highlight currency">
                                                     {{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                             @elseif(session()->get('firma_id') == $ilan->firmalar->id)<!--İlan sahibi ise Kazananı belirlemek için -->
@@ -290,7 +290,7 @@
                                                 <td>
                                                     {{$hizmetIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td>
+                                                <td class="currency">
                                                     {{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                                 @if($ilan->kapanma_tarihi > $dt)
@@ -376,7 +376,7 @@
                                                 <td>
                                                     {{$hizmetIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td>
+                                                <td class="currency">
                                                     {{number_format($hizmetIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                             @endif    
@@ -455,7 +455,7 @@
                                                 <td class="highlight">
                                                     {{$yapimIsiIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td class="highlight">
+                                                <td class="highlight currency">
                                                     {{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                             @elseif(session()->get('firma_id') == $ilan->firmalar->id)<!--İlan sahibi ise Kazananı belirlemek için -->
@@ -471,7 +471,7 @@
                                                 <td>
                                                     {{$yapimIsiIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td>
+                                                <td class="currency">
                                                     {{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                                 @if($ilan->kapanma_tarihi > $dt)
@@ -556,7 +556,7 @@
                                                 <td>
                                                     {{$yapimIsiIdTeklif->kdv_haric_fiyat}}
                                                 </td>
-                                                <td>
+                                                <td class="currency">
                                                     {{number_format($yapimIsiIdTeklif->kdv_dahil_fiyat,2,'.','')}} &#8378;
                                                 </td>
                                             @endif    
