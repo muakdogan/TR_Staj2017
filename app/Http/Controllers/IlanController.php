@@ -17,6 +17,10 @@ use Barryvdh\Debugbar\Facade as Debugbar;
 use Illuminate\Support\Str;
 class IlanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('firmaYetkili');
+    }
     //
     public function showIlan(){
         $dt = Carbon::now();
@@ -148,5 +152,31 @@ class IlanController extends Controller
                 ->with('firma',$firma)->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
                 ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)->with('davetEdildigimIlanlar',$davetEdildigimIlanlar);
     
+    }
+
+    public function ilanOlustur($id)
+    {
+        $firma = Firma::find($id);
+   
+        $ilan = new \App\Ilan();
+        //FIX: Gate'in burada include edilememesi? (laravel 5.4?)
+        /*if (Gate::denies('createIlan')) {
+            return redirect()->intended();
+        }*/
+
+        if (!$ilan)
+        
+        if (!$ilan->ilan_yapim_isleri)
+            $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+
+        $sektorler= \App\ Sektor::all();
+        $maliyetler=  \App\Maliyet::all();
+        $odeme_turleri= \App\OdemeTuru::all();
+        $para_birimleri= \App\ParaBirimi::all();
+        $iller = Il::all();
+        $birimler=  \App\Birim::all();
+
+        return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
+
     }
 }
