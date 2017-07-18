@@ -904,32 +904,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             ->with('birimler',$birimler)->with('teklifler',$teklifler);
   }]);
   
-  Route::get('/ilanOlustur/{id}',function ($id) {
-      $firma = Firma::find($id);
-   
-       $ilan = new App\Ilan();
-      if (Gate::denies('show', $firma)) {
-        return redirect()->intended();
-      }
-      /*if (Gate::denies('createIlan')) {
-        return redirect()->intended();
-      }*/
-
-       if (!$ilan)
-       
-       if (!$ilan->ilan_yapim_isleri)
-        $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
-
-      $sektorler= \App\ Sektor::all();
-      $maliyetler=  \App\Maliyet::all();
-      $odeme_turleri= \App\OdemeTuru::all();
-      $para_birimleri= \App\ParaBirimi::all();
-      $iller = Il::all();
-      $birimler=  \App\Birim::all();
-
-      return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
-
-    });
+  Route::get('/ilanOlustur/{id}', 'IlanController@ilanOlustur');
   
   Route::post('/ilanOlusturEkle/{id}', function (Request $request,$id) {
         //ilan bilgileri kaydediliyor.
