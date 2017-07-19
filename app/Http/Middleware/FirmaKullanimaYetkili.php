@@ -15,7 +15,7 @@ class FirmaKullanimaYetkili
      */
     public function handle($request, Closure $next)
     {
-        $firma = \App\Firma::find($request->id);
+        $firma = \App\Firma::find(session()->get('firma_id'));
 
         if ($firma->onay != '1')
         {
@@ -38,6 +38,7 @@ class FirmaKullanimaYetkili
             //return redirect('/');
         }*/
 
+        echo "<script>console.log( 'Yetki onaylandı' );</script>";
         return $next($request);
     }
 }
