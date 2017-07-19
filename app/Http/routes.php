@@ -235,13 +235,7 @@ Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
   $yorumlar->save();
   return view('admin.yorumList');
 });
-Route::get('/kullaniciIslemleri/{id}', function ($id) {
-  $firma = Firma::find($id);
-  $roller=  App\Rol::all();
-
-  return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
-
-});
+Route::get('/kullaniciIslemleri/{id}', 'KullaniciController@kullaniciIslemleri');
 Route::get('/kullaniciBilgileri/{id}', function ($id) {
   $firma = Firma::find($id);
   return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
