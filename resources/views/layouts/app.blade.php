@@ -20,6 +20,8 @@
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
+    @yield('head') <!-- ic sayfalardan head bolumune kod eklenmek istenirse -->
+
     <style>
      div#header{
       width: 100%;
@@ -29,7 +31,7 @@
       padding: 5px;
       z-index:1080;
     }
-   
+
     body.sticky div#header{
       position: fixed;
       top: 0;
@@ -50,20 +52,20 @@ window.requestAnimationFrame = window.requestAnimationFrame
     || window.webkitRequestAnimationFrame
     || window.msRequestAnimationFrame
     || function(f){return setTimeout(f, 1000/60)}
- 
- 
+
+
 ;(function($){ // enclose everything in a immediately invoked function to make all variables and functions local
- 
+
     var $body,
     $target,
     targetoffsetTop,
     resizetimer,
     stickyclass= 'sticky' //class to add to BODY when header should be sticky
-     
+
     function updateCoords(){
         targetoffsetTop = $target.offset().top
     }
-     
+
     function makesticky(){
         var scrollTop = $(document).scrollTop()
         if (scrollTop >= targetoffsetTop){
@@ -77,7 +79,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
             }
         }
     }
-     
+
     $(window).on('load', function(){
         $body = $(document.body)
         $target = $('#header')
@@ -94,12 +96,12 @@ window.requestAnimationFrame = window.requestAnimationFrame
             }, 50)
         })
     })
- 
+
 })(jQuery)
 </script>
 
 </head>
-<body id="app-layout">
+<body id="app-layout" @yield('bodyAttributes')>
 
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
         <div class="container">
@@ -127,8 +129,6 @@ window.requestAnimationFrame = window.requestAnimationFrame
                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
                     </li>
                    @else
-
-
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
                               $firmaId = session()->get('firma_id');
@@ -162,15 +162,10 @@ window.requestAnimationFrame = window.requestAnimationFrame
                 </ul>
                  <ul class="nav navbar-nav" style="padding-left: 30px" >
                     <li>
-
                         <a href="{{url('/ilanAra')}}">İLAN ARA</a>
-
                     </li>
-
-
                 </ul>
             </div>
-
         </div>
 
     </nav>
@@ -194,8 +189,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
             count = '{{$kullanici->firmalar()->count()}}';
             session_value = "{{$firmaAdi}}";
 
-                   selected='{{$kullanicifirma->id}}';
-                   funcLocations();
+            selected='{{$kullanicifirma->id}}';
+            funcLocations();
 
         @endif
     });
@@ -204,8 +199,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
         selected = $(this).attr('name');
         click=1;
         funcLocations();
-
     });
+
     function funcLocations(){
        if(click === 1){ //// sayfa her yüklendiğinde çalışmasın diye bu kontrol gerekli
            $.ajax({
@@ -219,11 +214,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
                 }).fail(function(){
                     alert('Yüklenemiyor !!!  ');
-                });
-
+           });
        }
     }
-
     </script>
 </body>
 </html>

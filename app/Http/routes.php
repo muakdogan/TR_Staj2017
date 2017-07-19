@@ -1487,7 +1487,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
 
              DB::beginTransaction();
               try {
-                $now = new Carbon();
+                $now = new Carbon();//tarih
 
                 $ilan=  Ilan::find($ilan_id);
                 $teklifExist = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan_id)->get();

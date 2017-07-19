@@ -1,4 +1,12 @@
 @extends('layouts.app')
+
+@section('head') <!-- Osman Kutlu - jQuery confirm icin gerekli -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+@endsection
+
+@section('bodyAttributes')onload="loadPage()"@endsection <!-- teklif girilirken textbox cursorunu dogru konumlandirmak icin gerekli -->
+
 @section('content')
     <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
     <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
@@ -212,7 +220,7 @@ textarea,input[type=text],input[type=datetime-local],input[type=time],select,lab
 {
   color: #000;
   border-width: 0px 0px 1px 0px;
-  border-radius: 8px;
+  border-radius: 0px;
   border:0px solid #ccc;
   outline: 0;
   resize: none;
@@ -346,7 +354,184 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         }
 
 </style>
-<body>
+
+
+<script>
+    function setCaretPosition(elemId, caretPos) {
+        var elem = document.getElementById(elemId);
+
+        if(elem != null) {
+            if(elem.createTextRange) {
+                var range = elem.createTextRange();
+                range.move('character', caretPos);
+                range.select();
+            }
+            else {
+                if(elem.selectionStart) {
+                    elem.focus();
+                    elem.setSelectionRange(caretPos, caretPos);
+                }
+                else
+                    elem.focus();
+            }
+        }
+    }
+
+    function ParaFormatLabel(miktar){
+        var num = miktar;
+        num = num.replace(/\./g, ',');
+        if (!num.includes(",")){
+            num+=",00";
+        }
+
+        x = num.split(',');
+        x1 = x[0];
+        if(x[1].length==1){
+            x[1]=x[1]+"0";
+        }
+        x2 = ","+x[1];
+        x2 = x2.substr(0, 3);
+        //sayı binlik bölümlere ayrılması için
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)){
+            x1 = x1.replace(rgx, '$1' + '.' + '$2');
+        }
+        num = x1+x2;
+
+        return num;
+    }
+
+    function ParaFormat(Num,event,elemId,miktarElemId) {
+
+        var evt = event.which;
+
+        if(Num.length<3){
+            Num="0,00";
+        }
+        if(!Num.includes(",")){
+            Num=Num.substr(0,Num.length-2)+","+Num.substr(Num.length-2,2);
+        }
+
+        Num = Num.replace(/\./g, '');
+
+        x = Num.split(',');
+
+        if(x[0].length==0){
+            x[0]="0";
+        }
+
+        //başlangıçtaki geçersiz 0 lar silinir
+        checkPosition = 0;
+        lengthA = x[0].length;
+        x[0] = String(parseInt(x[0]));
+        lengthB = x[0].length;
+        if (lengthA != lengthB) {
+            checkPosition = lengthA - lengthB;
+        }
+
+        x1 = x[0];
+        //virgülden sonrası kontrol edilir
+        if(x[1].length==1){
+            x[1]=x[1]+"0";
+        }
+        else if(x[1].length==0){
+            x[1]="00";
+        }
+
+        x2 = ","+x[1];
+        x2 = x2.substr(0, 3);
+
+        //double formatındaki input güncellenir
+        document.getElementById(miktarElemId).value= x[0];
+        document.getElementById(miktarElemId).value += '.' + x2.substr(1, 2);
+
+        //cursor position alınır
+        var ctl = document.getElementById(elemId);
+        var startPos = ctl.selectionStart;
+
+        //left     &    right  &   delete keyleri hariç girer
+        if(evt!= 39 & evt!= 37 & evt!=8 & startPos<=x1.length+x1.length/3 & x1.length%3==1){
+            startPos++;
+        }
+
+        //delete için cursor sola kaydırır
+        else if(evt==8 & x1.length%3==0 ){
+            if(!(startPos<=x1.length+x1.length/3 && startPos%3==0)){
+                startPos--;
+            }
+        }
+
+        //sayı binlik bölümlere ayrılması için
+        var rgx = /(\d+)(\d{3})/;
+
+        //sayıdaki "." lar koyulur
+        while (rgx.test(x1)){
+            x1 = x1.replace(rgx, '$1' + '.' + '$2');
+        }
+
+        //textbox göncellenir
+        document.getElementById(elemId).value = x1+x2;
+
+        //cursor güncellenir
+        startPos-=checkPosition;
+        setCaretPosition(elemId, startPos);
+
+    }
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function loadPage() {
+        //ilk clickte cursorun dogru yerde pozisyon almasi icin
+        function moveCaretToStart(el) {
+            if (typeof el.selectionStart == "number") {
+                el.selectionStart = el.selectionEnd = el.value.length-3;
+            } else if (typeof el.createTextRange != "undefined") {
+                el.focus();
+                var range = el.createTextRange();
+                range.collapse(true);
+                range.select();
+            }
+        }
+
+        <?php
+        $ilanlarr;
+
+        if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0){
+            //Mal Teklif
+            $ilanlarr=$ilan->ilan_mallar;
+        }
+        else if($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0){
+            //Hizmet Teklif
+            $ilanlarr=$ilan->ilan_hizmetler;
+        }
+        else if($ilan->ilan_turu == 3){
+            //Yapım isi Teklif
+            $ilanlarr=$ilan->ilan_yapim_isleri;
+        }
+        else{
+            //Goturu Bedel Teklif
+            $ilanlarr=$ilan->ilan_goturu_bedeller;
+        }
+        ?>
+
+        @for($i = 1; $i < count($ilanlarr)+1; $i++)
+        document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
+            moveCaretToStart(document.getElementById("visible_miktar#{{$i}}"));
+
+            // Work around Chrome's little problem
+            window.setTimeout(function() {
+                moveCaretToStart(document.getElementById("visible_miktar#{{$i}}"));
+            }, 1);
+        };
+        @endfor
+        //
+    }
+</script>
 
     <div class="container">
         <br>
@@ -358,7 +543,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         <div class="panel panel-warning">
             <div class="panel-heading"><h4><strong>{{$ilan->adi}}</strong> ilanı </h4></div>
             <div class="panel-body">
-                <div id="exTab2" class="col-lg-8">
+                <div id="exTab2" class="col-lg-9">
                     <ul class="nav nav-tabs">
                         <li class="active"><a  href="#1" data-toggle="tab">İlan Bilgileri</a>
                         </li>
@@ -459,7 +644,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="panel panel-warning" >
                         <div class="panel-heading">{{$ilan->firmalar->adi}} Profili</div>
                         <div class="panel-body">
@@ -543,22 +728,45 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     var kdvsizToplamFiyat;
     var ilan_turu={{$ilan->ilan_turu}};
     var sozlesme_turu={{$ilan->sozlesme_turu}};
-    
+
     Number.prototype.formatMoney = function(c, d, t){
-    var n = this, 
-        c = isNaN(c = Math.abs(c)) ? 2 : c, 
-        d = d == undefined ? "," : d, 
-        t = t == undefined ? "." : t, 
-        s = n < 0 ? "-" : "", 
-        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+    var n = this,
+        c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "," : d,
+        t = t == undefined ? "." : t,
+        s = n < 0 ? "-" : "",
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
         j = (j = i.length) > 3 ? j % 3 : 0;
        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
+
+    function TrToEnMoney(num){
+        /*
+         Osman Kutlu 13.07.2017
+         Turk binlik ve ondalık dilimleri float formatına çevirir
+         */
+        num = num.replace(/\./g, '');
+        num = num.replace(',', '\.');
+        x = num.split('\.');
+        if(x.length==2){
+            if(x[1].length>2){
+                x[1]=x[1].substr(0, 2);
+                num=x[0]+'\.'+x[1];
+            }
+            if(x[0].length==0){
+                num='0.'+x[1]
+            }
+        }
+        return parseFloat(num);
+    }
+
+
     $(function() {
     var updating = false;
     $("#toplamFiyatLabel").on('fnLabelChanged', function(){
         console.log('changed');
     });
+
     function voteClick(table) {
     		if (!updating) {
             updating = true;
@@ -705,8 +913,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         }
     }
 
-   
-
     $('.kdv').on('input', function() {
         var kdv=parseFloat(this.value);
         var result;
@@ -722,7 +928,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             }else{
 
             }
-            fiyat=parseFloat($(this).parent().next().children().val());
+            toplamFiyat=0;
+            fiyat=TrToEnMoney($(this).parent().next().children().val());
             if(isNaN(fiyat)) {
                 fiyat = 0;
             }
@@ -733,25 +940,28 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             //alert($(this).parent().next().next().next().children().html(result.formatMoney(2)));
             toplamFiyat=0;
             $("span.kalem_toplam").each(function(){
-                var n = toFloat($(this).html());
-                n=parseFloat(n);
+                var n = TrToEnMoney($(this).html());
                 toplamFiyat += n;
             });
             kdvsizToplamFiyat=0;
             var y = 0;
+            var count=0;
             $(".kdvsizFiyat").each(function(){
-                var n = toFloat($(this).val());
-                if(n == 0){
+                //Osman Kutlu 18.07.2017 KDV Haric Toplam Tutar'in dogru hesaplanması icin guncellendi
+                var miktar2=parseFloat($(this).parent().prev().prev().prev().text());
+                var n = TrToEnMoney($(this).val());
+                kdvsizToplamFiyat += (n*miktar2);
+
+                if(TrToEnMoney($(".kalem_toplam").eq(count).text()) == 0){
                     y = 1
                 }
-                n=parseFloat(n);
-                kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
+                count++;
             });
-            
             if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
                 $('#iskontoLabel').text(" İskonto Ver");
                 $('#iskonto').prop("type", "checkbox");
             }
+
             else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
                 $('#iskontoLabel').text("");
                 $('#iskonto').prop("type", "hidden");
@@ -763,6 +973,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
             }
             var parabirimi = "{{$ilan->para_birimleri->adi}}";
             var symbolP;
+            //alert(parabirimi);
             if(parabirimi.indexOf("Lirası") !== -1){
                 symbolP = String.fromCharCode(8378);
             }
@@ -787,11 +998,11 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         $(this).html(n1.formatMoney(2));
     });
     $('.fiyat').on('input', function() {
-        var fiyat = toFloat(this.value);
+
+        var fiyat = TrToEnMoney(this.value);
         if(isNaN(fiyat)) {
             fiyat = 0;
         }
-        $(this).val(fiyat.formatMoney(2));
         var result;
         if($(this).parent().prev().children().val() !== null)
         {
@@ -806,72 +1017,73 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
             }
             kdv=parseFloat($(this).parent().prev().children().val());
-            if(isNaN(fiyat)) {
-                fiyat = 0;
-            }
-            result=((fiyat+(fiyat*kdv)/100)*miktar);
-            toplamFiyat += result;
-            $(this).parent().next().next().children().html(result.formatMoney(2));
-            toplamFiyat=0;
-            $("span.kalem_toplam").each(function(){
-                var n = toFloat($(this).html());
-                n= parseFloat(n);
-                toplamFiyat += n;
-            });
-            
-            kdvsizToplamFiyat=0;
-            var y = 0;
-            $(".kdvsizFiyat").each(function(){
-
-                var miktarI = parseFloat($(this).parent().prev().prev().prev().text());
-                var n = toFloat($(this).val());
-                
-                if(n == 0){
-                    y = 1
+            if(kdv!=-1){//KDV secilmediyse islem yapmamasi icin
+                if(isNaN(fiyat)) {
+                    fiyat = 0;
                 }
-                n=parseFloat(n);
-                kdvsizToplamFiyat += ((n.toFixed(2))*miktar);
-            });
-            if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
-                $('#iskontoLabel').text(" İskonto Ver");
-                $('#iskonto').prop("type", "checkbox");
+                result=((fiyat+(fiyat*kdv)/100)*miktar);
+                toplamFiyat += result;
+                $(this).parent().next().next().children().html(result.formatMoney(2));
+                toplamFiyat=0;
+                $("span.kalem_toplam").each(function(){
+                    var n = TrToEnMoney($(this).html());
+                    n = parseFloat(n);
+                    toplamFiyat += n;
+                });
+
+                kdvsizToplamFiyat=0;
+                var y = 0;
+                var count=0;
+                $(".kdvsizFiyat").each(function(){
+                    //Osman Kutlu 18.07.2017 KDV Haric Toplam Tutar'in dogru hesaplanması icin guncellendi
+                    var miktar2 = parseFloat($(this).parent().prev().prev().prev().text());
+                    var n = TrToEnMoney($(this).val());
+                    kdvsizToplamFiyat += ((n.toFixed(2))*miktar2);
+                    if(TrToEnMoney($(".kalem_toplam").eq(count).text()) == 0){
+                        y = 1
+                    }
+                    count++;
+                });
+                if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
+                    $('#iskontoLabel').text(" İskonto Ver");
+                    $('#iskonto').prop("type", "checkbox");
+                }
+                else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
+                    $('#iskontoLabel').text("");
+                    $('#iskonto').prop("type", "hidden");
+                    $('#iskonto').attr('checked', false);
+                    canselIskontoVal();
+                }
+                if($('#iskonto').is(":checked")) {
+                    $('#iskontoVal').trigger('input');
+                }
+                var parabirimi = "{{$ilan->para_birimleri->adi}}";
+                var symbolP;
+                if(parabirimi.indexOf("Lirası") !== -1){
+                    symbolP = String.fromCharCode(8378);
+                }
+                else if(parabirimi === "Dolar"){
+                    symbolP= String.fromCharCode(36);
+                }
+                else{
+                    symbolP= String.fromCharCode(8364);
+                }
+                $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.formatMoney(2)+" "+symbolP);
+                $(".firmaFiyat").html("<strong>"+toplamFiyat.formatMoney(2)+"</strong>"+" "+symbolP);
+
+                voteClick($('#table'));
+                $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.formatMoney(2)+" "+symbolP);
+                $("#toplamFiyat").val(toplamFiyat.toFixed(2));
+                $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
             }
-            else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
-                $('#iskontoLabel').text("");
-                $('#iskonto').prop("type", "hidden");
-                $('#iskonto').attr('checked', false);
-                canselIskontoVal();
-            }
-            if($('#iskonto').is(":checked")) {
-                $('#iskontoVal').trigger('input');
-            }
-            var parabirimi = "{{$ilan->para_birimleri->adi}}";
-            var symbolP;
-            if(parabirimi.indexOf("Lirası") !== -1){
-                symbolP = String.fromCharCode(8378);
-            }
-            else if(parabirimi === "Dolar"){
-                symbolP= String.fromCharCode(36);
-            }
-            else{
-                symbolP= String.fromCharCode(8364);
-            }
-            $("#toplamFiyatLabel").text("KDV Dahil Toplam Fiyat: " + toplamFiyat.formatMoney(2)+" "+symbolP);
-            $(".firmaFiyat").html("<strong>"+toplamFiyat.formatMoney(2)+"</strong>"+" "+symbolP);
-            
-            voteClick($('#table'));
-            $("#toplamFiyatL").text("KDV Hariç Toplam Fiyat: "+kdvsizToplamFiyat.formatMoney(2)+" "+symbolP);
-            $("#toplamFiyat").val(toplamFiyat.toFixed(2));
-            $("#toplamFiyatKdvsiz").val(kdvsizToplamFiyat.toFixed(2));
-        }
-    });
+        }});
 
 });
     function toFloat(inputVal){
         var Strfiyat = String(inputVal);
         Strfiyat = Strfiyat.replace('.','');
         Strfiyat = Strfiyat.replace(',','.');
-        return parseFloat(Strfiyat);    
+        return parseFloat(Strfiyat);
     }
 
     $('#iskontoVal').on('input',function(){
@@ -880,12 +1092,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
         if(isNaN(iskontoOrani)) {
             iskontoOrani = 0;
         }
-       
+
         var iskontoluToplamFiyatKdvsiz = kdvsizToplamFiyat.toFixed(2)- (kdvsizToplamFiyat.toFixed(2)* iskontoOrani)/100;
         var iskontoluToplamFiyatKdvli = toplamFiyat.toFixed(2)- (toplamFiyat.toFixed(2)* iskontoOrani)/100;
-       
-        $("#iskontoluToplamFiyatLabel").text("İskontolu KDV Dahil Toplam Fiyat: " + iskontoluToplamFiyatKdvli.toFixed(2));
-        $("#iskontoluToplamFiyatL").text("İskontolu KDV Hariç Toplam Fiyat: "+iskontoluToplamFiyatKdvsiz.toFixed(2));
+
+        $("#iskontoluToplamFiyatLabel").text("İskontolu KDV Dahil Toplam Fiyat: " + iskontoluToplamFiyatKdvli.formatMoney(2));
+        $("#iskontoluToplamFiyatL").text("İskontolu KDV Hariç Toplam Fiyat: "+iskontoluToplamFiyatKdvsiz.formatMoney(2));
         $("#iskontoluToplamFiyatKdvli").val(iskontoluToplamFiyatKdvli.toFixed(2));
         $("#iskontoluToplamFiyatKdvsiz").val(iskontoluToplamFiyatKdvsiz.toFixed(2));
     });
@@ -950,57 +1162,141 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
         $("#gonder").click(function(e)
         {
-            $("#onaylamaModal").modal("show");
-            var postData = $("#teklifForm").serialize();
-            var formURL = $("#teklifForm").attr('action');
-            var ilan_id = {{$ilan->id}};
-            $(".onaylamaButton").click(function(e){
-                if($("#sozlesme_onay").is(':checked')){
-                    $("#onaylamaModal").modal("hide");
-                    $.ajax(
-                    {
-                        beforeSend: function(){
-                            $('.ajax-loader').css("visibility", "visible");
-                        },
-                        url : formURL,
-                        type: "POST",
-                        data : postData,
-                        success:function(data, textStatus, jqXHR)
-                        {
-                            $.ajax(
-                                {
-                                    url : "{{asset('rekabet')}}" +"/"+ ilan_id,
-                                    type: "GET",
-                                    success:function(data, textStatus, jqXHR)
-                                    {
-                                        $('.rekabet').html(data);
-                                        $('.ajax-loader').css("visibility", "hidden");
-                                        $('.currency').each(function(){
-                                            //var n = new Number($(this).html());
-                                            var n1 = parseFloat($(this).html());
-                                            $(this).html(n1.formatMoney(2));
-                                        });
-                                    },
-                                    error: function(jqXHR, textStatus, errorThrown)
-                                    {
-                                        alert(textStatus + "," + errorThrown);
-                                        $('.ajax-loader').css("visibility", "hidden");
-                                    }
-                                });
-                                e.preventDefault();
-                        },
-                        error: function(jqXHR, textStatus, errorThrown)
-                        {
-                            alert(textStatus + "," + errorThrown);
-                            $('.ajax-loader').css("visibility", "hidden");
-                        }
+            var isValid = 1;
+
+            if({{$ilan->kismi_fiyat}} == 0){
+                $(".kalem_toplam").each(function(){
+                    var kalem_toplam = TrToEnMoney($(this).text());
+                    if(kalem_toplam==0){
+                        isValid=0;
+                        return false;
+                    }
+                });
+                if(!isValid){
+                    $.alert({
+                        title: 'Hata!',
+                        content: "Tüm kalemlere 0'dan büyük teklif verilmeli ve KDV'ler seçilmeli!",
                     });
-                    e.preventDefault(); //STOP default action
                 }
-                else{
-                    alert("Sözleşmeyi onaylayınız !");
+            }
+            else{
+                //KISMI FIYAT TEKLIF ACIK
+                var count = 0;//tablodaki ilgili alanlara direk ulasmak için tutulur
+                var teklifBool=0;//hic teklif verilmis mi?
+                $(".kdvsizFiyat").each(function(){
+                    var kdv=$(".kdv").eq(count).val();
+                    var kdvsizFiyat = TrToEnMoney($(this).val());
+                    if(kdv!=-1 && kdvsizFiyat==0){
+                        isValid=0;
+                        $.confirm({
+                            title: 'Hata! - Kalem Sıra: '+ (count+1),
+                            content: 'KDV seçilmişse fiyat girilmek zorunda!',
+                            buttons: {
+                                confirm: {
+                                    text: 'KDV iptal',
+                                    action:function () {
+                                    $.alert('KDV İptal Edildi!');
+                                    $(".kdv").eq(count).val(-1);
+                                }},
+                                cancel:{
+                                    text: 'Teklif Vereceğim',
+                                }
+                            }
+                        });
+                        return false;
+                    }
+
+                    else if(kdv== -1 && kdvsizFiyat>0){
+                        isValid=0;
+                        $.confirm({
+                            title: 'Hata! - Kalem Sıra: '+ (count+1),
+                            content: 'Teklif verilen kalemlerin KDV si seçilmek zorunda!',
+                            buttons: {
+                                confirm: {
+                                    text: 'Teklif İptal',
+                                    action:function () {
+                                        $.alert('Teklif İptal Edildi!');
+                                        $(".kdvsizFiyat").eq(count).val('0,00');
+                                    }},
+                                cancel:{
+                                    text: 'KDV Seç',
+                                }
+                            }
+                        });
+                        return false;
+                    }
+                    else if(kdv!=-1 && kdvsizFiyat>0){
+                        teklifBool=1;
+                    }
+                    count++;
+                });
+
+                if(!teklifBool && isValid){
+                    isValid=0;
+                    $.alert({
+                        title: 'Hata!',
+                        content: 'En az bir kaleme teklif vermelisin!',
+                    });
                 }
-            });
+            }
+
+
+
+            if(isValid){
+
+                $("#onaylamaModal").modal("show");
+                var postData = $("#teklifForm").serialize();
+                var formURL = $("#teklifForm").attr('action');
+                var ilan_id = {{$ilan->id}};
+                $(".onaylamaButton").click(function(e){
+                    if($("#sozlesme_onay").is(':checked')){
+                        $("#onaylamaModal").modal("hide");
+                        $.ajax(
+                            {
+                                beforeSend: function(){
+                                    $('.ajax-loader').css("visibility", "visible");
+                                },
+                                url : formURL,
+                                type: "POST",
+                                data : postData,
+                                success:function(data, textStatus, jqXHR)
+                                {
+                                    $.ajax(
+                                        {
+                                            url : "{{asset('rekabet')}}" +"/"+ ilan_id,
+                                            type: "GET",
+                                            success:function(data, textStatus, jqXHR)
+                                            {
+                                                $('.rekabet').html(data);
+                                                $('.ajax-loader').css("visibility", "hidden");
+                                                $('.currency').each(function(){
+                                                    //var n = new Number($(this).html());
+                                                    var n1 = parseFloat($(this).html());
+                                                    $(this).html(n1.formatMoney(2));
+                                                });
+                                            },
+                                            error: function(jqXHR, textStatus, errorThrown)
+                                            {
+                                                alert(textStatus + "," + errorThrown);
+                                                $('.ajax-loader').css("visibility", "hidden");
+                                            }
+                                        });
+                                    e.preventDefault();
+                                },
+                                error: function(jqXHR, textStatus, errorThrown)
+                                {
+                                    alert(textStatus + "," + errorThrown);
+                                    $('.ajax-loader').css("visibility", "hidden");
+                                }
+                            });
+                        e.preventDefault(); //STOP default action
+                    }
+                    else{
+                        alert("Sözleşmeyi onaylayınız !");
+                    }
+                });
+
+            }
         });
     });
     function canselIskontoVal(){

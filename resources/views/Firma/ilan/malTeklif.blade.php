@@ -1,5 +1,4 @@
-<?php use Barryvdh\Debugbar\Facade as Debugbar; ?>
-
+<?php use Barryvdh\Debugbar\Facade as Debugbar;//debug yapmak için gerekli ?>
 <div id="mal">
     <h4>Fiyat İstenen Kalemler Listesi</h4>
     {{ Form::open(array('id'=>'teklifForm','url'=>'teklifGonder/'.$firma_id .'/'.$ilan->id.'/'.Auth::user()->id)) }}  
@@ -18,7 +17,7 @@
                         <th width="12%">KDV Oranı:</th>
                         <th width="14%">Birim Fiyat:</th>
                         <th width="1%"></th><!--Fiyat hesaplaması için gerekli -->
-                        <th width="11%">Toplam:({{$firma->ilanlar->para_birimleri->adi}})</th>
+                        <th width="11%">Toplam:<br />({{$ilan->para_birimleri->adi}})</th>
                     @endif    
 
                 </tr>
@@ -80,19 +79,15 @@
                            </select>
                         </td>
                         <td>
-                            @if($ilan->kismi_fiyat == 0)
-                                @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                    <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}"  required>
-                                @else
-                                    <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0" required>
-                                @endif
+                            @if(count($teklif)!=0 && count($malTeklif) != 0)
+                                <?php $eskiTeklif=number_format($malTeklif[0]['kdv_haric_fiyat'], 2, ',', '.'); ?>
+                                <input id="visible_miktar#{{$i-1}}" style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" onkeyup="ParaFormat(this.value,event, 'visible_miktar#{{$i-1}}','miktar#{{$i-1}}') " value="{{$eskiTeklif}}" onkeypress="return isNumberKey(event)">
+                                <input id="miktar#{{$i-1}}" type="hidden" name="birim_fiyat[]" value="{{$malTeklif[0]['kdv_haric_fiyat']}}" />
+                                <label class="control-label toplam">Eski Teklif: {{$eskiTeklif}}</label>
                             @else
-                                @if(count($teklif)!=0 && count($malTeklif) != 0)
-                                    <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="{{$malTeklif[0]['kdv_haric_fiyat']}}">
-                                @else
-                                    <input style="margin-top: 0px" align="right"  type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
-                                @endif
-                            @endif    
+                                <input id="visible_miktar#{{$i-1}}" style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" value="0,00" onkeyup="ParaFormat(this.value,event, 'visible_miktar#{{$i-1}}','miktar#{{$i-1}}') " onkeypress="return isNumberKey(event)">
+                                <input id="miktar#{{$i-1}}" type="hidden" name="birim_fiyat[]" value="0" />
+                            @endif
                         </td>
                         <td>
 
@@ -105,6 +100,7 @@
                         <input type="hidden" name="ilan_mal_id[]"  id="ilan_mal_id" value="{{$ilan_mal->id}}"> 
                 @endif
                 </tr>
+
                 @endforeach
                 @if(session()->get('firma_id') != $ilan->firmalar->id) <!-- ilan sahibi ise teklif vermemesi için bu butonların kaldırıyorum. -->
                     <tr>

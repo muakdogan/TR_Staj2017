@@ -135,8 +135,9 @@ class Ilan extends Model
   {
     if($this->goster == 0)
       return 'Firma Adı Gizli';
-    else
-      return session()->get('firma_adi');
+    else{
+        return Firma::find($this->firma_id)->adi;
+    }
   }
   public function getKalem ($kalem_id){
         if($this->ilan_turu == 1 && $this->sozlesme_turu == 0){
