@@ -162,9 +162,13 @@ class IlanController extends Controller
         $firma = Firma::find($firma_id);
    
         $ilan = new \App\Ilan();
-        if (Gate::denies('createIlan')) {
+
+        //redirect olunca ne olduğu anlaşılmadığı için şimdilik 403 veren bu satır var
+        $this->authorize('createIlan', $ilan);
+
+        /*if (Gate::denies('createIlan', $ilan)) {
             return redirect()->intended();
-        }
+        }*/
 
         if (!$ilan)
         
