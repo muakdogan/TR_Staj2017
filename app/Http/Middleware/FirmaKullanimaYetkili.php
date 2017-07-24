@@ -27,16 +27,22 @@ class FirmaKullanimaYetkili
 
         //date fonksiyonları PHP 5 gerektiriyor.
 
-        //TODO: uyelikBitisTarihi adını güncelle
-        //$uyelikBitis = date_create($firma->uyelikBitisTarihi);//firmanın üyelik bitiş tarihini php date nesnesine al
+        $uyelikBitis = date_create($firma->uyelik_bitis_tarihi);//firmanın üyelik bitiş tarihini php date nesnesine al
 
-        /*if ($uyelikBitis < date_create(NULL))
+        //echo "'<script>console.log('bitiş tarihi:'); console.log( \"$firma->uyelik_bitis_tarihi\" );</script>'";
+
+        if ($firma->uyelik_bitis_tarihi != NULL && $uyelikBitis < date_create(NULL))
         {
             abort(403, 'Forbidden');
             //echo "Üyeliğiniz sona ermiştir.";
 
             //return redirect('/');
-        }*/
+        }
+
+        else if ($firma->uyelik_bitis_tarihi == NULL)
+        {
+            echo "'<script>console.log(\"Üyelik bitiş tarihi NULL.\")</script>'";
+        }
 
         echo "<script>console.log( 'Yetki onaylandı' );</script>";
         return $next($request);
