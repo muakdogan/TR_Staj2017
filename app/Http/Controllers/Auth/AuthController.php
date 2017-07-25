@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Factories\ActivationFactory;
 use App\Kullanici;
 use Validator;
 use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 //use Auth;
@@ -37,6 +41,7 @@ class AuthController extends Controller
 
             //protected $redirectTo = '/';
 
+    protected $activationFactory;
 
     protected function authenticated(Request $request, Kullanici $user)
     {
@@ -49,6 +54,13 @@ class AuthController extends Controller
         $request->session()->put('firma_adi', $user->firmalar()->first()->adi);
         $role_id = $user->get_role_id($firma_id);
         $request->session()->put('role_id', $user->get_role_id($firma_id));
+
+        //Kullanıcının onayli field'ına bak, onaylı değilse login'e izin verme
+        if (!$user->onayli) {
+            $this->activationFactory->sendActivationMail($user);
+            auth()->logout();
+            return back()->with('activationWarning', true);
+        }
         
         return redirect()->intended($this->redirectPath());
     }
@@ -65,9 +77,11 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ActivationFactory $activationFactory)
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        
+        $this->activationFactory = $activationFactory;
     }
 
     /**
@@ -104,6 +118,76 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
+
+    }
+
+    public function activateUser($token)
+    {
+        if ($user = $this->activationFactory->activateUser($token)) {
+            auth()->login($user);
+            return redirect($this->redirectPath());
+        }
+        abort(404);
+    }
+
+    public function kayitForm(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $firma= new \App\Firma();
+
+            $firma->adi= Str::title(strtolower($request->firma_adi));
+            $now = new \DateTime();
+            $firma->olusturmaTarihi=$now;
+            $firma->save();
+
+            $iletisim = $firma->iletisim_bilgileri ?: new \App\IletisimBilgisi();
+            $iletisim->telefon = $request->telefon;
+            $iletisim->email = $request->email;
+            $firma->iletisim_bilgileri()->save($iletisim);
+
+            $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  \App\Adres();
+            $adres->il_id = $request->il_id;
+            $adres->ilce_id = $request->ilce_id;
+            $adres->semt_id = $request->semt_id;
+            $adres->adres =Str::title(strtolower( $request->adres));
+            $tur = 1;
+            $adres->tur_id = $tur;
+            $firma->adresler()->save($adres);
+
+            $firma->sektorler()->attach($request->sektor_id);
+
+            $kullanici= new \App\Kullanici();
+            $kullanici->adi = Str::title(strtolower($request->adi));
+            $kullanici->soyadi = Str::title(strtolower( $request->soyadi));
+            $kullanici->email = $request->email_giris;
+            $kullanici->password = Hash::make( $request->password);
+            $kullanici->telefon = $request->telefonkisisel;
+            $kullanici->save();
+
+            $firma->kullanicilar()->attach($kullanici,['rol_id'=>1, 'unvan'=>Str::title(strtolower($request->unvan))]);
+
+            /*$data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
+
+            Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request)
+            {
+
+            $message->to($request->email, $data['ad'])
+            ->subject('YENİ KAYIT OLMA İSTEĞİ!');
+
+            });*/
+
+            $this->activationFactory->sendActivationMail($kullanici);
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+
+        }
 
     }
 }
