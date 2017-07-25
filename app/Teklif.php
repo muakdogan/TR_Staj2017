@@ -50,7 +50,7 @@ class Teklif extends Model
         }
     }
     public function verilenFiyat(){
-        $verilenFiyat = $this->teklif_hareketler()->orderBy('id','desc')->limit(1)->get();
+        $verilenFiyat = $this->teklif_hareketler()->orderBy('id','desc')->limit(1)->get(); // Teklif hareketler tablosunda grouplama yaptığım için en güncel kayıt gelmesi için .Özge
         return number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','');
     }
     public function getTeklifMallar(){
