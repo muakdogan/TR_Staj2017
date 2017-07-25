@@ -553,64 +553,7 @@ Route::post('/getIlan',function () {
   return Response::json($querys);
 });
 
-Route::post('/form', function (Request $request) {
-  DB::beginTransaction();
-
-  try {
-    $firma= new Firma();
-
-    $firma->adi=Str::title(strtolower($request->firma_adi));
-    $now = new \DateTime();
-    $firma->olusturmaTarihi=$now;
-    $firma->save();
-
-    $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
-    $iletisim->telefon = $request->telefon;
-    $iletisim->email = $request->email;
-    $firma->iletisim_bilgileri()->save($iletisim);
-
-    $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
-    $adres->il_id = $request->il_id;
-    $adres->ilce_id = $request->ilce_id;
-    $adres->semt_id = $request->semt_id;
-    $adres->adres =Str::title(strtolower( $request->adres));
-    $tur = 1;
-    $adres->tur_id = $tur;
-    $firma->adresler()->save($adres);
-
-    $firma->sektorler()->attach($request->sektor_id);
-
-    $kullanici= new App\Kullanici();
-    $kullanici->adi = Str::title(strtolower($request->adi));
-    $kullanici->soyadi =Str::title(strtolower( $request->soyadi));
-    $kullanici->email = $request->email_giris;
-    $kullanici->password =Hash::make( $request->password);
-    $kullanici->telefon = $request->telefonkisisel;
-    $kullanici->save();
-
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>1, 'unvan'=>Str::title(strtolower($request->unvan))]);
-
-    $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
-
-    Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request)
-    {
-
-      $message->to($request->email, $data['ad'])
-      ->subject('YENİ KAYIT OLMA İSTEĞİ!');
-
-    });
-    DB::commit();
-    // all good
-  } catch (\Exception $e) {
-    $error="error";
-    DB::rollback();
-    return Response::json($error);
-
-  }
-
-
-
-});
+Route::post('/form', 'Auth\AuthController@kayitForm');
 
 Route::post('/yeniFirma/{id}', function (Request $request,$id) {
 
@@ -1314,3 +1257,5 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             });
 
             Route::auth();
+
+Route::get('kullanici/onay/{token}', 'Auth\AuthController@activateUser')->name('kullanici.onay');
