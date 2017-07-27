@@ -55,7 +55,7 @@ class AdminController extends Controller
             break;
 
             case 1://ödemesiz
-            $firma->uyelik_bitis_tarihi = Input::get('uyelik_bitis_tarihi');
+            $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('uyelik_bitis_suresi')+"M"));//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
             $firma->onay = 1;
             $firma->save();
             
@@ -69,18 +69,20 @@ class AdminController extends Controller
             $odeme->firma_id = $firma->id;
             $odeme->sistem_kullanici_id = session()->get('admin_id');
             $odeme->miktar = Input::get('miktar');
-            /*SMALLINT*/$odeme->sure = Input::get('sure');
-            /*SMALLINT*/$odeme->gecerlilik_sure = Input::get('gecerlilik_sure');
+            /*ay türünden*/$odeme->sure = Input::get('sure');
+            /*ay türünden*/$odeme->gecerlilik_sure = Input::get('gecerlilik_sure');
             $odeme->kullanici_id = $kullanici->id;
             $odeme->save();
 
-            $firma->uyelik_bitis_tarihi = Input::get('sure');
+            $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('sure')+"M"));//şu ana sure field'ını ay olarak ekle
+            $teklifBitisTarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('gecerlilik_sure')+"M"));//şu ana gecerlilik_sure field'ını ay olarak ekle
+
             $firma->onay = 1;
             $firma->save();
 
             $subject = "Firmanız Onaylandı";
             $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
-            $odeme->miktar karşılığında, son ödeme tarihi $odeme->gecerlilik_sure olmak üzere
+            $odeme->miktar karşılığında, son ödeme tarihi $teklifBitisTarihi olmak üzere
             $firma->uyelik_bitis_tarihi tarihine kadar onaylanmıştır.";
             break;
 
