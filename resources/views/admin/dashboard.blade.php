@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ url('/firmaList')}}">
+                            <a href="{{ url('/admin/firmaList')}}">
                                 <div class="panel-footer">
                                     <span class="pull-left">Firmaları Onaylayın</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ url('/yorumList')}}">
+                            <a href="{{ url('/admin/yorumList')}}">
                                 <div class="panel-footer">
                                     <span class="pull-left">Yorumları Onaylayın</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
