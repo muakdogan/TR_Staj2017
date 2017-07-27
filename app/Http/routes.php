@@ -52,12 +52,13 @@ Route::group(['middleware' => ['web']], function () {
   Route::post('admin/password/email','AdminAuth\PasswordController@sendResetLinkEmail');
   Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
   Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
-  Route::get('/admin', 'AdminController@index');
-  Route::post('/firmaOnay', 'AdminController@firmaOnay');
+  Route::get('/admin/dashboard', 'AdminController@index');
+  Route::get('/admin/firmaOnay/{id}', 'AdminController@firmaOnayla');//kaldır?
+  Route::post('/admin/firmaOnay', 'AdminController@firmaOnay');
 
 
 });
-Route::get('/kalemlerTablolari',['middleware' => 'admin' , function () {
+Route::get('/admin/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
 
 }]);
@@ -113,7 +114,7 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
               return Response::json($sektorler);
               
    });
-  Route::get('/tablesControl',['middleware' => 'admin' , function () {
+  Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
     return view('admin.index');
   }]);
 
@@ -139,17 +140,7 @@ Route::get('/', function () {
   return view('Anasayfa.temelAnasayfa');
 });
 
-Route::get('/firmaList', function () {
-
-  $onay = DB::table('firmalar')
-  ->where('onay', 0)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
-
-  $onayli = DB::table('firmalar')
-  ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination');
-
-  return View::make('admin.firmaList')-> with('onay',$onay)-> with('onayli',$onayli);
-
-});
+Route::get('/admin/firmaList', 'AdminController@onayBekleyenFirmalar');
 Route::get('/firmaListeleme',function (){
 
   $onay = DB::table('firmalar')
@@ -165,10 +156,7 @@ Route::get('/firmaListeOnaylı',function (){
 
   return Response::json(View::make('admin.firmaListOnayli',array('onayli'=> $onayli))->render());
 });
-Route::get('/yorumList', function () {
-
-  return view('admin.yorumList');
-});
+Route::get('/admin/yorumList', 'AdminController@yorumList');
 Route::POST('/firmaDavet', function () {
 
   $davetEdilenFirma = Input::get('isim');
@@ -192,29 +180,6 @@ Route::POST('/firmaDavet', function () {
     $mesaj =  "Bu Firma Sistemimizde Kayıtlıdır.";
   }
   return Response::json($mesaj);
-});
-
-Route::get('/firmaOnay/{id}', function ($id) {
-
-  $firmas = Firma::find($id);
-  $firmas->onay=1;
-  $firma_kul = App\FirmaKullanici::where('firma_id',$id)->get();
-  foreach ($firma_kul as $firmaKul){
-
-  }
-
-  $firmaOnay=  \App\Kullanici::find($firmaKul->kullanici_id);
-
-  $data = ['ad' => $firmaOnay->adi, 'soyad' => $firmaOnay->soyadi];
-
-  Mail::send('auth.emails.yorum_mesaj', $data, function($message) use($data,$firmaOnay)
-  {
-    $message->to($firmaOnay->email, $data['ad'])
-    ->subject('FİRMANIZ ONAYLANDI!');
-
-  });
-  $firmas->save();
-  return view('admin.firmaList');
 });
 
 Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
