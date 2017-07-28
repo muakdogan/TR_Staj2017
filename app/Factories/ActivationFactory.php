@@ -27,31 +27,36 @@ class ActivationFactory
 
         $token = $this->activationRepo->createActivation($user);
 
-        $link = route('kullanici.onay', $token);
-        $message = sprintf('Hesabınızı aktifleştirin %s', $link, $link);
+        $link = route('kullanici.onay', [$user->id, $token]);
+        $message = sprintf('Hesabınızı aktifleştirin %s', $link);
 
         $this->mailer->raw($message, function (Message $m) use ($user) {
             $m->to($user->email)->subject('Activation mail');
         });
     }
 
-    public function activateUser($token)
+    public function activateUser($kullanici_id, $token)
     {
+        $kullanici = \App\Kullanici::find($kullanici_id);
         $activation = $this->activationRepo->getActivationByToken($token);
 
-        if ($activation === null) {
+        if ($activation === null)//token'ın kullanıcı id'si, onay linkindeki ile eşleşmiyorsa
+        {
             return null;
         }
 
-        $user = Kullanici::find($activation->kullanici_id);
+        if ($activation->kullanici_id != $kullanici_id)
+        {
+            abort(403, 'Forbidden.');
+        }
 
-        $user->onayli = "1";
+        $kullanici->onayli = "1";
 
-        $user->save();
+        $kullanici->save();
 
         $this->activationRepo->deleteActivation($token);
 
-        return $user;
+        return $kullanici;
     }
 
     private function shouldSend($user)
