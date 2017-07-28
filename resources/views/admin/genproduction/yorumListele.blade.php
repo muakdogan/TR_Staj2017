@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentelella Alela! | </title>
+    <title>Tam Rekabet</title>
 
     <!-- Bootstrap -->
-    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/genvendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../vendor/genvendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- jQuery custom content scroller -->
-    <link href="../vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet"/>
+    <link href="../vendor/genvendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../vendor/genvendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="../vendor/genvendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="../vendor/genvendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendor/genvendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="../build/css/custom.min.css" rel="stylesheet">
-  </head>
+    <link href="../genbuild/css/custom.min.css" rel="stylesheet">
+    </head>
 
-  <body class="nav-md footer_fixed">
+
+    <body class="nav-md">
     <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+              <a href="{{url('/admin')}}" class="site_title"><i class="fa fa-paw"></i> <span>Tam Rekabet !</span></a> <!-- Ana sayfadaki proje isminin yazdıgı yer -->
             </div>
 
             <div class="clearfix"></div>
@@ -36,11 +45,15 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="../resources/views/admin/genproduction/images/img.jpg" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <span>Hoş Geldin,</span>
+                @if(Auth::guard('admin')->user())
+                <h2>{{ Auth::guard('admin')->user()->name }}</h2>
+                @else
+                <h2>John Mu Doe</h2>
+                @endif
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -52,14 +65,17 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="index.html">Dashboard</a></li>
+                   <li><a href="{{ url('/admin') }}"><i class="fa fa-home"></i> Anasayfa </a> <!-- If you delete the span stuff the arrow on the right side is removed -->
+                     <!-- <ul class="nav child_menu">
+
+                      <li><a href="index.blade.php">Dashboard</a></li>
                       <li><a href="index2.html">Dashboard2</a></li>
                       <li><a href="index3.html">Dashboard3</a></li>
-                    </ul>
+
+                     </ul> -->
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
+
+                  <!-- <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="form.html">General Form</a></li>
                       <li><a href="form_advanced.html">Advanced Components</a></li>
@@ -68,10 +84,11 @@
                       <li><a href="form_upload.html">Form Upload</a></li>
                       <li><a href="form_buttons.html">Form Buttons</a></li>
                     </ul>
-                  </li>
-                  <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
+                  </li> -->
+
+                  <li><a href="{{ url('/firmaList')}}"><i class="fa fa-desktop"></i> Firma Onayı </a>
                     <ul class="nav child_menu">
-                      <li><a href="general_elements.html">General Elements</a></li>
+                      <!--<li><a href="general_elements.html">General Elements</a></li>
                       <li><a href="media_gallery.html">Media Gallery</a></li>
                       <li><a href="typography.html">Typography</a></li>
                       <li><a href="icons.html">Icons</a></li>
@@ -79,33 +96,36 @@
                       <li><a href="widgets.html">Widgets</a></li>
                       <li><a href="invoice.html">Invoice</a></li>
                       <li><a href="inbox.html">Inbox</a></li>
-                      <li><a href="calendar.html">Calendar</a></li>
+                      <li><a href="calendar.html">Calendar</a></li> -->
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
+                  <li><a href="{{ url('/yorumList')}}"><i class="fa fa-table"></i> Yorum Onayı </a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">Tables</a></li>
-                      <li><a href="tables_dynamic.html">Table Dynamic</a></li>
+                      <!-- <li><a href="tables.html">Tables</a></li>
+                      <li><a href="tables_dynamic.html">Table Dynamic</a></li> -->
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-bar-chart-o"></i> Data Presentation <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
+                  <li><a href="{{ url('/kullaniciLog')}}"><i class="fa fa-bar-chart-o"></i> Kullanıcı Hareketleri </a>
+                    <!-- <ul class="nav child_menu">
                       <li><a href="chartjs.html">Chart JS</a></li>
                       <li><a href="chartjs2.html">Chart JS2</a></li>
                       <li><a href="morisjs.html">Moris JS</a></li>
                       <li><a href="echarts.html">ECharts</a></li>
                       <li><a href="other_charts.html">Other Charts</a></li>
-                    </ul>
+                    </ul> -->
                   </li>
-                  <li><a><i class="fa fa-clone"></i>Layouts <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
-                      <li><a href="fixed_footer.html">Fixed Footer</a></li>
+                  <li><a><i class="fa fa-clone"></i>Tablo İşlemleri <span class="fa fa-chevron-down"></a>
+                     <ul class="nav child_menu">
+                      <li><a href="{{ url('/tablesControl')}}">Admin Tablosu</a></li>
+                      <li><a href="{{ url('/kalemlerTablolari')}}">Kalemler Tabloları İşlemleri</a></li>
                     </ul>
                   </li>
                 </ul>
               </div>
-              <div class="menu_section">
+
+
+
+              <!-- <div class="menu_section">
                 <h3>Live On</h3>
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
@@ -143,10 +163,10 @@
                         <li><a href="#level1_2">Level One</a>
                         </li>
                     </ul>
-                  </li>                  
+                  </li>
                   <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
                 </ul>
-              </div>
+              </div> -->
 
             </div>
             <!-- /sidebar menu -->
@@ -181,7 +201,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/img.jpg" alt="">John Doe
+                    <img src=../resources/views/admin/genproduction/images/img.jpg alt="">John Doe
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -205,7 +225,7 @@
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     <li>
                       <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -217,7 +237,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -229,7 +249,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -241,7 +261,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -264,45 +284,160 @@
               </ul>
             </nav>
           </div>
-
         </div>
         <!-- /top navigation -->
 
+
+
+
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" style="width=%100; height=%30;">
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Fixed Footer <small> Just add class <strong>footer_fixed</strong></small></h3>
+                <h3>General Elements</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <div class="clearfix"></div>
+
+            <div class="">
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2><i class="fa fa-bars"></i> KULLANICI YORUM İŞLEMLERİ <small>Onaylı & Onaylanmayı Bekleyen</small></h2>
+                    <!-- <ul class="nav navbar-right panel_toolbox">                                //Aşagı ok,Ayarlar,Kapatma.
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                       <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                     <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul> -->
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+
+                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Onaylanmayı Bekleyen Yorumlar</a>
+                        </li>
+                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Onaylanmış Yorumlar</a>
+                        </li>
+                      </ul>
+
+                      <div id="myTabContent" class="tab-content">
+                        <?php
+                                 $onay = DB::table('yorumlar')
+                                 ->where('onay', ' ')->orderBy('tarih', 'desc') ->get();
+
+                                  $onayli = DB::table('yorumlar')
+                                 ->where('onay', 'onay')->orderBy('tarih', 'desc') ->get();
+                        ?>
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                          <br>
+                          <table  style="width: 100%;">
+                            <tr>
+                              <th >YORUM YAPILAN TARİH</th>
+                              <th >YAPILAN YORUMLAR</th>
+                               <th >ONAY</th>
+                            </tr>
+                          @foreach($onay as $yorumlar)
+                            <tr>
+                              <td>{{$yorumlar->tarih}} </td>
+                              <td>{{$yorumlar->yorum}}</td>
+                              <td><a href="{{ URL::to('yorumOnay', array($yorumlar->id,$yorumlar->yorum_yapan_kullanici_id), false)}}"  id="{{$yorumlar->id}}" type="button" class="btn btn-primary" onclick="alert('YORUM ONAYLANDI');">ONAYLA</a></td>
+                            </tr>
+                          @endforeach
+                       </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                          <br>
+                          <table style="width: 100%;">
+                              <tr>
+                                <th >YORUM YAPILAN TARİH</th>
+                                <th >YAPILAN YORUMLAR</th>
+                              </tr>
+                            @foreach($onayli as $onayli_yorumlar)
+                              <tr>
+                                <td>{{$onayli_yorumlar->tarih}}</td>
+                                <td>{{$onayli_yorumlar->yorum}}</td>
+                                <td><img src="{{asset('images/check.png')}}"></td>
+                              </tr>
+                            @endforeach
+                         </table>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+
+
           </div>
+          <div class="clearfix"></div>
         </div>
         <!-- /page content -->
 
         <!-- footer content -->
         <footer>
-          <div class="pull-right">
+          <!-- <div class="pull-right">
             Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-          </div>
+          </div> -->
           <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
       </div>
     </div>
 
+    <div id="custom_notifications" class="custom-notifications dsp_none">
+      <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
+      </ul>
+      <div class="clearfix"></div>
+      <div id="notif-group" class="tabbed_notifications"></div>
+    </div>
+
     <!-- jQuery -->
-    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <script src="../vendor/genvendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../vendor/genvendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <script src="../vendor/genvendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="../vendors/nprogress/nprogress.js"></script>
-    <!-- jQuery custom content scroller -->
-    <script src="../vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="../vendor/genvendors/nprogress/nprogress.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendor/genvendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendor/genvendors/iCheck/icheck.min.js"></script>
+    <!-- PNotify -->
+    <script src="../vendor/genvendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendor/genvendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendor/genvendors/pnotify/dist/pnotify.nonblock.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="../build/js/custom.min.js"></script>
+    <script src="../genbuild/js/custom.min.js"></script>
+
   </body>
 </html>

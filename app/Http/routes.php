@@ -176,7 +176,7 @@ Route::get('/firmaList', function () {
   $onayli = DB::table('firmalar')
   ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination');
 
-  return View::make('admin.genproduction.firma_yorum_Listele')-> with('onay',$onay)-> with('onayli',$onayli);
+  return View::make('admin.genproduction.firmaListele')-> with('onay',$onay)-> with('onayli',$onayli);
   // Eski hali admin.firmaList
 
 });
@@ -197,7 +197,8 @@ Route::get('/firmaListeOnaylı',function (){
 });
 Route::get('/yorumList', function () {
 
-  return view('admin.genproduction.firma_yorum_Listele');
+  return view('admin.genproduction.yorumListele');
+    // Eski hali admin.yorumList
 });
 Route::POST('/firmaDavet', function () {
 
