@@ -40,10 +40,35 @@ Route::get('/sessionKill', function () {
 
 
 
-Route::group(['middleware' => ['web']], function () {
+
+
+Route::get('/DbTest', function () {
+
+  if( DB::connection()->getDatabaseName() ){
+
+    echo 'Connected Database : ',DB::connection()->getDatabaseName();
+
+    //alert('Connected Succesfully');
+    //İs not working.
+  }
+});
+
+
+
+
+
+
+
+  Route::group(['middleware' => ['web']], function () {
   //Login Routes...
-  Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
+
+  //public/admin/login
+  //public in altındaki klasörün içine yönlendiriyor
+  Route::get('/admi','AdminAuth\AuthController@showLoginForm');
+
+
   Route::post('/admin/login','AdminAuth\AuthController@login');
+  //Route::get('/admin/logout','AdminAuth\AuthController@logout');
   Route::get('/admin/logout','AdminAuth\AuthController@logout');
   // Registration Routes...
   Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');
@@ -52,14 +77,16 @@ Route::group(['middleware' => ['web']], function () {
   Route::post('admin/password/email','AdminAuth\PasswordController@sendResetLinkEmail');
   Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
   Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
-  Route::get('/admin', 'AdminController@index');
-  Route::post('/firmaOnay', 'AdminController@firmaOnay');
 
+  ///public/index.php/admin kısmı
+  Route::get('/admin', 'AdminController@index');
+
+
+  Route::post('/firmaOnay', 'AdminController@firmaOnay');
 
 });
 Route::get('/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
-
 }]);
 
 //Route::resource('kullaniciLog', 'ActivityController');
@@ -105,16 +132,19 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
                 DebugBar::info("if");
               }
               else{
-                  
+
                 $sektorler = \App\Sektor::where('kalem_turu', '=', $mal_turu)->get();
                 DebugBar::info("else");
-              }   
+              }
               DebugBar::info($sektorler);
               return Response::json($sektorler);
-              
+
    });
+
+  //Admin tablosu için gereken yönlendirme.
+  //Eski hali "admin.index"
   Route::get('/tablesControl',['middleware' => 'admin' , function () {
-    return view('admin.index');
+    return view('admin.genproduction.projects');
   }]);
 
   Route::get('/api/v1/admins/{id?}', 'Admins@index');
@@ -140,14 +170,14 @@ Route::get('/', function () {
 });
 
 Route::get('/firmaList', function () {
-
   $onay = DB::table('firmalar')
   ->where('onay', 0)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
 
   $onayli = DB::table('firmalar')
   ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination');
 
-  return View::make('admin.firmaList')-> with('onay',$onay)-> with('onayli',$onayli);
+  return View::make('admin.genproduction.firma_yorum_Listele')-> with('onay',$onay)-> with('onayli',$onayli);
+  // Eski hali admin.firmaList
 
 });
 Route::get('/firmaListeleme',function (){
@@ -167,7 +197,7 @@ Route::get('/firmaListeOnaylı',function (){
 });
 Route::get('/yorumList', function () {
 
-  return view('admin.yorumList');
+  return view('admin.genproduction.firma_yorum_Listele');
 });
 Route::POST('/firmaDavet', function () {
 
@@ -374,7 +404,7 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
   return view('Firma.firmalar')->with('firmalar', $firmalar);
 }]);
 Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
-    
+
     $firma=Firma::find($firmaid);
     $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
         ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
@@ -437,11 +467,11 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
         $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
 
     $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-    
+
     DebugBar::info($firma->tedarikEttigiFirmalar);
-   
-    
-    
+
+
+
      return view('Firma.firmaDetay')->with('firma', $firma)->with('puanlar', $puanlar)->with('yorumlar', $yorumlar)
           ->with('toplamYorum', $toplamYorum)->with('satilanMarka', $satilanMarka)->with('firmaAdres', $firmaAdres)->with('firmaFatura', $firmaFatura)
           ->with('sirketTurleri', $sirketTurleri)->with('uretilenMarka', $uretilenMarka)->with('kaliteBelge', $kaliteBelge)->with('firmaReferanslar', $firmaReferanslar)
@@ -499,6 +529,9 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
   return view('Firma.firmaIslemleri')->with('firma',$firma)->with('davetEdilIlanlar', $davetEdilIlanlar)
           ->with('ilanlarFirma', $ilanlarFirma)->with('teklifler', $teklifler)->with('tekliflerCount', $tekliflerCount);
 }]);
+
+
+
 
 Route::post('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra', 'IlanController@showIlan');
@@ -903,10 +936,10 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan', $ilan)
             ->with('birimler',$birimler)->with('teklifler',$teklifler);
   }]);
-  
+
   Route::get('/ilanOlustur/{id}',function ($id) {
       $firma = Firma::find($id);
-   
+
        $ilan = new App\Ilan();
       if (Gate::denies('show', $firma)) {
         return redirect()->intended();
@@ -916,7 +949,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
       }*/
 
        if (!$ilan)
-       
+
        if (!$ilan->ilan_yapim_isleri)
         $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
 
@@ -930,45 +963,45 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
       return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
 
     });
-  
+
   Route::post('/ilanOlusturEkle/{id}', function (Request $request,$id) {
         //ilan bilgileri kaydediliyor.
-        
+
         $firma = Firma::find($id);
         $ilan = new Ilan;
         $ilan->adi=Str::title(strtolower( $request->ilan_adi));
         $ilan->ilan_sektor=$request->firma_sektor;
-        
+
         $ilan_tarihi= explode(" - ", $request->ilan_tarihi_araligi);
         DebugBar::info($ilan_tarihi);
-        
+
         $ilan_tarihi_replace1=$ilan_tarihi[0];
         $ilan_tarihi_replace1 = str_replace('/', '-', $ilan_tarihi_replace1);
         $ilan_tarihi_replace2=$ilan_tarihi[1];
         $ilan_tarihi_replace2 = str_replace('/', '-', $ilan_tarihi_replace2);
-        
+
         DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace1)));
         DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace2)));
-         
+
         $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi_replace1));
         $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi_replace2));
-       
-        
+
+
         $is_tarihi= explode(" - ", $request->is_tarihi_araligi);
         DebugBar::info($is_tarihi);
-        
+
         $is_tarihi_replace1=$is_tarihi[0];
         $is_tarihi_replace1 = str_replace('/', '-', $is_tarihi_replace1);
         $is_tarihi_replace2=$is_tarihi[1];
         $is_tarihi_replace2 = str_replace('/', '-', $is_tarihi_replace2);
-        
-        
+
+
         $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
         DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace1)));
-        
+
         $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi_replace2));
         DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace2)));
-        
+
         $ilan->aciklama =Str::title(strtolower( $request->aciklama));
         $ilan->ilan_turu= $request->ilan_turu;
         $ilan->katilimcilar= $request->katilimcilar;
@@ -983,7 +1016,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         $ilan->teslim_yeri_il_id= $request->il_id;
         $ilan->teslim_yeri_ilce_id= $request->ilce_id;
         $ilan->isin_suresi= $request->isin_suresi;
-        
+
         $ilan->adi= $request->ilan_adi;
         $ilan->sozlesme_onay= $request->sozlesme_onay;
         //foreach($request->firma_adi_gizli as $firma_adi_gizli){
@@ -1021,10 +1054,10 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             $onayli_tedarikciler->save();
           }
         }
-        
+
         //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
         if($ilan->ilan_turu==1 && $ilan->sozlesme_turu==0){
-            
+
             foreach($request->mal_id as $malId){
                   $arrayMalId[] = $malId;
             }
@@ -1046,11 +1079,11 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             foreach($request->mal_miktar as $miktar){
                   $arrayMiktar[] = $miktar;
             }
-            
+
             foreach($request->mal_birim as $birim){
                   $arrayBirim[] = $birim;
             }
-           
+
             $i=0;
               foreach($request->mal_kalem as $malKalem){
                 $mal= new \App\IlanMal();
@@ -1068,8 +1101,8 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
               }
         }
         else if($ilan->ilan_turu==2 && $ilan->sozlesme_turu==0){
-          
-            
+
+
             foreach($request->hizmet_id as $hizmetId){
                   $arrayHizmetId[] = $hizmetId;
             }
@@ -1091,7 +1124,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             foreach($request->hizmet_miktar_birim_id as $hmb){
                   $arrayHmb[] = $hmb;
             }
-           
+
             $i=0;
               foreach($request->hizmet_kalem as $hizmetKalem){
                 $hizmet= new \App\IlanHizmet();
@@ -1105,10 +1138,10 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 $hizmet->miktar_birim_id=$arrayHmb[$i];
                 $hizmet->save();
                 $i++;
-              } 
+              }
         }
          else if($ilan->sozlesme_turu==1){
-             
+
             foreach($request->goturu_id as $goturuId){
                   $arrayGoturuId[] = $goturuId;
             }
@@ -1135,10 +1168,10 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 $goturu->miktar_birim_id=$arrayGmb[$i];
                 $goturu->save();
                 $i++;
-              } 
+              }
          }
          else if($ilan->ilan_turu==3){
-             
+
              foreach($request->yapim_id as $yapimId){
                   $arrayYapimId[] = $yapimId;
             }
@@ -1160,7 +1193,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             foreach($request->yapim_miktar_birim_id as $ymb){
                   $arrayYmb[] = $ymb;
             }
-           
+
             $i=0;
               foreach($request->yapim_kalem as $yapimKalem){
                 $yapim= new \App\IlanYapimIsi();
@@ -1174,13 +1207,13 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 $yapim->birim_id=$arrayYmb[$i];
                 $yapim->save();
                 $i++;
-              } 
-             
+              }
+
          }
          return Redirect::to('ilanlarim/'.$firma->id);
-      
+
   });
-  
+
 
   //firma profil route...
   Route::post('firmaProfili/uploadImage/{id}', 'FirmaController@uploadImage');
@@ -1344,7 +1377,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     if($ilan->kismi_fiyat == 0){
         $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
         $kisKazanCount=0;
-       
+
         foreach($kazananKapali as $kazanK){
             $kisKazanCount=1;
         }
@@ -1357,7 +1390,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         }
     }
     $minFiyat = $ilan->minFiyat();
-                                     
+
       return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
               ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
               ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
@@ -1459,7 +1492,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             $ilan = App\Ilan::find($ilanid);
             Debugbar::info("rekabet");
             $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->get();
-           
+
             $minFiyat = $ilan->minFiyat();
             $kazanK = null;
             if($ilan->kismi_fiyat == 0){
@@ -1559,7 +1592,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                   }
 
                 }elseif($ilan->sozlesme_turu == 1){
-                   
+
                   $i=0;
                   foreach($request->ilan_goturu_bedel_id as $id){
                     $ilan_goturu = \App\IlanGoturuBedel::find($id);
@@ -1622,7 +1655,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 DB::rollback();
                 return Response::json($error);
               }
-              
+
 
             });
             ////////////////////////ilan detay ///////////////////////////

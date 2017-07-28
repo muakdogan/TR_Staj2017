@@ -49,7 +49,7 @@ class AuthController extends Controller
         $request->session()->put('firma_adi', $user->firmalar()->first()->adi);
         $role_id = $user->get_role_id($firma_id);
         $request->session()->put('role_id', $user->get_role_id($firma_id));
-        
+
         return redirect()->intended($this->redirectPath());
     }
     public function getLogout(){

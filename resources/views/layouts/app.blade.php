@@ -29,7 +29,7 @@
       padding: 5px;
       z-index:1080;
     }
-   
+
     body.sticky div#header{
       position: fixed;
       top: 0;
@@ -50,20 +50,20 @@ window.requestAnimationFrame = window.requestAnimationFrame
     || window.webkitRequestAnimationFrame
     || window.msRequestAnimationFrame
     || function(f){return setTimeout(f, 1000/60)}
- 
- 
+
+
 ;(function($){ // enclose everything in a immediately invoked function to make all variables and functions local
- 
+
     var $body,
     $target,
     targetoffsetTop,
     resizetimer,
     stickyclass= 'sticky' //class to add to BODY when header should be sticky
-     
+
     function updateCoords(){
         targetoffsetTop = $target.offset().top
     }
-     
+
     function makesticky(){
         var scrollTop = $(document).scrollTop()
         if (scrollTop >= targetoffsetTop){
@@ -77,7 +77,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
             }
         }
     }
-     
+
     $(window).on('load', function(){
         $body = $(document.body)
         $target = $('#header')
@@ -94,7 +94,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
             }, 50)
         })
     })
- 
+
 })(jQuery)
 </script>
 
@@ -148,7 +148,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                                 <li ><a style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                             </ul>
                                         @endforeach
-                                    @endif    
+                                    @endif
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi">Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
@@ -162,7 +162,6 @@ window.requestAnimationFrame = window.requestAnimationFrame
                 </ul>
                  <ul class="nav navbar-nav" style="padding-left: 30px" >
                     <li>
-
                         <a href="{{url('/ilanAra')}}">İLAN ARA</a>
 
                     </li>

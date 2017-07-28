@@ -12,7 +12,8 @@ class AdminController extends Controller
     }
     public function index(){
     	$firmalar=Firma::all();
-    	return view('admin.dashboard')->with('firmalar',$firmalar);
+    	return view('admin.genproduction.index')->with('firmalar',$firmalar);
+      // "admin.genproduction.index is the new template "Gentelella Aletta". The old one is "admin.dashboard"   "
     }
     public function firmaOnay(Request $request){
         $firma = Firma();
@@ -21,6 +22,4 @@ class AdminController extends Controller
         $onay->save();
         return redirect('/admin');
     }
-    
-    
 }
