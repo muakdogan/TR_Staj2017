@@ -1223,4 +1223,4 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
 
             Route::auth();
 
-Route::get('kullanici/onay/{token}', 'Auth\AuthController@activateUser')->name('kullanici.onay');
+Route::get('kullanici/onay/{kullanici_id}/{token}', 'Auth\AuthController@activateUser')->name('kullanici.onay');
