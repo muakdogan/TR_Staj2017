@@ -121,9 +121,9 @@ class AuthController extends Controller
 
     }
 
-    public function activateUser($token)
+    public function activateUser($kullanici_id, $token)
     {
-        if ($user = $this->activationFactory->activateUser($token)) {
+        if ($user = $this->activationFactory->activateUser($kullanici_id, $token)) {
             auth()->login($user);
             return redirect($this->redirectPath());
         }
