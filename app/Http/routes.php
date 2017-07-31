@@ -78,6 +78,7 @@ Route::get('/DbTest', function () {
   Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
   Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
 
+
   ///public/index.php/admin kısmı
   Route::get('/admin', 'AdminController@index');
 
@@ -85,6 +86,9 @@ Route::get('/DbTest', function () {
   Route::post('/firmaOnay', 'AdminController@firmaOnay');
 
 });
+
+
+
 Route::get('/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
 }]);
