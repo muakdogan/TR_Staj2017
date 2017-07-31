@@ -143,7 +143,7 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
    });
 
   Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
-    return view('admin.genproduction.projects');
+    return view('admin.index');
   }]);
 
   Route::get('/api/v1/admins/{id?}', 'Admins@index');

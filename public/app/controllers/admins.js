@@ -1,4 +1,5 @@
 app.controller('adminsController', function($scope, $http, API_URL) {
+    alert("Buraya geliyorsan haber ver");
     //retrieve employees listing from API
     $http.get(API_URL + "admins")
             .success(function(response) {
