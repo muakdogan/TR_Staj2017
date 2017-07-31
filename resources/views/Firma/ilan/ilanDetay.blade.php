@@ -8,6 +8,18 @@
 @section('bodyAttributes')onload="loadPage()"@endsection <!-- teklif girilirken textbox cursorunu dogru konumlandirmak icin gerekli -->
 
 @section('content')
+
+    <?php
+        $kullaniciTeklifi=null;
+        $para_birimi=$ilan->para_birimleri->para_birimi();
+    ?>
+
+    @foreach($teklifler as $tekliff)
+        @if(session()->get('firma_id') == $tekliff->teklifler->getFirma("id"))
+            <?php $kullaniciTeklifi=$tekliff;?>
+        @endif
+    @endforeach
+
     <script src="{{asset('js/noUiSlider/nouislider.js')}}"></script>
     <link href="{{asset('css/noUiSlider/nouislider.css')}}" rel="stylesheet"></link>
     <script src="{{asset('js/wNumb.js')}}"></script>
@@ -636,10 +648,12 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                             @endif
 
                         </div>
-                        <div class="tab-pane kismiRekabet" id="3">
-                            @if($ilan->kismi_fiyat == 1)
-                                @include('Firma.ilan.kismiRekabet')
-                            @endif
+                        <div class="tab-pane" id="3">
+                            <div id="kismiRekabet">
+                                @if(1)
+                                    @include('Firma.ilan.kismiRekabet')
+                                @endif
+                            </div>
                         </div>
 
                     </div>
@@ -724,8 +738,16 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
         var fiyat;
         var temp=0;
         var count=0;
-        var toplamFiyat;
-        var kdvsizToplamFiyat;
+
+        @if($kullaniciTeklifi!=null)
+            var toplamFiyat={{$kullaniciTeklifi['kdv_dahil_fiyat']}};
+            var kdvsizToplamFiyat={{$kullaniciTeklifi['kdv_haric_fiyat']}};
+        @else
+            var toplamFiyat;
+            var kdvsizToplamFiyat;
+        @endif
+
+
         var ilan_turu={{$ilan->ilan_turu}};
         var sozlesme_turu={{$ilan->sozlesme_turu}};
 
@@ -961,7 +983,7 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
             }
 
             else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
-                $('#iskontoLabel').text("");
+                $('#iskontoLabel').text("İskonto verebilmek için tüm kalemlere teklif vermelisiniz!");
                 $('#iskonto').prop("type", "hidden");
                 $('#iskonto').attr('checked', false);
                 canselIskontoVal();
@@ -999,6 +1021,11 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
         var n1 = parseFloat($(this).html());
         $(this).html(n1.formatMoney(2));
     });
+    $('.currency2').each(function(){
+        //var n = new Number($(this).html());
+        var n1 = parseFloat($(this).html());
+        $(this).html(n1.formatMoney(2));
+    });
     $('.fiyat').on('input', function() {
 
         var fiyat = TrToEnMoney(this.value);
@@ -1029,7 +1056,6 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                 toplamFiyat=0;
                 $("span.kalem_toplam").each(function(){
                     var n = TrToEnMoney($(this).html());
-                    n = parseFloat(n);
                     toplamFiyat += n;
                 });
 
@@ -1051,7 +1077,7 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                     $('#iskonto').prop("type", "checkbox");
                 }
                 else if(y == 1 && {{$ilan->kismi_fiyat}} == 1){
-                    $('#iskontoLabel').text("");
+                    $('#iskontoLabel').text("İskonto verebilmek için tüm kalemlere teklif vermelisiniz!");
                     $('#iskonto').prop("type", "hidden");
                     $('#iskonto').attr('checked', false);
                     canselIskontoVal();
@@ -1139,7 +1165,6 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
         })(jQuery);
 
         $(document).ready(function() {
-
             var firmaId = "{{session()->get('firma_id')}}";
             if(firmaId === ""){
                 $('#myModalSirketListe').modal({
@@ -1147,20 +1172,34 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                 });
             }
             var k=0;
-            $('.kdv').each( function() {
-                $("#kdv"+k).trigger('input');
-                k++;
+
+            //Onceden tum kalemlere teklif verilmis mi?
+            var count=0;
+            var y=0;
+            $(".kalem_toplam").each(function(){
+               if(parseFloat($(this).text()) == 0){
+                    y = 1;
+                    return false;
+                }
+                count++;
             });
+            if(y == 0 && {{$ilan->kismi_fiyat}} == 1){
+                $('#iskontoLabel').text(" İskonto Ver");
+                $('#iskonto').prop("type", "checkbox");
+            }
+
             $("#iskonto").click(function() {
                 if($(this).is(":checked")) {
-                    $('#iskontoVal').prop("type", "text");
+                    $('#iskontoVal').prop("type", "number");
+                    $('#iskontoVal').prop("max", "100");
+                    $('#iskontoVal').prop("min", "1");
                 }
                 else{
                     canselIskontoVal();
                 }
             });
 
-            voteClick($('#table'));
+            voteClick($('#table'));//Rekabet tablosu siralanir
 
             $("#gonder").click(function(e)
             {
@@ -1246,7 +1285,7 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                 var postData = $("#teklifForm").serialize();
                 var formURL = $("#teklifForm").attr('action');
                 var ilan_id = {{$ilan->id}};
-                $(".onaylamaButton").click(function(e){
+                $(".onaylamaButton").unbind().click(function(e){
                     if($("#sozlesme_onay").is(':checked')){
                         $("#onaylamaModal").modal("hide");
                         $.ajax(
@@ -1259,6 +1298,27 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                                 data : postData,
                                 success:function(data, textStatus, jqXHR)
                                 {
+                                    $("#gonder").text('Teklif Güncelle')
+                                    $.ajax(
+                                    {
+                                        url : "{{asset('kismiRekabet')}}/{{$firma->id}}/"+ ilan_id,
+                                        type: "GET",
+                                        success:function(data, textStatus, jqXHR)
+                                        {
+                                            $('#kismiRekabet').html(data);
+                                            $('.ajax-loader').css("visibility", "hidden");
+                                            $('.currency2').each(function(){
+                                                var n1 = parseFloat($(this).html());
+                                                $(this).html(n1.formatMoney(2));
+                                            });
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown)
+                                        {
+                                            alert(textStatus + "," + errorThrown);
+                                            $('.ajax-loader').css("visibility", "hidden");
+                                        }
+                                    });
+                                    e.preventDefault();
                                     $.ajax(
                                         {
                                             url : "{{asset('rekabet')}}" +"/"+ ilan_id,
@@ -1268,10 +1328,10 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                                                 $('.rekabet').html(data);
                                                 $('.ajax-loader').css("visibility", "hidden");
                                                 $('.currency').each(function(){
-                                                    //var n = new Number($(this).html());
-                                                    var n1 = parseFloat($(this).html());
-                                                    $(this).html(n1.formatMoney(2));
+                                                        var n1 = parseFloat($(this).html());
+                                                        $(this).html(n1.formatMoney(2));
                                                 });
+                                                voteClick($('#table'));
                                             },
                                             error: function(jqXHR, textStatus, errorThrown)
                                             {
@@ -1300,6 +1360,8 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
         function canselIskontoVal(){
             $('#iskontoVal').prop("type", "hidden");
             $('#iskontoVal').val(null);
+            $('#iskontoluToplamFiyatKdvsiz').val(null);
+            $('#iskontoluToplamFiyatKdvli').val(null);
             $("#iskontoluToplamFiyatLabel").text("");
             $("#iskontoluToplamFiyatL").text("");
         }

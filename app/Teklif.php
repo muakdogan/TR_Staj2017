@@ -72,10 +72,10 @@ class Teklif extends Model
     }
     public function getTeklifYapimIsleri(){
         $teklifYapimIsleri=DB::select(DB::raw("SELECT * 
-                                                FROM teklifler t, hizmet_teklifler h
-                                                WHERE t.id = h.teklif_id
+                                                FROM teklifler t, yapim_isi_teklifler y
+                                                WHERE t.id = y.teklif_id
                                                 AND t.id ='$this->id'
-                                                GROUP BY h.ilan_hizmet_id"));
+                                                GROUP BY y.ilan_yapim_isleri_id"));
         return $teklifYapimIsleri;
     }
     public function getTeklifGoturuBedel (){
@@ -100,11 +100,7 @@ class Teklif extends Model
                 }
         }else if($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0){ //--Hizmet -->
                 $ilanMalCount = $ilan->ilan_hizmetler()->count();
-                $teklifHizmetler=DB::select(DB::raw("SELECT * 
-                                                FROM teklifler t, hizmet_teklifler h
-                                                WHERE t.id = h.teklif_id
-                                                AND t.id ='$this->id'
-                                                GROUP BY h.ilan_hizmet_id"));
+                $teklifHizmetler=$this->getTeklifHizmetler();
                 $teklifMalCount=0;
                 foreach($teklifHizmetler as $teklifHizmet){
                     $teklifMalCount++;
@@ -112,11 +108,11 @@ class Teklif extends Model
                 Debugbar::info($teklifHizmetler);
         }elseif($ilan->ilan_turu == 3){//<!-- Yapım İşi-->
                 $ilanMalCount = $ilan->ilan_yapim_isleri()->count();
-                $teklifYapimIsleri=$this->teklifYapimIsleri();
-                        $teklifMalCount=0;
-                        foreach($teklifYapimIsleri as $teklifYapimIsi){
-                            $teklifMalCount++;
-                        }
+                $teklifYapimIsleri=$this->getTeklifYapimIsleri();
+                $teklifMalCount=0;
+                foreach($teklifYapimIsleri as $teklifYapimIsi){
+                    $teklifMalCount++;
+                }
         }
         else{ //<!-- Goturu Bedel-->
             $ilanMalCount = $ilan->ilan_goturu_bedeller()->count();

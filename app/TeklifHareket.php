@@ -23,8 +23,14 @@ class TeklifHareket extends Model
     {
         return $this->belongsTo('App\ParaBirimi', 'para_birimleri_id', 'id');
     }
+
     public function verilenFiyat(){
         $verilenFiyat = $this->orderBy('id','desc')->limit(1)->get();
         return number_format($verilenFiyat[0]['kdv_dahil_fiyat'],2,'.','');
     }
+
+    public function paraFormat($para){
+        return number_format($para,2,',','.');
+    }
+
 }
