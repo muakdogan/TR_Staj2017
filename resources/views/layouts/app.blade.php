@@ -164,7 +164,6 @@ window.requestAnimationFrame = window.requestAnimationFrame
                 </ul>
                  <ul class="nav navbar-nav" style="padding-left: 30px" >
                     <li>
-
                         <a href="{{url('/ilanAra')}}">İLAN ARA</a>
 
                     </li>

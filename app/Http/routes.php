@@ -41,10 +41,35 @@ Route::get('/sessionKill', function () {
 
 
 
-Route::group(['middleware' => ['web']], function () {
+
+
+Route::get('/DbTest', function () {
+
+  if( DB::connection()->getDatabaseName() ){
+
+    echo 'Connected Database : ',DB::connection()->getDatabaseName();
+
+    //alert('Connected Succesfully');
+    //İs not working.
+  }
+});
+
+
+
+
+
+
+
+  Route::group(['middleware' => ['web']], function () {
   //Login Routes...
-  Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
+
+  //public/admin/login
+  //public in altındaki klasörün içine yönlendiriyor
+  Route::get('/admi','AdminAuth\AuthController@showLoginForm');
+
+
   Route::post('/admin/login','AdminAuth\AuthController@login');
+  //Route::get('/admin/logout','AdminAuth\AuthController@logout');
   Route::get('/admin/logout','AdminAuth\AuthController@logout');
   // Registration Routes...
   Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');
@@ -53,15 +78,16 @@ Route::group(['middleware' => ['web']], function () {
   Route::post('admin/password/email','AdminAuth\PasswordController@sendResetLinkEmail');
   Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
   Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
+
   Route::get('/admin/dashboard', 'AdminController@index');
   Route::get('/admin/firmaOnay/{id}', 'AdminController@firmaOnayla');//kaldır?
   Route::post('/admin/firmaOnay', 'AdminController@firmaOnay');
 
+  Route::post('/firmaOnay', 'AdminController@firmaOnay');
 
 });
 Route::get('/admin/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
-
 }]);
 
 //Route::resource('kullaniciLog', 'ActivityController');
@@ -115,8 +141,9 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
               return Response::json($sektorler);
 
    });
+
   Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
-    return view('admin.index');
+    return view('admin.genproduction.projects');
   }]);
 
   Route::get('/api/v1/admins/{id?}', 'Admins@index');
@@ -142,6 +169,7 @@ Route::get('/', function () {
 });
 
 Route::get('/admin/firmaList', 'AdminController@onayBekleyenFirmalar');
+
 Route::get('/firmaListeleme',function (){
 
   $onay = DB::table('firmalar')
@@ -157,7 +185,9 @@ Route::get('/firmaListeOnaylı',function (){
 
   return Response::json(View::make('admin.firmaListOnayli',array('onayli'=> $onayli))->render());
 });
+
 Route::get('/admin/yorumList', 'AdminController@yorumList');
+
 Route::POST('/firmaDavet', function () {
 
   $davetEdilenFirma = Input::get('isim');
@@ -457,6 +487,9 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
           ->with('ilanlarFirma', $ilanlarFirma)->with('teklifler', $teklifler)->with('tekliflerCount', $tekliflerCount);
 }]);
 
+
+
+
 Route::post('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra/{page}', 'IlanController@showIlan');
@@ -742,9 +775,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan', $ilan)
             ->with('birimler',$birimler)->with('teklifler',$teklifler);
   }]);
-  
+
   Route::get('/ilanOlustur/{firma_id}', 'IlanController@ilanOlustur');
-  
+
   Route::post('/ilanOlusturEkle/{firma_id}', 'IlanController@ilanOlusturEkle');
 
   //firma profil route...
