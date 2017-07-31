@@ -14,7 +14,8 @@ class AdminController extends Controller
     }
     public function index(){
     	$firmalar=Firma::all();
-    	return view('admin.dashboard')->with('firmalar',$firmalar);
+    	return view('admin.genproduction.index')->with('firmalar',$firmalar);
+      // "admin.genproduction.index is the new template "Gentelella Aletta". The old one is "admin.dashboard"   "
     }
 
     public function onayBekleyenFirmalar () {
@@ -30,7 +31,7 @@ class AdminController extends Controller
         $onayli = DB::table('firmalar')
         ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination');
 
-        return View::make('admin.firmaList')-> with('onay',$onay)-> with('onayli',$onayli);
+        return View::make('admin.genproduction.firmaListele')-> with('onay',$onay)-> with('onayli',$onayli);
 
     }
 
@@ -125,10 +126,10 @@ class AdminController extends Controller
 
         });
         $firmas->save();
-        return view('admin.firmaList');
+        return view('admin.genproduction.firmaListele');
     }
 
     public function yorumList() {
-        return view('admin.yorumList');
+        return view('admin.genproduction.yorumListele');
     }
 }

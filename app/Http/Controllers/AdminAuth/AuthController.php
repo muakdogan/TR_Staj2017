@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\AdminAuth;
 
+
+use App\Admin\Auth;
 use App\Admin;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -48,14 +50,15 @@ class AuthController extends Controller
         {
             return redirect('admin/dashboard');
         }
+
         if(view()->exists('auth.authenticate')){
             return view('auth.authenticate');
         }
+
         return view('admin.auth.login');
     }
-    
-    public function showRegistrationForm(){
 
+    public function showRegistrationForm(){
         return view('admin.auth.register');
     }
 
