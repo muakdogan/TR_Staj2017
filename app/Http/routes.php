@@ -775,9 +775,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan', $ilan)
             ->with('birimler',$birimler)->with('teklifler',$teklifler);
   }]);
-  
+
   Route::get('/ilanOlustur/{firma_id}', 'IlanController@ilanOlustur');
-  
+
   Route::post('/ilanOlusturEkle/{firma_id}', 'IlanController@ilanOlusturEkle');
 
   //firma profil route...
