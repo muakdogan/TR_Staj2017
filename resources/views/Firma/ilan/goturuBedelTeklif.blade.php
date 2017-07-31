@@ -71,11 +71,11 @@
                                 @else
                                     <input style="margin-top: 0px" align="right" type="text" class="form-control fiyat kdvsizFiyat" name="birim_fiyat[]" placeholder="Fiyat" value="0">
                                 @endif
-                            @endif    
+                            @endif
                         </td>
                         <td></td> <!--Fiyat hesaplaması için gerekli -->
                         <td>
-                            <span align="right" class="kalem_toplam" name="kalem_toplam" class="col-sm-3"></span>
+                            <span align=zz"right" class="kalem_toplam" name="kalem_toplam" class="col-sm-3"></span>
                         </td> 
                         <td colspan="2">
                         </td>

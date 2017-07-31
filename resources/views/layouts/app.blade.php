@@ -21,6 +21,8 @@
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
+    @yield('head') <!-- ic sayfalardan head bolumune kod eklenmek istenirse -->
+
     <style>
      div#header{
       width: 100%;
@@ -100,7 +102,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 </script>
 
 </head>
-<body id="app-layout">
+<body id="app-layout" @yield('bodyAttributes')>
 
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
         <div class="container">
@@ -128,8 +130,6 @@ window.requestAnimationFrame = window.requestAnimationFrame
                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
                     </li>
                    @else
-
-
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
                               $firmaId = session()->get('firma_id');
@@ -165,13 +165,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
                  <ul class="nav navbar-nav" style="padding-left: 30px" >
                     <li>
                         <a href="{{url('/ilanAra')}}">İLAN ARA</a>
-
                     </li>
-
-
                 </ul>
             </div>
-
         </div>
 
     </nav>
@@ -195,8 +191,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
             count = '{{$kullanici->firmalar()->count()}}';
             session_value = "{{$firmaAdi}}";
 
-                   selected='{{$kullanicifirma->id}}';
-                   funcLocations();
+            selected='{{$kullanicifirma->id}}';
+            funcLocations();
 
         @endif
     });
@@ -205,8 +201,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
         selected = $(this).attr('name');
         click=1;
         funcLocations();
-
     });
+
     function funcLocations(){
        if(click === 1){ //// sayfa her yüklendiğinde çalışmasın diye bu kontrol gerekli
            $.ajax({
@@ -220,11 +216,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
                 }).fail(function(){
                     alert('Yüklenemiyor !!!  ');
-                });
-
+           });
        }
     }
-
     </script>
 </body>
 </html>

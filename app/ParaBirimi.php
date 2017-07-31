@@ -29,4 +29,12 @@ class ParaBirimi extends Model
     {
         return $this->hasMany('App\YapimIsiTeklif', 'para_birimleri_id', 'id');
     }
+
+    public function para_birimi(){
+        $birim="&#8378;"; //Turk Lirasi
+        if($this->adi == "Dolar") $birim="$";
+        else if($this->adi == "Euro") $birim="&#8364;";
+        return $birim;
+    }
+
 }
