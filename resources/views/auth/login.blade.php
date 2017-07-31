@@ -8,6 +8,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Giriş</div>
                 <div class="panel-body">
+
+                    @if (session('activationWarning'))
+                        <div class="alert alert-warning">
+                            Hesabınız aktifleştirilmemiş. Lütfen yolladığımız onay email'ını kontrol ediniz.
+                        </div>
+                    @endif
+
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {!! csrf_field() !!}
 

@@ -22,7 +22,9 @@ class KullaniciController extends Controller
         $this->auth = $auth;
         $this->passwords = $passwords;
         // $this->subject = 'Your Account Password';
-        $this->middleware('guest');
+
+        $this->middleware('guest', ['only' => ['notify']]);//Kullanıcı login olduğunda belli bir sayfaya (/ilanAra) redirect olması için?
+        $this->middleware('firmaYetkili', ['only' => ['kullaniciIslemleri']]);
     }
 
     public function notify(Request $request, $id)
@@ -60,4 +62,13 @@ class KullaniciController extends Controller
             return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
     }
     
+
+    public function kullaniciIslemleri($id)
+    {
+        $firma = Firma::find($id);
+        $roller=  \App\Rol::all();
+
+        return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+
+    }
 }
