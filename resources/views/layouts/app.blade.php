@@ -13,10 +13,11 @@
     <title></title>
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
-    <script src="{{asset('js/jquery.js')}}"></script>
-    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    {{-- <script src="{{asset('js/jquery.js')}}"></script>
+    <script src="{{asset('js/bootstrap.min.js')}}"></script> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
@@ -29,7 +30,7 @@
       padding: 5px;
       z-index:1080;
     }
-   
+
     body.sticky div#header{
       position: fixed;
       top: 0;
@@ -50,20 +51,20 @@ window.requestAnimationFrame = window.requestAnimationFrame
     || window.webkitRequestAnimationFrame
     || window.msRequestAnimationFrame
     || function(f){return setTimeout(f, 1000/60)}
- 
- 
+
+
 ;(function($){ // enclose everything in a immediately invoked function to make all variables and functions local
- 
+
     var $body,
     $target,
     targetoffsetTop,
     resizetimer,
     stickyclass= 'sticky' //class to add to BODY when header should be sticky
-     
+
     function updateCoords(){
         targetoffsetTop = $target.offset().top
     }
-     
+
     function makesticky(){
         var scrollTop = $(document).scrollTop()
         if (scrollTop >= targetoffsetTop){
@@ -77,7 +78,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
             }
         }
     }
-     
+
     $(window).on('load', function(){
         $body = $(document.body)
         $target = $('#header')
@@ -94,7 +95,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
             }, 50)
         })
     })
- 
+
 })(jQuery)
 </script>
 
@@ -148,7 +149,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                                 <li ><a style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                             </ul>
                                         @endforeach
-                                    @endif    
+                                    @endif
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi">Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
@@ -177,7 +178,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
     @yield('content')
     @include('layouts.footer_menu')
     <!-- JavaScripts -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> --}}
    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script>
       var selected;
