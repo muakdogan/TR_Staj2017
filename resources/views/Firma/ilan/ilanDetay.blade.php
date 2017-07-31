@@ -486,6 +486,10 @@
 
             //cursor güncellenir
             startPos-=checkPosition;
+            if(parseInt(x[0])==0&parseInt(x[1])==0&startPos<1){
+                setCaretPosition(elemId, 1);
+            }
+            else
             setCaretPosition(elemId, startPos);
 
         }
