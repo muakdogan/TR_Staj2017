@@ -39,8 +39,9 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/admin') }}">
-                    TamRekabet
+
+                <a class="navbar-brand" href="{{ url('/admin/dashboard') }}">
+                    Tamrekabet
                 </a>
             </div>
 

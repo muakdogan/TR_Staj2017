@@ -150,4 +150,8 @@ class Firma extends Model
     {
         return $this->belongsToMany('App\Firma', 'onayli_tedarikciler', 'tedarikci_id', 'firma_id');
     }
+    public function odemeler()
+    {
+        return $this->hasMany('App\Odeme', 'firma_id', 'id');
+    }
 }
