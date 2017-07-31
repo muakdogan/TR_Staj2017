@@ -19,9 +19,8 @@ class ActivityController extends Controller
     {
         $latestActivities = Activity::with('user')->latest()->limit(100)->get();
         return view('admin.kullaniciLog', array('latestActivities' => $latestActivities));
-        
-        Activity::log('yaptım oldu');
 
+        Activity::log('yaptım oldu');
     }
 
     public function destroy($id)

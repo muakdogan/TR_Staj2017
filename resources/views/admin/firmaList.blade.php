@@ -27,17 +27,17 @@
                             </div>
                             <br>
                         </div>
-                    </div>          
+                    </div>
         </div>
-        
-            
+
+
    </div>
 </div>
 <script>
      $(document).on('click', '.pagination a', function (e){
-         
+
        if($(this).attr('href').indexOf("1pagination=")!= -1){
-           
+
             firmaListOnaysız($(this).attr('href').split('1pagination=')[1]);
         }
         else{
@@ -46,7 +46,7 @@
         }
         e.preventDefault();
      });
-    
+
      function firmaListOnaysız(){
            $.ajax({
             type:"GET",
@@ -55,16 +55,16 @@
             cache: false,
             success: function(data){
                 console.log(data);
-                $('.onaysiz').html(data);   
+                $('.onaysiz').html(data);
             },
             error: function (error) {
                   **alert('error; ' + eval(error));**
             }
-            
+
         });
     }
-    function firmaListOnaylı(){  
-         alert("girdi");
+    function firmaListOnaylı(){
+
            $.ajax({
             type:"GET",
             url:"{{asset('firmaListeOnaylı')}}",
@@ -72,7 +72,7 @@
             cache: false,
             success: function(data){
                 console.log(data);
-                $('.onayli').html(data);   
+                $('.onayli').html(data);
             }
              error: function (error) {
                   **alert('error; ' + eval(error));**

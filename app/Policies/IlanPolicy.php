@@ -22,6 +22,6 @@ class IlanPolicy
     public function createIlan(Kullanici $user)
     {
       $rol_id = $user->get_role_id(session()->get('firma_id'));
-      return $rol_id !== 3;
+      return $rol_id !== '3';//bu değer db'den string olarak geliyor
     }
 }

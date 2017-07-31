@@ -18,6 +18,7 @@ use App\Ilce;
 use App\Semt;
 use App\Ilan;
 use App\Teklif;
+use App\MaliBilgi;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
@@ -40,10 +41,35 @@ Route::get('/sessionKill', function () {
 
 
 
-Route::group(['middleware' => ['web']], function () {
+
+
+Route::get('/DbTest', function () {
+
+  if( DB::connection()->getDatabaseName() ){
+
+    echo 'Connected Database : ',DB::connection()->getDatabaseName();
+
+    //alert('Connected Succesfully');
+    //İs not working.
+  }
+});
+
+
+
+
+
+
+
+  Route::group(['middleware' => ['web']], function () {
   //Login Routes...
-  Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
+
+  //public/admin/login
+  //public in altındaki klasörün içine yönlendiriyor
+  Route::get('/admi','AdminAuth\AuthController@showLoginForm');
+
+
   Route::post('/admin/login','AdminAuth\AuthController@login');
+  //Route::get('/admin/logout','AdminAuth\AuthController@logout');
   Route::get('/admin/logout','AdminAuth\AuthController@logout');
   // Registration Routes...
   Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');
@@ -52,14 +78,16 @@ Route::group(['middleware' => ['web']], function () {
   Route::post('admin/password/email','AdminAuth\PasswordController@sendResetLinkEmail');
   Route::post('admin/password/reset','AdminAuth\PasswordController@reset');
   Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
-  Route::get('/admin', 'AdminController@index');
+
+  Route::get('/admin/dashboard', 'AdminController@index');
+  Route::get('/admin/firmaOnay/{id}', 'AdminController@firmaOnayla');//kaldır?
+  Route::post('/admin/firmaOnay', 'AdminController@firmaOnay');
+
   Route::post('/firmaOnay', 'AdminController@firmaOnay');
 
-
 });
-Route::get('/kalemlerTablolari',['middleware' => 'admin' , function () {
+Route::get('/admin/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
-
 }]);
 
 //Route::resource('kullaniciLog', 'ActivityController');
@@ -105,16 +133,17 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
                 DebugBar::info("if");
               }
               else{
-                  
+
                 $sektorler = \App\Sektor::where('kalem_turu', '=', $mal_turu)->get();
                 DebugBar::info("else");
-              }   
+              }
               DebugBar::info($sektorler);
               return Response::json($sektorler);
-              
+
    });
-  Route::get('/tablesControl',['middleware' => 'admin' , function () {
-    return view('admin.index');
+
+  Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
+    return view('admin.genproduction.projects');
   }]);
 
   Route::get('/api/v1/admins/{id?}', 'Admins@index');
@@ -139,17 +168,8 @@ Route::get('/', function () {
   return view('Anasayfa.temelAnasayfa');
 });
 
-Route::get('/firmaList', function () {
+Route::get('/admin/firmaList', 'AdminController@onayBekleyenFirmalar');
 
-  $onay = DB::table('firmalar')
-  ->where('onay', 0)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
-
-  $onayli = DB::table('firmalar')
-  ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination');
-
-  return View::make('admin.firmaList')-> with('onay',$onay)-> with('onayli',$onayli);
-
-});
 Route::get('/firmaListeleme',function (){
 
   $onay = DB::table('firmalar')
@@ -165,10 +185,9 @@ Route::get('/firmaListeOnaylı',function (){
 
   return Response::json(View::make('admin.firmaListOnayli',array('onayli'=> $onayli))->render());
 });
-Route::get('/yorumList', function () {
 
-  return view('admin.yorumList');
-});
+Route::get('/admin/yorumList', 'AdminController@yorumList');
+
 Route::POST('/firmaDavet', function () {
 
   $davetEdilenFirma = Input::get('isim');
@@ -194,29 +213,6 @@ Route::POST('/firmaDavet', function () {
   return Response::json($mesaj);
 });
 
-Route::get('/firmaOnay/{id}', function ($id) {
-
-  $firmas = Firma::find($id);
-  $firmas->onay=1;
-  $firma_kul = App\FirmaKullanici::where('firma_id',$id)->get();
-  foreach ($firma_kul as $firmaKul){
-
-  }
-
-  $firmaOnay=  \App\Kullanici::find($firmaKul->kullanici_id);
-
-  $data = ['ad' => $firmaOnay->adi, 'soyad' => $firmaOnay->soyadi];
-
-  Mail::send('auth.emails.yorum_mesaj', $data, function($message) use($data,$firmaOnay)
-  {
-    $message->to($firmaOnay->email, $data['ad'])
-    ->subject('FİRMANIZ ONAYLANDI!');
-
-  });
-  $firmas->save();
-  return view('admin.firmaList');
-});
-
 Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
 
   $yorumlar = App\Yorum::find($id);
@@ -235,13 +231,7 @@ Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
   $yorumlar->save();
   return view('admin.yorumList');
 });
-Route::get('/kullaniciIslemleri/{id}', function ($id) {
-  $firma = Firma::find($id);
-  $roller=  App\Rol::all();
-
-  return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
-
-});
+Route::get('/kullaniciIslemleri/{id}', 'KullaniciController@kullaniciIslemleri');
 Route::get('/kullaniciBilgileri/{id}', function ($id) {
   $firma = Firma::find($id);
   return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
@@ -374,7 +364,7 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
   return view('Firma.firmalar')->with('firmalar', $firmalar);
 }]);
 Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
-    
+
     $firma=Firma::find($firmaid);
     $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
         ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
@@ -437,11 +427,11 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
         $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
 
     $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-    
+
     DebugBar::info($firma->tedarikEttigiFirmalar);
-   
-    
-    
+
+
+
      return view('Firma.firmaDetay')->with('firma', $firma)->with('puanlar', $puanlar)->with('yorumlar', $yorumlar)
           ->with('toplamYorum', $toplamYorum)->with('satilanMarka', $satilanMarka)->with('firmaAdres', $firmaAdres)->with('firmaFatura', $firmaFatura)
           ->with('sirketTurleri', $sirketTurleri)->with('uretilenMarka', $uretilenMarka)->with('kaliteBelge', $kaliteBelge)->with('firmaReferanslar', $firmaReferanslar)
@@ -450,10 +440,7 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
 
 });
-Route::get('/davetEdildigim/{firmaid}', function ($firmaid) {
-  $firma=Firma::find($firmaid);
-  return view('Firma.ilan.davetEdildigimIlanlar')->with('firma', $firma);
-});
+Route::get('/davetEdildigim/{firma_id}', 'IlanController@davetEdildigimIlanlar');
 
 Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
   $firmas = Firma::find($id);
@@ -499,6 +486,9 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
   return view('Firma.firmaIslemleri')->with('firma',$firma)->with('davetEdilIlanlar', $davetEdilIlanlar)
           ->with('ilanlarFirma', $ilanlarFirma)->with('teklifler', $teklifler)->with('tekliflerCount', $tekliflerCount);
 }]);
+
+
+
 
 Route::post('/ilanAra', 'IlanController@showIlan');
 Route::get('/ilanAra', 'IlanController@showIlan');
@@ -562,64 +552,7 @@ Route::post('/getIlan',function () {
   return Response::json($querys);
 });
 
-Route::post('/form', function (Request $request) {
-  DB::beginTransaction();
-
-  try {
-    $firma= new Firma();
-
-    $firma->adi=Str::title(strtolower($request->firma_adi));
-    $now = new \DateTime();
-    $firma->olusturmaTarihi=$now;
-    $firma->save();
-
-    $iletisim = $firma->iletisim_bilgileri ?: new App\IletisimBilgisi();
-    $iletisim->telefon = $request->telefon;
-    $iletisim->email = $request->email;
-    $firma->iletisim_bilgileri()->save($iletisim);
-
-    $adres = $firma->adresler()->where('tur_id', '=', '1')->first() ?: new  App\Adres();
-    $adres->il_id = $request->il_id;
-    $adres->ilce_id = $request->ilce_id;
-    $adres->semt_id = $request->semt_id;
-    $adres->adres =Str::title(strtolower( $request->adres));
-    $tur = 1;
-    $adres->tur_id = $tur;
-    $firma->adresler()->save($adres);
-
-    $firma->sektorler()->attach($request->sektor_id);
-
-    $kullanici= new App\Kullanici();
-    $kullanici->adi = Str::title(strtolower($request->adi));
-    $kullanici->soyadi =Str::title(strtolower( $request->soyadi));
-    $kullanici->email = $request->email_giris;
-    $kullanici->password =Hash::make( $request->password);
-    $kullanici->telefon = $request->telefonkisisel;
-    $kullanici->save();
-
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>1, 'unvan'=>Str::title(strtolower($request->unvan))]);
-
-    $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
-
-    Mail::send('auth.emails.mesaj', $data, function($message) use($data,$request)
-    {
-
-      $message->to($request->email, $data['ad'])
-      ->subject('YENİ KAYIT OLMA İSTEĞİ!');
-
-    });
-    DB::commit();
-    // all good
-  } catch (\Exception $e) {
-    $error="error";
-    DB::rollback();
-    return Response::json($error);
-
-  }
-
-
-
-});
+Route::post('/form', 'Auth\AuthController@kayitForm');
 
 Route::post('/yeniFirma/{id}', function (Request $request,$id) {
 
@@ -672,70 +605,9 @@ Route::post('/yeniFirma/{id}', function (Request $request,$id) {
   //return redirect('/');
 });
 
+Route::get('ilanlarim/{firma_id}', 'IlanController@ilanlarim');
 
-Route::get('ilanlarim/{id}' ,function ($id) {
-  $firma = Firma::find($id);
-  $model_ilanlar=  Ilan::all();
-  if (Gate::denies('show', $firma)) {
-    return Redirect::to('/');
-  }
-
-    $aktif_ilanlar= Ilan::where('firma_id',$firma->id)->where('statu',0)->get();
-
-    $aktif_count= $aktif_ilanlar->count();
-
-
-    $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
-    $sonuc_ilanlar= Ilan::where('firma_id',$firma->id)->where('statu',1)->get();
-    $sonuc_kapali = $sonuc_ilanlar->count();
-    $kazananFiyat=0;
-
-    $pasif_ilanlar = App\Ilan::where('firma_id',$firma->id)->where('statu',2)->get();
-
-
-    return view('Firma.ilan.ilanlarim')->with('firma', $firma)->with('aktif_ilanlar', $aktif_ilanlar)->with('aktif_count', $aktif_count)->with('ilanlarım', $ilanlarım)
-            ->with('sonuc_kapali', $sonuc_kapali)->with('sonuc_ilanlar', $sonuc_ilanlar)->with('model_ilanlar', $model_ilanlar)
-            ->with('kazananFiyat', $kazananFiyat)->with('pasif_ilanlar',$pasif_ilanlar);
-
-});
-Route::get('basvurularim/{id}' ,function ($id) {
-  $firma = Firma::find($id);
-  if (Gate::denies('show', $firma)) {
-    return Redirect::to('/');
-  }
-    $basvurular = DB::select(DB::raw("SELECT *
-                        FROM teklif_hareketler th1
-                        JOIN (
-                        SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
-                        FROM teklifler t, teklif_hareketler th
-                        WHERE t.id = th.teklif_id
-                        AND t.firma_id ='$firma->id'
-                        GROUP BY th.teklif_id
-                        )th2 ON th1.teklif_id = th2.teklif_id
-                        AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
-    $basvurular_count = DB::select(DB::raw("SELECT count(th1.id) as count
-                        FROM teklif_hareketler th1
-                        JOIN (
-                        SELECT teklif_id, t.ilan_id AS ilanId, MAX( tarih ) tarih
-                        FROM teklifler t, teklif_hareketler th
-                        WHERE t.id = th.teklif_id
-                        AND t.firma_id ='$firma->id'
-                        GROUP BY th.teklif_id
-                        )th2 ON th1.teklif_id = th2.teklif_id
-                        AND th1.tarih = th2.tarih ORDER BY th2.tarih DESC "));
-    $kazananKismi = App\KismiAcikKazanan::where('kazanan_firma_id',$firma->id)->get();
-    $kazananKismiCount= $kazananKismi->count();
-
-    $kazananKapali = App\KismiKapaliKazanan::where('kazanan_firma_id',$firma->id)->get();
-    $kazananKismiCount = $kazananKismiCount +($kazananKapali->count());
-    $teklifler=  \App\Teklif::all();
-  //$kullanici = App\Kullanici::find($kul_id);
-    $detaylar = App\MalTeklif::all();
-    return view('Firma.ilan.basvurularim')->with('firma', $firma)->with('teklifler', $teklifler)->with('detaylar', $detaylar)
-         ->with('basvurular', $basvurular)->with('basvurular_count', $basvurular_count)
-         ->with('kazananKismi', $kazananKismi)->with('kazananKapali', $kazananKapali)->with('kazananKismiCount', $kazananKismiCount);
-
-});
+Route::get('basvurularim/{firma_id}', 'IlanController@basvurularim');
 
 Route::get('/basvuruDetay/',function (){
   $teklifler =  \App\Teklif::all();
@@ -903,284 +775,10 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan', $ilan)
             ->with('birimler',$birimler)->with('teklifler',$teklifler);
   }]);
-  
-  Route::get('/ilanOlustur/{id}',function ($id) {
-      $firma = Firma::find($id);
-   
-       $ilan = new App\Ilan();
-      if (Gate::denies('show', $firma)) {
-        return redirect()->intended();
-      }
-      /*if (Gate::denies('createIlan')) {
-        return redirect()->intended();
-      }*/
 
-       if (!$ilan)
-       
-       if (!$ilan->ilan_yapim_isleri)
-        $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+  Route::get('/ilanOlustur/{firma_id}', 'IlanController@ilanOlustur');
 
-      $sektorler= \App\ Sektor::all();
-      $maliyetler=  \App\Maliyet::all();
-      $odeme_turleri= \App\OdemeTuru::all();
-      $para_birimleri= \App\ParaBirimi::all();
-      $iller = Il::all();
-      $birimler=  \App\Birim::all();
-
-      return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
-
-    });
-  
-  Route::post('/ilanOlusturEkle/{id}', function (Request $request,$id) {
-        //ilan bilgileri kaydediliyor.
-        
-        $firma = Firma::find($id);
-        $ilan = new Ilan;
-        $ilan->adi=Str::title(strtolower( $request->ilan_adi));
-        $ilan->ilan_sektor=$request->firma_sektor;
-        
-        $ilan_tarihi= explode(" - ", $request->ilan_tarihi_araligi);
-        DebugBar::info($ilan_tarihi);
-        
-        $ilan_tarihi_replace1=$ilan_tarihi[0];
-        $ilan_tarihi_replace1 = str_replace('/', '-', $ilan_tarihi_replace1);
-        $ilan_tarihi_replace2=$ilan_tarihi[1];
-        $ilan_tarihi_replace2 = str_replace('/', '-', $ilan_tarihi_replace2);
-        
-        DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace1)));
-        DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace2)));
-         
-        $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi_replace1));
-        $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi_replace2));
-       
-        
-        $is_tarihi= explode(" - ", $request->is_tarihi_araligi);
-        DebugBar::info($is_tarihi);
-        
-        $is_tarihi_replace1=$is_tarihi[0];
-        $is_tarihi_replace1 = str_replace('/', '-', $is_tarihi_replace1);
-        $is_tarihi_replace2=$is_tarihi[1];
-        $is_tarihi_replace2 = str_replace('/', '-', $is_tarihi_replace2);
-        
-        
-        $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
-        DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace1)));
-        
-        $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi_replace2));
-        DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace2)));
-        
-        $ilan->aciklama =Str::title(strtolower( $request->aciklama));
-        $ilan->ilan_turu= $request->ilan_turu;
-        $ilan->katilimcilar= $request->katilimcilar;
-        $ilan->rekabet_sekli= $request->rekabet_sekli;
-        $ilan->sozlesme_turu= $request->sozlesme_turu;
-        $ilan->odeme_turu_id=$request->odeme_turu;
-        $ilan->para_birimi_id=$request->para_birimi;
-        $ilan->kismi_fiyat=$request->kismi_fiyat;
-        $ilan->yaklasik_maliyet= $request->maliyet;
-        $ilan->komisyon_miktari=$request->yaklasik_maliyet;
-        $ilan->teslim_yeri_satici_firma= $request->teslim_yeri;
-        $ilan->teslim_yeri_il_id= $request->il_id;
-        $ilan->teslim_yeri_ilce_id= $request->ilce_id;
-        $ilan->isin_suresi= $request->isin_suresi;
-        
-        $ilan->adi= $request->ilan_adi;
-        $ilan->sozlesme_onay= $request->sozlesme_onay;
-        //foreach($request->firma_adi_gizli as $firma_adi_gizli){
-          $ilan->goster = $request->firma_adi_goster;
-        //}
-        if($request->file('teknik'))
-        {
-          $file = $request->file('teknik');
-          $file = array('teknik' => $request->file('teknik'));
-          $destinationPath = 'Teknik';
-          $extension = $request->file('teknik')->getClientOriginalExtension();
-          $fileName = rand(11111, 99999) . '.' . $extension;
-          $ilan->teknik_sartname = $fileName;
-          $request->file('teknik')->move($destinationPath, $fileName);
-          Session::flash('success', 'Upload successfully');
-
-        }
-        $ilan->statu = 0;
-
-        $firma->ilanlar()->save($ilan);
-
-        if($request->belirli_istekli!=null){
-          foreach($request->belirli_istekli as $belirli){
-            $belirli_istekliler= new \App\BelirlIstekli();
-            $belirli_istekliler->ilan_id = $ilan->id;
-            $belirli_istekliler->firma_id=$belirli;
-            $belirli_istekliler->save();
-          }
-        }
-         if($request->onayli_tedarikciler!=null){
-          foreach($request->onayli_tedarikciler as $onayli){
-            $onayli_tedarikciler= new App\OnayliTedarikci();
-            $onayli_tedarikciler->firma_id = $ilan->firma_id;
-            $onayli_tedarikciler->tedarikci_id=$onayli;
-            $onayli_tedarikciler->save();
-          }
-        }
-        
-        //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
-        if($ilan->ilan_turu==1 && $ilan->sozlesme_turu==0){
-            
-            foreach($request->mal_id as $malId){
-                  $arrayMalId[] = $malId;
-            }
-            foreach($request->mal_kalem as $malKalem){
-                  $arrayMalKalem[] = $malKalem;
-            }
-            foreach($request->mal_marka as $marka){
-                  $arrayMarka[] = $marka;
-            }
-            foreach($request->mal_model as $model){
-                  $arrayModel[] = $model;
-            }
-            foreach($request->mal_aciklama as $malAciklama){
-                  $arrayMalAciklama[] = $malAciklama;
-            }
-            foreach($request->mal_ambalaj as $ambalaj){
-                  $arrayAmbalaj[] = $ambalaj;
-            }
-            foreach($request->mal_miktar as $miktar){
-                  $arrayMiktar[] = $miktar;
-            }
-            
-            foreach($request->mal_birim as $birim){
-                  $arrayBirim[] = $birim;
-            }
-           
-            $i=0;
-              foreach($request->mal_kalem as $malKalem){
-                $mal= new \App\IlanMal();
-                $mal->ilan_id=$ilan->id;
-                $mal->kalem_id=$arrayMalId[$i];
-                $mal->kalem_adi=$arrayMalKalem[$i];
-                $mal->marka=Str::title(strtolower($arrayMarka[$i]));
-                $mal->model=Str::title(strtolower($arrayModel[$i]));
-                $mal->aciklama=Str::title(strtolower($arrayMalAciklama[$i]));
-                $mal->ambalaj=Str::title(strtolower($arrayAmbalaj[$i]));
-                $mal->miktar=$arrayMiktar[$i];
-                $mal->birim_id=$arrayBirim[$i];
-                $mal->save();
-                $i++;
-              }
-        }
-        else if($ilan->ilan_turu==2 && $ilan->sozlesme_turu==0){
-          
-            
-            foreach($request->hizmet_id as $hizmetId){
-                  $arrayHizmetId[] = $hizmetId;
-            }
-            foreach($request->hizmet_kalem as $hizmetKalem){
-                  $arrayHizmetKalem[] = $hizmetKalem;
-            }
-            foreach($request->hizmet_aciklama as $hizmetAciklama){
-                  $arrayHizmetAciklama[] = $hizmetAciklama;
-            }
-            foreach($request->hizmet_fiyat_standardi as $hfs){
-                  $arrayHfs[] = $hfs;
-            }
-            foreach($request->hizmet_fiyat_standardi_birimi as $hfsb){
-                  $arrayHfsb[] = $hfsb;
-            }
-            foreach($request->hizmet_miktar as $hizmetMiktar){
-                  $arrayHizmetMiktar[] = $hizmetMiktar;
-            }
-            foreach($request->hizmet_miktar_birim_id as $hmb){
-                  $arrayHmb[] = $hmb;
-            }
-           
-            $i=0;
-              foreach($request->hizmet_kalem as $hizmetKalem){
-                $hizmet= new \App\IlanHizmet();
-                $hizmet->ilan_id=$ilan->id;
-                $hizmet->kalem_id= $arrayHizmetId[$i];
-                $hizmet->kalem_adi= $arrayHizmetKalem[$i];
-                $hizmet->aciklama=Str::title(strtolower($arrayHizmetAciklama[$i]));
-                $hizmet->fiyat_standardi=Str::title(strtolower($arrayHfs[$i]));
-                $hizmet->fiyat_standardi_birim_id=$arrayHfsb[$i];
-                $hizmet->miktar=$arrayHizmetMiktar[$i];
-                $hizmet->miktar_birim_id=$arrayHmb[$i];
-                $hizmet->save();
-                $i++;
-              } 
-        }
-         else if($ilan->sozlesme_turu==1){
-             
-            foreach($request->goturu_id as $goturuId){
-                  $arrayGoturuId[] = $goturuId;
-            }
-            foreach($request->goturu_kalem as $goturuKalem){
-                  $arrayGooturuKalem[] = $goturuKalem;
-            }
-            foreach($request->goturu_aciklama as $goturuAciklama){
-                  $arrayGoturuAciklama[] = $goturuAciklama;
-            }
-            foreach($request->goturu_miktar as $goturuMiktar){
-                  $arrayGoturuMiktar[] = $goturuMiktar;
-            }
-            foreach($request->goturu_miktar_birim_id as $gmb){
-                  $arrayGmb[] = $gmb;
-            }
-            $i=0;
-              foreach($request->goturu_kalem as $goturuKalem){
-                $goturu= new \App\IlanGoturuBedel();
-                $goturu->ilan_id=$ilan->id;
-                $goturu->kalem_id=  $arrayGoturuId[$i];
-                $goturu->kalem_adi= $arrayGooturuKalem[$i];
-                $goturu->aciklama=Str::title(strtolower($arrayGoturuAciklama[$i]));
-                $goturu->miktar=$arrayGoturuMiktar[$i];
-                $goturu->miktar_birim_id=$arrayGmb[$i];
-                $goturu->save();
-                $i++;
-              } 
-         }
-         else if($ilan->ilan_turu==3){
-             
-             foreach($request->yapim_id as $yapimId){
-                  $arrayYapimId[] = $yapimId;
-            }
-            foreach($request->yapim_kalem as $yapimKalem){
-                  $arrayYapimKalem[] = $yapimKalem;
-            }
-            foreach($request->yapim_aciklama as $yapimAciklama){
-                  $arrayYapimAciklama[] = $yapimAciklama;
-            }
-            foreach($request->yapim_fiyat_standardi as $yfs){
-                  $arrayYfs[] = $yfs;
-            }
-            foreach($request->yapim_fiyat_standardi_birimi as $yfsb){
-                  $arrayYfsb[] = $yfsb;
-            }
-            foreach($request->yapim_miktar as $yapimMiktar){
-                  $arrayYapimMiktar[] = $yapimMiktar;
-            }
-            foreach($request->yapim_miktar_birim_id as $ymb){
-                  $arrayYmb[] = $ymb;
-            }
-           
-            $i=0;
-              foreach($request->yapim_kalem as $yapimKalem){
-                $yapim= new \App\IlanYapimIsi();
-                $yapim->ilan_id=$ilan->id;
-                $yapim->kalem_id= $arrayYapimId[$i];
-                $yapim->kalem_adi=  $arrayYapimKalem[$i];
-                $yapim->aciklama=Str::title(strtolower( $arrayYapimAciklama[$i]));
-                $yapim->fiyat_standardi=Str::title(strtolower($arrayYfs[$i]));
-                $yapim->fiyat_standardi_birimi_id=$arrayYfsb[$i];
-                $yapim->miktar=$arrayYapimMiktar[$i];
-                $yapim->birim_id=$arrayYmb[$i];
-                $yapim->save();
-                $i++;
-              } 
-             
-         }
-         return Redirect::to('ilanlarim/'.$firma->id);
-      
-  });
-  
+  Route::post('/ilanOlusturEkle/{firma_id}', 'IlanController@ilanOlusturEkle');
 
   //firma profil route...
   Route::post('firmaProfili/uploadImage/{id}', 'FirmaController@uploadImage');
@@ -1349,7 +947,7 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
     if($ilan->kismi_fiyat == 0){
         $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
         $kisKazanCount=0;
-       
+
         foreach($kazananKapali as $kazanK){
             $kisKazanCount=1;
         }
@@ -1362,7 +960,7 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
         }
     }
     $minFiyat = $ilan->minFiyat();
-                                     
+
       return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
               ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
               ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
@@ -1463,7 +1061,7 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
           Route::get('rekabet/{ilan_id}' ,function ($ilanid) {
             $ilan = App\Ilan::find($ilanid);
             $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->get();
-           
+
             $minFiyat = $ilan->minFiyat();
             $kazanK = null;
             if($ilan->kismi_fiyat == 0){
@@ -1562,7 +1160,7 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
                   }
 
                 }elseif($ilan->sozlesme_turu == 1){
-                   
+
                   $i=0;
                   foreach($request->ilan_goturu_bedel_id as $id){
                     $ilan_goturu = \App\IlanGoturuBedel::find($id);
@@ -1658,3 +1256,5 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
             });
 
             Route::auth();
+
+Route::get('kullanici/onay/{kullanici_id}/{token}', 'Auth\AuthController@activateUser')->name('kullanici.onay');
