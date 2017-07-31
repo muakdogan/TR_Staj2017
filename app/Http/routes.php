@@ -18,6 +18,7 @@ use App\Ilce;
 use App\Semt;
 use App\Ilan;
 use App\Teklif;
+use App\MaliBilgi;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
@@ -106,13 +107,13 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
                 DebugBar::info("if");
               }
               else{
-                  
+
                 $sektorler = \App\Sektor::where('kalem_turu', '=', $mal_turu)->get();
                 DebugBar::info("else");
-              }   
+              }
               DebugBar::info($sektorler);
               return Response::json($sektorler);
-              
+
    });
   Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
     return view('admin.index');
@@ -333,7 +334,7 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
   return view('Firma.firmalar')->with('firmalar', $firmalar);
 }]);
 Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
-    
+
     $firma=Firma::find($firmaid);
     $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
         ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
@@ -396,11 +397,11 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
         $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
 
     $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-    
+
     DebugBar::info($firma->tedarikEttigiFirmalar);
-   
-    
-    
+
+
+
      return view('Firma.firmaDetay')->with('firma', $firma)->with('puanlar', $puanlar)->with('yorumlar', $yorumlar)
           ->with('toplamYorum', $toplamYorum)->with('satilanMarka', $satilanMarka)->with('firmaAdres', $firmaAdres)->with('firmaFatura', $firmaFatura)
           ->with('sirketTurleri', $sirketTurleri)->with('uretilenMarka', $uretilenMarka)->with('kaliteBelge', $kaliteBelge)->with('firmaReferanslar', $firmaReferanslar)
@@ -745,7 +746,6 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
   Route::get('/ilanOlustur/{firma_id}', 'IlanController@ilanOlustur');
   
   Route::post('/ilanOlusturEkle/{firma_id}', 'IlanController@ilanOlusturEkle');
-  
 
   //firma profil route...
   Route::post('firmaProfili/uploadImage/{id}', 'FirmaController@uploadImage');
@@ -909,7 +909,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     if($ilan->kismi_fiyat == 0){
         $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
         $kisKazanCount=0;
-       
+
         foreach($kazananKapali as $kazanK){
             $kisKazanCount=1;
         }
@@ -922,7 +922,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
         }
     }
     $minFiyat = $ilan->minFiyat();
-                                     
+
       return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
               ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
               ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
@@ -1024,7 +1024,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
             $ilan = App\Ilan::find($ilanid);
             Debugbar::info("rekabet");
             $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->get();
-           
+
             $minFiyat = $ilan->minFiyat();
             $kazanK = null;
             if($ilan->kismi_fiyat == 0){
@@ -1124,7 +1124,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                   }
 
                 }elseif($ilan->sozlesme_turu == 1){
-                   
+
                   $i=0;
                   foreach($request->ilan_goturu_bedel_id as $id){
                     $ilan_goturu = \App\IlanGoturuBedel::find($id);
@@ -1187,7 +1187,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 DB::rollback();
                 return Response::json($error);
               }
-              
+
 
             });
             ////////////////////////ilan detay ///////////////////////////
