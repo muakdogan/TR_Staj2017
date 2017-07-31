@@ -10,6 +10,7 @@ app.controller('adminsController', function($scope, $http, API_URL) {
         $scope.modalstate = modalstate;
         switch (modalstate) {
             case 'add':
+            alert("Buraya Gels");
                 $scope.form_title = "Yeni Admin Ekle";
                 break;
             case 'edit':

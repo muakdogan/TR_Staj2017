@@ -386,16 +386,16 @@
                           <td>
                             <ul class="list-inline">
                               <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
+                                <img src="../../resources/views/admin/genproduction/images/user.png" class="avatar" alt="Avatar">
                               </li>
                               <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
+                                <img src="../../resources/views/admin/genproduction/images/user.png" class="avatar" alt="Avatar">
                               </li>
                               <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
+                                <img src="../../resources/views/admin/genproduction/images/user.png" class="avatar" alt="Avatar">
                               </li>
                               <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
+                                <img src="../../resources/views/admin/genproduction/images/user.png" class="avatar" alt="Avatar">
                               </li>
                             </ul>
                           </td>
