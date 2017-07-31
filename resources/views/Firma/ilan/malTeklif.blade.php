@@ -149,8 +149,8 @@
             </td>
         </tr>
         <tr>
-            <td colspan="5"></td>
-            <td colspan="3" style="text-align:right">
+            <td colspan="3"></td>
+            <td colspan="4" style="text-align:right">
                 @if($kullaniciTeklifi['iskonto_orani']>0)
                     <label for="" id="iskontoluToplamFiyatL" class="control-label toplam" >İskontolu KDV Hariç Toplam Fiyat: {{$teklifler[0]->paraFormat($kullaniciTeklifi['iskontolu_kdvsiz_fiyat'])}}</label>
                     <input type="hidden" name="iskontoluToplamFiyatKdvsiz"  id="iskontoluToplamFiyatKdvsiz" value="{{$kullaniciTeklifi['iskontolu_kdvsiz_fiyat']}}">
@@ -159,7 +159,7 @@
                     <input type="hidden" name="iskontoluToplamFiyatKdvsiz"  id="iskontoluToplamFiyatKdvsiz" value="">
                 @endif
             </td>
-            <td colspan="3" style="text-align:right">
+            <td colspan="4" style="text-align:right">
                 @if($kullaniciTeklifi['iskonto_orani']>0)
                     <label for="" id="iskontoluToplamFiyatLabel" class="control-label toplam" >İskontolu KDV Dahil Toplam Fiyat: {{$teklifler[0]->paraFormat($kullaniciTeklifi['iskontolu_kdvli_fiyat'])}}</label>
                     <input type="hidden" name="iskontoluToplamFiyatKdvli"  id="iskontoluToplamFiyatKdvli" value="{{$kullaniciTeklifi['iskontolu_kdvli_fiyat']}}">
