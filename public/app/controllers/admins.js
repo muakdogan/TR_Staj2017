@@ -1,5 +1,4 @@
 app.controller('adminsController', function($scope, $http, API_URL) {
-    alert("Buraya geliyorsan haber ver");
     //retrieve employees listing from API
     $http.get(API_URL + "admins")
             .success(function(response) {
@@ -9,7 +8,6 @@ app.controller('adminsController', function($scope, $http, API_URL) {
     //show modal form
     $scope.toggle = function(modalstate, id) {
         $scope.modalstate = modalstate;
-        var x = confirm("Add e Girdii");
         switch (modalstate) {
             case 'add':
                 $scope.form_title = "Yeni Admin Ekle";
@@ -54,7 +52,7 @@ app.controller('adminsController', function($scope, $http, API_URL) {
 
     //delete record
     $scope.confirmDelete = function(id) {
-        var isConfirmDelete = confirm('Are you sure you want this record?');
+        var isConfirmDelete = confirm('Are you sure you want DELETE this record?');
         if (isConfirmDelete) {
             alert(API_URL);
             $http({
