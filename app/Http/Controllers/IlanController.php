@@ -163,12 +163,9 @@ class IlanController extends Controller
    
         $ilan = new \App\Ilan();
 
-        //redirect olunca ne olduğu anlaşılmadığı için şimdilik 403 veren bu satır var
-        $this->authorize('createIlan', $ilan);
-
-        /*if (Gate::denies('createIlan', $ilan)) {
+        if (Gate::denies('createIlan', [$ilan, $firma_id])) {
             return redirect()->intended();
-        }*/
+        }
 
         if (!$ilan)
         
