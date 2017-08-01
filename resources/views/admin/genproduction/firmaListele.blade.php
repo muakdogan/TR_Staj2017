@@ -290,7 +290,7 @@
             </nav>
           </div>
         </div>
-        <!-- /top navi
+        <!-- /top navi -->
 
 
         <!-- page content -->
@@ -316,7 +316,7 @@
             <div class="clearfix"></div>
 
             <div class="">
-              <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2><i class="fa fa-bars"></i> Kullanıcı Firma İşlemleri <small>Onaylı & Onaylanmayı Bekleyen</small></h2>
