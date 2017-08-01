@@ -59,7 +59,7 @@ class AdminController extends Controller
             $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('uyelik_bitis_suresi')+"M"));//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
             $firma->onay = 1;
             $firma->save();
-            
+
             $subject = "Firmanız Onaylandı";
             $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
             $firma->uyelik_bitis_tarihi tarihine kadar onaylanmıştır.";
@@ -105,7 +105,7 @@ class AdminController extends Controller
         });
 
     }
-    
+
     public function firmaOnayla ($id) {
 
         $firmas = Firma::find($id);

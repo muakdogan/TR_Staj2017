@@ -65,7 +65,7 @@ Route::get('/DbTest', function () {
 
   //public/admin/login
   //public in altındaki klasörün içine yönlendiriyor
-  Route::get('/admi','AdminAuth\AuthController@showLoginForm');
+  Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
 
 
   Route::post('/admin/login','AdminAuth\AuthController@login');
@@ -144,12 +144,12 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
 
   Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
     return view('admin.genproduction.projects');
-  }]);
+  }]);//admin.index
 
-  Route::get('/api/v1/admins/{id?}', 'Admins@index');
-  Route::post('/api/v1/admins', 'Admins@store');
-  Route::post('/api/v1/admins/{id}', 'Admins@update');
-  Route::delete('/api/v1/admins/{id}', 'Admins@destroy');
+  Route::get('/admin/api/v1/admins/{id?}', 'Admins@index');
+  Route::post('/admin/api/v1/admins', 'Admins@store');
+  Route::post('/admin/api/v1/admins/{id}', 'Admins@update');
+  Route::delete('/admin/api/v1/admins/{id}', 'Admins@destroy');
 
   /*Route::get('/adminAnasayfa', function () {
   $firmalar=Firma::all();
