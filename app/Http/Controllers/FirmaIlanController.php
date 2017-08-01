@@ -11,32 +11,57 @@ use Illuminate\Support\Facades\Validator;
 use Session;
 use Gate;
 use File;
+use App\Teklif;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use DB;
+use Barryvdh\Debugbar\Facade as Debugbar;
 class FirmaIlanController extends Controller
 {
   /*public function __construct(){
   $this->middleware('auth', ['only' => 'showFirmaIlanEkle']);
 }*/
 //
-public function showFirmaIlanEkle($id,$ilan_id){
-  $firma = Firma::find($id);
-  $ilan = Ilan::find($ilan_id);
-  if (Gate::denies('show', $firma)) {
-    return redirect()->intended();
-  }
-  /*if (Gate::denies('createIlan')) {
-    return redirect()->intended();
-  }*/
-  $sektorler= \App\ Sektor::all();
-  $maliyetler=  \App\Maliyet::all();
-  $odeme_turleri= \App\OdemeTuru::all();
-  $para_birimleri= \App\ParaBirimi::all();
-  $iller = Il::all();
-  $birimler=  \App\Birim::all();
+    public function showFirmaIlanEkle($firma_id,$ilan_id){
+    $firma = Firma::find($firma_id);
+    $ilan = Ilan::find($ilan_id);
 
-  return view('Firma.ilan.firmaIlanEkle', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
+    if($ilan==null){
+        $ilan = new Ilan();
+    }
+
+    if (!$ilan->ilan_hizmetler){
+        $ilan->ilan_hizmetler = new \App\IlanHizmet();
+    }
+
+    if (!$ilan->ilan_mallar)
+        $ilan->ilan_mallar = new \App\IlanMal();
+
+    if (!$ilan->ilan_goturu_bedeller)
+        $ilan->ilan_goturu_bedeller = new \App\IlanGoturuBedel ();
+
+    if (!$ilan->ilan_yapim_isleri)
+        $ilan->ilan_yapim_isleri = new \App\IlanYapimIsi();
+
+    if (Gate::denies('show', $firma)) {
+    return redirect()->intended();
+    }
+    /*if (Gate::denies('createIlan')) {
+    return redirect()->intended();
+    }*/
+    $sektorler= \App\Sektor::all();
+    $maliyetler=  \App\Maliyet::all();
+    $odeme_turleri= \App\OdemeTuru::all();
+    $para_birimleri= \App\ParaBirimi::all();
+    $iller = Il::all();
+    $birimler=  \App\Birim::all();
+
+    $teklifVarMi=0;
+    if($ilan->teklif_hareketler()->limit(1)->paginate()!=null){
+        $teklifVarMi=1;
+    }
+
+    return view('Firma.ilanDuzenle.index')->with('firma',$firma)->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan)->with('teklifVarMi',$teklifVarMi);
 }
 public function ilanUpdate(Request $request,$id,$ilan_id){
   /*$rules = array('teknik' => 'mimes:pdf|max:100000');

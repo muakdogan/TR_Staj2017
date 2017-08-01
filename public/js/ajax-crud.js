@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    var url = "/tamrekabet/public/index.php/firma";
+    var url = "/tamrekabet/public/index.blade.php/firma";
    
     //display modal form for task editing
     $('.open-modal').click(function(){

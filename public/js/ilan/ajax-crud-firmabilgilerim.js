@@ -1,39 +1,42 @@
 $(document).ready(function(){
 
-
     $('#btn-add-firmaBilgilerim').click(function () {
         $('#btn-save-firmaBilgilerim').val("add");
         $('#myModal-firmaBilgilerim').modal('show');
     });
+
     $('#btn-add-ilanBilgileri').click(function () {
         $('#btn-save-ilanBilgileri').val("add");
         $('#myModal-ilanBilgileri').modal('show');
     });
-      $('#btn-add-fiyatlandırmaBilgileri').click(function () {
+
+    $('#btn-add-fiyatlandırmaBilgileri').click(function () {
         $('#btn-save-fiyatlandırmaBilgileri').val("add");
         $('#myModal-fiyatlandırmaBilgileri').modal('show');
     });
     
-     $('.btn-add-teknik').click(function () {
+    $('.btn-add-teknik').click(function () {
         $('#btn-save-teknik').val("add");
         $('#myModal-teknik').modal('show');
     });
-     $('#btn-add-mal').click(function () {
-        $('#myModal-mal_birimfiyat_add').modal('show');
 
+    $('#btn-add-mal').click(function () {
+        $('#myModal-mal_birimfiyat_add').modal('show');
     });
-     $('#btn-add-hizmet').click(function () {
+
+    $('#btn-add-hizmet').click(function () {
         $('#myModal-hizmet_birimfiyat_add').modal('show');
     });
-     $('#btn-add-goturu_bedeller').click(function () {
+
+    $('#btn-add-goturu_bedeller').click(function () {
         $('#myModal-goturu_bedeller_add').modal('show');
     });
-     $('#btn-add-yapim_isleri').click(function () {
+
+    $('#btn-add-yapim_isleri').click(function () {
         $('#myModal-yapim_isleri_add').modal('show');
     });
     
-    
-   var url = "/tamrekabet/public/index.php/firmaMal";
+    var url = "/tamrekabet/public/index.blade.php/firmaMal";
     $('.open-modal-mal').click(function(){
         var ilan_mal_id = $(this).val();
         $.get(url + '/'  + ilan_mal_id, function (data) {
@@ -51,11 +54,11 @@ $(document).ready(function(){
             
         }) 
     });
-     var url1 = "/tamrekabet/public/index.php/firmaHizmet";
+
+    var url1 = "http://localhost/tamrekabet/TR_Staj2017/public/firmaHizmet";
     $('.open-modal-hizmet').click(function(){
         var ilan_hizmet_id = $(this).val();
         $.get(url1 + '/'  + ilan_hizmet_id, function (data) {
-          
            console.log(data);
             $('#ilan_hizmet_id').val(data.id);
             $('#sira').val(data.sira);
@@ -65,10 +68,10 @@ $(document).ready(function(){
             $('#miktar').val(data.miktar);
             $('#miktar_birimi').val(data.miktar_birim_id); 
             $('#myModal-hizmet_birimfiyat').modal('show');
-            
-        }) 
+        })
     });
-   var url2 = "/tamrekabet/public/index.php/firmaGoturuBedel";
+
+    var url2 = "/tamrekabet/public/index.blade.php/firmaGoturuBedel";
     $('.open-modal-goturu-bedel').click(function(){
         var ilan_goturu_bedel_id = $(this).val();
         $.get(url2 + '/'  + ilan_goturu_bedel_id, function (data) {
@@ -82,7 +85,8 @@ $(document).ready(function(){
             
         }) 
     });
-      var url3= "/tamrekabet/public/index.php/firmaYapimİsi";
+
+    var url3= "/tamrekabet/public/index.blade.php/firmaYapimİsi";
     $('.open-modal-yapim-isi').click(function(){
         var ilan_yapim_isi_id = $(this).val();
         $.get(url3 + '/'  + ilan_yapim_isi_id, function (data) {
@@ -97,23 +101,15 @@ $(document).ready(function(){
             
         }) 
     });
-    
-    
-    
-    
-      $('.detay').click(function(){
+
+    $('.detay').click(function(){
         $('#btn-save-detay').val("add");
         $('#myModal-detay').modal('show');
     });
-      $('.düzenle').click(function(){
+
+    $('.düzenle').click(function(){
         $('#btn-save-düzenle').val("add");
         $('#myModal-düzenle').modal('show');
     });
-    
-    
-    
-    
-    
-    
 });
 
