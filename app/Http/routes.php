@@ -905,6 +905,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
 
   });
 
+
+Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetService');
+
   //////////////////////////////////////teklifGor//////////////////////
   Route::get('teklifGor/{id}/{ilanid}' ,['middleware'=>'auth' ,function ($id,$ilan_id) {
     $firma = Firma::find($id);
@@ -926,6 +929,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $kullanici_id=Auth::user()->kullanici_id;
     $teklif= App\Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();
 
+
     $firmaIlan=$ilan->firmalar;
     $firmaAdres = $firmaIlan->adresler()->first();
         if (!$firmaAdres) {
@@ -938,6 +942,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $time = Carbon::parse($dt);
     $dt = $time->format('Y-m-d');
     $kullanici = App\Kullanici::find(session()->get('kullanici_id'));
+
      $kazanK = null;
     if($ilan->kismi_fiyat == 0){
         $kazananKapali = App\KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
@@ -1055,7 +1060,6 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
           ///////////////////////////////////// Rekabet //////////////////////////////////////
           Route::get('rekabet/{ilan_id}' ,function ($ilanid) {
             $ilan = App\Ilan::find($ilanid);
-            Debugbar::info("rekabet");
             $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->get();
 
             $minFiyat = $ilan->minFiyat();
@@ -1075,8 +1079,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                     $kisKazanCount=1;
                 }
             }
-            return Response::json(View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render());
-
+            return View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render();
 
         });
             /////////////////////////////////////teklif Gönder /////////////////////////////////
@@ -1085,7 +1088,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
 
              DB::beginTransaction();
               try {
-                $now = new Carbon();
+                $now = new Carbon();//tarih
 
                 $ilan=  Ilan::find($ilan_id);
                 $teklifExist = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan_id)->get();
@@ -1220,8 +1223,6 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
                 DB::rollback();
                 return Response::json($error);
               }
-
-
             });
             ////////////////////////ilan detay ///////////////////////////
             Route::get('ilanDetay', function () {
