@@ -10,17 +10,17 @@ USE App\Admin;
 class LoginController extends Controller
 {
     //
-    
+
     public function userLogin(){
         $input = Input::all();
         if(count($input) > 0){
             $auth = auth()->guard('user');
- 
+
             $credentials = [
                 'email' =>  $input['email'],
                 'password' =>  $input['password'],
             ];
- 
+
             if ($auth->attempt($credentials)) {
                 return redirect()->action('LoginController@profile');
             } else {
@@ -30,19 +30,19 @@ class LoginController extends Controller
             return view('auth.login');
         }
     }
- 
+
     public function adminLogin(){
         $input = Input::all();
         if(count($input) > 0){
             $auth = auth()->guard('admin');
- 
+
             $credentials = [
                 'email' =>  $input['email'],
                 'password' =>  $input['password'],
             ];
- 
+
             if ($auth->attempt($credentials)) {
-                 return redirect()->action('LoginController@profile');                     
+                 return redirect()->action('LoginController@profile');
             } else {
                 echo 'Error';
             }
@@ -50,13 +50,13 @@ class LoginController extends Controller
             return view('Admin.adminGiris');
         }
     }
- 
+
     public function profile(){
         if(auth()->guard('admin')->check()){
              pr(auth()->guard('admin')->user()->toArray());
-        }         
+        }
         if(auth()->guard('user')->check()){
             pr(auth()->guard('user')->user()->toArray());
-        } 
+        }
     }
 }

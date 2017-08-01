@@ -5,26 +5,688 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25bb77ac-2bc2-44d5-b5d7-5fc516a68bdb" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Goturu/kalemEkleM_Goturu.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Goturu/kalemGuncelleM_Goturu.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Goturu/kalemListesi_Goturu.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Hizmet/kalemEkleM_Hizmet.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Hizmet/kalemGuncelleM_Hizmet.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Hizmet/kalemListesi_Hizmet.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Mal/kalemEkleM_Mal.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Mal/kalemGuncelleM_Mal.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Mal/kalemListesi_Mal.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Yapim/kalemEkleM_Yapim.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Yapim/kalemGuncelleM_Yapim.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Yapim/kalemListesi_Yapim.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDetaylari.blade.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/back_disabled.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/back_enabled.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/back_enabled_hover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/forward_disabled.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/forward_enabled.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/forward_enabled_hover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/images/loading.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/fonts/FontAwesome.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/fonts/fontawesome-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/fonts/fontawesome-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/fonts/fontawesome-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/glyphicons-halflings-regular.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/glyphicons-halflings-regular.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/glyphicons-halflings-regular.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/glyphicons-halflings-regular.woff2" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/images/layout.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/images/min_menu.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/images/min_menu.tiff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/images/welcome.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/images/welcome.tiff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/american-express.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/cropper.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/img.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/inbox.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/mastercard.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/media.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/paypal.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/picture.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/prod-1.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/prod-2.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/prod-3.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/prod-4.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/prod-5.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/user.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/images/visa.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Factories/ActivationFactory.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Http/Middleware/FirmaKullanimaYetkili.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Odeme.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Repositories/ActivationRepository.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/css/custom.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/css/custom.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/js/custom.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genbuild/js/custom.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/css/animate.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/css/bootstrap.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/css/docs.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/css/shCoreDefault.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/css/font-awesome.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/css/font-awesome.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/fonts/fontawesome-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/glyphicons-halflings-regular.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/bordered-pulled.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/core.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/fixed-width.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/font-awesome.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/icons.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/larger.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/list.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/mixins.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/path.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/rotated-flipped.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/spinning.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/stacked.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/less/variables.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_bordered-pulled.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_core.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_fixed-width.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_icons.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_larger.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_list.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_mixins.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_path.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_rotated-flipped.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_spinning.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_stacked.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/_variables.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/fonts/scss/font-awesome.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/index_cn.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/js/bootstrap.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/js/jquery.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/js/shBrushXml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gendocumentation/js/shCore.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/gensrc/js/custom.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/gensrc/js/helpers/smartresize.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/gensrc/scss/custom.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/gensrc/scss/daterangepicker.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/css/maps/jquery-jvectormap-2.0.3.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/firmaListele.blade.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/index.blade.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/js/datepicker/daterangepicker.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/js/moment/moment.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/projects.blade.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/genproduction/yorumListele.blade.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/admin/projects.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/6charts.png" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/6charts.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/html.png" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/html.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/simple.png" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/simple.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/about/dialogs/logo_ckeditor.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/about/dialogs/logo_ckeditor.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/fakeobjects/images/spacer.gif" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/fakeobjects/images/spacer.gif" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/icons.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/icons.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/image/images/noimage.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/image/images/noimage.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/link/images/anchor.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/link/images/anchor.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/magicline/images/icon.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/magicline/images/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/inlineall/logo.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/inlineall/logo.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/sample.jpg" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/sample.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/outputforflash.fla" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/outputforflash.fla" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/outputforflash.swf" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/outputforflash.swf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/icons.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/icons.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/images/arrow.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/images/arrow.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/images/close.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/images/close.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/images/mini.png" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/images/mini.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_diagonals-thick_90_eeeeee_40x40.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_flat_15_cd0a0a_40x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_flat_15_cd0a0a_40x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_glass_100_e4f1fb_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_glass_100_e4f1fb_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_glass_50_3baae3_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_glass_50_3baae3_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_glass_80_d7ebf9_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_glass_80_d7ebf9_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-hard_100_f2f5f7_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-hard_70_000000_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-hard_70_000000_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-soft_100_deedf7_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-soft_100_deedf7_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-soft_25_ffef8f_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-bg_highlight-soft_25_ffef8f_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_2694e8_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_2694e8_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_2e83ff_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_2e83ff_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_3d80b3_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_3d80b3_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_72a7cf_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_72a7cf_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_ffffff_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/images/ui-icons_ffffff_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/img/easy-pie-chart.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/img/easy-pie-chart.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/img/loading.gif" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/img/loading.gif" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/img/progressbar.gif" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/img/progressbar.gif" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/static/favicon.ico" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/static/favicon.ico" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/static/favicon.ico" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/static/favicon.ico" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/animated-overlay.gif" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/animated-overlay.gif" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_diagonals-thick_18_b81900_40x40.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_diagonals-thick_18_b81900_40x40.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_diagonals-thick_20_666666_40x40.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_diagonals-thick_20_666666_40x40.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_flat_0_aaaaaa_40x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_flat_0_aaaaaa_40x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_flat_10_000000_40x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_flat_10_000000_40x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_flat_75_ffffff_40x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_flat_75_ffffff_40x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_100_f6f6f6_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_100_f6f6f6_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_100_fdf5ce_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_100_fdf5ce_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_55_fbf9ee_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_55_fbf9ee_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_65_ffffff_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_65_ffffff_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_75_dadada_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_75_dadada_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_75_e6e6e6_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_75_e6e6e6_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_95_fef1ec_1x400.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_glass_95_fef1ec_1x400.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_gloss-wave_35_f6a828_500x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_gloss-wave_35_f6a828_500x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_highlight-soft_100_eeeeee_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_highlight-soft_75_cccccc_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_highlight-soft_75_cccccc_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_highlight-soft_75_ffe45c_1x100.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_222222_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_222222_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_228ef1_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_228ef1_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_2e83ff_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_2e83ff_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_454545_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_454545_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_888888_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_888888_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_cd0a0a_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_cd0a0a_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_ef8c08_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_ef8c08_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_ffd27a_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_ffd27a_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_ffffff_256x240.png" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/images/ui-icons_ffffff_256x240.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.eot" afterPath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.eot" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.ttf" afterPath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.ttf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.woff" afterPath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/FontAwesome.otf" afterPath="$PROJECT_DIR$/public/admin/fonts/FontAwesome.otf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.eot" afterPath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.eot" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.ttf" afterPath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.ttf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.woff" afterPath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.eot" afterPath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.eot" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.ttf" afterPath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.ttf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.woff" afterPath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.woff" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/Germany.png" afterPath="$PROJECT_DIR$/public/admin/img/Germany.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/India.png" afterPath="$PROJECT_DIR$/public/admin/img/India.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/Russia.png" afterPath="$PROJECT_DIR$/public/admin/img/Russia.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/Spain.png" afterPath="$PROJECT_DIR$/public/admin/img/Spain.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/arrow-up.png" afterPath="$PROJECT_DIR$/public/admin/img/arrow-up.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/avatar-mini.jpg" afterPath="$PROJECT_DIR$/public/admin/img/avatar-mini.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/avatar-mini2.jpg" afterPath="$PROJECT_DIR$/public/admin/img/avatar-mini2.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/avatar-mini3.jpg" afterPath="$PROJECT_DIR$/public/admin/img/avatar-mini3.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/avatar-mini4.jpg" afterPath="$PROJECT_DIR$/public/admin/img/avatar-mini4.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/avatar1.jpg" afterPath="$PROJECT_DIR$/public/admin/img/avatar1.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/avatar1_small.jpg" afterPath="$PROJECT_DIR$/public/admin/img/avatar1_small.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/bg-1.jpg" afterPath="$PROJECT_DIR$/public/admin/img/bg-1.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/chart-texture.jpg" afterPath="$PROJECT_DIR$/public/admin/img/chart-texture.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/chat-avatar.jpg" afterPath="$PROJECT_DIR$/public/admin/img/chat-avatar.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/chat-avatar2.jpg" afterPath="$PROJECT_DIR$/public/admin/img/chat-avatar2.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/customSelect-arrow.gif" afterPath="$PROJECT_DIR$/public/admin/img/customSelect-arrow.gif" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/geekslabs.png" afterPath="$PROJECT_DIR$/public/admin/img/geekslabs.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/line-icon-c.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/line-icon-c.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/line-icon-hover.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/line-icon-hover.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/line-icon.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/line-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/search-line-icon.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/search-line-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/social.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/social.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/weather-hover.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/weather-hover.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/icons/weather.png" afterPath="$PROJECT_DIR$/public/admin/img/icons/weather.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/left-arrow.png" afterPath="$PROJECT_DIR$/public/admin/img/left-arrow.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/logo-big.png" afterPath="$PROJECT_DIR$/public/admin/img/logo-big.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/mail-avatar.jpg" afterPath="$PROJECT_DIR$/public/admin/img/mail-avatar.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/profile-avatar.jpg" afterPath="$PROJECT_DIR$/public/admin/img/profile-avatar.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/profile-widget-avatar.jpg" afterPath="$PROJECT_DIR$/public/admin/img/profile-widget-avatar.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/right-arrow.png" afterPath="$PROJECT_DIR$/public/admin/img/right-arrow.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/sample-img-1.jpg" afterPath="$PROJECT_DIR$/public/admin/img/sample-img-1.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/sample-img-2.png" afterPath="$PROJECT_DIR$/public/admin/img/sample-img-2.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/sample-img-3.png" afterPath="$PROJECT_DIR$/public/admin/img/sample-img-3.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/search-icon.jpg" afterPath="$PROJECT_DIR$/public/admin/img/search-icon.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/user.jpg" afterPath="$PROJECT_DIR$/public/admin/img/user.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/img/user22.png" afterPath="$PROJECT_DIR$/public/admin/img/user22.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/FirmaIlanController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/FirmaIlanController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/ajax-crud-firmabrosur.js" afterPath="$PROJECT_DIR$/public/js/ajax-crud-firmabrosur.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/ajax-crud-referanslarGecmis.js" afterPath="$PROJECT_DIR$/public/js/ajax-crud-referanslarGecmis.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/ajax-crud.js" afterPath="$PROJECT_DIR$/public/js/ajax-crud.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/ilan/ajax-crud-firmabilgilerim.js" afterPath="$PROJECT_DIR$/public/js/ilan/ajax-crud-firmabilgilerim.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Firma.php" afterPath="$PROJECT_DIR$/app/Firma.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/ActivityController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/ActivityController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminAuth/AuthController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminAuth/AuthController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/FirmaController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/FirmaController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/IlanController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/IlanController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/KullaniciController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/KullaniciController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/LoginController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/LoginController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Kernel.php" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Middleware/Authenticate.php" afterPath="$PROJECT_DIR$/app/Http/Middleware/Authenticate.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfNotAdmin.php" afterPath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfNotAdmin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/routes.php" afterPath="$PROJECT_DIR$/app/Http/routes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Policies/IlanPolicy.php" afterPath="$PROJECT_DIR$/app/Policies/IlanPolicy.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/database.php" afterPath="$PROJECT_DIR$/config/database.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/.gitignore" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/Chart.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/Chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/Chart.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/Chart.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/LICENSE.md" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/LICENSE.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/component.json" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/component.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/Chart.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/Chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/prettify.css" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/prettify.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/prettify.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/prettify.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/prettify.less" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/prettify.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/styles.css" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/styles.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/styles.less" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/docs/styles.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/readme.md" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/readme.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/bar.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/bar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/doughnut.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/doughnut.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/line.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/line.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/pie.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/pie.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/polarArea.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/polarArea.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/radar.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/radar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/sixup.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/samples/sixup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/Chart.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/Chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/effects.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/effects.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/excanvas.js" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/assets/excanvas.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/chart-master/site/styles.css" afterPath="$PROJECT_DIR$/public/admin/assets/chart-master/site/styles.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/CHANGES.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/CHANGES.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/LICENSE.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/LICENSE.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/README.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/build-config.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/build-config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/ckeditor.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/ckeditor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/config.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/contents.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/contents.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/af.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/af.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ar.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/bg.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/bg.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/bn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/bn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/bs.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/bs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ca.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ca.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/cs.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/cs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/cy.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/cy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/da.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/da.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/de.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/de.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/el.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/el.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en-au.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en-au.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en-ca.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en-ca.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en-gb.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en-gb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/eo.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/eo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/es.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/es.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/et.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/et.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/eu.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/eu.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fa.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fa.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fo.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fr-ca.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fr-ca.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/fr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/gl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/gl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/gu.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/gu.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/he.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/he.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/hi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/hi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/hr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/hr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/hu.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/hu.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/is.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/is.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/it.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/it.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ja.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ja.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ka.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ka.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/km.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/km.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ko.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ko.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ku.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ku.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/lt.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/lt.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/lv.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/lv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/mk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/mk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/mn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/mn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ms.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ms.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/nb.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/nb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/nl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/nl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/no.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/no.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/pl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/pl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/pt-br.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/pt-br.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/pt.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/pt.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ro.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ro.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ru.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ru.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sr-latn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sr-latn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sv.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/sv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/th.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/th.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/tr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/tr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ug.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/ug.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/uk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/uk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/vi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/vi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/zh-cn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/zh-cn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/zh.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/lang/zh.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/a11yhelp.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/a11yhelp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/_translationstatus.txt" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/_translationstatus.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ar.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/bg.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/bg.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ca.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ca.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/cs.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/cs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/da.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/da.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/de.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/de.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/el.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/el.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/en.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/eo.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/eo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/es.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/es.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/et.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/et.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/fa.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/fa.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/fi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/fi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/fr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/fr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/gu.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/gu.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/he.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/he.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/hi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/hi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/hr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/hr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/hu.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/hu.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/it.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/it.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ja.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ja.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ku.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ku.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/lt.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/lt.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/lv.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/lv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/mk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/mk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/mn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/mn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/nb.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/nb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/nl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/nl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/no.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/no.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/pl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/pl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/pt-br.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/pt-br.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/pt.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/pt.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ro.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ro.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ru.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ru.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/sk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/sk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/sl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/sl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/sv.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/sv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/tr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/tr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ug.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/ug.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/uk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/uk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/vi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/vi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/zh-cn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/a11yhelp/dialogs/lang/zh-cn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/about/dialogs/about.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/about/dialogs/about.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/clipboard/dialogs/paste.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/clipboard/dialogs/paste.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/dialog/dialogDefinition.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/dialog/dialogDefinition.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/image/dialogs/image.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/image/dialogs/image.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/link/dialogs/anchor.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/link/dialogs/anchor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/link/dialogs/link.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/link/dialogs/link.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/pastefromword/filter/default.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/pastefromword/filter/default.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/LICENSE.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/LICENSE.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/README.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/dialogs/options.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/dialogs/options.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/dialogs/toolbar.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/scayt/dialogs/toolbar.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/_translationstatus.txt" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/_translationstatus.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/ca.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/ca.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/cs.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/cs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/cy.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/cy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/de.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/de.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/el.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/el.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/en.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/eo.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/eo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/et.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/et.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/fa.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/fa.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/fi.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/fi.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/fr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/fr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/he.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/he.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/hr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/hr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/it.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/it.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/ku.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/ku.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/lv.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/lv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/nb.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/nb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/nl.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/nl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/no.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/no.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/pt-br.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/pt-br.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/sk.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/sk.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/sv.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/sv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/tr.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/tr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/ug.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/ug.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/zh-cn.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/lang/zh-cn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/specialchar.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/specialchar/dialogs/specialchar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/table/dialogs/table.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/table/dialogs/table.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/tabletools/dialogs/tableCell.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/tabletools/dialogs/tableCell.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/LICENSE.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/LICENSE.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/README.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/ciframe.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/ciframe.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/tmpFrameset.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/tmpFrameset.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/wsc.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/wsc.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/wsc.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/plugins/wsc/dialogs/wsc.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/ajax.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/ajax.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/api.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/api.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/appendto.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/appendto.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/outputxhtml/outputxhtml.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/outputxhtml/outputxhtml.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/posteddata.php" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/posteddata.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/sample.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/sample.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/uilanguages/languages.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/assets/uilanguages/languages.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/divreplace.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/divreplace.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/inlineall.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/inlineall.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/inlinebycode.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/inlinebycode.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/dialog/assets/my_dialog.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/dialog/assets/my_dialog.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/dialog/dialog.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/dialog/dialog.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/enterkey/enterkey.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/enterkey/enterkey.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/swfobject.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/assets/outputforflash/swfobject.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/outputforflash.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/outputforflash.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/outputhtml.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/htmlwriter/outputhtml.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/magicline/magicline.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/magicline/magicline.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/toolbar/toolbar.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/toolbar/toolbar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/wysiwygarea/fullpage.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/plugins/wysiwygarea/fullpage.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/readonly.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/readonly.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/replacebyclass.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/replacebyclass.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/replacebycode.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/replacebycode.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/sample.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/sample.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/sample.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/sample.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/sample_posteddata.php" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/sample_posteddata.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/tabindex.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/tabindex.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/uicolor.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/uicolor.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/uilanguages.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/uilanguages.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/xhtmlstyle.html" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/samples/xhtmlstyle.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_ie.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_ie.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_ie7.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_ie7.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_ie8.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_ie8.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_iequirks.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_iequirks.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_opera.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/dialog_opera.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_gecko.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_gecko.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_ie.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_ie.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_ie7.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_ie7.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_ie8.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_ie8.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_iequirks.css" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/editor_iequirks.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/readme.md" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/skins/moono/readme.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/ckeditor/styles.js" afterPath="$PROJECT_DIR$/public/admin/assets/ckeditor/styles.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/GPL-LICENSE.txt" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/GPL-LICENSE.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/MIT-LICENSE.txt" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/MIT-LICENSE.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/changelog.txt" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/changelog.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/agenda-views.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/agenda-views.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/basic-views.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/basic-views.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/theme.css" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/cupertino/theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/default.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/default.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/external-dragging.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/external-dragging.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/gcal.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/gcal.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/json-events.php" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/json-events.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/json.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/json.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/selectable.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/selectable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/theme.html" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/demos/theme.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.css" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.js" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.print.css" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/fullcalendar.print.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/gcal.js" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/fullcalendar/gcal.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/jquery/jquery-1.8.1.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/jquery/jquery-1.8.1.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/fullcalendar/jquery/jquery-ui-1.8.23.custom.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/fullcalendar/jquery/jquery-ui-1.8.23.custom.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/Makefile" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/Makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/Readme.md" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/Readme.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/examples/excanvas.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/examples/excanvas.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/examples/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/examples/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/examples/style.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/examples/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/.gitignore" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/CONTRIBUTING.md" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/CONTRIBUTING.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/README.md" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/blueimp-file-upload.jquery.json" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/blueimp-file-upload.jquery.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/cors/postmessage.html" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/cors/postmessage.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/cors/result.html" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/cors/result.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/css/jquery.fileupload-ui-noscript.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/css/jquery.fileupload-ui-noscript.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/css/jquery.fileupload-ui.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/css/jquery.fileupload-ui.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/css/style.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/css/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/cors/jquery.postmessage-transport.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/cors/jquery.postmessage-transport.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/cors/jquery.xdr-transport.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/cors/jquery.xdr-transport.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.fileupload-fp.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.fileupload-fp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.fileupload-ui.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.fileupload-ui.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.fileupload.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.fileupload.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.iframe-transport.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/jquery.iframe-transport.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/main.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/canvas-to-blob.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/canvas-to-blob.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/jquery.ui.widget.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/jquery.ui.widget.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/load-image.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/load-image.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/tmpl.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/js/vendor/tmpl.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/package.json" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/app.yaml" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/app.yaml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/app/main.go" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/app/main.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/static/robots.txt" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-go/static/robots.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/app.yaml" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/app.yaml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/main.py" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/static/robots.txt" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/gae-python/static/robots.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/.gitignore" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/package.json" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/public/files/thumbnail/.gitignore" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/public/files/thumbnail/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/server.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/server.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/tmp/.gitignore" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/node/tmp/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/UploadHandler.php" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/UploadHandler.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/files/.htaccess" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/files/.htaccess" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/files/style-responsive.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/files/style-responsive.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/index.php" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/server/php/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/test/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/test/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/test/test.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-file-upload/test/test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-knob/README.md" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-knob/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-knob/index.html" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-knob/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-knob/js/jquery.knob.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-knob/js/jquery.knob.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.1.custom.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.1.custom.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.1.custom.min.css" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.1.custom.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.1.custom.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.1.custom.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.2.custom.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.10.2.custom.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.9.2.custom.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/jquery-ui/jquery-ui-1.9.2.custom.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/.gitignore" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/.travis.yml" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/README.md" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/component.json" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/component.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/_template.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/_template.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/area-as-line.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/area-as-line.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/area.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/area.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/bar-colors.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/bar-colors.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/bar-no-axes.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/bar-no-axes.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/bar.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/bar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/days.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/days.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/decimal-custom-hover.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/decimal-custom-hover.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/diagonal-xlabels-bar.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/diagonal-xlabels-bar.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/diagonal-xlabels.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/diagonal-xlabels.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/donut-colors.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/donut-colors.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/donut-formatter.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/donut-formatter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/donut.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/donut.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/dst.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/dst.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/events.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/events.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/goals.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/goals.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/example.css" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/example.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/example.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/example.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/prettify.css" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/prettify.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/prettify.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/lib/prettify.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/months-no-smooth.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/months-no-smooth.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/negative.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/negative.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/no-grid.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/no-grid.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/non-continuous.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/non-continuous.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/non-date.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/non-date.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/quarters.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/quarters.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/stacked_bars.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/stacked_bars.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/timestamps.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/timestamps.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/updating.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/updating.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/weeks.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/weeks.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/years.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/examples/years.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/grunt.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/grunt.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/less/morris.core.less" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/less/morris.core.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.area.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.area.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.bar.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.bar.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.donut.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.donut.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.grid.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.grid.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.hover.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.hover.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.line.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/lib/morris.line.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/morris.css" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/morris.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/morris.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/morris.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/morris.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/morris.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/package.json" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/raphael-min.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/raphael-min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/area/area_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/area/area_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/bar/bar_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/bar/bar_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/bar/colours.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/bar/colours.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/commas_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/commas_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/donut/donut_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/donut/donut_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/grid/auto_grid_lines_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/grid/auto_grid_lines_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/grid/set_data_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/grid/set_data_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/grid/y_label_format_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/grid/y_label_format_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/hover_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/hover_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/label_series_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/label_series_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/line/line_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/line/line_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/pad_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/pad_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/parse_time_spec.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/lib/parse_time_spec.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/specs.html" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/specs.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/support/placeholder.coffee" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/support/placeholder.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/chai-1.3.0.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/chai-1.3.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/chai-jquery-1.1.0.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/chai-jquery-1.1.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/jquery-1.8.2.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/jquery-1.8.2.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/mocha-1.6.0.css" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/mocha-1.6.0.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/mocha-1.6.0.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/mocha-1.6.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/raphael-2.1.0.min.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/raphael-2.1.0.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/sinon-1.5.0.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/sinon-1.5.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/sinon-chai-2.1.2.js" afterPath="$PROJECT_DIR$/public/admin/assets/morris.js-0.4.3/spec/vendor/sinon-chai-2.1.2.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/bootstrap-theme.css" afterPath="$PROJECT_DIR$/public/admin/css/bootstrap-theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/bootstrap.min.css" afterPath="$PROJECT_DIR$/public/admin/css/bootstrap.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/elegant-icons-style.css" afterPath="$PROJECT_DIR$/public/admin/css/elegant-icons-style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/font-awesome.css" afterPath="$PROJECT_DIR$/public/admin/css/font-awesome.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/font-awesome.min.css" afterPath="$PROJECT_DIR$/public/admin/css/font-awesome.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/fullcalendar.css" afterPath="$PROJECT_DIR$/public/admin/css/fullcalendar.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/jquery-jvectormap-1.2.2.css" afterPath="$PROJECT_DIR$/public/admin/css/jquery-jvectormap-1.2.2.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/jquery-ui-1.10.4.min.css" afterPath="$PROJECT_DIR$/public/admin/css/jquery-ui-1.10.4.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/line-icons.css" afterPath="$PROJECT_DIR$/public/admin/css/line-icons.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/owl.carousel.css" afterPath="$PROJECT_DIR$/public/admin/css/owl.carousel.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/style-responsive.css" afterPath="$PROJECT_DIR$/public/admin/css/style-responsive.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/widgets.css" afterPath="$PROJECT_DIR$/public/admin/css/widgets.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/css/xcharts.min.css" afterPath="$PROJECT_DIR$/public/admin/css/xcharts.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.svg" afterPath="$PROJECT_DIR$/public/admin/fonts/ElegantIcons.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.svg" afterPath="$PROJECT_DIR$/public/admin/fonts/fontawesome-webfont.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.svg" afterPath="$PROJECT_DIR$/public/admin/fonts/glyphicons-halflings-regular.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/additional-methods.min.js" afterPath="$PROJECT_DIR$/public/admin/js/additional-methods.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/bootstrap-switch.js" afterPath="$PROJECT_DIR$/public/admin/js/bootstrap-switch.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/bootstrap-wysiwyg-custom.js" afterPath="$PROJECT_DIR$/public/admin/js/bootstrap-wysiwyg-custom.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/bootstrap-wysiwyg.js" afterPath="$PROJECT_DIR$/public/admin/js/bootstrap-wysiwyg.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/bootstrap.js" afterPath="$PROJECT_DIR$/public/admin/js/bootstrap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/bootstrap.min.js" afterPath="$PROJECT_DIR$/public/admin/js/bootstrap.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/calendar-custom.js" afterPath="$PROJECT_DIR$/public/admin/js/calendar-custom.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/chartjs-custom.js" afterPath="$PROJECT_DIR$/public/admin/js/chartjs-custom.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/charts-flot.js" afterPath="$PROJECT_DIR$/public/admin/js/charts-flot.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/charts-other.js" afterPath="$PROJECT_DIR$/public/admin/js/charts-other.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/charts-xcharts.js" afterPath="$PROJECT_DIR$/public/admin/js/charts-xcharts.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/charts.js" afterPath="$PROJECT_DIR$/public/admin/js/charts.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/dynamic-table.js" afterPath="$PROJECT_DIR$/public/admin/js/dynamic-table.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/easy-pie-chart.js" afterPath="$PROJECT_DIR$/public/admin/js/easy-pie-chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/excanvas.min.js" afterPath="$PROJECT_DIR$/public/admin/js/excanvas.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/form-component.js" afterPath="$PROJECT_DIR$/public/admin/js/form-component.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/form-validation-script.js" afterPath="$PROJECT_DIR$/public/admin/js/form-validation-script.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/fullcalendar.js" afterPath="$PROJECT_DIR$/public/admin/js/fullcalendar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/fullcalendar.min.js" afterPath="$PROJECT_DIR$/public/admin/js/fullcalendar.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/ga.js" afterPath="$PROJECT_DIR$/public/admin/js/ga.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/gdp-data.js" afterPath="$PROJECT_DIR$/public/admin/js/gdp-data.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/gritter.js" afterPath="$PROJECT_DIR$/public/admin/js/gritter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/html5shiv.js" afterPath="$PROJECT_DIR$/public/admin/js/html5shiv.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/index.js" afterPath="$PROJECT_DIR$/public/admin/js/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery-1.8.3.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery-1.8.3.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery-jvectormap-1.2.2.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery-jvectormap-1.2.2.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery-jvectormap-world-mill-en.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery-jvectormap-world-mill-en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery-ui-1.10.4.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery-ui-1.10.4.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery-ui-1.9.2.custom.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery-ui-1.9.2.custom.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.autosize.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.autosize.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.customSelect.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.customSelect.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.flot.pie.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.flot.pie.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.hotkeys.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.hotkeys.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.localscroll.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.localscroll.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.nicescroll.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.nicescroll.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.placeholder.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.placeholder.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.rateit.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.rateit.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.scrollTo.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.scrollTo.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.slimscroll.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.slimscroll.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.smartWizard.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.smartWizard.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.sparkline-11.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.sparkline-11.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.sparkline.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.sparkline.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.stepy.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.stepy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.tagsinput.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.tagsinput.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/jquery.validate.min.js" afterPath="$PROJECT_DIR$/public/admin/js/jquery.validate.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/lte-ie7.js" afterPath="$PROJECT_DIR$/public/admin/js/lte-ie7.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/morris-script.js" afterPath="$PROJECT_DIR$/public/admin/js/morris-script.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/morris.min.js" afterPath="$PROJECT_DIR$/public/admin/js/morris.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/owl.carousel.js" afterPath="$PROJECT_DIR$/public/admin/js/owl.carousel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/scripts.js" afterPath="$PROJECT_DIR$/public/admin/js/scripts.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/sliders.js" afterPath="$PROJECT_DIR$/public/admin/js/sliders.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/sparkline-chart.js" afterPath="$PROJECT_DIR$/public/admin/js/sparkline-chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/sparklines.js" afterPath="$PROJECT_DIR$/public/admin/js/sparklines.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/admin/js/xcharts.min.js" afterPath="$PROJECT_DIR$/public/admin/js/xcharts.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/controllers/admins.js" afterPath="$PROJECT_DIR$/public/app/controllers/admins.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.php" afterPath="$PROJECT_DIR$/public/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Anasayfa/temelAnasayfa.blade.php" afterPath="$PROJECT_DIR$/resources/views/Anasayfa/temelAnasayfa.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/firmaKayit.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/firmaKayit.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/dashboard.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/dashboard.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/firmaList.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/firmaList.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/firmaListOnayli.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/firmaListOnayli.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/firmaListTable.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/firmaListTable.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/index.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/layouts/admin_alt_menu.blade.php" afterPath="$PROJECT_DIR$/resources/views/layouts/admin_alt_menu.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/layouts/appAdmin.blade.php" afterPath="$PROJECT_DIR$/resources/views/layouts/appAdmin.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.php" afterPath="$PROJECT_DIR$/server.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -108,11 +770,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="ilanDetaylari.blade.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDetaylari.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="415">
+              <caret line="26" column="46" lean-forward="false" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="FirmaIlanController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FirmaIlanController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="340">
-              <caret line="62" column="0" lean-forward="true" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+              <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding>
                 <element signature="e#39#67#0#PHP" expanded="true" />
               </folding>
@@ -123,34 +795,20 @@
       <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-530">
-              <caret line="1315" column="33" lean-forward="true" selection-start-line="1315" selection-start-column="33" selection-end-line="1316" selection-end-column="140" />
+            <state relative-caret-position="-6037">
+              <caret line="913" column="33" lean-forward="false" selection-start-line="913" selection-start-column="33" selection-end-line="913" selection-end-column="33" />
               <folding>
                 <element signature="e#6#19#0#PHP" expanded="true" />
-                <marker date="1501230953678" expanded="true" signature="2545:2893" ph="SELECT adi a... kalemler" />
-                <marker date="1501230953678" expanded="true" signature="2585:2678" ph="SELECT (CASE... kalemler" />
-                <marker date="1501230953678" expanded="true" signature="2697:2790" ph="SELECT (CASE... kalemler" />
-                <marker date="1501230953678" expanded="true" signature="15518:15728" ph="SELECT * FRO... iller" />
-                <marker date="1501230953678" expanded="true" signature="15518:15850" ph="SELECT * FRO... " />
-                <marker date="1501230953678" expanded="true" signature="15799:15850" ph="SELECT * FRO... iller" />
-                <marker date="1501230953678" expanded="true" signature="23754:24274" ph="SELECT * FRO... teklif_hareketler" />
-                <marker date="1501230953678" expanded="true" signature="23869:24138" ph="SELECT tekli... teklifler" />
-                <marker date="1501230953678" expanded="true" signature="24324:24865" ph="SELECT count... " />
-                <marker date="1501230953678" expanded="true" signature="31470:31845" ph="SELECT * FRO... teklif_hareketler" />
-                <marker date="1501230953678" expanded="true" signature="31539:31728" ph="SELECT tekli... teklifler" />
-                <marker date="1501230953678" expanded="true" signature="53669:53894" ph="SELECT * FRO... teklifler" />
-                <marker date="1501230953678" expanded="true" signature="54072:54313" ph="SELECT * FRO... teklifler" />
-                <marker date="1501230953678" expanded="true" signature="54470:54730" ph="SELECT * FRO... teklifler" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="120" column="31" lean-forward="false" selection-start-line="120" selection-start-column="31" selection-end-line="120" selection-end-column="31" />
+            <state relative-caret-position="238">
+              <caret line="121" column="50" lean-forward="false" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
               <folding>
                 <marker date="1501588454450" expanded="true" signature="11099:11110" ph="..." />
                 <marker date="1501588454450" expanded="true" signature="11236:11247" ph="..." />
@@ -163,7 +821,7 @@
         <entry file="file://$PROJECT_DIR$/public/js/ilan/ajax-crud-firmabilgilerim.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="7" column="51" lean-forward="true" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+              <caret line="7" column="51" lean-forward="false" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -219,9 +877,9 @@
       <find>$teklif</find>
       <find>lan O</find>
       <find>İlan Ol</find>
-      <find>sozlesme_turu</find>
       <find>teklifG</find>
       <find>effect8</find>
+      <find>sozlesme_turu</find>
       <find>Firma Se</find>
     </findStrings>
   </component>
@@ -534,12 +1192,12 @@
       <workItem from="1501485609859" duration="5220000" />
       <workItem from="1501492406789" duration="2624000" />
       <workItem from="1501501987443" duration="5585000" />
-      <workItem from="1501571694706" duration="15022000" />
+      <workItem from="1501571694706" duration="15568000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="201109000" />
+    <option name="totallyTimeSpent" value="201655000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -943,14 +1601,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDetaylari.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="26" column="46" lean-forward="false" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Yapim/kalemListesi_Yapim.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -994,31 +1644,17 @@
     <entry file="file://$PROJECT_DIR$/public/js/ilan/ajax-crud-firmabilgilerim.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
-          <caret line="7" column="51" lean-forward="true" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+          <caret line="7" column="51" lean-forward="false" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-530">
-          <caret line="1315" column="33" lean-forward="true" selection-start-line="1315" selection-start-column="33" selection-end-line="1316" selection-end-column="140" />
+        <state relative-caret-position="-6037">
+          <caret line="913" column="33" lean-forward="false" selection-start-line="913" selection-start-column="33" selection-end-line="913" selection-end-column="33" />
           <folding>
             <element signature="e#6#19#0#PHP" expanded="true" />
-            <marker date="1501230953678" expanded="true" signature="2545:2893" ph="SELECT adi a... kalemler" />
-            <marker date="1501230953678" expanded="true" signature="2585:2678" ph="SELECT (CASE... kalemler" />
-            <marker date="1501230953678" expanded="true" signature="2697:2790" ph="SELECT (CASE... kalemler" />
-            <marker date="1501230953678" expanded="true" signature="15518:15728" ph="SELECT * FRO... iller" />
-            <marker date="1501230953678" expanded="true" signature="15518:15850" ph="SELECT * FRO... " />
-            <marker date="1501230953678" expanded="true" signature="15799:15850" ph="SELECT * FRO... iller" />
-            <marker date="1501230953678" expanded="true" signature="23754:24274" ph="SELECT * FRO... teklif_hareketler" />
-            <marker date="1501230953678" expanded="true" signature="23869:24138" ph="SELECT tekli... teklifler" />
-            <marker date="1501230953678" expanded="true" signature="24324:24865" ph="SELECT count... " />
-            <marker date="1501230953678" expanded="true" signature="31470:31845" ph="SELECT * FRO... teklif_hareketler" />
-            <marker date="1501230953678" expanded="true" signature="31539:31728" ph="SELECT tekli... teklifler" />
-            <marker date="1501230953678" expanded="true" signature="53669:53894" ph="SELECT * FRO... teklifler" />
-            <marker date="1501230953678" expanded="true" signature="54072:54313" ph="SELECT * FRO... teklifler" />
-            <marker date="1501230953678" expanded="true" signature="54470:54730" ph="SELECT * FRO... teklifler" />
           </folding>
         </state>
       </provider>
@@ -1026,7 +1662,7 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FirmaIlanController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
-          <caret line="62" column="0" lean-forward="true" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding>
             <element signature="e#39#67#0#PHP" expanded="true" />
           </folding>
@@ -1070,6 +1706,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/abc.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="121" column="50" lean-forward="false" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
+          <folding>
+            <marker date="1501588454450" expanded="true" signature="11099:11110" ph="..." />
+            <marker date="1501588454450" expanded="true" signature="11236:11247" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="65">
@@ -1089,22 +1744,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/abc.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDetaylari.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="415">
+          <caret line="26" column="46" lean-forward="false" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="120" column="31" lean-forward="false" selection-start-line="120" selection-start-column="31" selection-end-line="120" selection-end-column="31" />
-          <folding>
-            <marker date="1501588454450" expanded="true" signature="11099:11110" ph="..." />
-            <marker date="1501588454450" expanded="true" signature="11236:11247" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>

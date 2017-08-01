@@ -13,10 +13,11 @@
     <title></title>
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/heroic-features.css')}}" rel="stylesheet">
-    <script src="{{asset('js/jquery.js')}}"></script>
-    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    {{-- <script src="{{asset('js/jquery.js')}}"></script>
+    <script src="{{asset('js/bootstrap.min.js')}}"></script> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
@@ -139,8 +140,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
                             <ul class="dropdown-menu">
                                 <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
                                     <?php
-                                        $kullanici = App\Kullanici::find(Auth::user()->id);
-                                        $kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
+                                        $kullanici = App\Kullanici::find(Auth::user()->id);//onaylanmamış firmaların kullanıcı adı altında görünebilmesi için
+                                        //$kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
+                                        $kullaniciF=$kullanici->firmalar()->get();
                                     ?>
                                     @if(count($kullaniciF) != 0)
                                         @foreach($kullaniciF as $kullanicifirma)
@@ -148,7 +150,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                                 <li ><a style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                             </ul>
                                         @endforeach
-                                    @endif    
+                                    @endif
                                 <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
                                 <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi">Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
@@ -172,7 +174,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
     @yield('content')
     @include('layouts.footer_menu')
     <!-- JavaScripts -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> --}}
    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script>
       var selected;

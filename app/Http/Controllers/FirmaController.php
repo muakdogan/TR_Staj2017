@@ -29,6 +29,11 @@ use View;
 
 class FirmaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('firmaYetkili', ['except' => ['showFirma']]);
+    }
+
     /*public function properFunc($string){
 
         $proper=Str::title(strtolower($string));
@@ -70,7 +75,7 @@ class FirmaController extends Controller
                  $firma->firma_brosurler = new App\FirmaBrosur();
         }
         if (!$firma->firma_calisma_bilgileri) {
-               $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
+               $firma->firma_calisma_bilgileri = new \App\FirmaCalismaBilgisi();
                $calismaGunu = '';
         } else{
                $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;

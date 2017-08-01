@@ -4,11 +4,11 @@ app.controller('adminsController', function($scope, $http, API_URL) {
             .success(function(response) {
                 $scope.admins = response;
             });
-    
+
     //show modal form
     $scope.toggle = function(modalstate, id) {
         $scope.modalstate = modalstate;
-
+        var x = confirm("Add e Girdii");
         switch (modalstate) {
             case 'add':
                 $scope.form_title = "Yeni Admin Ekle";
@@ -32,12 +32,11 @@ app.controller('adminsController', function($scope, $http, API_URL) {
     //save new record / update existing record
     $scope.save = function(modalstate, id) {
         var url = API_URL + "admins";
-        
         //append employee id to the URL if the form is in edit mode
         if (modalstate === 'edit'){
             url += "/" + id;
         }
-        
+
         $http({
             method: 'POST',
             url: url,
@@ -60,7 +59,7 @@ app.controller('adminsController', function($scope, $http, API_URL) {
             $http({
                 method: 'DELETE',
                 url: API_URL + 'admins/'+ id
-               
+
             }).
                     success(function(data) {
                         console.log(data);
