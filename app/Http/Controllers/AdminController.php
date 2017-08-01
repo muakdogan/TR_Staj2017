@@ -6,6 +6,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use DateInterval;
 
 class AdminController extends Controller
 {
@@ -18,7 +19,7 @@ class AdminController extends Controller
       // "admin.genproduction.index is the new template "Gentelella Aletta". The old one is "admin.dashboard"   "
     }
 
-    public function onayBekleyenFirmalar () {
+    public function firmaList () {
 
         $onay = DB::table('firmalar')
         ->join('firma_kullanicilar', 'firmalar.id', '=', 'firma_kullanicilar.firma_id')
@@ -26,10 +27,10 @@ class AdminController extends Controller
         ->select('firmalar.*')
         ->where([['firmalar.onay', 0], ['kullanicilar.onayli', 1]])
         ->distinct()
-        ->orderBy('olusturmaTarihi', 'desc')->paginate(2, ['*'], '1pagination');
+        ->orderBy('olusturmaTarihi', 'desc')->paginate(5, ['*'], '1pagination');
 
         $onayli = DB::table('firmalar')
-        ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '2pagination');
+        ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(5, ['*'], '2pagination');
 
         return View::make('admin.genproduction.firmaListele')-> with('onay',$onay)-> with('onayli',$onayli);
 
@@ -37,72 +38,87 @@ class AdminController extends Controller
 
     public function firmaOnay(Request $request){
 
-        //Onay türünü belirle. 0: standart, 1: ödemesiz, 2: özel, 3: ret
-        $onayTuru = Input::get('onay_turu');
-        $firma = \App\Firma::find(Input::get('firma_id'));
-        $kullanici = $firma->kullanicilar()->first();
+        DB::beginTransaction();
 
-        $subject;
-        $message;
+        try {
+            //Onay türünü belirle. 0: standart, 1: ödemesiz, 2: özel, 3: ret
+            $onayTuru = $request->input('onay_turu');
+            $firma_id = $request->input('firma_id');
+            $firma = \App\Firma::find($firma_id);
+            $kullanici = $firma->kullanicilar()->first();
 
-        switch ($onayTuru)
-        {
-            case 0://standart
-            $firma->onay = 1;
-            $firma->save();
+            $subject;
+            $message;
 
-            $subject = "Firmanız Onaylandı";
-            $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firma onaylanmıştır.";
-            break;
+            switch ($onayTuru)
+            {
+                case 0://standart
+                $firma->onay = 1;
+                $firma->save();
 
-            case 1://ödemesiz
-            $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('uyelik_bitis_suresi')+"M"));//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
-            $firma->onay = 1;
-            $firma->save();
+                $subject = "Firmanız Onaylandı";
+                $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firma onaylanmıştır.";
+                break;
 
-            $subject = "Firmanız Onaylandı";
-            $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
-            $firma->uyelik_bitis_tarihi tarihine kadar onaylanmıştır.";
-            break;
+                case 1://ödemesiz
+                $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+$request->input('uyelik_bitis_suresi')+"M"));//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
+                $firma->onay = 1;
+                $firma->save();
 
-            case 2://özel
-            $odeme = new \App\Odeme();
-            $odeme->firma_id = $firma->id;
-            $odeme->sistem_kullanici_id = session()->get('admin_id');
-            $odeme->miktar = Input::get('miktar');
-            /*ay türünden*/$odeme->sure = Input::get('sure');
-            /*ay türünden*/$odeme->gecerlilik_sure = Input::get('gecerlilik_sure');
-            $odeme->kullanici_id = $kullanici->id;
-            $odeme->save();
+                $subject = "Firmanız Onaylandı";
+                $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
+                $firma->uyelik_bitis_tarihi tarihine kadar onaylanmıştır.";
+                break;
 
-            $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('sure')+"M"));//şu ana sure field'ını ay olarak ekle
-            $teklifBitisTarihi = date_create(NULL)->add(new DateInterval("P"+Input::get('gecerlilik_sure')+"M"));//şu ana gecerlilik_sure field'ını ay olarak ekle
+                case 2://özel
+                $odeme = new \App\Odeme();
+                $odeme->firma_id = $firma->id;
+                $odeme->sistem_kullanici_id = Auth::guard('admin')->user()->id;
+                $odeme->miktar = $request->input('miktar');
+                /*ay türünden*/$odeme->sure = $request->input('sure');
+                /*ay türünden*/$odeme->gecerlilik_sure = $request->input('gecerlilik_sure');
+                $odeme->kullanici_id = $kullanici->id;
+                $odeme->save();
 
-            $firma->onay = 1;
-            $firma->save();
+                $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('sure')."M"))->format('Y-m-d');//şu ana sure field'ını ay olarak ekle
+                $teklifBitisTarihi = date_create(NULL)->add(new DateInterval("P".$request->input('gecerlilik_sure')."M"))->format('Y-m-d');//şu ana gecerlilik_sure field'ını ay olarak ekle
 
-            $subject = "Firmanız Onaylandı";
-            $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
-            $odeme->miktar karşılığında, son ödeme tarihi $teklifBitisTarihi olmak üzere
-            $firma->uyelik_bitis_tarihi tarihine kadar onaylanmıştır.";
-            break;
+                $firma->onay = 1;
+                $firma->save();
 
-            case 3://ret
-            $firma->onay = -1;
-            $firma->save();
+                $subject = "Firmanız Onaylandı";
+                $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
+                $odeme->miktar karşılığında, son ödeme tarihi $teklifBitisTarihi olmak üzere
+                $firma->uyelik_bitis_tarihi tarihine kadar onaylanmıştır.";
+                break;
 
-            $subject = "Firmanız Reddedildi";
-            $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği reddedilmiştir.";
-            break;
+                case 3://ret
+                $firma->onay = -1;
+                $firma->save();
 
-            default:
+                $subject = "Firmanız Reddedildi";
+                $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği reddedilmiştir.";
+                break;
 
-            break;
+                default:
+
+                break;
+            }
+
+            DB::commit();
+            
+            /*$this->mailer->raw($message, function (Message $m) use ($user) {
+                $m->to($kullanici->email)->subject($subject);
+            });*/
+
+            return redirect('admin/firmaList');
+
         }
-
-        $this->mailer->raw($message, function (Message $m) use ($user) {
-            $m->to($kullanici->email)->subject($subject);
-        });
+        catch (\Exception $e)
+        {
+            DB::rollback();
+            return response()->json($e);
+        }
 
     }
 
