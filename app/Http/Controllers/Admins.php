@@ -8,7 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 class Admins extends Controller
 {
-  
+
     public function index($id = null) {
         if ($id == null) {
             return Admin::orderBy('id', 'asc')->get();
@@ -40,7 +40,7 @@ class Admins extends Controller
         $admin->password = $request->input('password');
         $admin->save();
 
-        return "Sucess updating user #" . $admin->id;
+        return "Success updating user #" . $admin->id;
     }
 
     public function destroy(Request $request, $id) {

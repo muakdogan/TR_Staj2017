@@ -56,6 +56,7 @@ class AuthController extends Controller
         }
 
         return view('admin.auth.login');
+        //admin.auth.genLogin = Gentelelladaki login ekranı fakat henüz uyarlayamadım.
     }
 
     public function showRegistrationForm(){
