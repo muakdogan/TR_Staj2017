@@ -80,10 +80,8 @@ Route::get('/DbTest', function () {
   Route::get('admin/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
 
   Route::get('/admin/dashboard', 'AdminController@index');
-  Route::get('/admin/firmaOnay/{id}', 'AdminController@firmaOnayla');//kaldır?
-  Route::post('/admin/firmaOnay', 'AdminController@firmaOnay');
+  Route::post('/admin/firmaOnay', 'AdminController@firmaOnay')->name('firmaOnaySubmit');//form submit butonu isimli rota istedi
 
-  Route::post('/firmaOnay', 'AdminController@firmaOnay');
 
 });
 Route::get('/admin/kalemlerTablolari',['middleware' => 'admin' , function () {
@@ -168,7 +166,7 @@ Route::get('/', function () {
   return view('Anasayfa.temelAnasayfa');
 });
 
-Route::get('/admin/firmaList', 'AdminController@onayBekleyenFirmalar');
+Route::get('/admin/firmaList', 'AdminController@firmaList');
 
 Route::get('/firmaListeleme',function (){
 
