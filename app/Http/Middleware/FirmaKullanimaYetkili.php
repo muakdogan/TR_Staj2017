@@ -17,6 +17,11 @@ class FirmaKullanimaYetkili
     {
         $firma = \App\Firma::find(session()->get('firma_id'));
 
+        if (!$firma)//null ise
+        {
+            abort(403, 'Forbidden');
+        }
+
         if ($firma->onay != '1')
         {
             abort(403, 'Forbidden');
