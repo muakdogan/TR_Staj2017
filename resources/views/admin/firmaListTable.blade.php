@@ -1,7 +1,8 @@
-<table style="width: 100%;">
+<table class="table table-responsive" style="width: 100%;">
     <tr>
       <th>FİRMA KAYIT TARİHİ</th>
       <th>FİRMALAR</th>
+      <th>FİRMA DETAYLARI</th>
       <th>ONAY TÜRÜ</th>
       <th>ONAY DETAYLARI</th>
       <th>ONAY</th>
@@ -9,7 +10,7 @@
   @foreach($onay as $firma)
     {{-- buradaki hücreler, firma onaylama formuna dahil --}}
 
-    <tr class="firmaSatir">
+    <tr class="onaySatir">
 
       <form method="POST" action="{{route('firmaOnaySubmit')}}" class="firmaOnayForm">
 
@@ -17,6 +18,9 @@
 
         <td>{{$firma->olusturmaTarihi}} </td>
         <td>{{$firma->adi}}</td>
+        <td>
+          <button class="btn detayButon">DETAYLAR</button>
+        </td>
         <td>
           <select class="onayTuruSecim" name="onay_turu">
             <option value="0">Standart</option>
@@ -53,10 +57,39 @@
             
           </div>
         </td>
-        <td><input style="float:left" id="{{$firma->id}}" type="submit" class="btn btn-primary onayButon" value="ONAYLA"></td>
+        <td>
+
+          <input id="{{$firma->id}}" type="submit" class="btn btn-primary onayButon" value="ONAYLA">
+        </td>
 
       </form>
+
     </tr>
+
+    <tr class="detaySatir bg-info" style="display: none;">
+      <td colspan="6">
+        <table style="width: 100%;">
+          <tr>
+            <th>ID</th>
+            <th>Tanıtım</th>
+            <th>Kuruluş yılı</th>
+            <th>Şirket türü</th>
+            <th>Kayıt tarihi</th>
+            <th>Doluluk oranı</th>
+          </tr>
+
+          <tr>
+            <td>{{$firma->id}}</td>
+            <td>{{$firma->tanitim_yazisi}}</td>
+            <td>{{$firma->kurulus_tarihi}}</td>
+            <td>{{$firma->sirket_turu}}</td>
+            <td>{{$firma->olusturmaTarihi}}</td>
+            <td>{{$firma->doluluk_orani}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+      
   @endforeach
   {{$onay->links()}}
 
@@ -74,26 +107,28 @@
 
     //başta her satırda 0 metodunu göster
     $(document).ready(function(){
-      $('.firmaSatir').each(function(){
-        metotGoster($(this), 0);
+      $('.onaySatir').each(function(){
+        metotGoster($(this), $(this).find(".onayTuruSecim").prop("selectedIndex"));
       });
     });
 
-    $('.onayTuruSecim').change(function(){
-      metotGoster($(this).parents('.firmaSatir'), $(this).prop('selectedIndex'));
+    //firma detaylarını gösterme tuşu
+    $(".detayButon").click(function(event){
+      event.preventDefault();
+      $(this).parents(".onaySatir").next(".detaySatir:first").toggle();
     });
 
-    $('.onayButon').click(function(){
-      $("input[type=submit]", $(this).parents(".firmaSatir")).removeAttr("clicked");
-      $(this).attr("clicked", "true");
+    //onay türünü değişitirnce görünür field'ların değişmesi
+    $('.onayTuruSecim').change(function(){
+      metotGoster($(this).parents('.onaySatir'), $(this).prop('selectedIndex'));
     });
 
     //ONAYLA tuşuna basıldığında formun geçerli olup olmadığına bak
     $(".firmaOnayForm").submit(function(event){
 
-      //Tuhaflık: jQuery, form inputlarını <form>'un değil <tr class="firmaSatir">'ın çocuğu olarak görüyor
+      //Tuhaflık: jQuery, form inputlarını <form>'un değil <tr class="onaySatir">'ın çocuğu olarak görüyor
 
-      var satir = $(this).parents(".firmaSatir");
+      var satir = $(this).parents(".onaySatir");
       var onayTuru = $(satir).find('.onayTuruSecim').prop('selectedIndex');
 
       if (onayTuru == 1)//ödemesiz onaya gereken field doldurulmuş mu?
