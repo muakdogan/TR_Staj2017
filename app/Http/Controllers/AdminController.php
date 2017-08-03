@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use DateInterval;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 class AdminController extends Controller
 {
@@ -61,7 +62,7 @@ class AdminController extends Controller
                 break;
 
                 case 1://ödemesiz
-                $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P"+$request->input('uyelik_bitis_suresi')+"M"));//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
+                $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('uyelik_bitis_suresi')."M"))->format('Y-m-d');//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
                 $firma->onay = 1;
                 $firma->save();
 
