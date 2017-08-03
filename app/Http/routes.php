@@ -461,7 +461,7 @@ Route::get('/firmaKayit' ,function () {
    $sektorler=DB::table('sektorler')->orderBy('adi','ASC')->get();
 
 
-  return view('Firma.firmaKayit')->with('iller', $iller)->with('sektorler',$sektorler)->with('iller_query',$iller_query);
+  return view('Firma.genFirmaKayit')->with('iller', $iller)->with('sektorler',$sektorler)->with('iller_query',$iller_query);
 });
 
 Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {

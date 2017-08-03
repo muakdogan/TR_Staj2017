@@ -5,65 +5,9 @@
 
     <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
 
-    <style>
+    <link rel="stylesheet" type="text/css" href="{{asset('Firma/css/firmaKayıtFormu.css')}}"/>
 
-        .ajax-loader {
-                    visibility: hidden;
-                    background-color: rgba(255,255,255,0.7);
-                    position: absolute;
-                    z-index: +100 !important;
-                    width: 100%;
-                    height:100%;
-        }
-        .ajax-loader img {
-                    position: relative;
-                    top:50%;
-                    left:32%;
-        }
-        form .error {
-                  color: #ff0000;
-        }
-         .popup, .popup2, .bMulti {
-            background-color: #fff;
-            border-radius: 10px 10px 10px 10px;
-            box-shadow: 0 0 25px 5px #999;
-            color: #111;
-            display: none;
-            min-width: 450px;
-            padding: 25px;
-            text-align: center;
-            }
-            .popup, .bMulti {
-                min-height: 150px;
-            }
-            .button.b-close, .button.bClose {
-                border-radius: 7px 7px 7px 7px;
-                box-shadow: none;
-                font: bold 131% sans-serif;
-                padding: 0 6px 2px;
-                position: absolute;
-                right: -7px;
-                top: -7px;
-            }
-            .button {
-                background-color: #2b91af;
-                border-radius: 10px;
-                box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-                color: #fff;
-                cursor: pointer;
-                display: inline-block;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-            }
-            .search_icon {
-                background-color: white;
-                background-image: url("{{asset('images/src.png')}}");
-                background-repeat: no-repeat;
-                padding: 0px 0px 0px 20px;
 
-            }
-</style>
 </head>
     <div class="container">
         <h1>TAMREKABET'E HOŞGELDİNİZ</h1>
@@ -77,7 +21,7 @@
                             {!! Form::open(array('id'=>'firma_kayit','url'=>'form' ,'name'=>'kayit','method' => 'POST','files'=>true,
                                                   'class' => 'form-horizontal' ))!!}{{--Oguzhan 14.7.2017 form-horizontal class'i eklendi --}}
                             <div class="row">
-                                  <div class = "panel-heading"><h5><strong>Firma Bilgileri</strong></h5></div><!-- Oguzhan panel-heading eklendi-->
+                                  <div class = "panel-heading"><h5><strong>Firma Bilgileri</strong></h5></div>
                                     <hr>
                                     <div class="form-group">
                                         {{-- <div class="col-sm-3">
@@ -292,9 +236,6 @@
                                 </div>
                             </div>
                             <br>
-                            <!--
-                                Oguzhan Ulucay 13/07/2017
-                            -->
                             <div class="row">
                                 <div class = "panel-footer"><h5><strong>Fatura Bilgileri</strong></h5></div>
                                 <hr>
@@ -584,8 +525,6 @@
 
 
     /*
-      19.07.2017 Oguzhan
-
       original_state_il   = fatura adresinin il kismini alan form elementinin klonunu tutar
       original_state_ilce = fatura adresinin ilce kismini alan form elementinin klonunu tutar.
       original_state_semt = fatura adresinin semt kismini alana form elemenetinin klonunu tutar.
@@ -606,8 +545,6 @@
 
 
     /*
-      18-19.07.2017 Oguzhan
-
       selection header'a id eklendi.
       count_for_header degiskeni eklendi.
       afterSelect ve afterDeselect fonksiyonlarinda duzenleme yapildi.
@@ -617,8 +554,6 @@
       Sektorlerin secimleri kaldirirken de ayni sekilde degiskeni artirir.
 
       count_for_header = Kac tane sektor secme hakki oldugunu tutar.
-
-
     */
     var count = 0;
     var count_for_header = 5;
@@ -773,12 +708,9 @@
 
 
 /*
-    21.07.2017 Oguzhan
-
     Eklemeler:
     Form data serialize edilmeden once maskelemeler kaldirilir daha sonra da
     tekrar maskeleme yapilir.
-
 */
  $("#firma_kayit").submit(function(e)
  {
@@ -874,7 +806,6 @@
     $('#presentation').restrictLength( $('#pres-max-length') );
 
     /*
-      Oguzhan Ulucay 13/07/2017
 
       Fatura bilgileri kayit formu icin script.
       Fonksiyon radio buttonlara tiklanildiginda cagrilir.
@@ -1021,14 +952,12 @@
 
         $('#fatura_semt_id').replaceWith(original_state_semt.clone(true));
 
-
       }
 
     });
 
 
     /*
-      Oguzhan Ulucay 18.07.2017
 
       Tooltips
     */
@@ -1214,10 +1143,8 @@
             });
     });
 
-    /* Oguzhan Ulucay 24.07.2017
-
+    /*
         fatura adres icin eklendi
-
     */
     $('#fatura_il_id').on('change', function (e) {
         console.log(e);
@@ -1246,10 +1173,8 @@
             });
     });
 
-    /* Oguzhan Ulucay 24.07.2017
-
+    /*
         fatura adres icin eklendi
-
     */
 
     $('#fatura_ilce_id').on('change', function (e) {
@@ -1280,7 +1205,6 @@
     });
 
 
-    /* Oguzhan Ulucay 18.07.2017 */
     $('#vergi_daire_il').on('change', function (e) {
         console.log(e);
 
