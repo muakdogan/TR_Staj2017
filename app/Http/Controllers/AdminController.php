@@ -20,7 +20,7 @@ class AdminController extends Controller
       // "admin.genproduction.index is the new template "Gentelella Aletta". The old one is "admin.dashboard"   "
     }
 
-    public function firmaList () {
+    public function firmaList (Request $request) {
 
         $onay = DB::table('firmalar')
         ->join('firma_kullanicilar', 'firmalar.id', '=', 'firma_kullanicilar.firma_id')
@@ -33,7 +33,26 @@ class AdminController extends Controller
         $onayli = DB::table('firmalar')
         ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(5, ['*'], '2pagination');
 
-        return View::make('admin.genproduction.firmaListele')-> with('onay',$onay)-> with('onayli',$onayli);
+        //$tab değişkeni son view'da jQuery ile tab index'i olarak kullanılacağı için 0'dan başlıyor
+
+        if ($request->get('2pagination'))
+        {
+            $tabStates['tab1'] = "";
+            $tabStates['tab1_content'] = "";
+            $tabStates['tab2'] = "active";
+            $tabStates['tab2_content'] = "active in";
+        }
+        
+        else
+        {
+            $tabStates['tab1'] = "active";
+            $tabStates['tab1_content'] = "active in";
+            $tabStates['tab2'] = "";
+            $tabStates['tab2_content'] = "";
+        }
+
+
+        return View::make('admin.genproduction.firmaListele')->with('onay',$onay)->with('onayli',$onayli)->with('tabStates', $tabStates);
 
     }
 
