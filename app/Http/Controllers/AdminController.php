@@ -100,7 +100,10 @@ class AdminController extends Controller
                 $odeme->kullanici_id = $kullanici->id;
                 $odeme->save();
 
-                $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('sure')."M"))->format('Y-m-d');//şu ana sure field'ını ay olarak ekle
+                //üyelik, firma teklif edilen ödemeyi yaptığında başlayacak
+                $firma->uyelik_bitis_tarihi = NULL;
+                //$firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('sure')."M"))->format('Y-m-d');//şu ana sure field'ını ay olarak ekle
+
                 $teklifBitisTarihi = date_create(NULL)->add(new DateInterval("P".$request->input('gecerlilik_sure')."M"))->format('Y-m-d');//şu ana gecerlilik_sure field'ını ay olarak ekle
 
                 $firma->onay = 1;
