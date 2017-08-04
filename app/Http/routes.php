@@ -168,14 +168,6 @@ Route::get('/', function () {
 
 Route::get('/admin/firmaList', 'AdminController@firmaList');
 
-Route::get('/firmaListeleme',function (){
-
-  $onay = DB::table('firmalar')
-  ->where('onay', 0)->orderBy('olusturmaTarihi', 'desc') ->paginate(2, ['*'], '1pagination');
-
-  return Response::json(View::make('admin.firmaListTable',array('onay'=> $onay))->render());
-
-});
 Route::get('/firmaListeOnaylı',function (){
 
   $onayli = DB::table('firmalar')
