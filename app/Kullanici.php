@@ -56,6 +56,9 @@ class Kullanici extends Authenticatable
   }
   public function get_role_id($firma_id)
   {
-    return $this->firmalar()->find($firma_id)->pivot->rol_id;
+    $firmas = $this->firmalar()->find($firma_id);
+    if ($firmas)
+      return $firmas->pivot->rol_id;
+    else return null;
   }
 }
