@@ -22,13 +22,24 @@ class AdminController extends Controller
 
     public function firmaList (Request $request) {
 
-        $onay = DB::table('firmalar')
+        /*$onay = DB::table('firmalar')
         ->join('firma_kullanicilar', 'firmalar.id', '=', 'firma_kullanicilar.firma_id')
         ->join('kullanicilar', 'kullanicilar.id', '=', 'firma_kullanicilar.kullanici_id')
         ->select('firmalar.*')
         ->where([['firmalar.onay', 0], ['kullanicilar.onayli', 1]])
         ->distinct()
-        ->orderBy('olusturmaTarihi', 'desc')->paginate(5, ['*'], '1pagination');
+        ->orderBy('olusturmaTarihi', 'desc')->paginate(5, ['*'], '1pagination');*/
+
+        $onayBekleyenFirmalar = \App\Firma::where('onay', '0')->with(
+            ['kullanicilar' => function ($query){
+                $query->where('kullanicilar.onayli', '=', '1');
+            },
+            'sektorler',
+            'iletisim_bilgileri',
+            'adresler.iller',
+            'adresler.ilceler',
+            'adresler.semtler',
+            'adresler.adres_turleri'])->get();
 
         $onayli = DB::table('firmalar')
         ->where('onay', 1)->orderBy('olusturmaTarihi', 'desc') ->paginate(5, ['*'], '2pagination');
@@ -52,7 +63,10 @@ class AdminController extends Controller
         }
 
 
-        return View::make('admin.genproduction.firmaListele')->with('onay',$onay)->with('onayli',$onayli)->with('tabStates', $tabStates);
+        return View::make('admin.genproduction.firmaListele')
+        ->with(['onayBekleyen' => $onayBekleyenFirmalar,
+        'onayli' => $onayli,
+        'tabStates' => $tabStates]);
 
     }
 
