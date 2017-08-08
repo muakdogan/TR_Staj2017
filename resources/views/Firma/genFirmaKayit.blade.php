@@ -83,7 +83,8 @@
                                         'placeholder'=>'Firma adı',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min1',
-                                        'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!',
+                                        'required')) !!}
                         </div>
                       </div>
 
@@ -261,7 +262,7 @@
 
                         <div class="col-md-9 col-sm-9 col-xs-12">
 
-                          <div class="radio" id="adres_kopyalayici">
+                          <div class="radio">
     <!-- There may be a problem about "adres_kopyalayici" -->
                             <label>
                               <input type="radio" name="fatura_tur" id="fatura_tur_kurumsal" value="kurumsal" checked> Kurumsal
@@ -270,24 +271,26 @@
                               <input type="radio" name="fatura_tur" id="fatura_tur_bireysel" value="bireysel"> Bireysel
                             </label>
 
+
+                          </div>
+
+                          
                           </br></br>
                             <div class="form-group">
                                 <div class="checkbox">
                                   <label>
-                                    <input type="checkbox" name="adres_kopyalayici" > "Firma Adresi" ile "Fatura Adresi" aynı
+                                    <input id="adres_kopyalayici" type="checkbox" name="adres_kopyalayici" > "Firma Adresi" ile "Fatura Adresi" aynı
                                   </label>
                                 </div>
                             </div>
-
-                          </div>
                         </div>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group fatura_adres_group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fatura_adres">Fatura Adresi <span class="required"></span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::textarea('fatura_adres', null,
+                          {!! Form::text('fatura_adres', null,
                                           array('id' => 'fatura_adres',
                                                 'class'=>'form-control',
                                                 'placeholder'=>'Fatura Adresiniz',
@@ -300,10 +303,12 @@
                       </div>
 
 
-                      <div class="form-group">
+                      <div class="form-group fatura_adres_group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fatura_il_id">İl</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="fatura_il_id" id="fatura_il_id">
+                          <select class="form-control" name="fatura_il_id" id="fatura_il_id"
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
+                          data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
                             @foreach($iller_query as $il)
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
                             @endforeach
@@ -311,18 +316,22 @@
                         </div>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group fatura_adres_group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fatura_ilce_id">İlçe</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="fatura_ilce_id" id="fatura_ilce_id">
+                          <select class="form-control" name="fatura_ilce_id" id="fatura_ilce_id"
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
+                          data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
                           </select>
                         </div>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group fatura_adres_group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fatura_semt_id">Semt</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="fatura_semt_id" id="fatura_semt_id">
+                          <select class="form-control" name="fatura_semt_id" id="fatura_semt_id"
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
+                          data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
                           </select>
                         </div>
                       </div>
@@ -397,7 +406,7 @@
                                                    'data-validation-depends-on' =>'fatura_tur',
                                                    'data-validation-depends-on-value' => 'bireysel',
                                                    'data-validation-error-msg-number' => 'Lutfen sayi giriniz',
-                                                   'data-validation-error-msg-length' => 'Lutfen 11 haneli sayi giriniz'
+                                                   'data-validation-error-msg-length' => 'Lutfen 11 haneli sayi giriniz',
                                              )) !!}
                            </div>
                        </div>
@@ -622,8 +631,9 @@
     <script type="text/javascript" src="{{asset('js/jquery.quicksearch.js')}}"></script>
     <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.js"></script>
-    <!-- Form Validation -->
-    <!-- <script src="admin/genvendors/validator/firmaKayitFormValidator.js"></script> -->
+
+    {{--bu include layouts/app'teki head'te de var ama buraya ulaşamıyor..?--}}
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 
 
     <script>
@@ -644,7 +654,6 @@
        original_state_semt = $("#fatura_semt_id").clone(true);
 
        $('#il_id').change(function (e) {
-           console.log(e);
            var il_id = e.target.value;
            //ajax
            $.get("{{asset('ajax-subcat?il_id=')}}"+il_id, function (data) {
@@ -662,12 +671,13 @@
                  $('.ajax-loader').css("visibility", "hidden");
                }).fail(function(){
                   alert('İller Yüklenemiyor !!!  ');
+                  console.log("data:");
+                  console.log(data);
                });
        });
 
 
        $('#ilce_id').on('change', function (e) {
-           console.log(e);
            var ilce_id = e.target.value;
            //ajax
            $.get("{{asset('ajax-subcatt?ilce_id=')}}"+ ilce_id, function (data) {
@@ -685,11 +695,21 @@
                   alert('İller Yüklenemiyor !!!  ');
                });
        });
+
+
+      $("#adres_kopyalayici").change(function(event){
+
+        if (document.getElementById("adres_kopyalayici").checked)
+          $(".fatura_adres_group").hide();
+
+        else
+          $(".fatura_adres_group").show();
+      });
+
        /* Oguzhan Ulucay 24.07.2017
            fatura adres icin eklendi
        */
        $('#fatura_il_id').on('change', function (e) {
-           console.log(e);
            var il_id = e.target.value;
            //ajax
            $.get("{{asset('ajax-subcat?il_id=')}}"+il_id, function (data) {
@@ -713,7 +733,6 @@
            fatura adres icin eklendi
        */
        $('#fatura_ilce_id').on('change', function (e) {
-           console.log(e);
            var ilce_id = e.target.value;
            //ajax
            $.get("{{asset('ajax-subcatt?ilce_id=')}}"+ ilce_id, function (data) {
@@ -733,7 +752,6 @@
        });
        /* Oguzhan Ulucay 18.07.2017 */
        $('#vergi_daire_il').on('change', function (e) {
-           console.log(e);
            var vergi_daire_il = e.target.value;
            //ajax
            $.get("{{asset('vergi_daireleri?il_id=')}}"+vergi_daire_il, function (data) {
@@ -769,15 +787,15 @@
            }
        });
 
-       $('#adres_kopyalayici').click(function copyTheAdress(){
+       /*$('#adres_kopyalayici').click(function copyTheAdress(){
          var flag_first_adrs_filled = false;
          var flag_second_adrs_empty = false;//flag_fields_empty
          var flag_return_original = false;
          var debug4 = $('#firma_adres').val();
          var debug5 = $('#semt_id').val();
-         /*
-           firma adresi dolu ise aktif et.
-         */
+         
+           //firma adresi dolu ise aktif et.
+         
          if($('#firma_adres').val()!="" &&
             $('#il_id').val() !=null      &&
             $('#ilce_id').val()!=null     &&
@@ -787,33 +805,33 @@
          var debug = $('#fatura_ilce_id').val();
          var debug2 = $('#fatura_adres').val();
          var debug3 = $('#fatura_il_id').val();
-         /*
-           fatura adresi bos ise
-         */
+         
+           //fatura adresi bos ise
+         
          if( $('#fatura_adres').val()==""   &&
              $('#fatura_il_id').val()==null   &&
              $('#fatura_ilce_id').val()==null &&
              $('#fatura_semt_id').val()==null ){
                flag_second_adrs_empty = true;
              }
-         /*
-           fatura adresi dolu ise
-       */
+         
+           //fatura adresi dolu ise
+       
         if($('#fatura_adres').val()!=""   &&
             $('#fatura_il_id').val()!=null   &&
             $('#fatura_ilce_id').val()!=null &&
             $('#fatura_semt_id').val()!=null ){
               flag_return_original =true;
             }
-         /*
-           firma ve fatura adresi bos ise checkbox isaretlenmez.
-         */
+         
+           //firma ve fatura adresi bos ise checkbox isaretlenmez.
+         
          if(flag_first_adrs_filled == false && flag_second_adrs_empty == true){
            $('#adres_kopyalayici').attr("checked",false);
          }
-         /*
-           firma adresi bos, fatura adresi dolu ise checkbox isaretlenmez.
-         */
+         
+          // firma adresi bos, fatura adresi dolu ise checkbox isaretlenmez.
+         
          else if(flag_first_adrs_filled == false && flag_second_adrs_empty == false){
            $('#adres_kopyalayici').attr("checked",false);
          }
@@ -840,7 +858,7 @@
          }else if( flag_return_original == true ){
            $('#fatura_semt_id').replaceWith(original_state_semt.clone(true));
          }
-       });
+       });*/
 
        $("#password").tooltip({
          title: "En az 6 karakter uzunlugunda; sayi, harf veya ozel karakter kombinasyonu giriniz.",
@@ -1131,10 +1149,10 @@
               errorMessageKey: 'Lutfen gecerli T.C Kimlik No giriniz.'
     });
     $.validate({
-        modules : 'location, date, security, file, logic',//18.7.17 Logic eklendi. -Oguzhan
+        /*modules : 'location, date, security, file, logic',//18.7.17 Logic eklendi. -Oguzhan
         onModulesLoaded : function() {
           $('#country').suggestCountry();
-        }
+        }*/
     });
     $('#presentation').restrictLength( $('#pres-max-length') );
     /*
