@@ -222,9 +222,8 @@ class AuthController extends Controller
             DB::commit();
             // all good
         } catch (\Exception $e) {
-            $error="error";
             DB::rollback();
-            return Response::json($error);
+            return Response::json($e);
 
         }
 
