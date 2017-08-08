@@ -447,7 +447,8 @@ Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
   return view('firmas.upload')->with('firmas', $firmas);
 }]);
 
-Route::get('/firmaKayit' ,function () {
+// 'FirmaController@firmaKayitFormValidator',
+Route::get('/firmaKayit', function () {
   $iller = App\Il::all();
 
   $iller_query= DB::select(DB::raw("SELECT *
@@ -462,6 +463,7 @@ Route::get('/firmaKayit' ,function () {
 
 
   return view('Firma.genFirmaKayit')->with('iller', $iller)->with('sektorler',$sektorler)->with('iller_query',$iller_query);
+  // Önceki Hali "Firma.firmaKayit" Güncel Hali "Firma.genFirmaKayit"
 });
 
 Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
@@ -486,7 +488,6 @@ Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
   return view('Firma.firmaIslemleri')->with('firma',$firma)->with('davetEdilIlanlar', $davetEdilIlanlar)
           ->with('ilanlarFirma', $ilanlarFirma)->with('teklifler', $teklifler)->with('tekliflerCount', $tekliflerCount);
 }]);
-
 
 
 
