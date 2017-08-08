@@ -61,7 +61,7 @@ class AuthController extends Controller
             auth()->logout();
             return back()->with('activationWarning', true);
         }
-        
+
         return redirect()->intended($this->redirectPath());
     }
     public function getLogout(){
@@ -80,7 +80,7 @@ class AuthController extends Controller
     public function __construct(ActivationFactory $activationFactory)
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-        
+
         $this->activationFactory = $activationFactory;
     }
 
