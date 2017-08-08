@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
 @extends('layouts.app')
-@section('content')
-  <head>
+
+
+  @section('head')
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
@@ -34,8 +33,9 @@
     <link href="../genbuild/css/custom.min.css" rel="stylesheet">
 
       <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
-  </head>
+  @endsection
 
+  @section('content')
    <body class="nav-md">
      <div>
        <div>
@@ -704,9 +704,7 @@
            effect: "fade",
            opacity: 0.7
          });
-         alert("Tooltip1");
          $("#vergi_no").tooltip({
-            alert("Tooltip2");
             title: "10 haneli sirket numaraniz.",
             // place tooltip on the right edge
             placement: "right",
@@ -1038,4 +1036,3 @@
 
   </body>
   @endsection
-</html>
