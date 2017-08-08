@@ -800,6 +800,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return Response::json($brosur);
   });
 
+    Route::get('/ilanDuzenle/{firmaID}/{ilanID}', 'IlanController@ilanDuzenle');
+    Route::post('/ilanDuzenle/{firmaID}/{ilanID}', 'IlanController@ilanDuzenleSubmit');
+
   //firma ilan route... /////////////////////////////////////////////////
   Route::get('/ilanEkle/{id}/{ilan_id}', 'FirmaIlanController@showFirmaIlanEkle');
 

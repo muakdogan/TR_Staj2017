@@ -38,6 +38,7 @@ class FirmaKullanimaYetkili
         }
 
         Debugbar::info("Yetki onaylandı");
+
         return $next($request);
     }
 }

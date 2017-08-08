@@ -16,9 +16,8 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
         <thead>
         <tr>
             <th  class="anim:update anim:number"  width="10%">Sıra</th>
-            <th  class="anim:id" width="40%">Firma Adı</th>
-            <th  class="anim:update anim:sort anim:number" width="40%">Teklif({{$para_birimi}})</th>
-            <th  class="anim:constant" width="10%"></th>
+            <th  class="anim:id" width="45%">Firma Adı</th>
+            <th  class="anim:update anim:sort anim:number" width="45%">Teklif({{$para_birimi}})</th>
         </tr>
         </thead>
         <tbody>
@@ -26,41 +25,31 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
             <?php  $j++; ?>
             @if(count($teklif->verilenFiyat()) != 0)
                 @if($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $teklif->teklifler->getFirma("id")) <!--Kazanan firma kontrolü -->
-                <tr class="kismiKazanan">
+                    <tr class="kismiKazanan">
                 @else
                     <tr>
-                    @endif
-                    @if(session()->get('firma_id') == $teklif->teklifler->getFirma("id")) <!--Teklifi veren firma ise -->
-                        <td class="highlight">{{$j}}</td>
-                        <td class="highlight">{{$teklif->teklifler->getFirma("adi")}}:</td>
-                        <td class="highlight firmaFiyat" style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong></td>
-                        <td class="highlight"></td>
-                        @elseif(session()->get('firma_id') == $ilan->firmalar->id) <!--İlan sahibi ise Kazananı belirlemek için -->
-                        <?php $ilanSahibi= 1;?>
-                        <?php  $i++; ?>
-                        <td>{{$j}}</td>
-                        <td>{{$teklif->teklifler->getFirma("adi")}}</td>
-                        <td style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
-                        </td>
-                        @if($ilan->kapanma_tarihi > $dt)
-                            <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
-                        @else
-                            @if($kisKazanCount == 0)
-                                <td><button name="{{$teklif->teklifler->getFirma("id")}}" id="{{$teklif->teklifler->verilenFiyat()}}" style="float:right" type="button" class="btn btn-info KapaliKazanan">Kazanan</button></td>
-                            @elseif($kisKazanCount == 1 && $kazanK->kazanan_firma_id == $teklif->teklifler->getFirma("id"))
-                                <td>KAZANDI</td>
-                            @endif
-                        @endif
-                        @else  <!-- Diğer teklif veren firmalar -->
-                        <?php  $i++; ?>
-                        <td>{{$j}}</td>
-                        <td>X Firması</td>
-                        <td  style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
-                        </td>
-                        <td></td>
-                        @endif
-                    </tr>
                 @endif
+
+                @if(session()->get('firma_id') == $teklif->teklifler->getFirma("id")) <!--Teklifi veren firma ise -->
+                    <td class="highlight">{{$j}}</td>
+                    <td class="highlight">{{$teklif->teklifler->getFirma("adi")}}:</td>
+                    <td class="highlight firmaFiyat" style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong></td>
+                @elseif(session()->get('firma_id') == $ilan->firmalar->id) <!--İlan sahibi ise Kazananı belirlemek için -->
+                    <?php $ilanSahibi= 1;?>
+                    <?php  $i++; ?>
+                    <td>{{$j}}</td>
+                    <td>{{$teklif->teklifler->getFirma("adi")}}</td>
+                    <td style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
+                    </td>
+                @else  <!-- Diğer teklif veren firmalar -->
+                    <?php  $i++; ?>
+                    <td>{{$j}}</td>
+                    <td>X Firması</td>
+                    <td  style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong>
+                    </td>
+                @endif
+                </tr>
+        @endif
                 @endforeach
         </tbody>
     </table>
@@ -70,9 +59,8 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
         <thead>
         <tr>
             <th width="10%">Sıra</th>
-            <th class="anim:id" width="40%">Firma Adı</th>
-            <th class="anim:sort" width="40%">Teklif ({{$para_birimi}})</th>
-            <th width="10%"></th>
+            <th class="anim:id" width="45%">Firma Adı</th>
+            <th class="anim:sort" width="45%">Teklif ({{$para_birimi}})</th>
         </tr>
         </thead>
         <tbody>
@@ -94,13 +82,12 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
                             </strong> <br />%{{$teklif['iskonto_orani']}} İskontolu
                             @endif
                         </td>
-                        <td class="highlight"></td>
                     @elseif(session()->get('firma_id') == $ilan->firmalar->id)
                         <?php  $i++; ?>
                         <?php $ilanSahibi= 1;?>
                         <td>{{$j}}</td>
                         <td>{{$teklif->teklifler->getFirma("adi")}}:</td>
-                        <?php /*<strong class="currency"> ifin içine alininca javascript kodlari çalismiyor.. */?>
+                        {{--<strong class="currency"> ifin içine alininca javascript kodlari çalismiyor.. --}}
                         <td style="text-align: right; font-size: 10px"><strong class="currency">
                             @if($teklif['iskonto_orani']==0)
                                 {{$teklif->teklifler->verilenFiyat()}}
@@ -110,15 +97,6 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
                                 </strong> <br />%{{$teklif['iskonto_orani']}} İskontolu
                             @endif
                         </td>
-                        @if($ilan->kapanma_tarihi > $dt)
-                            <td><button name="kazanan" style="float:right" type="button" class="btn btn-info disabled" >Kazanan</button></td>
-                        @else
-                            @if($kisKazanCount == 0)
-                                <td><button name="{{$teklif->teklifler->getFirma("id")}}" id="{{$teklif->teklifler->verilenFiyat()}}" style="float:right" type="button" class="btn btn-info KapaliAcikRekabetKazanan">Kazanan</button></td>
-                            @elseif($kisKazanCount == 1)
-                                <td></td>
-                            @endif
-                        @endif
                     @else
                         <?php  $i++; ?>
                         <td>{{$j}}</td>
@@ -133,7 +111,6 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
                                 </strong> <br />%{{$teklif['iskonto_orani']}} İskontolu
                             @endif
                         </td>
-                        <td></td>
                     @endif
                 @endif
             </tr>
@@ -143,7 +120,6 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
             <td class="minFiyat">{{$j=$j+1}}</td>
             <td class="minFiyat">Optimum Fiyat</td>
             <td class="minFiyat" style="text-align: right; font-size: 10px"><strong class="currency"><?php foreach ($minFiyat as $fyt) { echo number_format($fyt->deneme, 2, '.', ''); } ?></strong></td>
-            <td class="minFiyat"></td>
         </tr>
         </tbody>
     </table>
