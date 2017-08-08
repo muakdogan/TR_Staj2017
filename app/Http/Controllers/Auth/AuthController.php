@@ -61,7 +61,7 @@ class AuthController extends Controller
             auth()->logout();
             return back()->with('activationWarning', true);
         }
-        
+
         return redirect()->intended($this->redirectPath());
     }
     public function getLogout(){
@@ -80,7 +80,7 @@ class AuthController extends Controller
     public function __construct(ActivationFactory $activationFactory)
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-        
+
         $this->activationFactory = $activationFactory;
     }
 
@@ -155,6 +155,24 @@ class AuthController extends Controller
             $tur = 1;
             $adres->tur_id = $tur;
             $firma->adresler()->save($adres);
+
+
+            // firma adres
+            if($request->adres_kopyalayici == null){
+              $fatura_adres = $firma->adresler()->where('tur_id', '=', '0')->first() ?: new  \App\Adres();
+              $fatura_adres->il_id = $request->fatura_il_id;
+              $fatura_adres->ilce_id = $request->fatura_ilce_id;
+              $fatura_adres->semt_id = $request->fatura_semt_id;
+
+              $firma->adresler()->save($fatura_adres);
+            }
+            else if($request->adres_kopyalayici == "kopyala"){
+              $adres->tur_id=0;
+              $firma->adresler()->save($adres);
+            }
+
+
+
 
             $firma->sektorler()->attach($request->sektor_id);
 

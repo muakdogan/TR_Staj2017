@@ -5,6 +5,7 @@
     <head>
         <title>Laravel 5 AngularJS CRUD Example</title>
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+        <!-- asset'i url içerisinde kullanınca public dosyası altından aramaya başlar. -->
     </head>
     <body>
 

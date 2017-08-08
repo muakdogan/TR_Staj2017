@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- @extends('layouts.appAdmin')
 
-  @section('content') -->
   <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -34,10 +32,10 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form>
+            <form method="POST" action="">
               <h1>Login Form</h1>
               <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <input type="text" class="form-control" placeholder="E-mail Adres" required="true" />
+                <input type="email" class="form-control" name="email" placeholder="E-mail Adres" required />
                 @if ($errors->has('email'))
                     <span class="help-block">
                         <strong>{{ $errors->first('email') }}</strong>
@@ -45,7 +43,7 @@
                 @endif
               </div>
               <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                <input type="password" class="form-control" placeholder="Password" required="true" />
+                <input type="password" name="password" class="form-control" placeholder="Password" required />
                 @if ($errors->has('password'))
                     <span class="help-block">
                         <strong>{{ $errors->first('password') }}</strong>
@@ -71,8 +69,8 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                  <h1><i class="fa fa-paw"></i> Tam Rekabet </h1>
+                  <p>©2017 All Rights Reserved. Tam Rekabet is a Bootstrap 3 template. Privacy and Terms</p>
                 </div>
               </div>
             </form>
@@ -107,8 +105,8 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                  <h1><i class="fa fa-paw"></i> Tam Rekabet </h1>
+                  <p>©2017 All Rights Reserved. Tam Rekabet  is a Bootstrap 3 template. Privacy and Terms</p>
                 </div>
               </div>
             </form>
