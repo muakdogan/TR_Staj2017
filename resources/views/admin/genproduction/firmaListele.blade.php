@@ -11,23 +11,23 @@
     <title>Tam Rekabet</title>
 
     <!-- Bootstrap -->
-    <link href="../vendor/genvendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="genvendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="../vendor/genvendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="genvendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="../vendor/genvendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="genvendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
-    <link href="../vendor/genvendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="genvendors/iCheck/skins/flat/green.css" rel="stylesheet">
 
     <!-- bootstrap-progressbar -->
-    <link href="../vendor/genvendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <link href="genvendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
-    <link href="../vendor/genvendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <link href="genvendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
-    <link href="../vendor/genvendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="genvendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="../genbuild/css/custom.min.css" rel="stylesheet">
+    <link href="../../genbuild/css/custom.min.css" rel="stylesheet">
     </head>
 
 
@@ -37,15 +37,16 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{{url('/admin')}}" class="site_title"><i class="fa fa-paw"></i> <span>Tam Rekabet !</span></a> <!-- Ana sayfadaki proje isminin yazdıgı yer -->
+              <a href="{{url('/admin/dashboard')}}" class="site_title"><i class="fa fa-paw"></i> <span>Tam Rekabet !</span></a> <!-- Ana sayfadaki proje isminin yazdıgı yer -->
             </div>
 
             <div class="clearfix"></div>
 
             <!-- menu profile quick info -->
             <div class="profile clearfix">
+
               <div class="profile_pic">
-                <img src="../resources/views/admin/genproduction/images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="../../resources/views/admin/genproduction/images/user.png" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Hoş Geldin,</span>
@@ -65,7 +66,7 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                   <li><a href="{{ url('/admin') }}"><i class="fa fa-home"></i> Anasayfa </a> <!-- If you delete the span stuff the arrow on the right side is removed -->
+                   <li><a href="{{ url('/admin/dashboard') }}"><i class="fa fa-home"></i> Anasayfa </a> <!-- If you delete the span stuff the arrow on the right side is removed -->
                      <!-- <ul class="nav child_menu">
 
                       <li><a href="index.blade.php">Dashboard</a></li>
@@ -86,7 +87,7 @@
                     </ul>
                   </li> -->
 
-                  <li><a href="{{ url('/firmaList')}}"><i class="fa fa-desktop"></i> Firma Onayı </a>
+                  <li><a href="{{ url('/admin/firmaList')}}"><i class="fa fa-desktop"></i> Firma Onayı </a>
                     <ul class="nav child_menu">
                       <!--<li><a href="general_elements.html">General Elements</a></li>
                       <li><a href="media_gallery.html">Media Gallery</a></li>
@@ -99,7 +100,7 @@
                       <li><a href="calendar.html">Calendar</a></li> -->
                     </ul>
                   </li>
-                  <li><a href="{{ url('/yorumList')}}"><i class="fa fa-table"></i> Yorum Onayı </a>
+                  <li><a href="{{ url('/admin/yorumList')}}"><i class="fa fa-table"></i> Yorum Onayı </a>
                     <ul class="nav child_menu">
                       <!-- <li><a href="tables.html">Tables</a></li>
                       <li><a href="tables_dynamic.html">Table Dynamic</a></li> -->
@@ -116,8 +117,8 @@
                   </li>
                   <li><a><i class="fa fa-clone"></i>Tablo İşlemleri <span class="fa fa-chevron-down"></a>
                      <ul class="nav child_menu">
-                      <li><a href="{{ url('/tablesControl')}}">Admin Tablosu</a></li>
-                      <li><a href="{{ url('/kalemlerTablolari')}}">Kalemler Tabloları İşlemleri</a></li>
+                      <li><a href="{{ url('/admin/tablesControl')}}">Admin Tablosu</a></li>
+                      <li><a href="{{ url('/admin/kalemlerTablolari')}}">Kalemler Tabloları İşlemleri</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -201,7 +202,11 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src=../resources/views/admin/genproduction/images/img.jpg alt="">John Doe
+                    @if(Auth::guard('admin')->user())
+                    {{ Auth::guard('admin')->user()->name }}
+                    @else
+                    Kullanıcı Tanınamadı !!!
+                    @endif
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -213,19 +218,19 @@
                       </a>
                     </li>
                     <li><a href="javascript:;">Help</a></li>
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li><a href="{{ url('/admin/logout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                   </ul>
                 </li>
 
                 <li role="presentation" class="dropdown">
                   <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
+                    <span class="badge bg-green"></span>
                   </a>
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
+                    <!-- <li>
                       <a>
-                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
+                        <span class="image"><img src=../../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -237,7 +242,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
+                        <span class="image"><img src=../../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -249,7 +254,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
+                        <span class="image"><img src=../../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -261,7 +266,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src=../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
+                        <span class="image"><img src=../../resources/views/admin/genproduction/images/img.jpg alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -270,7 +275,7 @@
                           Film festivals used to be do-or-die moments for movie makers. They were where...
                         </span>
                       </a>
-                    </li>
+                    </li> -->
                     <li>
                       <div class="text-center">
                         <a>
@@ -285,9 +290,7 @@
             </nav>
           </div>
         </div>
-        <!-- /top navigation -->
-
-
+        <!-- /top navi
 
 
         <!-- page content -->
@@ -397,24 +400,24 @@
     </div>
 
     <!-- jQuery -->
-    <script src="../vendor/genvendors/jquery/dist/jquery.min.js"></script>
+    <script src="genvendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="../vendor/genvendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="genvendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script src="../vendor/genvendors/fastclick/lib/fastclick.js"></script>
+    <script src="genvendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="../vendor/genvendors/nprogress/nprogress.js"></script>
+    <script src="genvendors/nprogress/nprogress.js"></script>
     <!-- bootstrap-progressbar -->
-    <script src="../vendor/genvendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <script src="genvendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
     <!-- iCheck -->
-    <script src="../vendor/genvendors/iCheck/icheck.min.js"></script>
+    <script src="genvendors/iCheck/icheck.min.js"></script>
     <!-- PNotify -->
-    <script src="../vendor/genvendors/pnotify/dist/pnotify.js"></script>
-    <script src="../vendor/genvendors/pnotify/dist/pnotify.buttons.js"></script>
-    <script src="../vendor/genvendors/pnotify/dist/pnotify.nonblock.js"></script>
+    <script src="genvendors/pnotify/dist/pnotify.js"></script>
+    <script src="genvendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="genvendors/pnotify/dist/pnotify.nonblock.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="../genbuild/js/custom.min.js"></script>
+    <script src="../../genbuild/js/custom.min.js"></script>
 
   </body>
 </html>

@@ -65,7 +65,7 @@ Route::get('/DbTest', function () {
 
   //public/admin/login
   //public in altındaki klasörün içine yönlendiriyor
-  Route::get('/admi','AdminAuth\AuthController@showLoginForm');
+  Route::get('/admin/login','AdminAuth\AuthController@showLoginForm');
 
 
   Route::post('/admin/login','AdminAuth\AuthController@login');
@@ -144,12 +144,12 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
 
   Route::get('/admin/tablesControl',['middleware' => 'admin' , function () {
     return view('admin.genproduction.projects');
-  }]);
+  }]);//admin.index
 
-  Route::get('/api/v1/admins/{id?}', 'Admins@index');
-  Route::post('/api/v1/admins', 'Admins@store');
-  Route::post('/api/v1/admins/{id}', 'Admins@update');
-  Route::delete('/api/v1/admins/{id}', 'Admins@destroy');
+  Route::get('/admin/api/v1/admins/{id?}', 'Admins@index');
+  Route::post('/admin/api/v1/admins', 'Admins@store');
+  Route::post('/admin/api/v1/admins/{id}', 'Admins@update');
+  Route::delete('/admin/api/v1/admins/{id}', 'Admins@destroy');
 
   /*Route::get('/adminAnasayfa', function () {
   $firmalar=Firma::all();
@@ -808,6 +808,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $brosur= App\FirmaBrosur::find($brosur_id);
     return Response::json($brosur);
   });
+
+    Route::get('/ilanDuzenle/{firmaID}/{ilanID}', 'IlanController@ilanDuzenle');
+    Route::post('/ilanDuzenle/{firmaID}/{ilanID}', 'IlanController@ilanDuzenleSubmit');
 
   //firma ilan route... /////////////////////////////////////////////////
   Route::get('/ilanEkle/{id}/{ilan_id}', 'FirmaIlanController@showFirmaIlanEkle');

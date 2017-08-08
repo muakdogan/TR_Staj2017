@@ -32,21 +32,11 @@ class Authenticate
     protected $auth;
 
     public function __construct(Guard $auth) {
-
-
-        echo 'AUTH : ';
-
-
         $this->auth=$auth;
     }
     public function handle($request, Closure $next)
     {
         if ($this->auth->guest()) {
-
-
-           echo 'Logged in : ';
-
-
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {

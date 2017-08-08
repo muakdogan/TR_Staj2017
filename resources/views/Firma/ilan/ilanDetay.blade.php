@@ -5,7 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
 @endsection
 
-@section('bodyAttributes')onload="loadPage()"@endsection <!-- teklif girilirken textbox cursorunu dogru konumlandirmak icin gerekli -->
+@section('bodyAttributes')onload="loadPage()"@endsection {{-- teklif girilirken textbox cursorunu dogru konumlandirmak icin gerekli --}}
 
 @section('content')
 
@@ -633,9 +633,7 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                                     <td>{{date('d-m-Y', strtotime($ilan->is_bitis_tarihi))}}</td>
                                 </tr>
                             </table>
-                            @if($ilan->firma_id == session()->get('firma_id'))
-                                <a href="{{ URL::to('ilanEkle', array($firmaIlan->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
-                            @endif
+
                         </div>
                         <div class="tab-pane" id="2">
                             <h3>{{$firmaIlan->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
@@ -659,7 +657,9 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                                 @endif
                             </div>
                         </div>
-
+                        @if($ilan->firma_id == session()->get('firma_id'))
+                            <a href="{{ URL::to('ilanDuzenle', array($firmaIlan->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-3">

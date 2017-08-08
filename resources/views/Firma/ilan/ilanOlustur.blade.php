@@ -266,11 +266,7 @@
                              -o-transform:skew(8deg) rotate(3deg);
                                 transform:skew(8deg) rotate(3deg);
                     }
-                  
-                  
-                   
         </style>
-
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>

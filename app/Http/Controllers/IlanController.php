@@ -9,6 +9,15 @@ use App\Sektor;
 use App\BelirlIstekli;
 use DB;
 use App\Ilan;
+use App\IlanHizmet;
+use App\IlanMal;
+use App\IlanGoturuBedel;
+use App\IlanYapimIsi;
+use App\Maliyet;
+use App\ParaBirimi;
+use App\Birim;
+use App\OnayliTedarikci;
+
 use Input;
 use View;
 use Carbon\Carbon;
@@ -184,6 +193,401 @@ class IlanController extends Controller
 
         return view('Firma.ilan.ilanOlustur', ['firma' => $firma])->with('iller',$iller)->with('sektorler',$sektorler)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan);
 
+    }
+
+
+    public function ilanDuzenle($firmaID,$ilanID){
+        $firma = Firma::find($firmaID);
+        $ilan = Ilan::find($ilanID);
+
+        /*
+         * Ilan ve firma ID gecerli olmalidir ve
+         * Kullanici sadece kendi ilanini guncelleyebilir.
+         */
+        if ($ilan==null || $firma==null || Gate::denies('show', $firma)) {
+            return redirect()->intended();
+        }
+
+        if (!$ilan->ilan_hizmetler){
+            $ilan->ilan_hizmetler = new IlanHizmet();
+        }
+
+        if (!$ilan->ilan_mallar)
+            $ilan->ilan_mallar = new IlanMal();
+
+        if (!$ilan->ilan_goturu_bedeller)
+            $ilan->ilan_goturu_bedeller = new IlanGoturuBedel();
+
+        $goturu_bedel= IlanGoturuBedel::where('ilan_id',$ilan->id)->get();
+        Debugbar::info($goturu_bedel);
+        if (!$ilan->ilan_yapim_isleri)
+            $ilan->ilan_yapim_isleri = new IlanYapimIsi();
+
+        $ilan_sektor = Sektor::find($ilan->ilan_sektor);
+        $maliyetler =  Maliyet::all();
+        $odeme_turleri = OdemeTuru::all();
+        $para_birimleri = ParaBirimi::all();
+        $iller = DB::select(DB::raw("SELECT *  FROM  `iller` WHERE adi = 'İstanbul' OR adi =  'İzmir' OR adi =  'Ankara'
+                                     UNION SELECT * FROM iller"));
+        $birimler =  Birim::all();
+
+        $teklifVarMi=0;
+        if($ilan->teklif_hareketler()->limit(1)->paginate()!=null){
+            $teklifVarMi=1;
+        }
+
+        return view('Firma.ilanDuzenle.index')->with('firma',$firma)->with('iller',$iller)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan)->with('teklifVarMi',$teklifVarMi)->with('ilan_sektor',$ilan_sektor)->with('goturu_bedel',$goturu_bedel);
+    }
+
+    public function ilanDuzenleSubmit($firmaID,$ilanID){
+
+        $firma = Firma::find($firmaID);
+        $ilan = Ilan::find($ilanID);
+
+
+        /*
+         * Ilan ve firma ID gecerli olmalidir ve
+         * Kullanici sadece kendi ilanini guncelleyebilir.
+         */
+        if ($ilan==null || $firma==null) {
+            return false;
+        }
+
+        $ilan->adi=Input::get('ilan_adi');
+        //$ilan->aciklama="";
+        $ilan->katilimcilar= Input::get('katilimcilar');//1 - Onayli tedarikciler | 2 - Belirli Firmalar | 3 - Tum Firmalar
+        $ilan->rekabet_sekli= Input::get('rekabet_sekli');//1 - Tam Rekabet | 2 - Sadece Basvuru
+        //$ilan->usulu="";//1 - Tam Rekabet | 2 - Belirli Istekliler Arasında | 3 - Sadece Basvuru
+        $ilan->kismi_fiyat=Input::get('kismi_fiyat');//1 - Kısmi Fiyat Teklifine Kapalı | 2 - Kısmi Fiyat Teklifine Acik
+        $ilan->sozlesme_turu= Input::get('sozlesme_turu');//0 - Birim Fiyatli | 1 - Goturu Bedel
+        //$ilan->teknik_sartname="";//pdf dosya
+        $ilan->teslim_yeri_satici_firma= Input::get('teslim_yeri');
+        if($ilan->teslim_yeri_satici_firma=='Adrese Teslim'){
+            $ilan->teslim_yeri_il_id= Input::get('il_id');
+            $ilan->teslim_yeri_ilce_id= Input::get('ilce_id');
+        }
+        else{
+            $ilan->teslim_yeri_il_id= null;
+            $ilan->teslim_yeri_ilce_id= null;
+        }
+        $ilan->isin_suresi= Input::get('isin_suresi');
+        $ilan->odeme_turu_id=Input::get('odeme_turu');
+        $ilan->para_birimi_id=Input::get('para_birimi');
+        $ilan->yaklasik_maliyet= Input::get('maliyet');
+        $ilan->komisyon_miktari=Input::get('yaklasik_maliyet');
+        $ilan->goster = Input::get('firma_adi_goster');//0 - Gizle | 1 - Goster
+       // $ilan->statu = 0;//0 - Aktif | 1 - Sonuclanmamis | 2 Pasif
+
+        //ilan tarihi guncelle
+        $ilan_tarihi= explode(" - ", Input::get('ilan_tarihi_araligi'));
+
+
+        $ilan_tarihi_replace1=$ilan_tarihi[0];
+        $ilan_tarihi_replace1 = str_replace('/', '-', $ilan_tarihi_replace1);
+        $ilan_tarihi_replace2=$ilan_tarihi[1];
+        $ilan_tarihi_replace2 = str_replace('/', '-', $ilan_tarihi_replace2);
+        $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi_replace1));
+        $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi_replace2));
+
+        //is tarihi guncelle
+        $is_tarihi= explode(" - ", Input::get('is_tarihi_araligi'));
+        $is_tarihi_replace1=$is_tarihi[0];
+        $is_tarihi_replace1 = str_replace('/', '-', $is_tarihi_replace1);
+        $is_tarihi_replace2=$is_tarihi[1];
+        $is_tarihi_replace2 = str_replace('/', '-', $is_tarihi_replace2);
+
+        $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
+        $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi_replace2));
+
+
+        $ilan->save();
+
+        $upKalemArray = json_decode(Input::get('updatedArray'));
+        $upSayac = count($upKalemArray);
+        $delKalemArray = json_decode(Input::get('deletedArray'));
+        $delSayac = count($delKalemArray);
+/*
+        if(Input::get('belirli_istekli')!=null){
+            foreach(Input::get('belirli_istekli') as $belirli){
+                $belirli_istekliler= new BelirlIstekli();
+                $belirli_istekliler->ilan_id = $ilan->id;
+                $belirli_istekliler->firma_id=$belirli;
+                $belirli_istekliler->save();
+            }
+        }
+        if(Input::get('onayli_tedarikciler')!=null){
+            foreach(Input::get('onayli_tedarikciler') as $onayli){
+                $onayli_tedarikciler= new OnayliTedarikci();
+                $onayli_tedarikciler->firma_id = $ilan->firma_id;
+                $onayli_tedarikciler->tedarikci_id=$onayli;
+                $onayli_tedarikciler->save();
+            }
+        }
+*/
+        //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
+
+        if($ilan->sozlesme_turu==1){//GOTURU ILAN TURU
+
+            if($ilan->ilan_turu==1){
+                //Varsa Mal Kalemleri Sil
+                DB::table('ilan_mallar')->where('ilan_id',$ilan->id)->delete();
+            }
+            else if($ilan->ilan_turu==2){
+                //Varsa Hizmet Kalemleri Sil
+                DB::table('ilan_hizmetler')->where('ilan_id',$ilan->id)->delete();
+            }
+            else{
+                //Varsa Yapim Kalemleri Sil
+                DB::table('ilan_yapim_isleri')->where('ilan_id',$ilan->id)->delete();
+            }
+
+            if(Input::get('kalem_id')=='-1'){
+                $goturu= new IlanGoturuBedel();
+                $goturu->ilan_id=$ilan->id;
+                $goturu->kalem_id=  Input::get('goturu_id');
+                $goturu->kalem_adi= Input::get('goturu_kalem');
+                $goturu->aciklama=Str::title(strtolower(Input::get('goturu_aciklama')));
+                $goturu->miktar=Input::get('goturu_miktar');
+                $goturu->miktar_birim_id=Input::get('goturu_miktar_birim_id');
+                $goturu->save();
+            }
+            else{
+                $goturu = IlanGoturuBedel::find(Input::get('kalem_id'));
+                $goturu->kalem_id=  Input::get('goturu_id');
+                $goturu->kalem_adi= Input::get('goturu_kalem');
+                $goturu->aciklama=Str::title(strtolower(Input::get('goturu_aciklama')));
+                $goturu->miktar=Input::get('goturu_miktar');
+                $goturu->miktar_birim_id=Input::get('goturu_miktar_birim_id');
+                $goturu->save();
+            }
+
+
+
+        }
+        else if($ilan->ilan_turu==1){//MAL ILAN TURU
+
+            //Varsa goturu bedel siler
+            DB::table('ilan_goturu_bedeller')->where('ilan_id',$ilan->id)->delete();
+
+            foreach(Input::get('mal_id') as $malId){
+                $arrayMalId[] = $malId;
+            }
+            foreach(Input::get('mal_kalem') as $malKalem){
+                $arrayMalKalem[] = $malKalem;
+            }
+            foreach(Input::get('mal_marka') as $marka){
+                $arrayMarka[] = $marka;
+            }
+            foreach(Input::get('mal_model') as $model){
+                $arrayModel[] = $model;
+            }
+            foreach(Input::get('mal_aciklama') as $malAciklama){
+                $arrayMalAciklama[] = $malAciklama;
+            }
+            foreach(Input::get('mal_ambalaj') as $ambalaj){
+                $arrayAmbalaj[] = $ambalaj;
+            }
+            foreach(Input::get('mal_miktar') as $miktar){
+                $arrayMiktar[] = $miktar;
+            }
+
+            foreach(Input::get('mal_birim') as $birim){
+                $arrayBirim[] = $birim;
+            }
+
+            $x=0;
+            //KALEM DELETE
+            for ($i=0;$i<count($delKalemArray);$i++){
+                DB::table('ilan_mallar')->where('id',$delKalemArray[$i])->delete();
+            }
+
+            foreach(Input::get('kalem_id') as $kalem_id){
+                if($kalem_id=="-1"){
+                    $mal= new IlanMal();
+                    $mal->ilan_id=$ilan->id;
+                    $mal->kalem_id=$arrayMalId[$x];
+                    $mal->kalem_adi=$arrayMalKalem[$x];
+                    $mal->marka=Str::title(strtolower($arrayMarka[$x]));
+                    $mal->model=Str::title(strtolower($arrayModel[$x]));
+                    $mal->aciklama=Str::title(strtolower($arrayMalAciklama[$x]));
+                    $mal->ambalaj=Str::title(strtolower($arrayAmbalaj[$x]));
+                    $mal->miktar=$arrayMiktar[$x];
+                    $mal->birim_id=$arrayBirim[$x];
+                    $mal->save();
+                }
+                else{
+                    //KALEM UPDATE
+                    if( $upSayac!=0){
+                        for ($i=0;$i<count($upKalemArray);$i++){
+                            if ($kalem_id==$upKalemArray[$i]){
+                                $mal=IlanMal::find($kalem_id);
+                                if($mal!=null){
+                                    $mal->kalem_id=$arrayMalId[$x];
+                                    $mal->kalem_adi=$arrayMalKalem[$x];
+                                    $mal->marka=Str::title(strtolower($arrayMarka[$x]));
+                                    $mal->model=Str::title(strtolower($arrayModel[$x]));
+                                    $mal->aciklama=Str::title(strtolower($arrayMalAciklama[$x]));
+                                    $mal->ambalaj=Str::title(strtolower($arrayAmbalaj[$x]));
+                                    $mal->miktar=$arrayMiktar[$x];
+                                    $mal->birim_id=$arrayBirim[$x];
+                                    $mal->save();
+                                    $upSayac--;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                $x++;
+            }
+        }
+        else if($ilan->ilan_turu==2){//HIZMET ILAN TURU
+
+            //Varsa goturu bedel siler
+            DB::table('ilan_goturu_bedeller')->where('ilan_id',$ilan->id)->delete();
+
+            foreach(Input::get('hizmet_id') as $hizmetId){
+                $arrayHizmetId[] = $hizmetId;
+            }
+            foreach(Input::get('hizmet_kalem') as $hizmetKalem){
+                $arrayHizmetKalem[] = $hizmetKalem;
+            }
+            foreach(Input::get('hizmet_aciklama') as $hizmetAciklama){
+                $arrayHizmetAciklama[] = $hizmetAciklama;
+            }
+            foreach(Input::get('hizmet_fiyat_standardi') as $hfs){
+                $arrayHfs[] = $hfs;
+            }
+            foreach(Input::get('hizmet_fiyat_standardi_birimi') as $hfsb){
+                $arrayHfsb[] = $hfsb;
+            }
+            foreach(Input::get('hizmet_miktar') as $hizmetMiktar){
+                $arrayHizmetMiktar[] = $hizmetMiktar;
+            }
+            foreach(Input::get('hizmet_miktar_birim_id') as $hmb){
+                $arrayHmb[] = $hmb;
+            }
+
+            $x=0;
+            //KALEM DELETE
+            for ($i=0;$i<count($delKalemArray);$i++){
+                    DB::table('ilan_hizmetler')->where('id',$delKalemArray[$i])->delete();
+            }
+
+            foreach(Input::get('kalem_id') as $kalem_id){
+                if($kalem_id=="-1"){
+                    $hizmet= new IlanHizmet();
+                    $hizmet->ilan_id=$ilan->id;
+                    $hizmet->kalem_id= $arrayHizmetId[$x];
+                    $hizmet->kalem_adi= $arrayHizmetKalem[$x];
+                    $hizmet->aciklama=Str::title(strtolower($arrayHizmetAciklama[$x]));
+                    $hizmet->fiyat_standardi=Str::title(strtolower($arrayHfs[$x]));
+                    $hizmet->fiyat_standardi_birim_id=$arrayHfsb[$x];
+                    $hizmet->miktar=$arrayHizmetMiktar[$x];
+                    $hizmet->miktar_birim_id=$arrayHmb[$x];
+                    $hizmet->save();
+                }
+                else{
+                    //KALEM UPDATE
+                    if( $upSayac!=0){
+                        for ($i=0;$i<count($upKalemArray);$i++){
+                            if ($kalem_id==$upKalemArray[$i]){
+                                $hizmet=IlanHizmet::find($kalem_id);
+                                if($hizmet!=null){
+                                    $hizmet->kalem_id= $arrayHizmetId[$x];
+                                    $hizmet->kalem_adi= $arrayHizmetKalem[$x];
+                                    $hizmet->aciklama=Str::title(strtolower($arrayHizmetAciklama[$x]));
+                                    $hizmet->fiyat_standardi=Str::title(strtolower($arrayHfs[$x]));
+                                    $hizmet->fiyat_standardi_birim_id=$arrayHfsb[$x];
+                                    $hizmet->miktar=$arrayHizmetMiktar[$x];
+                                    $hizmet->miktar_birim_id=$arrayHmb[$x];
+                                    $hizmet->save();
+                                    $upSayac--;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                $x++;
+            }
+        }
+        else if($ilan->ilan_turu==3){ //YAPIM ISI ILAN TURU
+
+            //Varsa goturu bedel siler
+            DB::table('ilan_goturu_bedeller')->where('ilan_id',$ilan->id)->delete();
+
+            foreach(Input::get('yapim_id') as $yapimId){
+                $arrayYapimId[] = $yapimId;
+            }
+            foreach(Input::get('yapim_kalem') as $yapimKalem){
+                $arrayYapimKalem[] = $yapimKalem;
+            }
+            foreach(Input::get('yapim_aciklama') as $yapimAciklama){
+                $arrayYapimAciklama[] = $yapimAciklama;
+            }
+            foreach(Input::get('yapim_fiyat_standardi') as $yfs){
+                $arrayYfs[] = $yfs;
+            }
+            foreach(Input::get('yapim_fiyat_standardi_birimi') as $yfsb){
+                $arrayYfsb[] = $yfsb;
+            }
+            foreach(Input::get('yapim_miktar') as $yapimMiktar){
+                $arrayYapimMiktar[] = $yapimMiktar;
+            }
+            foreach(Input::get('yapim_miktar_birim_id') as $ymb){
+                $arrayYmb[] = $ymb;
+            }
+
+            $x=0;
+            //KALEM DELETE
+            for ($i=0;$i<count($delKalemArray);$i++){
+                DB::table('ilan_yapim_isleri')->where('id',$delKalemArray[$i])->delete();
+            }
+
+            foreach(Input::get('kalem_id') as $kalem_id){
+                if($kalem_id=="-1"){
+                    $yapim= new IlanYapimIsi();
+                    $yapim->ilan_id=$ilan->id;
+                    $yapim->kalem_id= $arrayYapimId[$x];
+                    $yapim->kalem_adi=  $arrayYapimKalem[$x];
+                    $yapim->aciklama=Str::title(strtolower( $arrayYapimAciklama[$x]));
+                    $yapim->fiyat_standardi=Str::title(strtolower($arrayYfs[$x]));
+                    $yapim->fiyat_standardi_birimi_id=$arrayYfsb[$x];
+                    $yapim->miktar=$arrayYapimMiktar[$x];
+                    $yapim->birim_id=$arrayYmb[$x];
+                    $yapim->save();
+                }
+                else{
+                    //KALEM UPDATE
+                    if( $upSayac!=0){
+                        for ($i=0;$i<count($upKalemArray);$i++){
+                            if ($kalem_id==$upKalemArray[$i]){
+                                $yapim=IlanYapimIsi::find($kalem_id);
+                                if($yapim!=null){
+                                    $yapim->kalem_id= $arrayYapimId[$x];
+                                    $yapim->kalem_adi=  $arrayYapimKalem[$x];
+                                    $yapim->aciklama=Str::title(strtolower( $arrayYapimAciklama[$x]));
+                                    $yapim->fiyat_standardi=Str::title(strtolower($arrayYfs[$x]));
+                                    $yapim->fiyat_standardi_birimi_id=$arrayYfsb[$x];
+                                    $yapim->miktar=$arrayYapimMiktar[$x];
+                                    $yapim->birim_id=$arrayYmb[$x];
+                                    $yapim->save();
+                                    $upSayac--;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                $x++;
+            }
+        }
+
+
+        DebugBar::info($upKalemArray);
+        DebugBar::info($delKalemArray);
+        DebugBar::info(Input::get('ilan_adi'));
     }
 
     //TODO: test et

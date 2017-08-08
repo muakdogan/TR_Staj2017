@@ -16,6 +16,11 @@ class IlanYapimIsi extends Model
     {
         return $this->belongsTo('App\Birim', 'birim_id', 'id');
     }
+
+    public function fiyat_birimler()
+    {
+        return $this->belongsTo('App\Birim', 'fiyat_standardi_birimi_id', 'id');
+    }
        public function ilanlar()
     {
         return $this->belongsTo('App\Ilan', 'ilan_id', 'id');

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 class FirmaKullanimaYetkili
 {
@@ -41,10 +42,10 @@ class FirmaKullanimaYetkili
 
         else if ($firma->uyelik_bitis_tarihi == NULL)
         {
-            echo "'<script>console.log(\"Üyelik bitiş tarihi NULL.\")</script>'";
+            Debugbar::info("Üyelik bitiş tarihi NULL.");
         }
 
-        echo "<script>console.log( 'Yetki onaylandı' );</script>";
+        Debugbar::info("Yetki onaylandı.");
         return $next($request);
     }
 }

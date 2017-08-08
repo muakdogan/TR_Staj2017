@@ -1,862 +1,14 @@
 @extends('layouts.app')
-
-
-
-{{--Teklif yoksa ilan düzenlenebilir!--}}
-@if(!$teklifVarMi || 1)
+<?php use Barryvdh\Debugbar\Facade as Debugbar;
+Debugbar::info($ilan);
+?>
 
 @section('head')
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
-<script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
-<link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
-<link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
-<style>
-    .popup, .popup2, .bMulti {
-        background-color: #fff;
-        border-radius: 10px 10px 10px 10px;
-        box-shadow: 0 0 25px 5px #999;
-        color: #111;
-        display: none;
-        min-width: 450px;
-        padding: 25px;
-        text-align: center;
-    }
-    .popup, .bMulti {
-        min-height: 150px;
-    }
-    .button.b-close, .button.bClose {
-        border-radius: 7px 7px 7px 7px;
-        box-shadow: none;
-        font: bold 131% sans-serif;
-        padding: 0 6px 2px;
-        position: absolute;
-        right: -7px;
-        top: -7px;
-    }
-    .button {
-        background-color: #2b91af;
-        border-radius: 10px;
-        box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-        color: #fff;
-        cursor: pointer;
-        display: inline-block;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-    }
-
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    td, th {
-
-        text-align: left;
-        padding: 5px;
-    }
-    .button {
-        background-color: #555555; /* Green */
-        border: none;
-        color: white;
-        padding: 10px 22px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 13px;
-        margin: 4px 2px;
-        cursor: pointer;
-        float:right;
-    }
-    .button1 {
-        background-color: #555555; /* Green */
-        border: none;
-        color: white;
-        padding: 10px 22px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 13px;
-        margin: 4px 2px;
-        cursor: pointer;
-        float:left;
-    }
-    .test + .tooltip > .tooltip-inner {
-        background-color: #73AD21;
-        color: #FFFFFF;
-        border: 1px solid green;
-        padding: 10px;
-        font-size: 12px;
-    }
-    .test + .tooltip.bottom > .tooltip-arrow {
-        border-bottom: 5px solid green;
-    }
-</style>
-@endsection
-
-@section('content')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
-
-<div class="container">
-    <br>
-    <br>
-    @include('layouts.alt_menu')
-    @if(count($ilan) == 0)
-    <h2>İlan Oluştur</h2>
-    @else
-    <h2>İlan Düzenle</h2>
-    @endif
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-9" >
-            <div class="panel-group" id="accordion">
-
-                @include('Firma.ilanDuzenle.ilanDetaylari')
-
-                @include('Firma.ilanDuzenle.Mal.kalemListesi_Mal')
-                @include('Firma.ilanDuzenle.Hizmet.kalemListesi_Hizmet')
-                @include('Firma.ilanDuzenle.Goturu.kalemListesi_Goturu')
-                @include('Firma.ilanDuzenle.Yapim.kalemListesi_Yapim')
-            </div>
-        </div>
-        <div class="col-sm-3">
-            Yan column Sidebar
-        </div>
-    </div>
-    <div id="mesaj" class="popup">
-        <span class="button b-close"><span>X</span></span>
-        <h2 style="color:red;font-size:14px"> Dikkat!!</h2>
-        <h3 style="font-size:12px">Lütfen Rekabet Şeklini Seçmeden Önce İlan Sektörü Seçimi Yapınız.</h3>
-    </div>
-    <div id="mesaj_sistem" class="popup">
-        <span class="button b-close"><span>X</span></span>
-        <h2 style="color:red"> Üzgünüz.. !!!</h2>
-        <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
-    </div>
-</div>
-
-<script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-
-<!--script src="{{asset('js/selectDD.js')}}"></script-->
-
-<script charset="utf-8">
-    var firmaCount = 0;
-    var multiselectCount=0;
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-
-        $.fn.datepicker.dates['tr'] = {
-            days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"],
-            daysShort: ["Pz", "Pzt", "Sal", "Çrş", "Prş", "Cu", "Cts", "Pz"],
-            daysMin: ["Pz", "Pzt", "Sa", "Çr", "Pr", "Cu", "Ct", "Pz"],
-            months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-            monthsShort: ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
-            today: "Bugün"
-        };
-        var date_input=$('input[class="form-control date"]'); //our date input has the name "date"
-        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        date_input.datepicker({
-            format: 'dd-mm-yyyy',
-            language:"tr",
-            container: container,
-            weekStart:1,
-            todayHighlight: true,
-            autoclose: true
-        }).on('change', function() {
-            $(this).validate();  // triggers the validation test
-            // '$(this)' refers to '$("#datepicker")'
-        });
-
-        $('#il_id').on('change', function (e) {
-            var il_id = e.target.value;
-            GetIlce(il_id);
-            //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
-            //$("#semt_id")[0].selectedIndex=0;
-        });
-    });
-
-    $.validate({
-        modules : 'location, date, security, file',
-        onModulesLoaded : function() {
-            $('#country').suggestCountry();
-        }
-    });
-    $('#presentation').restrictLength( $('#pres-max-length') );
-
-    function GetIlce(il_id) {
-        if (il_id > 0) {
-            $("#ilce_id").get(0).options.length = 0;
-            $("#ilce_id").get(0).options[0] = new Option("Yükleniyor", "-1");
-
-            $.ajax({
-                type: "GET",
-                url: "{{asset('ajax-subcat')}}",
-                data:{il_id:il_id},
-                contentType: "application/json; charset=utf-8",
-
-                success: function(msg) {
-                    $("#ilce_id").get(0).options.length = 0;
-                    $("#ilce_id").get(0).options[0] = new Option("Seçiniz", "-1");
-
-                    $.each(msg, function(index, ilce) {
-                        $("#ilce_id").get(0).options[$("#ilce_id").get(0).options.length] = new Option(ilce.adi, ilce.id);
-                    });
-                },
-                async: false,
-                error: function() {
-                    $("#ilce_id").get(0).options.length = 0;
-                    alert("İlçeler yükelenemedi!!!");
-                }
-            });
-        }
-        else {
-            $("#ilce_id").get(0).options.length = 0;
-        }
-    }
-
-    function populateDD(){
-        var teslim_yeri = '{{$ilan->teslim_yeri_satici_firma}}';
-        if( teslim_yeri == 'Satıcı Firma' ){
-            $(".teslim_il").hide();
-            $(".teslim_ilce").hide();
-        }
-        else{
-            GetIlce({{$ilan->teslim_yeri_il_id}});
-            $("#il_id").val({{$ilan->teslim_yeri_il_id}});
-            if("{{$ilan->teslim_yeri_ilce_id}}" !== "" ){
-                $("#ilce_id").val({{$ilan->teslim_yeri_ilce_id}});
-            }
-        }
-        $("#odeme_turu").val({{$ilan->odeme_turu_id}});
-        $("#para_birimi").val({{$ilan->para_birimi_id}});
-        $("#katilimcilar").val({{$ilan->katilimcilar}});
-        $("#kismi_fiyat").val({{$ilan->kismi_fiyat}});
-        $("#firma_sektor").val({{$ilan->ilan_sektor}});
-        $("#ilan_turu").val({{$ilan->ilan_turu}});
-        $("#rekabet_sekli").val({{$ilan->rekabet_sekli}});
-        $("#sozlesme_turu").val({{$ilan->sozlesme_turu}});
-        $("#yaklasik_maliyet").val({{$ilan->komisyon_miktari}});
-        if("{{$ilan->teslim_yeri_satici_firma}}" !== "" ){
-            $("#teslim_yeri").val("{{$ilan->teslim_yeri_satici_firma}}");
-        }
-        if("{{$ilan->isin_suresi}}" !== "" ){
-            $("#isin_suresi").val("{{$ilan->isin_suresi}}");
-        }
-    }
-
-    var sektor=0;
-
-    $(function() {
-        $("#yaklasik_maliyet").change(function(){
-            var option = $('option:selected', this).attr('name');
-            $('#maliyet').val(option);
-        });
-    });
-
-    var select_count=0;
-    var multiselectCount=0;
-    $(function() {
-        $("#firma_sektor").change(function(){
-            sektor = $('option:selected', this).attr('value');
-            select_count++;
-
-            if(select_count>1){
-
-            }
-            $('#custom-headers').multiSelect('deselect_all');
-            //$('#custom-headers').multiSelect().remove();
-
-            funcBelirliIstekler();
-
-        });
-    });
-
-    function funcBelirliIstekler(){
-        $.ajax({
-            type:"GET",
-            url: "{{asset('belirli')}}",
-            data:{sektorBelirli:sektor},
-            cache: false,
-            success: function(data){
-                console.log(data);
-                $("#custom-headers option").remove();
-                for(var c=0; c<multiselectCount; c++){
-                    $("#"+(c+48)+"-selectable").remove();
-                }
-
-                for(var key=0; key <Object.keys(data).length;key++)
-                {
-                    multiselectCount++;
-                    $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key });
-
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus); alert("Error: " + errorThrown);
-            }
-        });
-    }
-
-    $(function() {
-        $("#rekabet_sekli").change(function(){
-            var option = $('option:selected', this).attr('value');
-            if(sektor!==0){
-
-                if(option==="2"){
-                    $('#belirli-istekliler').show();
-                }
-                else
-                {
-                    $('#belirli-istekliler').hide();
-                }
-            }
-            else
-            {
-                $('#mesaj').bPopup({
-                    speed: 650,
-                    transition: 'slideIn',
-                    transitionClose: 'slideBack',
-                    autoClose: 5000
-                });
-            }
-        });
-    });
-
-    $('#custom-headers').multiSelect({
-        selectableHeader: "<input style='width:115px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
-        selectionHeader: "<input  style='width:115px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
-        afterInit: function(ms){
-            var that = this,
-                $selectableSearch = that.$selectableUl.prev(),
-                $selectionSearch = that.$selectionUl.prev(),
-                selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-                selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
-
-            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                .on('keydown', function(e){
-                    if (e.which === 40){
-                        that.$selectableUl.focus();
-                        return false;
-                    }
-                });
-
-            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                .on('keydown', function(e){
-                    if (e.which == 40){
-                        that.$selectionUl.focus();
-                        return false;
-                    }
-                });
-        },
-        afterSelect: function(values){
-            firmaCount++;
-            if( firmaCount>2){
-                $('#custom-headers').multiSelect('deselect', values);
-            }
-            this.qs1.cache();
-            this.qs2.cache();
-        },
-        afterDeselect: function(){
-            firmaCount--;
-            this.qs1.cache();
-            this.qs2.cache();
-        }
-    });
-
-    var ilan_turu;
-    var sozlesme_turu;
-
-    $('#ilan_turu').on('change', function (e) {
-        ilan_turu = e.target.value;
-        if(ilan_turu=="1" && sozlesme_turu=="0")//mal
-        {
-            $('#hizmet').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-
-        }
-        else if(ilan_turu=="2" && sozlesme_turu=="0")//hizmet
-        {
-            $('#mal').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-        }
-        else if(sozlesme_turu=="1")//goturu
-        {
-            $('#hizmet').hide()
-            $('#mal').hide()
-            $('#yapim').hide();
-        }
-        else if(ilan_turu=="3")//yapim isi
-        {
-            $('#hizmet').hide()
-            $('#goturu').hide()
-            $('#mal').hide()
-        }
-    });
-
-    $('#sozlesme_turu').on('change', function (e) {
-        sozlesme_turu = e.target.value;
-        if(ilan_turu=="1" && sozlesme_turu=="0")
-        {
-            $('#hizmet').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-
-        }
-        else if(ilan_turu=="2" && sozlesme_turu=="0")
-        {
-            $('#mal').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-        }
-        else if(sozlesme_turu=="1")
-        {
-            $('#hizmet').hide()
-            $('#mal').hide()
-            $('#yapim').hide();
-        }
-        else if(ilan_turu=="3")
-        {
-            $('#hizmet').hide()
-            $('#goturu').hide()
-            $('#mal').hide()
-        }
-    });
-
-    $( document ).ready(function() {
-        $('#belirli-istekliler').hide();
-        var ilan_turu='{{$ilan->ilan_turu}}';
-        var sozlesme_turu='{{$ilan->sozlesme_turu}}';
-        if(ilan_turu=="")
-        {
-            $('#hizmet').hide()
-            $('#mal').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-        }
-        else if(ilan_turu=="1" && sozlesme_turu=="0")
-        {
-            $('#hizmet').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-
-        }
-        else if(ilan_turu=="2" && sozlesme_turu=="0")
-        {
-            $('#mal').hide()
-            $('#goturu').hide()
-            $('#yapim').hide()
-        }
-        else if(sozlesme_turu=="1")
-        {
-            $('#hizmet').hide()
-            $('#mal').hide()
-            $('#yapim').hide();
-        }
-        else if(ilan_turu=="3")
-        {
-            $('#hizmet').hide()
-            $('#goturu').hide()
-            $('#mal').hide()
-        }
-    });
-
-    $( "#teslim_yeri" ).change(function() {
-        var teslim_yeri= $('#teslim_yeri').val();
-        if(teslim_yeri=="Satıcı Firma"){
-            $('.teslim_il').hide();
-            $('.teslim_ilce').hide();
-        }
-        else if(teslim_yeri=="Adrese Teslim"){
-            $('.teslim_il').show();
-            $('.teslim_ilce').show();
-        }
-        else{}
-
-    });
-    $('.firma_goster').click(function() {
-        $(this).siblings('input:checkbox').prop('checked', false);
-    });
-    $(function() {
-        $('.selectpicker').selectpicker();
-    });
-
-    ////transection controllerinde çıkan sistemsel hatanın ekrana bastırılması.
-    var firma_id='{{$firma->id}}';
-    var ilanId='{{$ilan->id}}';
-
-    $("#fiyatlandirma_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#mal_add_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#mal_up_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#hizmet_up_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#hizmet_add_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#goturu_add_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#goturu_up_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#yapim_add_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-
-    $("#yapim_up_kayit").submit(function(e)
-    {
-        var postData = $(this).serialize();
-        var formURL = $(this).attr('action');
-
-
-        $.ajax(
-            {
-                beforeSend: function(){
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                url : formURL,
-                type: "POST",
-                data : postData,
-                success:function(data, textStatus, jqXHR)
-                {
-                    console.log(data);
-                    $('.ajax-loader').css("visibility", "hidden");
-                    if(data=="error"){
-                        $('#mesaj_sistem').bPopup({
-                            speed: 650,
-                            transition: 'slideIn',
-                            transitionClose: 'slideBack',
-                            autoClose: 5000
-                        });
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id+"/"+ilanId}, 5000);
-                    }
-                    else{
-
-                        setTimeout(function(){ location.href="{{asset('ilanEkle')}}"+"/"+firma_id +"/"+ilanId}, 1000);
-                    }
-                    e.preventDefault();
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    alert(textStatus + "," + errorThrown);
-                }
-            });
-        e.preventDefault();
-    });
-</script>
-@endsection
-@else
-    {{--Teklif varsa ilan düzenleneMEZ!--}}
-@section('head')
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
+    <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
+    <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
+    <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
     <style>
         .popup, .popup2, .bMulti {
             background-color: #fff;
@@ -900,7 +52,7 @@
 
         td, th {
 
-            text-align: center;
+            text-align: left;
             padding: 5px;
         }
         .button {
@@ -939,19 +91,13 @@
         .test + .tooltip.bottom > .tooltip-arrow {
             border-bottom: 5px solid green;
         }
-
         /*custom font*/
-
 
         #msform {
             width: 100%;
-
-
             position: relative;
         }
-        #msform fieldset {
 
-        }
         /*Hide all except first fieldset*/
         #msform fieldset:not(:first-of-type) {
             display: none;
@@ -997,7 +143,7 @@
             color: #27ae60;
             text-transform: uppercase;
             font-size: 9px;
-            width: 33.33%;
+            width: 50%;
             float: left;
             position: relative;
             text-align: center;
@@ -1095,10 +241,110 @@
             -o-transform:skew(8deg) rotate(3deg);
             transform:skew(8deg) rotate(3deg);
         }
-
     </style>
 
 @endsection
+
+{{--Teklif yoksa ilan düzenlenebilir!--}}
+@if(!$teklifVarMi)
+
+@section('content')
+    <style>
+    .ajax-loader {
+    visibility: hidden;
+    background-color: rgba(255,255,255,0.7);
+    position: absolute;
+    z-index: +100 !important;
+    width: 100%;
+    height:100%;
+    }
+
+    .ajax-loader img {
+    position: relative;
+    top:50%;
+    left:32%;
+    }
+    </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+
+<div class="container">
+    <br /> <br />
+    @include('layouts.alt_menu')
+    <div class="ajax-loader">
+        <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+    </div>
+    <h2>İlan Düzenle</h2>
+    <div class="box effect8">
+        <h3><button style="font-size:30px;color: #337ab7;background-color: #ffffff;border-color: #ffffff;"  id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="populateDD()">İlanı Düzenlemeye Başlayın</button></h3>
+    </div>
+
+    @include('Firma.ilanDuzenle.ilanDuzenleM')
+
+    <div id="mesaj" class="popup">
+        <span class="button b-close"><span>X</span></span>
+        <h2 style="color:red;font-size:14px"> Dikkat!!</h2>
+        <h3 style="font-size:12px">Lütfen Rekabet Şeklini Seçmeden Önce İlan Sektörü Seçimi Yapınız.</h3>
+    </div>
+    <div id="mesaj_sistem" class="popup">
+        <span class="button b-close"><span>X</span></span>
+        <h2 style="color:red"> Üzgünüz.. !!!</h2>
+        <h3>Sistemsel bir hata oluştu.Lütfen daha sonra tekrar deneyin</h3>
+    </div>
+</div>
+
+<script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+<script charset="utf-8">
+    function populateDD() {
+        var teslim_yeri = '{{$ilan->teslim_yeri_satici_firma}}';
+
+        if (teslim_yeri == 'Satıcı Firma') {
+            $(".teslim_il").hide();
+            $(".teslim_ilce").hide();
+        }
+        else {
+            GetIlce({{$ilan->teslim_yeri_il_id}});
+            $("#il_id").val({{$ilan->teslim_yeri_il_id}});
+            if ("{{$ilan->teslim_yeri_ilce_id}}" !== "") {
+                $("#ilce_id").val({{$ilan->teslim_yeri_ilce_id}});
+            }
+        }
+
+        CKEDITOR.instances.aciklama.setData("{{$ilan->aciklama}}");
+
+        $("#ilan_adi").val("{{$ilan->adi}}");
+        $("#odeme_turu").val({{$ilan->odeme_turu_id}});
+        $("#para_birimi").val({{$ilan->para_birimi_id}});
+        $("#katilimcilar").val({{$ilan->katilimcilar}});
+        $("#kismi_fiyat").val({{$ilan->kismi_fiyat}});
+        $("#firma_sektor").val({{$ilan->ilan_sektor}});
+          $("#firma_sektor_label").val("{{$ilan_sektor->adi}}");
+        if({{$ilan->goster}}){
+         $("#firma_adi_goster").attr('checked', true);
+         }
+         else{
+         $("#firma_adi_gizle").attr('checked', true);
+         }
+        $("#ilan_turu").val({{$ilan->ilan_turu}});
+        $("#rekabet_sekli").val({{$ilan->rekabet_sekli}});
+        $("#sozlesme_turu").val({{$ilan->sozlesme_turu}});
+        $("#yaklasik_maliyet").val({{$ilan->komisyon_miktari}});
+        if ("{{$ilan->teslim_yeri_satici_firma}}" !== "") {
+            $("#teslim_yeri").val("{{$ilan->teslim_yeri_satici_firma}}");
+        }
+        if ("{{$ilan->isin_suresi}}" !== "") {
+            $("#isin_suresi").val("{{$ilan->isin_suresi}}");
+        }
+    }S
+</script>
+@endsection
+@else
+    {{--Teklif varsa ilan düzenleneMEZ!--}}
+
 @section('content')
 
     <div class="container">

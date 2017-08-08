@@ -8,9 +8,9 @@ app.controller('adminsController', function($scope, $http, API_URL) {
     //show modal form
     $scope.toggle = function(modalstate, id) {
         $scope.modalstate = modalstate;
-        var x = confirm("Add e Girdii");
         switch (modalstate) {
             case 'add':
+            alert("Buraya Gels");
                 $scope.form_title = "Yeni Admin Ekle";
                 break;
             case 'edit':
@@ -53,7 +53,7 @@ app.controller('adminsController', function($scope, $http, API_URL) {
 
     //delete record
     $scope.confirmDelete = function(id) {
-        var isConfirmDelete = confirm('Are you sure you want this record?');
+        var isConfirmDelete = confirm('Are you sure you want DELETE this record?');
         if (isConfirmDelete) {
             alert(API_URL);
             $http({
