@@ -112,7 +112,8 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="il_id">İl</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="il_id" id="il_id">
+                          <select class="form-control" name="il_id" id="il_id"
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                             <option selected disabled>İl Seçiniz</option>
                             @foreach($iller_query as $il)
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
@@ -133,7 +134,8 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="semt_id">Semt</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control" name="semt_id" id="semt_id" >
+                          <select class="form-control" name="semt_id" id="semt_id"
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                           </select>
                         </div>
                       </div>
