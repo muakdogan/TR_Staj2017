@@ -261,7 +261,6 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
 
                           <div class="radio">
-    <!-- There may be a problem about "adres_kopyalayici" -->
                             <label>
                               <input type="radio" name="fatura_tur" id="fatura_tur_kurumsal" value="kurumsal" checked> Kurumsal
                             </label>
@@ -434,15 +433,22 @@
                       </div>
                     </div>
 
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <!-- <button type="button" class="btn btn-primary">Cancel</button>
-                          <button type="reset" class="btn btn-primary">Reset</button> -->
-                          <button id="sozlesme_goster" class="btn btn-primary">Kaydet</button>
-                        </div>
+                    <div class="form-group">
+                      <div>
+                        
+                        <input type="checkbox" data-validation="required"
+                        data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız."><button class="btn btn-link btn-xs sozlesme_goster" style="vertical-align: baseline;">Kullanıcı sözleşmesini</button> okudum ve onaylıyorum.
                       </div>
-                    <!-- </form> -->
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <!-- <button type="button" class="btn btn-primary">Cancel</button>
+                        <button type="reset" class="btn btn-primary">Reset</button> -->
+                        <button type="submit" class="btn btn-primary">Kaydol</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -452,7 +458,7 @@
               <div class="modal-dialog modal-lg" style="overflow-y: initial !important">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <button type="button" class="close" id="sozlesme_kapat">&times;</button>
+                    <button type="button" class="close sozlesme_kapat">&times;</button>
                     <h4 class="modal-title">KULLANICI SÖZLEŞMESİ</h4>
                   </div>
 
@@ -553,12 +559,7 @@
                   </fieldset>
 
                   <div class="form-group">
-                    <label class="col-md-offset-1 col-md-6">Sözleşmeyi okudum ve onaylıyorum. </label>
-                    <input type="checkbox" data-validation="required" data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız." id="sozlesme_checkbox"></input>
-                  </div>
-
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Onayla</button>
+                    <button class="btn btn-primary col-md-offset-4 col-md-4 close sozlesme_kapat">Kapat</button>
                   </div>
                 </div>
               </div>
@@ -1047,12 +1048,12 @@
         }
     }
 
-    $("#sozlesme_kapat").click(function (event){
+    $(".sozlesme_kapat").click(function (event){
       event.preventDefault();
       $("#sozlesme_modal").modal('hide');
     });
 
-    $("#sozlesme_goster").click(function (event){
+    $(".sozlesme_goster").click(function (event){
       event.preventDefault();
       $("#sozlesme_modal").modal('show');
     });
