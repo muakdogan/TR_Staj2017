@@ -22,8 +22,8 @@ a{
 .hover:hover {
     background-color:#eee;
 }
-<?php use Barryvdh\Debugbar\Facade as Debugbar; ?>
 </style>
+<?php use Barryvdh\Debugbar\Facade as Debugbar; ?>
     <h3>İlanlar</h3> 
     <hr class="hr">
     <?php 

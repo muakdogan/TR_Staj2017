@@ -39,6 +39,12 @@ class FirmaController extends Controller
         $proper=Str::title(strtolower($string));
         return response($proper);
     }*/
+    public function firmaKayitFormValidator(){
+
+
+
+    }
+
      public function showFirma($id){
         $firma = Firma::find($id);
         if (Gate::denies('show', $firma)) {
@@ -109,35 +115,35 @@ class FirmaController extends Controller
         $iller = Il::all();
         $sektorler= Sektor::all();
         $firma = Firma::find(session()->get("firma_id"));
-        
+
         $il_id = Input::get('il');
         $sektorlerInput = Input::get('sektor');
         $radSearch= Input::get('radSearch');
         $input= Input::get('input');
-        /*SELECT *, (select case 
+        /*SELECT *, (select case
            when exists (
-              SELECT 1 
-              FROM onayli_tedarikciler o 
-              WHERE o.tedarikci_id = f.id 
+              SELECT 1
+              FROM onayli_tedarikciler o
+              WHERE o.tedarikci_id = f.id
                  AND o.firma_id = 9
-           ) 
-           then 1 
-           else 0 
+           )
+           then 1
+           else 0
         end)
         FROM firmalar f */
         //$firmalar=Firma::select("*");
         $firmalar = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
-                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi",DB::raw("(case 
+                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi",DB::raw("(case
                 when exists (
-                   SELECT 1 
-                   FROM onayli_tedarikciler o 
-                   WHERE o.tedarikci_id = firmalar.id 
+                   SELECT 1
+                   FROM onayli_tedarikciler o
+                   WHERE o.tedarikci_id = firmalar.id
                       AND o.firma_id = 9
-                ) 
-                then 1 
-                else 0 
+                )
+                then 1
+                else 0
              end)as onay"));
         if($radSearch != NULL){
             if($radSearch == "sektor"){
@@ -151,7 +157,7 @@ class FirmaController extends Controller
             else if($radSearch == "firma"){
                 $firmalar=$firmalar->where('firmalar.adi', 'like', '%' . $input . '%');
             }
-            
+
         }
         if($radSearch == ""){
             if($input != NULL){
@@ -171,12 +177,12 @@ class FirmaController extends Controller
         if($il_id != NULL){
             $firmalar=$firmalar->whereIn('adresler.il_id',$il_id);
         }
-         
+
         if($sektorlerInput != NULL){
             $firmalar = $firmalar->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
                 ->join('sektorler', 'firma_sektorler.sektor_id', '=', 'sektorler.id')->whereIn('sektorler.id',$sektorlerInput);
         }
-        
+
         $firmalar=$firmalar->paginate(5);
          DebugBar::info($firmalar);
         if (Request::ajax()) {
@@ -190,7 +196,7 @@ class FirmaController extends Controller
     }
     public function onayliTedarikcilerEkleCıkar(){ //// onayli tedarikçi ekle kaldır tüm firmalar için
         $tedarikci_id = Input::get('firma_id');
-        
+
         $kontrol = OnayliTedarikci::where('firma_id',session()->get('firma_id'))->where('tedarikci_id',$tedarikci_id)->get();
         if(count($kontrol) > 0){
             $tedarikci = OnayliTedarikci::find($kontrol[0]['id']);
@@ -203,27 +209,20 @@ class FirmaController extends Controller
             $tedarikci->tedarikci_id = $tedarikci_id;
 
             $tedarikci ->save();
-        }    
+        }
     }
     public function onayliTedarikcilerim(){
-
-        $onayli_tedarikciler =Firma::find(session()->get("firma_id"))->onayliTedarikciler()->with(['sektorler',
-            'adresler'=>function($query){
-                $query->where('adresler.tur_id', 1);
-            },'adresler.iller'])->get();
-
-
-            /*= Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
+        $onayli_tedarikciler  = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
                 ->whereExists(function ($query) {
                     $query->select(DB::raw("*"))
                           ->from('onayli_tedarikciler')
-                          ->whereRaw('onayli_tedarikciler.firma_id='+session()->get("firma_id"))
+                          ->whereRaw('onayli_tedarikciler.firma_id',session()->get("firma_id"))
                           ->whereRaw('onayli_tedarikciler.tedarikci_id = firmalar.id');
                 })
-                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get(); 
-                */
+                ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get();
+
             Debugbar::info($onayli_tedarikciler);
         return View::make('Firma.onayliTedarikciler')-> with('onayli_tedarikciler',$onayli_tedarikciler);
     }

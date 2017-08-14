@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Response;
 
 //use Auth;
 
@@ -61,7 +62,7 @@ class AuthController extends Controller
             auth()->logout();
             return back()->with('activationWarning', true);
         }
-        
+
         return redirect()->intended($this->redirectPath());
     }
     public function getLogout(){
@@ -80,7 +81,7 @@ class AuthController extends Controller
     public function __construct(ActivationFactory $activationFactory)
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-        
+
         $this->activationFactory = $activationFactory;
     }
 
@@ -151,10 +152,49 @@ class AuthController extends Controller
             $adres->il_id = $request->il_id;
             $adres->ilce_id = $request->ilce_id;
             $adres->semt_id = $request->semt_id;
-            $adres->adres =Str::title(strtolower( $request->adres));
+            $adres->adres =Str::title(strtolower( $request->firma_adres));
             $tur = 1;
             $adres->tur_id = $tur;
             $firma->adresler()->save($adres);
+
+            if ($request->adres_kopyalayici == null)
+            {
+                $fatura_adres = new \App\Adres();
+                $fatura_adres->il_id = $request->fatura_il_id;
+                $fatura_adres->ilce_id = $request->fatura_ilce_id;
+                $fatura_adres->semt_id = $request->fatura_semt_id;
+                $fatura_adres->adres = Str::title(strtolower( $request->fatura_adres));
+                $fatura_adres->tur_id = 2;
+                $firma->adresler()->save($fatura_adres);
+            }
+            else if ($request->adres_kopyalayici == "kopyala")
+            {
+                $fatura_adres = new \App\Adres();
+                $fatura_adres->il_id = $request->il_id;
+                $fatura_adres->ilce_id = $request->ilce_id;
+                $fatura_adres->semt_id = $request->semt_id;
+                $fatura_adres->adres = Str::title(strtolower( $request->firma_adres));
+                $fatura_adres->tur_id = 2;
+                $firma->adresler()->save($fatura_adres);
+            }
+
+            $mali = new \App\MaliBilgi();
+
+            if ($request->fatura_tur == "kurumsal")
+            {
+                $mali->unvani = $request->firma_unvan;
+                $mali->vergi_numarasi = $request->vergi_no;
+            }
+
+            else if ($request->fatura_tur == "bireysel")
+            {
+                $mali->unvani = $request->ad_soyad;
+                $mali->vergi_numarasi = $request->tc_kimlik;                
+            }
+
+            $mali->vergi_dairesi_id = $request->vergi_daire;
+
+            $firma->mali_bilgiler()->save($mali);
 
             $firma->sektorler()->attach($request->sektor_id);
 
@@ -183,9 +223,8 @@ class AuthController extends Controller
             DB::commit();
             // all good
         } catch (\Exception $e) {
-            $error="error";
             DB::rollback();
-            return Response::json($error);
+            return Response::json($e);
 
         }
 

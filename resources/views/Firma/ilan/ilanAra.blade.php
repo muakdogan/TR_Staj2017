@@ -157,13 +157,12 @@
                 
             }
             .trigger {
-    /* font: 16px/1 'roboto-m'; */
-    color: #333;
-    background: #eee;
-    display: block;
-    padding: 20px 15px 20px 45px;
-
-            
+                /* font: 16px/1 'roboto-m'; */
+                color: #333;
+                background: #eee;
+                display: block;
+                padding: 20px 15px 20px 45px;
+            }
    </style>
    <link href="{{asset('css/multiple-select.css')}}" rel="stylesheet"/>
 <body style="overflow-x:hidden">
@@ -704,7 +703,13 @@
             window.scrollTo(0, 0);
 
             $('.ajax-loader').css("visibility", "hidden");
-        }).fail(function(){ 
+        }).fail(function(jqXHR, textStatus, errorThrown){ 
+            console.log("jqXHR:");
+            console.log(jqXHR);
+            console.log("textStatus:");
+            console.log(textStatus);
+            console.log("errorThrown:");
+            console.log(errorThrown);
             alert('İlanlar Yüklenemiyor !!!  ');
             $('.ajax-loader').css("visibility", "hidden");
         });

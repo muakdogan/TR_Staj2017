@@ -17,7 +17,7 @@
     <script src="{{asset('js/bootstrap.min.js')}}"></script> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
     <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
@@ -33,10 +33,18 @@
       z-index:1080;
     }
 
+    div#bs-example-navbar-collapse-1{
+      background-color: #f5f5f5;
+    }
+    a#tamrekabet{
+      background-color: #f5f5f5;
+    }
+
+
     body.sticky div#header{
       position: fixed;
       top: 0;
-      left: 0;
+      left: 50
       box-shadow: 0 5px 10px rgba(0,0,0,0.3);
     }
     .yazi{
@@ -44,6 +52,7 @@
       background-color: #ccc;
 
      }
+
 
 </style>
 <script>
@@ -113,9 +122,10 @@ window.requestAnimationFrame = window.requestAnimationFrame
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url('/') }}" style="padding:25px 30px">TamRekabet</a>
+                <a id="tamrekabet"class="navbar-brand" href="{{ url('/') }}" style=" padding:25px 30px"><label style="color: #000">TamRekabet</label></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
                 <ul class="nav navbar-nav" style="float:right">
 
                     @if (!session()->get('firma_adi'))
