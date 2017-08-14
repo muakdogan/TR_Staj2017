@@ -271,7 +271,7 @@
 
                           </div>
 
-                          
+
                           </br></br>
                             <div class="form-group">
                                 <div class="checkbox">
@@ -790,9 +790,9 @@
          var flag_return_original = false;
          var debug4 = $('#firma_adres').val();
          var debug5 = $('#semt_id').val();
-         
+
            //firma adresi dolu ise aktif et.
-         
+
          if($('#firma_adres').val()!="" &&
             $('#il_id').val() !=null      &&
             $('#ilce_id').val()!=null     &&
@@ -802,33 +802,33 @@
          var debug = $('#fatura_ilce_id').val();
          var debug2 = $('#fatura_adres').val();
          var debug3 = $('#fatura_il_id').val();
-         
+
            //fatura adresi bos ise
-         
+
          if( $('#fatura_adres').val()==""   &&
              $('#fatura_il_id').val()==null   &&
              $('#fatura_ilce_id').val()==null &&
              $('#fatura_semt_id').val()==null ){
                flag_second_adrs_empty = true;
              }
-         
+
            //fatura adresi dolu ise
-       
+
         if($('#fatura_adres').val()!=""   &&
             $('#fatura_il_id').val()!=null   &&
             $('#fatura_ilce_id').val()!=null &&
             $('#fatura_semt_id').val()!=null ){
               flag_return_original =true;
             }
-         
+
            //firma ve fatura adresi bos ise checkbox isaretlenmez.
-         
+
          if(flag_first_adrs_filled == false && flag_second_adrs_empty == true){
            $('#adres_kopyalayici').attr("checked",false);
          }
-         
+
           // firma adresi bos, fatura adresi dolu ise checkbox isaretlenmez.
-         
+
          else if(flag_first_adrs_filled == false && flag_second_adrs_empty == false){
            $('#adres_kopyalayici').attr("checked",false);
          }
@@ -1102,7 +1102,7 @@
       $('#telefon').mask('(000) 000-00-00');//telefon verisini tekrar maskeler
       $('#telefonkisisel').mask('(000) 000-00-00');
       formURL = $(this).attr('action');
-            
+
       $.ajax(
       {
         beforeSend: function(){
@@ -1223,4 +1223,6 @@
     </script>
 
 
+
   @endsection
+

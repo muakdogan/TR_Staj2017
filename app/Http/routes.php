@@ -1076,7 +1076,7 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
             return View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render();
 
         });
-            
+
 Route::post('/teklifGonder/{firma_id}/{ilan_id}/{kullanici_id}', 'IlanController@teklifGonder');
             ////////////////////////ilan detay ///////////////////////////
             Route::get('ilanDetay', function () {
