@@ -668,7 +668,7 @@ Route::get('/onayli/',function (){
   ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
   ->where('onayli_tedarikciler.firma_id', '=',$firma_id)
   ->where('firma_sektorler.sektor_id', '=',$sektorOnayli)
-  ->select('firmalar.adi')
+  ->select('firmalar.adi','firmalar.id')
   ->orderBy('adi','asc');
 
   $sektorControl = $sektorControl->get();
@@ -680,24 +680,25 @@ Route::get('/belirli/',function (){
   $sektorControl = DB::table('firmalar')
   ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
   ->where('firma_sektorler.sektor_id', '=',$sektorOnayli)
-  ->select('firmalar.adi')
+  ->select('firmalar.adi', 'firmalar.id')
   ->orderBy('adi','asc');
 
   $sektorControl = $sektorControl->get();
   return Response::json($sektorControl);
 });
 Route::get('/tumFirmalar/',function (){
+
   $sektorTumFirma = Input::get('sektorTumFirma');
   $firma_id = session()->get('firma_id');
   $sektorControl = DB::table('firmalar')
   ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
-  ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
-  ->where('onayli_tedarikciler.firma_id', '!=',$firma_id)
+  ->where('firmalar.id', '!=',$firma_id)
   ->where('firma_sektorler.sektor_id', '=',$sektorTumFirma)
 
-  ->select('firmalar.adi')
+  ->select('firmalar.adi','firmalar.id')
 
   ->orderBy('adi','asc');
+
 
   $sektorControl = $sektorControl->get();
 

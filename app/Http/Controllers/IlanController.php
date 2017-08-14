@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use Request;
+use Illuminate\Http\Request;
 use App\Il;
 use App\Firma;
 use App\OdemeTuru;
@@ -254,10 +254,10 @@ class IlanController extends Controller
         }
 
         $ilan->adi=Input::get('ilan_adi');
-        //$ilan->aciklama="";
+        $ilan->aciklama=Input::get('aciklama');
         $ilan->katilimcilar= Input::get('katilimcilar');//1 - Onayli tedarikciler | 2 - Belirli Firmalar | 3 - Tum Firmalar
         $ilan->rekabet_sekli= Input::get('rekabet_sekli');//1 - Tam Rekabet | 2 - Sadece Basvuru
-        //$ilan->usulu="";//1 - Tam Rekabet | 2 - Belirli Istekliler Arasında | 3 - Sadece Basvuru
+        $ilan->katilimcilar= Input::get('katilimcilar');//1 - Onaylı Tedarikçiler | 2 - Belirli Firmalar | 3 - Tüm Firmalar
         $ilan->kismi_fiyat=Input::get('kismi_fiyat');//1 - Kısmi Fiyat Teklifine Kapalı | 2 - Kısmi Fiyat Teklifine Acik
         $ilan->sozlesme_turu= Input::get('sozlesme_turu');//0 - Birim Fiyatli | 1 - Goturu Bedel
         //$ilan->teknik_sartname="";//pdf dosya
@@ -276,7 +276,7 @@ class IlanController extends Controller
         $ilan->yaklasik_maliyet= Input::get('maliyet');
         $ilan->komisyon_miktari=Input::get('yaklasik_maliyet');
         $ilan->goster = Input::get('firma_adi_goster');//0 - Gizle | 1 - Goster
-       // $ilan->statu = 0;//0 - Aktif | 1 - Sonuclanmamis | 2 Pasif
+        // $ilan->statu = 0;//0 - Aktif | 1 - Sonuclanmamis | 2 Pasifs
 
         //ilan tarihi guncelle
         $ilan_tarihi= explode(" - ", Input::get('ilan_tarihi_araligi'));
@@ -299,14 +299,15 @@ class IlanController extends Controller
         $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
         $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi_replace2));
 
-
         $ilan->save();
 
         $upKalemArray = json_decode(Input::get('updatedArray'));
         $upSayac = count($upKalemArray);
         $delKalemArray = json_decode(Input::get('deletedArray'));
-        $delSayac = count($delKalemArray);
-/*
+
+        //Varsa belirli istekliler güncellenmek için temizlenir.
+        DB::table('belirli_istekliler')->where('ilan_id',$ilan->id)->delete();
+
         if(Input::get('belirli_istekli')!=null){
             foreach(Input::get('belirli_istekli') as $belirli){
                 $belirli_istekliler= new BelirlIstekli();
@@ -315,6 +316,8 @@ class IlanController extends Controller
                 $belirli_istekliler->save();
             }
         }
+
+        //???
         if(Input::get('onayli_tedarikciler')!=null){
             foreach(Input::get('onayli_tedarikciler') as $onayli){
                 $onayli_tedarikciler= new OnayliTedarikci();
@@ -323,11 +326,10 @@ class IlanController extends Controller
                 $onayli_tedarikciler->save();
             }
         }
-*/
+
         //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
 
         if($ilan->sozlesme_turu==1){//GOTURU ILAN TURU
-
             if($ilan->ilan_turu==1){
                 //Varsa Mal Kalemleri Sil
                 DB::table('ilan_mallar')->where('ilan_id',$ilan->id)->delete();
@@ -341,28 +343,27 @@ class IlanController extends Controller
                 DB::table('ilan_yapim_isleri')->where('ilan_id',$ilan->id)->delete();
             }
 
-            if(Input::get('kalem_id')=='-1'){
+            if(Input::get('kalem_id_goturu')=='-1'){
                 $goturu= new IlanGoturuBedel();
                 $goturu->ilan_id=$ilan->id;
                 $goturu->kalem_id=  Input::get('goturu_id');
                 $goturu->kalem_adi= Input::get('goturu_kalem');
                 $goturu->aciklama=Str::title(strtolower(Input::get('goturu_aciklama')));
                 $goturu->miktar=Input::get('goturu_miktar');
-                $goturu->miktar_birim_id=Input::get('goturu_miktar_birim_id');
+                $goturu->miktar_birim_id=Input::get('goturu_birim_id');
+
                 $goturu->save();
+
             }
             else{
-                $goturu = IlanGoturuBedel::find(Input::get('kalem_id'));
-                $goturu->kalem_id=  Input::get('goturu_id');
+                $goturu = IlanGoturuBedel::find(Input::get('kalem_id_goturu'));
+                $goturu->kalem_id =  Input::get('goturu_id');
                 $goturu->kalem_adi= Input::get('goturu_kalem');
                 $goturu->aciklama=Str::title(strtolower(Input::get('goturu_aciklama')));
                 $goturu->miktar=Input::get('goturu_miktar');
-                $goturu->miktar_birim_id=Input::get('goturu_miktar_birim_id');
+                $goturu->miktar_birim_id=Input::get('goturu_birim_id');
                 $goturu->save();
             }
-
-
-
         }
         else if($ilan->ilan_turu==1){//MAL ILAN TURU
 
@@ -594,7 +595,8 @@ class IlanController extends Controller
     public function ilanOlusturEkle(Request $request, $firma_id)
     {
         //ilan bilgileri kaydediliyor.
-        
+
+
         $firma = Firma::find($firma_id);
         $ilan = new Ilan;
         $ilan->adi=Str::title(strtolower( $request->ilan_adi));
@@ -650,8 +652,8 @@ class IlanController extends Controller
         //foreach($request->firma_adi_gizli as $firma_adi_gizli){
           $ilan->goster = $request->firma_adi_goster;
         //}
-        if($request->file('teknik'))
-        {
+
+        if($request->file('teknik')) {
           $file = $request->file('teknik');
           $file = array('teknik' => $request->file('teknik'));
           $destinationPath = 'Teknik';
@@ -668,18 +670,21 @@ class IlanController extends Controller
 
         if($request->belirli_istekli!=null){
           foreach($request->belirli_istekli as $belirli){
+              Debugbar::info($belirli);
             $belirli_istekliler= new \App\BelirlIstekli();
             $belirli_istekliler->ilan_id = $ilan->id;
             $belirli_istekliler->firma_id=$belirli;
             $belirli_istekliler->save();
           }
+
         }
          if($request->onayli_tedarikciler!=null){
           foreach($request->onayli_tedarikciler as $onayli){
-            $onayli_tedarikciler= new App\OnayliTedarikci();
-            $onayli_tedarikciler->firma_id = $ilan->firma_id;
-            $onayli_tedarikciler->tedarikci_id=$onayli;
-            $onayli_tedarikciler->save();
+
+              $belirli_istekliler= new \App\BelirlIstekli();
+              $belirli_istekliler->ilan_id = $ilan->id;
+              $belirli_istekliler->firma_id=$onayli;
+              $belirli_istekliler->save();
           }
         }
         

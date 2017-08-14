@@ -18,13 +18,14 @@ class FirmaKullanimaYetkili
     {
         $firma = \App\Firma::find(session()->get('firma_id'));
 
-        if ($firma->onay != '1')
+        if (!$firma || $firma->onay != '1')
         {
             abort(403, 'Forbidden');
             //echo "Onaylanmış bir firmaya ait değilsiniz.";
 
             //return redirect('/');
         }
+
 
         //date fonksiyonları PHP 5 gerektiriyor.
 

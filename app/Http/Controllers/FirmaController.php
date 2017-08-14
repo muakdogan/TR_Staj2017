@@ -206,17 +206,24 @@ class FirmaController extends Controller
         }    
     }
     public function onayliTedarikcilerim(){
-        $onayli_tedarikciler  = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
+
+        $onayli_tedarikciler =Firma::find(session()->get("firma_id"))->onayliTedarikciler()->with(['sektorler',
+            'adresler'=>function($query){
+                $query->where('adresler.tur_id', 1);
+            },'adresler.iller'])->get();
+
+
+            /*= Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
                 ->whereExists(function ($query) {
                     $query->select(DB::raw("*"))
                           ->from('onayli_tedarikciler')
-                          ->whereRaw('onayli_tedarikciler.firma_id',session()->get("firma_id"))
+                          ->whereRaw('onayli_tedarikciler.firma_id='+session()->get("firma_id"))
                           ->whereRaw('onayli_tedarikciler.tedarikci_id = firmalar.id');
                 })
                 ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get(); 
-                
+                */
             Debugbar::info($onayli_tedarikciler);
         return View::make('Firma.onayliTedarikciler')-> with('onayli_tedarikciler',$onayli_tedarikciler);
     }

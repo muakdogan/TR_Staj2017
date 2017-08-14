@@ -118,7 +118,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav" style="float:right">
 
-                    @if (Auth::guest())
+                    @if (!session()->get('firma_adi'))
 
                     <li>
                         <a href="{{ url('/firmaKayit') }}">ÜYE OL</a>
@@ -140,9 +140,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
                             <ul class="dropdown-menu">
                                 <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
                                     <?php
-                                        $kullanici = App\Kullanici::find(Auth::user()->id);//onaylanmamış firmaların kullanıcı adı altında görünebilmesi için
+                                        $kullanici = Auth::user();//onaylanmamış firmaların kullanıcı adı altında görünebilmesi için
                                         //$kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
-                                        $kullaniciF=$kullanici->firmalar()->get();
+                                        $kullaniciF= $kullanici->firmalar()->get();
                                     ?>
                                     @if(count($kullaniciF) != 0)
                                         @foreach($kullaniciF as $kullanicifirma)

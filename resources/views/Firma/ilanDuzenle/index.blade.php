@@ -246,7 +246,7 @@ Debugbar::info($ilan);
 @endsection
 
 {{--Teklif yoksa ilan düzenlenebilir!--}}
-@if(!$teklifVarMi)
+@if(!$teklifVarMi || 1)
 
 @section('content')
     <style>
@@ -314,12 +314,38 @@ Debugbar::info($ilan);
             }
         }
 
+        CKEDITOR.config.autoParagraph = false;
         CKEDITOR.instances.aciklama.setData("{{$ilan->aciklama}}");
 
         $("#ilan_adi").val("{{$ilan->adi}}");
         $("#odeme_turu").val({{$ilan->odeme_turu_id}});
         $("#para_birimi").val({{$ilan->para_birimi_id}});
+
+        //katılımcılar doldurulur
         $("#katilimcilar").val({{$ilan->katilimcilar}});
+        option = $('option:selected', $("#katilimcilar")).attr('value');
+        if(option==="1"){
+            funcOnayliTedarikciler();
+            funcTumFirmalar();
+            $('#onayli_tedarikciler').show();
+            $('#belirli-istekliler').hide();
+        }
+        else if (option==="2"){
+            funcBelirliIstekliler();
+            $('#belirli-istekliler').show();
+            $('#onayli_tedarikciler').hide();
+            /*var vals = $("#belirli-istekliler").val();
+            vals.push("0");
+            $("#belirli-istekliler").val(vals);*/
+            $('#belirliIstek').multiSelect('select', ['0', '1']);
+        }
+        else {
+            $('#onayli_tedarikciler').hide();
+            $('#belirli-istekliler').hide();
+        }
+
+
+
         $("#kismi_fiyat").val({{$ilan->kismi_fiyat}});
         $("#firma_sektor").val({{$ilan->ilan_sektor}});
           $("#firma_sektor_label").val("{{$ilan_sektor->adi}}");
