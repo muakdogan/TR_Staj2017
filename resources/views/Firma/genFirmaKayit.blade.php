@@ -36,7 +36,6 @@
   @endsection
 
   @section('content')
-   <body class="nav-md">
      <div>
        <div>
         <!-- page content -->
@@ -83,8 +82,7 @@
                                         'placeholder'=>'Firma adı',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min1',
-                                        'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!',
-                                        'required')) !!}
+                                        'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                         </div>
                       </div>
 
@@ -431,7 +429,7 @@
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="vergi_daire" id="vergi_daire"
                                 data-validation = "required" data-validation-depends-on = "fatura_tur"
-                                data-validation-depends-on-value = "kurumsal" data-validation-error-msg = "Lutfen Seciniz" required>
+                                data-validation-depends-on-value = "kurumsal" data-validation-error-msg = "Lutfen Seciniz">
                         </select>
                       </div>
                     </div>
@@ -556,10 +554,8 @@
 
                   <div class="form-group">
                     <label class="col-md-offset-1 col-md-6">Sözleşmeyi okudum ve onaylıyorum. </label>
-                    <input type="checkbox" id="sozlesme_checkbox"></input>
+                    <input type="checkbox" data-validation="required" data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız." id="sozlesme_checkbox"></input>
                   </div>
-
-                  <p id="sozlesme_uyari" style="display:none;">Devam etmek için sözleşmeyi onaylamalısınız.</p>
 
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Onayla</button>
@@ -1062,6 +1058,35 @@
     });
 
     /*
+      Oguzhan Ulucay 18/07/2017
+      T.C kimlik numarasi icin ozel validation.
+      T.C kimlik numaralarinin basinda sifir olamaz.
+      T.C kimlik numaralarinin sonunda tek sayi olamaz.
+    */
+    $.formUtils.addValidator
+    ({
+              name : 'tc_kimlik_dogrulama',
+              validatorFunction : function(value, $el, config, language, $form) {
+                if(value.substr(0,1) == 0)
+                  return false;
+                if(value.substr(10,1)%2 != 0)
+                  return false;
+                else{
+                  return true;
+                }
+              },
+              errorMessage : 'Lutfen T.C kimlik numaranizi giriniz',
+              errorMessageKey: 'Lutfen gecerli T.C Kimlik No giriniz.'
+    });
+    $.validate({
+        /*modules : 'location, date, security, file, logic',//18.7.17 Logic eklendi. -Oguzhan
+        onModulesLoaded : function() {
+          $('#country').suggestCountry();
+        }*/
+    });
+    $('#presentation').restrictLength( $('#pres-max-length') );
+
+    /*
     21.07.2017 Oguzhan
     Eklemeler:
     Form data serialize edilmeden once maskelemeler kaldirilir daha sonra da
@@ -1069,15 +1094,6 @@
     */
     $("#firma_kayit").submit(function(e)
     {
-      if(document.getElementById("sozlesme_checkbox").checked == false)
-      {
-        e.preventDefault();
-        $("#sozlesme_uyari").show();
-        return false;
-      }
-
-      $("#sozlesme_uyari").hide();
-
       var postData, formURL;
       $('#telefon').unmask();//telefon verilerinin maskesini kaldirir.
       $('#telefonkisisel').unmask();
@@ -1127,34 +1143,7 @@
       });
       e.preventDefault(); //STOP default action
     });
-    /*
-      Oguzhan Ulucay 18/07/2017
-      T.C kimlik numarasi icin ozel validation.
-      T.C kimlik numaralarinin basinda sifir olamaz.
-      T.C kimlik numaralarinin sonunda tek sayi olamaz.
-    */
-    $.formUtils.addValidator
-    ({
-              name : 'tc_kimlik_dogrulama',
-              validatorFunction : function(value, $el, config, language, $form) {
-                if(value.substr(0,1) == 0)
-                  return false;
-                if(value.substr(10,1)%2 != 0)
-                  return false;
-                else{
-                  return true;
-                }
-              },
-              errorMessage : 'Lutfen T.C kimlik numaranizi giriniz',
-              errorMessageKey: 'Lutfen gecerli T.C Kimlik No giriniz.'
-    });
-    $.validate({
-        /*modules : 'location, date, security, file, logic',//18.7.17 Logic eklendi. -Oguzhan
-        onModulesLoaded : function() {
-          $('#country').suggestCountry();
-        }*/
-    });
-    $('#presentation').restrictLength( $('#pres-max-length') );
+
     /*
       Oguzhan Ulucay 13/07/2017
       Fatura bilgileri kayit formu icin script.
@@ -1233,5 +1222,4 @@
     </script>
 
 
-  </body>
   @endsection
