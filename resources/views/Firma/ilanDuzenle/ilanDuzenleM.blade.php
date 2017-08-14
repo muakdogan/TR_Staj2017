@@ -378,6 +378,10 @@
 
         //Ilan guncelle buton
         $("#onayButton").unbind().click(function(e){
+
+            for ( instance in CKEDITOR.instances )
+                CKEDITOR.instances[instance].updateElement();
+
             var postData = $("#msform").serialize();
             postData= postData+ '&' + $.param({ 'updatedArray': JSON.stringify(updated_array),'deletedArray': JSON.stringify(deleted_array) });
             var formURL = $("#msform").attr('action');
@@ -664,6 +668,7 @@
                     //multiselectCount++;
                     $('#belirliIstek').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
                 }
+                //$('#belirliIstek').multiSelect('select', ['0', '1']);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus); alert("Error: " + errorThrown);
@@ -740,7 +745,16 @@
     var kalem_num;
     var i="{{$i}}";
     $("#kalem_ekle").click(function(){
-        if(ilan_turu=="1" &&sozlesme_turu=="0") {
+
+        if(sozlesme_turu=="1" && $("#goturu_kalem0").length==0){
+            $("#goturu_table").append(['<tr>','<td>1</td>',
+                '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem0" name="goturu_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
+                '<td><textarea  rows="1" id="goturu_aciklama" name="goturu_aciklama" rows="5" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+                '<td><input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
+                '<td><select class="form-control required" name="goturu_miktar_birim_id" id="goturu_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
+                '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id"  id="goturu_id0" value=""><input class="inp_kalem_id_goturu" name="kalem_id_goturu" type="hidden" value="-1"/></td>','</tr>'].join(''));
+        }
+        else if(ilan_turu=="1" &&sozlesme_turu=="0") {
             $("#mal_table").append(['<tr>','<td>'+(parseInt(kalem_num)+1)+'</td>','<td> <input type="text"  style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px"class="form-control mal_show  required" id="mal_kalem'+kalem_num+'" name="mal_kalem[]" placeholder="Kalem Ekle" readonly value="" > </td>',
                 '<td><input type="text" class="form-control required " id="mal_marka" name="mal_marka[]" placeholder="Marka" value="" ></td>',
                 ' <td><input type="text" class="form-control required " id="mal_model" name="mal_model[]" placeholder="Model" value="" ></td>',
