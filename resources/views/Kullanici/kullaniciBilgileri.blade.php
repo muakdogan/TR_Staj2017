@@ -106,7 +106,7 @@ tr:nth-child(even) {
            
           <div class="col-sm-12">
              <?php                                   
-               $kullanici = App\Kullanici::find(Auth::user()->kullanici_id);
+               $kullanici = Auth::user();
                                       
               ?>
                                 
