@@ -248,10 +248,40 @@
             <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
     </div>
  <script>
+
+    $(document).ready(function(){
+        $('#btn-add-kullanici').click(function () {
+            $('#btn-save-kullanici').val("add");
+            $('#myModal-kullanici').modal('show');
+        });
+        $('#btn-add-sifre').click(function () {
+            $('#btn-save-sifre').val("add");
+            $('#myModal-sifre').modal('show');
+        });
+
+    });
+
+
+        var url = "kullanici";
+        $('.open-modal-kullanici').click(function(){
+            var kullanici_id = $(this).val();
+            $.get(url + '/'  + kullanici_id, function (data) {
+                //success data
+            console.log(data);
+                $('#kullanici_id').val(data.id);
+                $('#adi').val(data.adi);
+                $('#soyadi').val(data.soyadi);
+                $('#email').val(data.email);
+                $('#rol').val(data.rol_id);
+                $('#unvan').val(data.unvan);
+                $('#myModal-kullaniciDüzenle').modal('show');
+                
+            }) 
+        });
+
     var email;
     function email_control(){
          email= $('.email_control').val();
-         alert(email);
          email_Get();
     }
     function email_Get(){
@@ -282,9 +312,6 @@
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            alert(formURL);
-            //console.log($(this).attr("url"));
-            alert("girdi");
             $.ajax(
             {
                 beforeSend: function(){
@@ -304,7 +331,7 @@
                             transitionClose: 'slideBack',
                             autoClose: 5000 
                         });
-                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"}, 5000);
                     }
                     else{
                         $('#kayit_msg').bPopup({
@@ -314,7 +341,7 @@
                             autoClose: 5000 
                         });
                         
-                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"}, 5000);
                     }
                         e.preventDefault();
                 },
@@ -330,9 +357,6 @@
    {
        var postData = $(this).serialize();
             var formURL = $(this).attr('action');
-            //console.log($(this).attr("url"));
-            alert("girdiadd");
-             alert(formURL);
             $.ajax(
             {
                 beforeSend: function(){
@@ -352,7 +376,7 @@
                             transitionClose: 'slideBack',
                             autoClose: 5000 
                         });
-                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"}, 5000);
                     }
                     else{
                         $('#kayit_msg').bPopup({
@@ -362,7 +386,7 @@
                             autoClose: 5000 
                         });
                         
-                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"+"/"+firmaId}, 5000);
+                        setTimeout(function(){ location.href="{{asset('kullaniciIslemleri')}}"}, 5000);
                     }
                         e.preventDefault();
                 },
