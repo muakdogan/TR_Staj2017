@@ -185,4 +185,23 @@ class AdminController extends Controller
     public function yorumList() {
         return view('admin.genproduction.yorumListele');
     }
+
+    public function yorumOnay($id,$yorum_kul_id) {
+
+        $yorumlar = App\Yorum::find($id);
+        $yorumlar->onay=1;
+
+        $yorum_kul = App\Kullanici::find($yorum_kul_id);
+
+        $data = ['ad' => $yorum_kul->adi, 'soyad' => $yorum_kul->soyadi];
+
+        Mail::send('auth.emails.yorum_mesaj', $data, function($message) use($data,$yorum_kul)
+        {
+            $message->to($yorum_kul->email, $data['ad'])
+            ->subject('YORUMUNUZ YAYINLANDI!');
+
+        });
+        $yorumlar->save();
+        return view('admin.yorumList');
+    }
 }
