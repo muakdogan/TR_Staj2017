@@ -908,9 +908,9 @@ class IlanController extends Controller
 
     }
 
-    public function davetEdildigimIlanlar ($firma_id)
+    public function davetEdildigimIlanlar ()
     {
-        $firma=Firma::find($firma_id);
+        $firma=Firma::find(session()->get('firma_id'));
         return view('Firma.ilan.davetEdildigimIlanlar')->with('firma', $firma);
     }
 
