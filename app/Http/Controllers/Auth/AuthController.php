@@ -135,9 +135,8 @@ class AuthController extends Controller
     {
 
         $this->validate($request, [
-          'firma_adi' => 'required|max:255',
-          'sektor_id[]' => 'required'
-
+          'firma_adi' => 'required|max:255',//unique:firmalar'ı bulmuyor
+          'sektor_id' => 'required'
         ]);
 
 
