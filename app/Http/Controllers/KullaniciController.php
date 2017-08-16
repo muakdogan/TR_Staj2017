@@ -108,7 +108,7 @@ class KullaniciController extends Controller
             $kullanici->adi = Str::title(strtolower($request->adi));
             $kullanici->soyadi = Str::title(strtolower($request->soyadi));
             $kullanici->email = $request->email;
-            $kullanici->onay = 1;
+            $kullanici->onayli = 1;
             $kullanici->save();
 
             $rol=$request->rol;
