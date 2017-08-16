@@ -64,6 +64,9 @@ Route::group(['middleware' => ['web']], function () {
 
 
 });
+
+Route::get('/password/reset/{belirleme}/{token?}','Auth\PasswordController@showResetForm');
+
 Route::get('/admin/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
 }]);
