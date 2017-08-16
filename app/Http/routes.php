@@ -694,7 +694,8 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
   Route::delete('firmaProfili/kaliteSil/{id}', 'FirmaController@deleteKalite');
   Route::delete('firmaProfili/referansSil/{id}', 'FirmaController@deleteReferans');
   Route::delete('firmaProfili/brosurSil/{id}', 'FirmaController@deleteBrosur');
-  Route::get('/firmaProfili/{id}', 'FirmaController@showFirma');
+  Route::get('/firmaProfili', 'FirmaController@showFirma');
+  Route::get('/uyelikBilgileri', 'FirmaController@uyelikBilgileri');
   Route::get('/firma/{ref_id?}',function($ref_id){
     $referans=  FirmaReferans::find($ref_id);
     return Response::json($referans);
