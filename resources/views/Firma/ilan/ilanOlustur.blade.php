@@ -1101,7 +1101,7 @@ function funcOnayliTedarikciler(){
             for(var key=0; key <Object.keys(data).length;key++)
             {
                // multiselectCount++;
-                $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key}).multiSelect('select_all');
+                $('#custom-headers').multiSelect('addOption', { value: data[key].id, text: data[key].adi, index:key}).multiSelect('select_all');
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -1124,7 +1124,7 @@ function funcBelirliIstekliler(){
             for(var key=0; key <Object.keys(data).length;key++)
             {
                 //multiselectCount++;
-                $('#belirliIstek').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
+                $('#belirliIstek').multiSelect('addOption', { value: data[key].id, text: data[key].adi, index:key});
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
