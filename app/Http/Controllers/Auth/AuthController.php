@@ -133,6 +133,16 @@ class AuthController extends Controller
 
     public function kayitForm(Request $request)
     {
+
+        $this->validate($request, [
+          'firma_adi' => 'required|max:255',
+          'sektor_id[]' => 'required'
+
+        ]);
+
+
+
+
         DB::beginTransaction();
 
         try {
@@ -189,7 +199,7 @@ class AuthController extends Controller
             else if ($request->fatura_tur == "bireysel")
             {
                 $mali->unvani = $request->ad_soyad;
-                $mali->vergi_numarasi = $request->tc_kimlik;                
+                $mali->vergi_numarasi = $request->tc_kimlik;
             }
 
             $mali->vergi_dairesi_id = $request->vergi_daire;

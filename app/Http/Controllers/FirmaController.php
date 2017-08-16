@@ -39,11 +39,6 @@ class FirmaController extends Controller
         $proper=Str::title(strtolower($string));
         return response($proper);
     }*/
-    public function firmaKayitFormValidator(){
-
-
-
-    }
 
      public function showFirma($id){
         $firma = Firma::find($id);

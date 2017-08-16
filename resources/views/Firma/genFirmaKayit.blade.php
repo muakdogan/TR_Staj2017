@@ -37,6 +37,23 @@
 
   @section('content')
    <body class="nav-md" style="background-color: #fff">
+
+    @if(count($errors) > 0)
+    <div class="row">
+      <div>
+          <ul>
+              @foreach($errors->all() as $error)
+                  <li>{{$error}}</li>
+              @endforeach
+          </ul>
+      </div>
+    </div>
+    @endif
+
+
+
+
+
      <div>
        <div>
         <!-- page content -->
@@ -77,7 +94,7 @@
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Firma Adı</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
+                        <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi">
                           {!! Form::text('firma_adi', null,
                                         array('class'=>'form-control',
                                         'placeholder'=>'Firma adı',
@@ -1123,6 +1140,7 @@
         error: function(jqXHR, textStatus, errorThrown)
         {
           alert(textStatus + "," + errorThrown);
+          alert("Burası mı");
         }
       });
       e.preventDefault(); //STOP default action
