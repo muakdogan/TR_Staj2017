@@ -88,6 +88,7 @@ class AdminController extends Controller
             {
                 case 0://standart
                 $firma->onay = 1;
+                $firma->uyelik_baslangic_tarihi = date_create(NULL);
                 $firma->save();
 
                 $subject = "Firmanız Onaylandı";
@@ -95,6 +96,7 @@ class AdminController extends Controller
                 break;
 
                 case 1://ödemesiz
+                $firma->uyelik_baslangic_tarihi = date_create(NULL);
                 $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('uyelik_bitis_suresi')."M"))->format('Y-m-d');//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
                 $firma->onay = 1;
                 $firma->save();
@@ -115,6 +117,7 @@ class AdminController extends Controller
                 $odeme->save();
 
                 //üyelik, firma teklif edilen ödemeyi yaptığında başlayacak
+                $firma->uyelik_baslangic_tarihi = NULL;
                 $firma->uyelik_bitis_tarihi = NULL;
                 //$firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('sure')."M"))->format('Y-m-d');//şu ana sure field'ını ay olarak ekle
 
