@@ -14,7 +14,16 @@
                  </div>
                  <ul class="nav navbar-nav">
 
-                     <li class=""><a href="{{ URL::to('firmaProfili', array($firmaId), false)}}">Firma Profili</a></li>
+                     
+
+                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Firma İşlemleri <span class="caret"></span></a>
+                         <ul class="dropdown-menu">
+                             <li class=""><a href="{{ URL::to('firmaProfili', false)}}">Firma Profili</a></li>
+
+                             <li class=""><a href="{{ URL::to('uyelikBilgileri', false)}}">Üyelik Bilgileri</a></li>
+                         </ul>
+                     </li>
+                     
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="{{ URL::to('ilanlarim', array($firmaId), false)}}">İlanlarım</a></li>
