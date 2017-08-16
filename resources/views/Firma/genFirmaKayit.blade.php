@@ -36,7 +36,7 @@
   @endsection
 
   @section('content')
-<<<<<<< HEAD
+  
    <body class="nav-md" style="background-color: #fff">
 
     @if(count($errors) > 0)
@@ -51,12 +51,6 @@
     </div>
     @endif
 
-
-
-
-
-=======
->>>>>>> origin/master
      <div>
        <div>
         <!-- page content -->
@@ -456,7 +450,7 @@
 
                     <div class="form-group">
                       <div>
-                        
+
                         <input type="checkbox" data-validation="required"
                         data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız."><button class="btn btn-link btn-xs sozlesme_goster" style="vertical-align: baseline;">Kullanıcı sözleşmesini</button> okudum ve onaylıyorum.
                       </div>
@@ -1247,4 +1241,3 @@
 
 
   @endsection
-
