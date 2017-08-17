@@ -1,5 +1,5 @@
 <?php
-	if ($user->password == "")
+	if ($user->password == NULL)
 	{
 		echo "Şifrenizi belirlemek için tıklayın: ";
 		$belirleme = 1;
