@@ -23,44 +23,24 @@ use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Mail\Mailer;
 use Barryvdh\Debugbar\Facade as Debugbar;
 
-
-/*Route::get('/anasayfa', function () {
-return view('welcome');
-//Admin Welcome sayfası kullanılmamaktadır.
-});-,*/
 Route::get('/sessionKill', function () {
   Auth::logout();
   Session::flush();
   return Redirect::to('/');
-
 });
 
-
-
-
-
 Route::get('/DbTest', function () {
-
   if( DB::connection()->getDatabaseName() ){
-
     echo 'Connected Database : ',DB::connection()->getDatabaseName();
-
-    //alert('Connected Succesfully');
-    //İs not working.
   }
 });
 
-
-
-
-
-
-
-  Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web']], function () {
   //Login Routes...
 
   //public/admin/login
@@ -84,6 +64,9 @@ Route::get('/DbTest', function () {
 
 
 });
+
+Route::get('/password/reset/{belirleme}/{token?}','Auth\PasswordController@showResetForm');
+
 Route::get('/admin/kalemlerTablolari',['middleware' => 'admin' , function () {
   return view('admin.kalemlerTablolari');
 }]);
@@ -112,6 +95,7 @@ Route::post('/updateTree', function () {
 
   $kalem->save();
 });
+
 Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
   $id = Input::get('id');
   $kalemler = DB::select( DB::raw("SELECT adi as 'title',id as 'key',
@@ -123,6 +107,7 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
     return Response::json($kalemler);
 
   });
+
   Route::get('/getSektorler', function (Request $request) {
 
               $mal_turu= Input::get('mal_turu');
@@ -153,6 +138,7 @@ Route::get('/findChildrenTree/{sektor_id}', function ($sektor_id) {
   $firmalar=Firma::all();
   return view('admin.dashboard')->with('firmalar',$firmalar);
 });*/
+
 Route::post('/doluluk_orani/{id}', function (Request $request,$id) {
   $doluluk_orani = Input::get('doluluk_orani');
   $firma = Firma::find($id);
@@ -161,8 +147,8 @@ Route::post('/doluluk_orani/{id}', function (Request $request,$id) {
   return Response::json($firma);
 
 });
-Route::get('/', function () {
 
+Route::get('/', function () {
   return view('Anasayfa.temelAnasayfa');
 });
 
@@ -203,45 +189,11 @@ Route::POST('/firmaDavet', function () {
   return Response::json($mesaj);
 });
 
-Route::get('/yorumOnay/{id}/{yorum_kul_id}', function ($id,$yorum_kul_id) {
+Route::get('/admin/yorumOnay/{id}/{yorum_kul_id}', 'AdminController@yorumOnay');
 
-  $yorumlar = App\Yorum::find($id);
-  $yorumlar->onay=1;
-
-  $yorum_kul = App\Kullanici::find($yorum_kul_id);
-
-  $data = ['ad' => $yorum_kul->adi, 'soyad' => $yorum_kul->soyadi];
-
-  Mail::send('auth.emails.yorum_mesaj', $data, function($message) use($data,$yorum_kul)
-  {
-    $message->to($yorum_kul->email, $data['ad'])
-    ->subject('YORUMUNUZ YAYINLANDI!');
-
-  });
-  $yorumlar->save();
-  return view('admin.yorumList');
-});
-Route::get('/kullaniciIslemleri/{id}', 'KullaniciController@kullaniciIslemleri');
-Route::get('/kullaniciBilgileri/{id}', function ($id) {
-  $firma = Firma::find($id);
-  return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
-});
-Route::post('/kullaniciBilgileriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
-  $firma = Firma::find($id);
-  $kullanici= App\Kullanici::find($kul_id);
-  $kullanici->adi = Str::title(strtolower($request->adi));
-  $kullanici->soyadi = Str::title(strtolower($request->soyadi));
-  $kullanici->email = $request->email;
-  $kullanici->telefon = $request->telefon;
-  $kullanici->save();
-
-  $user = DB::table('users')
-  ->where( 'users.kullanici_id', '=',  $kul_id);
-  $user->name=$request->kul_adi;
-  $user->save();
-
-  return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
-});
+Route::get('/kullaniciIslemleri', 'KullaniciController@kullaniciIslemleri');
+Route::get('/kullaniciBilgileri', 'KullaniciController@kullaniciBilgileri');
+Route::post('/kullaniciBilgileriUpdate/{id}/{kul_id}','KullaniciController@kullaniciBilgileriUpdate');
 
 Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $request,$id,$user_id) {
   $firma = Firma::find($id);
@@ -252,49 +204,7 @@ Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $reques
 
   return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
 });
-Route::post('/kullaniciIslemleriEkle/{id}', function (Request $request,$id) {
-
-  DB::beginTransaction();
-
-  try {
-    $firma = Firma::find($id);
-    $roller=  App\Rol::all();
-
-    $kullanici= new App\Kullanici();
-    $kullanici->adi = Str::title(strtolower($request->adi));
-    $kullanici->soyadi = Str::title(strtolower($request->soyadi));
-    $kullanici->email = $request->email;
-    $kullanici->save();
-
-    $user = $kullanici->users ?: new App\User();
-    $user->email = $request->email;
-    $user->password =Hash::make('tamrekabet');
-
-    $kullanici->users()->save($user);
-    $rol=$request->rol;
-    $unvan=$request->unvan;
-    $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol,'unvan'=>$unvan]);
-
-    //$firma->kullanicilar()->attach($kullanici,['unvan'=>$unvan]);
-
-    $data = ['ad' => $request->adi, 'soyad' => $request->soyadi];
-
-    Mail::send('auth.emails.password', $data, function($message) use($data,$request)
-    {
-      $message->to($request->email, $data['ad'],$request->to)
-      ->subject('YENİ KAYIT OLMA İSTEĞİ!');
-    });
-    DB::commit();
-    // all good
-  } catch (\Exception $e) {
-    $error="error";
-    DB::rollback();
-    return Response::json($error);
-  }
-  //return Redirect::to('/kullaniciIslemleri/'.$firma->id);
-
-
-});
+Route::post('/kullaniciIslemleriEkle/{id}', 'KullaniciController@kullaniciIslemleriEkle');
 Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $request,$id,$kul_id) {
   DB::beginTransaction();
 
@@ -307,12 +217,6 @@ Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $reques
     $kullanici->soyadi = Str::title(strtolower($request->soyadi));
     $kullanici->email = $request->email;
     $kullanici->save();
-
-    $user = $kullanici->users ?: new App\User();
-    $user->email = $request->email;
-    $user->password =Hash::make('tamrekabet');
-
-    $kullanici->users()->save($user);
 
     $firmaKullanicilar = App\FirmaKullanici::where('kullanici_id', '=',  $kul_id)
     ->where('firma_id', '=',$id)->first();
@@ -331,8 +235,12 @@ Route::post('/kullaniciIslemleriUpdate/{id}/{kul_id}', function (Request $reques
 
 });
 Route::get('/kullanici/{kullanici_id?}',function($kullanici_id){
-  $kul= App\Kullanici::find($kullanici_id);
-  return Response::json($kul);
+  $kullanici = DB::table('kullanicilar')
+  ->join('firma_kullanicilar', 'kullanicilar.id', '=', 'firma_kullanicilar.kullanici_id')
+  ->select('kullanicilar.*', 'firma_kullanicilar.rol_id', 'firma_kullanicilar.unvan')
+  ->where('kullanicilar.id', $kullanici_id)->first();
+
+  return Response::json($kullanici);
 });
 Route::delete('/kullaniciDelete/{id}/{firma_id}',function($id,$firma_id,Request $request){
   $firma = Firma::find($firma_id);
@@ -430,7 +338,7 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
 
 });
-Route::get('/davetEdildigim/{firma_id}', 'IlanController@davetEdildigimIlanlar');
+Route::get('/davetEdildigim', 'IlanController@davetEdildigimIlanlar');
 
 Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
   $firmas = Firma::find($id);
@@ -456,12 +364,11 @@ Route::get('/firmaKayit', function () {
   // Önceki Hali "Firma.firmaKayit" Güncel Hali "Firma.genFirmaKayit"
 });
 
-Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
-  $kullanici=  App\Kullanici::all();
-  $kullanici_id=  App\Kullanici::find($id);
+Route::get('/yeniFirmaKaydet' ,function () {
+  $kullanici_id=  App\Kullanici::find(session()->get('kullanici_id'));
   $iller = App\Il::all();
   $sektorler= App\Sektor::all();
-  return view('Firma.yeniFirmaKaydet')->with('iller', $iller)->with('sektorler',$sektorler)->with('kullanici',$kullanici)->with('kullanici_id',$kullanici_id);
+  return view('Firma.yeniFirmaKaydet')->with('iller', $iller)->with('sektorler',$sektorler)->with('kullanici_id',$kullanici_id);
 });
 
 Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {
@@ -790,7 +697,8 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
   Route::delete('firmaProfili/kaliteSil/{id}', 'FirmaController@deleteKalite');
   Route::delete('firmaProfili/referansSil/{id}', 'FirmaController@deleteReferans');
   Route::delete('firmaProfili/brosurSil/{id}', 'FirmaController@deleteBrosur');
-  Route::get('/firmaProfili/{id}', 'FirmaController@showFirma');
+  Route::get('/firmaProfili', 'FirmaController@showFirma');
+  Route::get('/uyelikBilgileri', 'FirmaController@uyelikBilgileri');
   Route::get('/firma/{ref_id?}',function($ref_id){
     $referans=  FirmaReferans::find($ref_id);
     return Response::json($referans);

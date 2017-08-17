@@ -34,7 +34,7 @@ a{
     <input type="hidden" name="totalCount" value='{{$ilanlar->total()}}'>
         
     @foreach($ilanlar as $ilan)
-            <div class="ilanDetayPop "  name="{{$ilan->ilan_id}}">
+            <div class="ilanDetayPop "  name="{{$ilan->id}}">
                 <div class="pop-up"  style="display: none;
                                                 position: absolute;
                                                 left: 200px;
@@ -46,31 +46,39 @@ a{
                                                 font-size: 90%;
                                                 border-radius: 5px;
                                                 z-index: 1000;">
-                                <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$ilan->ilanadi}}</p>
+                                <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$ilan->adi}}</p>
                                 <p id="popIlanTuru"><img src="{{asset('images/ok.png')}}"><strong>İlan Türü :</strong> {{$ilan->getIlanTuru()}}</p>
                                 <p id="popIlanUsulu"><img src="{{asset('images/ok.png')}}"><strong>Usulü : </strong>{{$ilan->getRekabet()}}</p>
-                                <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$ilan->getIlanSektorAdi($ilan->ilan_sektor)}}</p>
+                                <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$ilan->sektorler->adi}}</p>
                                 <p id="popIlanAciklama"><img src="{{asset('images/ok.png')}}"><strong>Açıklama : </strong>{{$ilan->aciklama}}</p>
                                 <p id="popIlanIsinSuresi"><img src="{{asset('images/ok.png')}}"><strong>İşin Süresi:</strong> {{$ilan->isin_suresi}}</p>
                                 <p id="popIlanSözlesmeTuru"><img src="{{asset('images/ok.png')}}"><strong>Sözleşme Türü : </strong>{{$ilan->getSozlesmeTuru()}}</p>                                
                 </div>
                 <div class="row hover">
                     <div class="col-sm-10">
-                        <p style="font-size: 17px; color: #333"><b>İlan Adı: {{$ilan->ilanadi}}</b></p>
+                        <p style="font-size: 17px; color: #333"><b>İlan Adı: {{$ilan->adi}}</b></p>
                         
-                        @if(($ilan->puanlamaOrtalama($ilan->firmaid))> 0)
+                        @if($ilan->puanlamaOrtalama($ilan->firma_id) > 0)
                         
-                            <div class="puanlama">{{$ilan->puanlamaOrtalama($ilan->firmaid)}}</div>
-                            <p style="font-size:15px; color:#666"><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" >@if($ilan->goster == 0)
+                            <div class="puanlama">{{$ilan->puanlamaOrtalama($ilan->firma_id)}}</div>
+                            <p style="font-size:15px; color:#666"><a href="{{url('firmaDetay/'.$ilan->firma_id)}}" >
+                            
+                                @if($ilan->goster == 0 || $misafir == 1)
                                     Firma Adı Gizli
                                 @else    
-                                    Firma: {{$ilan->adi}}
+                                    Firma: {{$ilan->firmalar->adi}}
                                 @endif
                                 </a></p>
                         @else
-                            <p style="font-size:15px ; color:#666" ><a href="{{url('firmaDetay/'.$ilan->firmaid)}}" style="padding: 0px" >Firma: {{$ilan->adi}}</a></p>
+                            <p style="font-size:15px ; color:#666" ><a href="{{url('firmaDetay/'.$ilan->firma_id)}}" style="padding: 0px" >
+                            @if($ilan->goster == 0 || $misafir == 1)
+                                Firma Adı Gizli
+                            @else    
+                                Firma: {{$ilan->firmalar->adi}}
+                            @endif
+                            </a></p>
                         @endif
-                            <p>{{$ilan->iladi}}</p>
+                            <p>{{$ilan->firmalar->adresler[0]->iller->adi}}</p>
                             <p style="font-size: 13px;color: #999">{{date('d-m-Y', strtotime($ilan->yayin_tarihi))}}</p>
                      
                     </div>

@@ -14,7 +14,16 @@
                  </div>
                  <ul class="nav navbar-nav">
 
-                     <li class=""><a href="{{ URL::to('firmaProfili', array($firmaId), false)}}">Firma Profili</a></li>
+                     
+
+                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Firma İşlemleri <span class="caret"></span></a>
+                         <ul class="dropdown-menu">
+                             <li class=""><a href="{{ URL::to('firmaProfili', false)}}">Firma Profili</a></li>
+
+                             <li class=""><a href="{{ URL::to('uyelikBilgileri', false)}}">Üyelik Bilgileri</a></li>
+                         </ul>
+                     </li>
+                     
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">İlan İşlemleri <span class="caret"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="{{ URL::to('ilanlarim', array($firmaId), false)}}">İlanlarım</a></li>
@@ -33,14 +42,14 @@
 
                          </ul>
                      </li>
-                     <li class=""><a href="{{ URL::to('davetEdildigim', array($firmaId), false)}}">Davet Edildiğim İlanlar</a></li>
+                     <li class=""><a href="{{ URL::to('davetEdildigim', false)}}">Davet Edildiğim İlanlar</a></li>
                      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Firma Havuzu<span class="caret"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="{{ URL::to('onayliTedarikcilerim',false)}}">Onaylı Tedarikçilerim</a></li>
                              <li><a href="{{ URL::to('firmaHavuzu', false)}}">Tüm Firmalar</a></li>
                          </ul>
                      </li>
-                     <li><a href="{{ URL::to('kullaniciIslemleri', array($firmaId), false)}}">Kullanıcı İşlemleri</a></li>
+                     <li><a href="{{ URL::to('kullaniciIslemleri', false)}}">Kullanıcı İşlemleri</a></li>
                      <li><div class="deneme">
                              <a><p style="padding-top: 15px; padding-left: 25px;font-size: 16px; color:white"  class="firmaDavet" id="firmaDavetButton">Firma Davet Et !</p></a>
                                   <div class="modal fade" id="FirmaDavet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

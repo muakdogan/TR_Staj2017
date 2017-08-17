@@ -368,7 +368,7 @@
                             <tr>
                               <td>{{$yorumlar->tarih}} </td>
                               <td>{{$yorumlar->yorum}}</td>
-                              <td><a href="{{ URL::to('yorumOnay', array($yorumlar->id,$yorumlar->yorum_yapan_kullanici_id), false)}}"  id="{{$yorumlar->id}}" type="button" class="btn btn-primary" onclick="alert('YORUM ONAYLANDI');">ONAYLA</a></td>
+                              <td><a href="{{ URL::to('admin/yorumOnay', array($yorumlar->id,$yorumlar->yorum_yapan_kullanici_id), false)}}"  id="{{$yorumlar->id}}" type="button" class="btn btn-primary" onclick="alert('YORUM ONAYLANDI');">ONAYLA</a></td>
                             </tr>
                           @endforeach
                        </table>

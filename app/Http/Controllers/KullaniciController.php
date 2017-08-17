@@ -10,6 +10,8 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use App\Firma;
+use Illuminate\Support\Str;
+use DB;
 
 class KullaniciController extends Controller
 {
@@ -24,7 +26,7 @@ class KullaniciController extends Controller
         // $this->subject = 'Your Account Password';
 
         $this->middleware('guest', ['only' => ['notify']]);//Kullanıcı login olduğunda belli bir sayfaya (/ilanAra) redirect olması için?
-        $this->middleware('firmaYetkili', ['only' => ['kullaniciIslemleri']]);
+        $this->middleware('firmaYetkili', ['except' => ['notify']]);
     }
 
     public function notify(Request $request, $id)
@@ -63,12 +65,66 @@ class KullaniciController extends Controller
     }
     
 
-    public function kullaniciIslemleri($id)
+    public function kullaniciIslemleri()
     {
-        $firma = Firma::find($id);
+        $firma = Firma::find(session()->get('firma_id'));
         $roller=  \App\Rol::all();
 
         return view('Kullanici.kullaniciIslemleri')->with('firma',$firma)->with('roller',$roller);
+
+    }
+
+    public function kullaniciBilgileri () {
+        return view('Kullanici.kullaniciBilgileri')->with('firma',Firma::find(session()->get('firma_id')));
+    }
+
+    public function kullaniciBilgileriUpdate (Request $request,$id,$kul_id) {
+        $firma = Firma::find($id);
+        $kullanici= App\Kullanici::find($kul_id);
+        $kullanici->adi = Str::title(strtolower($request->adi));
+        $kullanici->soyadi = Str::title(strtolower($request->soyadi));
+        $kullanici->email = $request->email;
+        $kullanici->telefon = $request->telefon;
+        $kullanici->save();
+
+        $user = DB::table('users')
+        ->where( 'users.kullanici_id', '=',  $kul_id);
+        $user->name=$request->kul_adi;
+        $user->save();
+
+        return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
+    }
+
+    public function kullaniciIslemleriEkle (Request $request,$id) {
+
+        DB::beginTransaction();
+
+        try {
+            $firma = Firma::find($id);
+            $roller=  \App\Rol::all();
+
+            $kullanici= new \App\Kullanici();
+            $kullanici->adi = Str::title(strtolower($request->adi));
+            $kullanici->soyadi = Str::title(strtolower($request->soyadi));
+            $kullanici->email = $request->email;
+            $kullanici->onayli = 1;
+            $kullanici->save();
+
+            $rol=$request->rol;
+            $unvan=$request->unvan;
+            $firma->kullanicilar()->attach($kullanici,['rol_id'=>$rol,'unvan'=>$unvan]);
+
+            $this->sendResetLinkEmail($request);//yeni kullanıcının şifresini belirleyebilmesi için
+
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            $error="error";
+            DB::rollback();
+            return Response::json($error);
+        }
+        //return Redirect::to('/kullaniciIslemleri/'.$firma->id);
+
 
     }
 }
