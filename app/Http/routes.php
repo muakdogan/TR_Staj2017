@@ -192,7 +192,7 @@ Route::POST('/firmaDavet', function () {
 Route::get('/admin/yorumOnay/{id}/{yorum_kul_id}', 'AdminController@yorumOnay');
 
 Route::get('/kullaniciIslemleri', 'KullaniciController@kullaniciIslemleri');
-Route::get('/kullaniciBilgileri/{id}', 'KullaniciController@kullaniciBilgileri');
+Route::get('/kullaniciBilgileri', 'KullaniciController@kullaniciBilgileri');
 Route::post('/kullaniciBilgileriUpdate/{id}/{kul_id}','KullaniciController@kullaniciBilgileriUpdate');
 
 Route::post('/kullaniciBilgileriSifre/{id}/{user_id}', function (Request $request,$id,$user_id) {
@@ -364,12 +364,11 @@ Route::get('/firmaKayit', function () {
   // Önceki Hali "Firma.firmaKayit" Güncel Hali "Firma.genFirmaKayit"
 });
 
-Route::get('/yeniFirmaKaydet/{id}' ,function ($id) {
-  $kullanici=  App\Kullanici::all();
-  $kullanici_id=  App\Kullanici::find($id);
+Route::get('/yeniFirmaKaydet' ,function () {
+  $kullanici_id=  App\Kullanici::find(session()->get('kullanici_id'));
   $iller = App\Il::all();
   $sektorler= App\Sektor::all();
-  return view('Firma.yeniFirmaKaydet')->with('iller', $iller)->with('sektorler',$sektorler)->with('kullanici',$kullanici)->with('kullanici_id',$kullanici_id);
+  return view('Firma.yeniFirmaKaydet')->with('iller', $iller)->with('sektorler',$sektorler)->with('kullanici_id',$kullanici_id);
 });
 
 Route::get('/firmaIslemleri/{id}',['middleware'=>'auth', function ($id) {

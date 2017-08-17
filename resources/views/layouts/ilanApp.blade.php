@@ -139,8 +139,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                             <li ><a  style="padding:0px" href="#" class="firmaSec" name="{{$kullanicifirma->id}}">{{$kullanicifirma->adi}}</a></li>
                                         </ul>
                                     @endforeach
-                                <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
-                                <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Bilgilerim</a></li>
+                                <li><a href="{{url('yeniFirmaKaydet/')}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
+                                <li><a href="{{ URL::to('kullaniciBilgileri', false)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
                                 <li><a href="{{ url('/sessionKill') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>

@@ -74,9 +74,8 @@ class KullaniciController extends Controller
 
     }
 
-    public function kullaniciBilgileri ($id) {
-        $firma = Firma::find($id);
-        return view('Kullanici.kullaniciBilgileri')->with('firma',$firma);
+    public function kullaniciBilgileri () {
+        return view('Kullanici.kullaniciBilgileri')->with('firma',Firma::find(session()->get('firma_id')));
     }
 
     public function kullaniciBilgileriUpdate (Request $request,$id,$kul_id) {
