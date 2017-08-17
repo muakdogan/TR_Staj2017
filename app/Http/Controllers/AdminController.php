@@ -88,8 +88,18 @@ class AdminController extends Controller
             {
                 case 0://standart
                 $firma->onay = 1;
-                $firma->uyelik_baslangic_tarihi = date_create(NULL);
+                $firma->uyelik_baslangic_tarihi = NULL;
+                $firma->uyelik_bitis_tarihi = NULL;
                 $firma->save();
+                
+                //standart onayda, firma onaylandıktan sonra üyeliği başlatma ödemesini ne zaman yaparsa
+                //o zaman geçerli olan miktar ve üyelik süresi ile üye olacak.
+                //o yüzden burada miktar ve sure'ye atama yapılmıyor.
+                $odeme = new \App\Odeme();
+                $odeme->firma_id = $firma->id;
+                $odeme->sistem_kullanici_id = Auth::guard('admin')->user()->id;
+                $odeme->kullanici_id = $kullanici->id;
+                $odeme->save();
 
                 $subject = "Firmanız Onaylandı";
                 $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firma onaylanmıştır.";
@@ -100,6 +110,16 @@ class AdminController extends Controller
                 $firma->uyelik_bitis_tarihi = date_create(NULL)->add(new DateInterval("P".$request->input('uyelik_bitis_suresi')."M"))->format('Y-m-d');//şu ana uyelik_bitis_suresi field'ını ay olarak ekle
                 $firma->onay = 1;
                 $firma->save();
+
+                $odeme = new \App\Odeme();
+                $odeme->firma_id = $firma->id;
+                $odeme->sistem_kullanici_id = Auth::guard('admin')->user()->id;
+                $odeme->miktar = 0;
+                $odeme->odeme_durumu = 1;
+                $odeme->odeme_tarihi = date_create(NULL);
+                /*ay türünden*/$odeme->sure = $request->input('uyelik_bitis_suresi');
+                $odeme->kullanici_id = $kullanici->id;
+                $odeme->save();
 
                 $subject = "Firmanız Onaylandı";
                 $message = "Sayın $kullanici->adi $kullanici->soyadi, $firma->adi adlı firmanın üyeliği,
