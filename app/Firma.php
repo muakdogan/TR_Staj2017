@@ -77,7 +77,7 @@ class Firma extends Model
     }
      public function ilanlar()
     {
-        return $this->hasOne('App\Ilan', 'firma_id', 'id');
+        return $this->hasMany('App\Ilan', 'firma_id', 'id');
     }
     public function ilan_mallar()
     {
