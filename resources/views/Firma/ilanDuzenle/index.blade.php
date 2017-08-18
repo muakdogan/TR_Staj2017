@@ -5,8 +5,6 @@ Debugbar::info($ilan);
 
 @section('head')
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
-    <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
     <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
     <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
     <style>
@@ -68,19 +66,7 @@ Debugbar::info($ilan);
             cursor: pointer;
             float:right;
         }
-        .button1 {
-            background-color: #555555; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 22px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 13px;
-            margin: 4px 2px;
-            cursor: pointer;
-            float:left;
-        }
+
         .test + .tooltip > .tooltip-inner {
             background-color: #73AD21;
             color: #FFFFFF;
@@ -246,7 +232,7 @@ Debugbar::info($ilan);
 @endsection
 
 {{--Teklif yoksa ilan düzenlenebilir!--}}
-@if(!$teklifVarMi || 1)
+@if(!$teklifVarMi)
 
 @section('content')
     <style>
@@ -299,74 +285,15 @@ Debugbar::info($ilan);
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
 <script charset="utf-8">
-    function populateDD() {
-        var teslim_yeri = '{{$ilan->teslim_yeri_satici_firma}}';
 
-        if (teslim_yeri == 'Satıcı Firma') {
-            $(".teslim_il").hide();
-            $(".teslim_ilce").hide();
-        }
-        else {
-            GetIlce({{$ilan->teslim_yeri_il_id}});
-            $("#il_id").val({{$ilan->teslim_yeri_il_id}});
-            if ("{{$ilan->teslim_yeri_ilce_id}}" !== "") {
-                $("#ilce_id").val({{$ilan->teslim_yeri_ilce_id}});
-            }
-        }
-
-        CKEDITOR.config.autoParagraph = false;
-        CKEDITOR.instances.aciklama.setData("{{$ilan->aciklama}}");
-
-        $("#ilan_adi").val("{{$ilan->adi}}");
-        $("#odeme_turu").val({{$ilan->odeme_turu_id}});
-        $("#para_birimi").val({{$ilan->para_birimi_id}});
-
-        //katılımcılar doldurulur
-        $("#katilimcilar").val({{$ilan->katilimcilar}});
-        option = $('option:selected', $("#katilimcilar")).attr('value');
-        if(option==="1"){
-            funcOnayliTedarikciler();
-            funcTumFirmalar();
-            $('#onayli_tedarikciler').show();
-            $('#belirli-istekliler').hide();
-        }
-        else if (option==="2"){
-            funcBelirliIstekliler();
-            $('#belirli-istekliler').show();
-            $('#onayli_tedarikciler').hide();
-            /*var vals = $("#belirli-istekliler").val();
-            vals.push("0");
-            $("#belirli-istekliler").val(vals);*/
-            $('#belirliIstek').multiSelect('select', ['0', '1']);
-        }
-        else {
-            $('#onayli_tedarikciler').hide();
-            $('#belirli-istekliler').hide();
-        }
+    $('#btn-add-ilanBilgileri').click(function () {
+        $('#btn-save-ilanBilgileri').val("add");
+        $('#myModal-ilanBilgileri').modal('show');
+    });
 
 
-
-        $("#kismi_fiyat").val({{$ilan->kismi_fiyat}});
-        $("#firma_sektor").val({{$ilan->ilan_sektor}});
-          $("#firma_sektor_label").val("{{$ilan_sektor->adi}}");
-        if({{$ilan->goster}}){
-         $("#firma_adi_goster").attr('checked', true);
-         }
-         else{
-         $("#firma_adi_gizle").attr('checked', true);
-         }
-        $("#ilan_turu").val({{$ilan->ilan_turu}});
-        $("#rekabet_sekli").val({{$ilan->rekabet_sekli}});
-        $("#sozlesme_turu").val({{$ilan->sozlesme_turu}});
-        $("#yaklasik_maliyet").val({{$ilan->komisyon_miktari}});
-        if ("{{$ilan->teslim_yeri_satici_firma}}" !== "") {
-            $("#teslim_yeri").val("{{$ilan->teslim_yeri_satici_firma}}");
-        }
-        if ("{{$ilan->isin_suresi}}" !== "") {
-            $("#isin_suresi").val("{{$ilan->isin_suresi}}");
-        }
-    }S
 </script>
+    <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
 @endsection
 @else
     {{--Teklif varsa ilan düzenleneMEZ!--}}

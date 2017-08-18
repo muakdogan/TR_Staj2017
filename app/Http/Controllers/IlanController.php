@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Request as Req; //
 use App\Il;
 use App\Firma;
 use App\OdemeTuru;
@@ -13,27 +14,117 @@ use App\IlanHizmet;
 use App\IlanMal;
 use App\IlanGoturuBedel;
 use App\IlanYapimIsi;
+use App\Teklif;
+use App\Kullanici;
+use App\KismiKapaliKazanan;
+use App\KismiAcikKazanan;
 use App\Maliyet;
 use App\ParaBirimi;
 use App\Birim;
 use App\OnayliTedarikci;
-
+use Illuminate\Support\Facades\Session;
 use Input;
 use View;
+use File;
 use Carbon\Carbon;
 use Response;
 use Barryvdh\Debugbar\Facade as Debugbar;
 use Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 class IlanController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('firmaYetkili', ['except' => ['showIlan']]);
+        $this->middleware('auth',['only'=>['teklifGor']]);
     }
-    //
+
+    public function teklifGor ($id,$ilan_id) {
+        $firma = Firma::find($id);
+        $ilan = Ilan::find($ilan_id);
+        $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->paginate();
+        Debugbar::info($teklifler);
+
+        if (!$ilan)
+            $firma->ilanlar = new Ilan();
+        if (!$ilan->ilan_mallar)
+            $firma->ilanlar->ilan_mallar = new IlanMal();
+        if (!$ilan->ilan_hizmetler)
+            $firma->ilanlar->ilan_hizmetler = new IlanHizmet();
+        if (!$ilan->ilan_yapim_isleri)
+            $firma->ilanlar->ilan_yapim_isleri = new IlanYapimIsi();
+        if (!$ilan->ilan_goturu_bedeller)
+            $firma->ilanlar->ilan_goturu_bedeller = new IlanGoturuBedel();
+
+        $firma_id = session()->get('firma_id');
+        $kullanici_id = Auth::user()->kullanici_id;
+        $teklif = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();
+
+        $firmaIlan=$ilan->firmalar;
+        $firmaAdres = $firmaIlan->adresler()->first();
+        if (!$firmaAdres) {
+            $firmaAdres = new Adres();
+            $firmaAdres->iller = new Il();
+            $firmaAdres->ilceler = new Ilce();
+            $firmaAdres->semtler = new Semt();
+        }
+        $dt = Carbon::today();
+        $time = Carbon::parse($dt);
+        $dt = $time->format('Y-m-d');
+        $kullanici = Kullanici::find(session()->get('kullanici_id'));
+
+        $kazanK = null;
+        if($ilan->kismi_fiyat == 0){
+            $kazananKapali = KismiKapaliKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
+            $kisKazanCount=0;
+
+            foreach($kazananKapali as $kazanK){
+                $kisKazanCount=1;
+            }
+        }
+        else{
+            $kazananKapali = KismiAcikKazanan::where("ilan_id",$ilan->id)->get(); /////ilanın kazananı var mı kontrolü
+            $kisKazanCount=0;
+            foreach($kazananKapali as $kazanK){
+                $kisKazanCount=1;
+            }
+        }
+        $minFiyat = $ilan->minFiyat();
+
+        //ilan duzenleme icin gerekli///
+        $teklifVarMi=0;
+        if(count($ilan->teklif_hareketler()->limit(1)->paginate())>0){
+            $teklifVarMi=1;
+        }
+        $goturu_bedel= IlanGoturuBedel::where('ilan_id',$ilan->id)->get();
+        $ilan_sektor = Sektor::find($ilan->ilan_sektor);
+        $maliyetler =  Maliyet::all();
+        $odeme_turleri = OdemeTuru::all();
+        $para_birimleri = ParaBirimi::all();
+        $iller = DB::select(DB::raw("SELECT *  FROM  `iller` WHERE adi = 'İstanbul' OR adi =  'İzmir' OR adi =  'Ankara'
+                                     UNION SELECT * FROM iller"));
+        $birimler =  Birim::all();
+        $sartnameUzanti="pdf";
+        if($ilan->teknik_sartname){
+            $explodeArray = explode(".", $ilan->teknik_sartname);
+            $sartnameUzanti=$explodeArray[count($explodeArray)-1];
+        }
+        //////////////////ilan duzenleme icin gerekli sonu/////
+        ///
+        return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
+            ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
+            ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
+            ->with("dt",$dt)->with('kazananKapali',$kazananKapali)->with("kisKazanCount",$kisKazanCount)
+            ->with("kazanK",$kazanK)->with("minFiyat",$minFiyat)
+            ->with('iller',$iller)->with('maliyetler',$maliyetler)
+            ->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)
+            ->with('teklifVarMi',$teklifVarMi)->with('ilan_sektor',$ilan_sektor)
+            ->with('goturu_bedel',$goturu_bedel)->with('sartnameUzanti',$sartnameUzanti);
+
+    }
+
     public function showIlan(){
 
         $firma_id = session()->get('firma_id');
@@ -139,10 +230,9 @@ class IlanController extends Controller
                         });*/
              
         }
-        if($il_id != NULL)
-            {
-             $ilanlar->whereIn('adresler.il_id',$il_id);
-            }
+        if($il_id != NULL) {
+            $ilanlar->whereIn('adresler.il_id',$il_id);
+        }
         if ($bas_tar != NULL) {
             $ilanlar->where('ilanlar.yayin_tarihi','>=', $bas_tar);
         }
@@ -164,24 +254,21 @@ class IlanController extends Controller
         if($odeme != NULL){
             $ilanlar->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
-      
-        
+
         $ilanlar=$ilanlar->orderBy('yayin_tarihi', 'DESC')->paginate(5);
         
-        if (Request::ajax()) {
+        if (Req::ajax()) {
             return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar, 'misafir' => $misafir))->render());
         }
-        
+
         return View::make('Firma.ilan.ilanAra')-> with('ilanlar',$ilanlar)
                 ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
                 ->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
                 ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)->with('davetEdildigimIlanlar',$davetEdildigimIlanlar)
                 ->with('misafir', $misafir);
-    
     }
 
-    public function ilanOlustur($firma_id)
-    {
+    public function ilanOlustur($firma_id){
         $firma = Firma::find($firma_id);
    
         $ilan = new \App\Ilan();
@@ -206,10 +293,15 @@ class IlanController extends Controller
 
     }
 
-
     public function ilanDuzenle($firmaID,$ilanID){
         $firma = Firma::find($firmaID);
         $ilan = Ilan::find($ilanID);
+
+        $sartnameUzanti="pdf";
+        if($ilan->teknik_sartname){
+            $explodeArray = explode(".", $ilan->teknik_sartname);
+            $sartnameUzanti=$explodeArray[count($explodeArray)-1];
+        }
 
         /*
          * Ilan ve firma ID gecerli olmalidir ve
@@ -218,22 +310,16 @@ class IlanController extends Controller
         if ($ilan==null || $firma==null || Gate::denies('show', $firma)) {
             return redirect()->intended();
         }
-
-        if (!$ilan->ilan_hizmetler){
+        if (!$ilan->ilan_hizmetler)
             $ilan->ilan_hizmetler = new IlanHizmet();
-        }
-
         if (!$ilan->ilan_mallar)
             $ilan->ilan_mallar = new IlanMal();
-
         if (!$ilan->ilan_goturu_bedeller)
             $ilan->ilan_goturu_bedeller = new IlanGoturuBedel();
-
-        $goturu_bedel= IlanGoturuBedel::where('ilan_id',$ilan->id)->get();
-        Debugbar::info($goturu_bedel);
         if (!$ilan->ilan_yapim_isleri)
             $ilan->ilan_yapim_isleri = new IlanYapimIsi();
 
+        $goturu_bedel= IlanGoturuBedel::where('ilan_id',$ilan->id)->get();
         $ilan_sektor = Sektor::find($ilan->ilan_sektor);
         $maliyetler =  Maliyet::all();
         $odeme_turleri = OdemeTuru::all();
@@ -243,18 +329,20 @@ class IlanController extends Controller
         $birimler =  Birim::all();
 
         $teklifVarMi=0;
-        if($ilan->teklif_hareketler()->limit(1)->paginate()!=null){
+        if(count($ilan->teklif_hareketler()->limit(1)->paginate())>0){
             $teklifVarMi=1;
         }
 
-        return view('Firma.ilanDuzenle.index')->with('firma',$firma)->with('iller',$iller)->with('maliyetler',$maliyetler)->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)->with('ilan',$ilan)->with('teklifVarMi',$teklifVarMi)->with('ilan_sektor',$ilan_sektor)->with('goturu_bedel',$goturu_bedel);
+        return view('Firma.ilanDuzenle.index')->with('firma',$firma)->with('iller',$iller)->with('maliyetler',$maliyetler)
+            ->with('odeme_turleri',$odeme_turleri)->with('para_birimleri',$para_birimleri)->with('birimler',$birimler)
+            ->with('ilan',$ilan)->with('teklifVarMi',$teklifVarMi)->with('ilan_sektor',$ilan_sektor)
+            ->with('goturu_bedel',$goturu_bedel)->with('sartnameUzanti',$sartnameUzanti);
     }
 
     public function ilanDuzenleSubmit($firmaID,$ilanID){
 
         $firma = Firma::find($firmaID);
         $ilan = Ilan::find($ilanID);
-
 
         /*
          * Ilan ve firma ID gecerli olmalidir ve
@@ -271,7 +359,6 @@ class IlanController extends Controller
         $ilan->katilimcilar= Input::get('katilimcilar');//1 - Onaylı Tedarikçiler | 2 - Belirli Firmalar | 3 - Tüm Firmalar
         $ilan->kismi_fiyat=Input::get('kismi_fiyat');//1 - Kısmi Fiyat Teklifine Kapalı | 2 - Kısmi Fiyat Teklifine Acik
         $ilan->sozlesme_turu= Input::get('sozlesme_turu');//0 - Birim Fiyatli | 1 - Goturu Bedel
-        //$ilan->teknik_sartname="";//pdf dosya
         $ilan->teslim_yeri_satici_firma= Input::get('teslim_yeri');
         if($ilan->teslim_yeri_satici_firma=='Adrese Teslim'){
             $ilan->teslim_yeri_il_id= Input::get('il_id');
@@ -289,9 +376,27 @@ class IlanController extends Controller
         $ilan->goster = Input::get('firma_adi_goster');//0 - Gizle | 1 - Goster
         // $ilan->statu = 0;//0 - Aktif | 1 - Sonuclanmamis | 2 Pasifs
 
+
+        //$ilan->teknik_sartname="";//pdf dosya
+        if(Input::get('sartnameSilindiMi')){
+            $eskiSartname=$ilan->teknik_sartname;
+            Debugbar::find($eskiSartname);
+            File::delete("Teknik/".$eskiSartname);
+            $ilan->teknik_sartname=null;
+        }
+
+        if($sartname = Input::file('teknik')) {
+            //$rules = array('teknik' => 'required|mimes:pdf,doc,docx|max:100000');
+            $destinationPath = 'Teknik';
+            $extension = $sartname->getClientOriginalExtension();
+            $fileName = rand(11111, 99999) . '.' . $extension;
+            $ilan->teknik_sartname = $fileName;
+            $sartname->move($destinationPath, $fileName);
+            Session::flash('success', 'Upload successfully');
+        }
+
         //ilan tarihi guncelle
         $ilan_tarihi= explode(" - ", Input::get('ilan_tarihi_araligi'));
-
 
         $ilan_tarihi_replace1=$ilan_tarihi[0];
         $ilan_tarihi_replace1 = str_replace('/', '-', $ilan_tarihi_replace1);
@@ -328,13 +433,12 @@ class IlanController extends Controller
             }
         }
 
-        //???
         if(Input::get('onayli_tedarikciler')!=null){
             foreach(Input::get('onayli_tedarikciler') as $onayli){
-                $onayli_tedarikciler= new OnayliTedarikci();
-                $onayli_tedarikciler->firma_id = $ilan->firma_id;
-                $onayli_tedarikciler->tedarikci_id=$onayli;
-                $onayli_tedarikciler->save();
+                $belirli_istekliler= new \App\BelirlIstekli();
+                $belirli_istekliler->ilan_id = $ilan->id;
+                $belirli_istekliler->firma_id=$onayli;
+                $belirli_istekliler->save();
             }
         }
 
@@ -362,9 +466,7 @@ class IlanController extends Controller
                 $goturu->aciklama=Str::title(strtolower(Input::get('goturu_aciklama')));
                 $goturu->miktar=Input::get('goturu_miktar');
                 $goturu->miktar_birim_id=Input::get('goturu_birim_id');
-
                 $goturu->save();
-
             }
             else{
                 $goturu = IlanGoturuBedel::find(Input::get('kalem_id_goturu'));
@@ -595,8 +697,6 @@ class IlanController extends Controller
                 $x++;
             }
         }
-
-
         DebugBar::info($upKalemArray);
         DebugBar::info($delKalemArray);
         DebugBar::info(Input::get('ilan_adi'));
@@ -606,7 +706,6 @@ class IlanController extends Controller
     public function ilanOlusturEkle(Request $request, $firma_id)
     {
         //ilan bilgileri kaydediliyor.
-
 
         $firma = Firma::find($firma_id);
         $ilan = new Ilan;
@@ -626,8 +725,7 @@ class IlanController extends Controller
          
         $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi_replace1));
         $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi_replace2));
-       
-        
+
         $is_tarihi= explode(" - ", $request->is_tarihi_araligi);
         DebugBar::info($is_tarihi);
         
@@ -635,8 +733,7 @@ class IlanController extends Controller
         $is_tarihi_replace1 = str_replace('/', '-', $is_tarihi_replace1);
         $is_tarihi_replace2=$is_tarihi[1];
         $is_tarihi_replace2 = str_replace('/', '-', $is_tarihi_replace2);
-        
-        
+
         $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
         DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace1)));
         
@@ -665,15 +762,15 @@ class IlanController extends Controller
         //}
 
         if($request->file('teknik')) {
-          $file = $request->file('teknik');
-          $file = array('teknik' => $request->file('teknik'));
-          $destinationPath = 'Teknik';
-          $extension = $request->file('teknik')->getClientOriginalExtension();
-          $fileName = rand(11111, 99999) . '.' . $extension;
-          $ilan->teknik_sartname = $fileName;
-          $request->file('teknik')->move($destinationPath, $fileName);
-          Session::flash('success', 'Upload successfully');
-
+            $file = $request->file('teknik');
+            $file = array('teknik' => $request->file('teknik'));
+               //$rules = array('teknik' => 'required|mimes:pdf,doc,docx|max:100000');
+            $destinationPath = 'Teknik';
+            $extension = $request->file('teknik')->getClientOriginalExtension();
+            $fileName = rand(11111, 99999) . '.' . $extension;
+            $ilan->teknik_sartname = $fileName;
+            $request->file('teknik')->move($destinationPath, $fileName);
+            Session::flash('success', 'Upload successfully');
         }
         $ilan->statu = 0;
 
@@ -701,7 +798,6 @@ class IlanController extends Controller
         
         //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
         if($ilan->ilan_turu==1 && $ilan->sozlesme_turu==0){
-            
             foreach($request->mal_id as $malId){
                   $arrayMalId[] = $malId;
             }
@@ -723,7 +819,6 @@ class IlanController extends Controller
             foreach($request->mal_miktar as $miktar){
                   $arrayMiktar[] = $miktar;
             }
-            
             foreach($request->mal_birim as $birim){
                   $arrayBirim[] = $birim;
             }
@@ -858,8 +953,7 @@ class IlanController extends Controller
       
     }
 
-    public function ilanlarim($firmaId)
-    {
+    public function ilanlarim($firmaId){
         $firma = Firma::find($firmaId);
         $model_ilanlar=  Ilan::all();
         if (Gate::denies('show', $firma)) {
@@ -1075,6 +1169,79 @@ class IlanController extends Controller
             $error="error";
             DB::rollback();
             return Response::json($error);
+        }
+    }
+
+    public function getOnayliTedarikciler(){
+        $mod=Input::get('mod');
+        $firma_id = session()->get('firma_id');
+        $sektorOnayli = Input::get('sektorOnayli');
+
+        $sektorControl = DB::table('firmalar')
+            ->join('firma_sektorler', 'firmalar.id','=', 'firma_sektorler.firma_id')
+            ->where('firmalar.id', '!=' ,$firma_id)
+            ->where('firma_sektorler.sektor_id',$sektorOnayli)
+            ->select('firmalar.adi', 'firmalar.id')
+            ->orderBy('adi','asc');
+
+        $firmaArray["tumFirmalar"] = $sektorControl->get();
+
+        if($mod=="duzenle"){
+            $ilanID=Input::get('ilanID');
+            $secilmisFirmalar = DB::table('firmalar')
+                ->join('belirli_istekliler', 'firmalar.id', '=', 'belirli_istekliler.firma_id')
+                ->where('belirli_istekliler.ilan_id',$ilanID)
+                ->select('firmalar.id');
+
+            $firmaArray["secilmisFirmalar"] = $secilmisFirmalar->get();
+        }
+        else{
+            $onayliTedarikciler = DB::table('firmalar')
+                ->join('firma_sektorler', 'firmalar.id', '=', 'firma_sektorler.firma_id')
+                ->join('onayli_tedarikciler','firmalar.id','=','onayli_tedarikciler.tedarikci_id')
+                ->where('onayli_tedarikciler.firma_id', '=',$firma_id)
+                ->where('firma_sektorler.sektor_id', '=',$sektorOnayli)
+                ->select('firmalar.id');
+
+            $firmaArray["onayliTedarikciler"] = $onayliTedarikciler->get();
+        }
+        return Response::json($firmaArray);
+    }
+
+    public function getBelirliFirmalar(){
+        $mod=Input::get('mod');
+        $firma_id = session()->get('firma_id');
+        $sektorOnayli = Input::get('sektorOnayli');
+        if($mod=="duzenle"){
+            //ilan duzenleme icin
+            $ilanID=Input::get('ilanID');
+            $sektorControl = DB::table('firmalar')
+                ->join('firma_sektorler', 'firmalar.id','=', 'firma_sektorler.firma_id')
+                ->where('firmalar.id', '!=' ,$firma_id)
+                ->where('firma_sektorler.sektor_id',$sektorOnayli)
+                ->select('firmalar.adi', 'firmalar.id')
+                ->orderBy('adi','asc');
+
+            $firmaArray["tumFirmalar"] = $sektorControl->get();
+
+            $secilmisFirmalar = DB::table('firmalar')
+                ->join('belirli_istekliler', 'firmalar.id', '=', 'belirli_istekliler.firma_id')
+                ->where('belirli_istekliler.ilan_id',$ilanID)
+                ->select('firmalar.id');
+
+            $firmaArray["secilmisFirmalar"] = $secilmisFirmalar->get();
+            return Response::json($firmaArray);
+        }
+        else{
+            //yeni ilan olusturmak icin
+            $sektorControl = DB::table('firmalar')
+                ->join('firma_sektorler', 'firmalar.id','=', 'firma_sektorler.firma_id')
+                ->where('firmalar.id', '!=',$firma_id)
+                ->where('firma_sektorler.sektor_id',$sektorOnayli)
+                ->select('firmalar.adi', 'firmalar.id')
+                ->orderBy('adi','asc');
+            $sektorControl = $sektorControl->get();
+            return Response::json($sektorControl);
         }
     }
 }
