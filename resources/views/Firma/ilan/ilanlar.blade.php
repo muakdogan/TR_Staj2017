@@ -58,9 +58,9 @@ a{
                     <div class="col-sm-10">
                         <p style="font-size: 17px; color: #333"><b>İlan Adı: {{$ilan->adi}}</b></p>
                         
-                        @if($ilan->puanlamaOrtalama($ilan->firma_id) > 0)
+                        @if($ilan->firmalar->puanlamaOrtalama() > 0)
                         
-                            <div class="puanlama">{{$ilan->puanlamaOrtalama($ilan->firma_id)}}</div>
+                            <div class="puanlama">{{$ilan->firmalar->puanlamaOrtalama()}}</div>
                             <p style="font-size:15px; color:#666"><a href="{{url('firmaDetay/'.$ilan->firma_id)}}" >
                             
                                 @if($ilan->goster == 0 || $misafir == 1)

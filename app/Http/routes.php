@@ -795,6 +795,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $puan->tarih=$now;
     $puan->save();
 
+    $yorum_yapilan_firma->puanlariGuncelle();
+    $yorum_yapilan_firma->save();
+
     $yorum = new App\Yorum();
     $yorum->firma_id=$yorum_yapilan_firma;
     $yorum->ilan_id=$ilan_id;
@@ -818,15 +821,15 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
     Debugbar::info($teklifler);
     if (!$firma->ilanlar)
         $firma->ilanlar = new App\Ilan();
-    if (!$firma->ilanlar->ilan_mallar)
-        $firma->ilanlar->ilan_mallar = new App\IlanMal();
-    if (!$firma->ilanlar->ilan_hizmetler)
-        $firma->ilanlar->ilan_hizmetler = new App\IlanHizmet();
-    if (!$firma->ilanlar->ilan_yapim_isleri)
-        $firma->ilanlar->ilan_yapim_isleri = new App\IlanYapimIsi();
+    if (!$ilan->ilan_mallar)
+        $ilan->ilan_mallar = new App\IlanMal();
+    if (!$ilan->ilan_hizmetler)
+        $ilan->ilan_hizmetler = new App\IlanHizmet();
+    if (!$ilan->ilan_yapim_isleri)
+        $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
+    if (!$ilan->ilan_goturu_bedeller)
+        $ilan->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
 
-    if (!$firma->ilanlar->ilan_goturu_bedeller)
-        $firma->ilanlar->ilan_goturu_bedeller = new App\IlanGoturuBedel ();
     $firma_id = session()->get('firma_id');
     $kullanici_id=Auth::user()->kullanici_id;
     $teklif= App\Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();

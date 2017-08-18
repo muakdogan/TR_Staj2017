@@ -130,12 +130,28 @@ class Firma extends Model
         return 'Mavi Yaka,Beyaz Yaka';
     }
     public function puanlamaOrtalama(){
-              $puan = Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
-                                      ->where('firma_id',$this->id)
-                                      ->get();
-              $puan = $puan->toArray();
-              return number_format($puan[0]['ortalama'],1);
+        /*$puan = Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
+                                ->where('firma_id',$this->id)
+                                ->get();
+        $puan = $puan->toArray();*/
+
+        $ortalama = ($this->kalite_puan_ort + $this->teslimat_puan_ort + $this->teknik_puan_ort + $this->esneklik_puan_ort) / 4;
+
+        return number_format($ortalama,1);
     }
+
+    //save yapmaz.
+    public function puanlariGuncelle()
+    {
+        $puanlar = \App\Puanlama::select([DB::raw("AVG(kriter1) AS 1"), DB::raw("AVG(kriter2) AS 2"), DB::raw("AVG(kriter3) AS 3"), DB::raw("AVG(kriter4) AS 4")])
+        ->where('firma_id', $this->id)->get()->toArray();
+
+        $this->kalite_puan_ort = $puanlar[0];
+        $this->teslimat_puan_ort = $puanlar[1];
+        $this->teknik_puan_ort = $puanlar[2];
+        $this->esneklik_puan_ort = $puanlar[3];
+    }
+
     /*public function getSehirAdi(){
               $adres = $this->adresler()->where('tur_id',1)->first();
               Debugbar::info($adres);
