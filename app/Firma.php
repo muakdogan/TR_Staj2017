@@ -75,9 +75,9 @@ class Firma extends Model
     {
         return $this->belongsToMany('App\Kullanici','firma_kullanicilar', 'firma_id','kullanici_id')->withPivot('rol_id', 'unvan');
     }
-     public function ilanlar()
+    public function ilanlar()
     {
-        return $this->hasOne('App\Ilan', 'firma_id', 'id');
+        return $this->hasMany('App\Ilan', 'firma_id', 'id');
     }
     public function ilan_mallar()
     {

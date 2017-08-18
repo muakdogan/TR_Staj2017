@@ -39,12 +39,7 @@
                     <input type="hidden" name="goturu_id"  id="goturu_id0" value="{{$goturu_bedel[0]->kalem_id}}"><!--agaçtan seçilen kalemin id -->
                 </td>
             </tr>
-
-
         @else
-
-
-
             <tr>
                 <td>1</td>
                 <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem0" name="goturu_kalem" placeholder="Kalem Ekle" readonly  value=""  > </td>

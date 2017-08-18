@@ -18,7 +18,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
-    <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
     @yield('head') <!-- ic sayfalardan head bolumune kod eklenmek istenirse -->
@@ -44,7 +43,7 @@
     body.sticky div#header{
       position: fixed;
       top: 0;
-      left: 50
+      left: 50;
       box-shadow: 0 5px 10px rgba(0,0,0,0.3);
     }
     .yazi{

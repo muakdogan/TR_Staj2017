@@ -638,17 +638,15 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                         <div class="tab-pane" id="2">
                             <h3>{{$firmaIlan->adi}}'nın {{$ilan->adi}} İlanına Teklif  Ver</h3>
                             <hr>
-
-                            @if($ilan->ilan_turu == 1 && $ilan->sozlesme_turu == 0)
-                                @include('Firma.ilan.malTeklif')
-                            @elseif($ilan->ilan_turu == 2 && $ilan->sozlesme_turu == 0)
-                                @include('Firma.ilan.hizmetTeklif')
-                            @elseif($ilan->ilan_turu == 3)
-                                @include('Firma.ilan.yapimIsiTeklif')
-                            @else
+                            @if($ilan->sozlesme_turu == 1)
                                 @include('Firma.ilan.goturuBedelTeklif')
+                            @elseif($ilan->ilan_turu == 1)
+                                @include('Firma.ilan.malTeklif')
+                            @elseif($ilan->ilan_turu == 2)
+                                @include('Firma.ilan.hizmetTeklif')
+                            @else
+                                @include('Firma.ilan.yapimIsiTeklif')
                             @endif
-
                         </div>
                         <div class="tab-pane" id="3">
                             <div id="kismiRekabet">
@@ -658,7 +656,20 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                             </div>
                         </div>
                         @if($ilan->firma_id == session()->get('firma_id'))
-                            <a href="{{ URL::to('ilanDuzenle', array($firmaIlan->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
+                            @if(!$teklifVarMi)
+                                {{--Sadece teklif verilmemiş ilanlar duzenlenebilir!--}}
+
+                                <a href="{{ URL::to('ilanDuzenle', array($firmaIlan->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
+
+
+                                {{--ilan duzenleme modali include edilecek ve butona bağlanacak
+                                    ilan duzenleme acmadan önce ilan pasif hale getirilecek
+                                --}}
+
+                            @else
+                                <div class="col-lg-12"><input style="float:right" type="button" class="btn btn-info" value="İlanı Düzenle" disabled /></div>
+                                <div class="col-lg-12"><p><span style="float:right; color:red;">Teklif verilmiş ilan düzenlenemez!</span></p></div>
+                            @endif
                         @endif
                     </div>
                 </div>

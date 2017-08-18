@@ -218,7 +218,7 @@ class FirmaController extends Controller
                 ->whereExists(function ($query) {
                     $query->select(DB::raw("*"))
                           ->from('onayli_tedarikciler')
-                          ->whereRaw('onayli_tedarikciler.firma_id',session()->get("firma_id"))
+                          ->whereRaw('onayli_tedarikciler.firma_id='+session()->get("firma_id"))
                           ->whereRaw('onayli_tedarikciler.tedarikci_id = firmalar.id');
                 })
                 ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get();
@@ -228,7 +228,6 @@ class FirmaController extends Controller
     }
 
     public function uploadImage(Request $request) {
-
 
             $file = $request->file('logo');
             $file = array('logo' => $request->file('logo'));
