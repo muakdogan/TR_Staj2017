@@ -159,13 +159,6 @@ class Ilan extends Model
         $sektorAdi=Sektor::find($ilan_sektor_id);
         return $sektorAdi->adi;
  }
- public function puanlamaOrtalama($firma_id){
-           $puan = Puanlama::select( array(DB::raw("avg(kriter1+kriter2+kriter3+kriter4)/4 as ortalama")))
-                                   ->where('firma_id',$firma_id)
-                                   ->get();
-           $puan = $puan->toArray();
-           return number_format($puan[0]['ortalama'],1);
-    }
  public function belirliIstekliControl($ilan_id ,$firma_id){
 
         $belirliFirmalar = BelirlIstekli::where('ilan_id',$ilan_id)->get();

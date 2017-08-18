@@ -714,6 +714,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $puan->tarih=$now;
     $puan->save();
 
+    $yorum_yapilan_firma->puanlariGuncelle();
+    $yorum_yapilan_firma->save();
+
     $yorum = new App\Yorum();
     $yorum->firma_id=$yorum_yapilan_firma;
     $yorum->ilan_id=$ilan_id;
@@ -730,7 +733,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
 Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetService');
 
   //////////////////////////////////////teklifGor//////////////////////
-  Route::get('teklifGor/{id}/{ilanid}' ,'ilanController@teklifGor');
+
+  Route::get('teklifGor/{id}/{ilanid}' ,'IlanController@teklifGor');
+
     ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////
     Route::post('KismiAcikRekabetKazanan' ,function () {
 

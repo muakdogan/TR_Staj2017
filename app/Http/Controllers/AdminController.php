@@ -30,10 +30,9 @@ class AdminController extends Controller
         ->distinct()
         ->orderBy('olusturmaTarihi', 'desc')->paginate(5, ['*'], '1pagination');*/
 
-        $onayBekleyenFirmalar = \App\Firma::where('onay', '0')->with(
-            ['kullanicilar' => function ($query){
-                $query->where('kullanicilar.onayli', '=', '1');
-            },
+        $onayBekleyenFirmalar = \App\Firma::where('onay', '0')
+        ->whereHas('kullanicilar', function($query){ $query->where('onayli', '1');})->with(
+            ['kullanicilar',//whereHas olmasına rağmen with'e kullanicilar yazılmazsa eager loading olmuyor
             'sektorler',
             'iletisim_bilgileri',
             'adresler.iller',
