@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Response;
 
@@ -142,33 +143,84 @@ class AuthController extends Controller
       //  return $validator->errors()->all();
     }
 
+
+
     public function kayitForm(Request $request)
     {
 
-        $ilce = \App\Ilce::find($request->ilce_id);
-        $semt = \App\Semt::find($request->semt_id);
 
-        // $inputs = Input::all();
+
+
+        $ilceler = \App\Ilce::where('il_id', $request->il_id)->get();
+        $semtler = \App\Semt::where('ilce_id', $request->ilce_id)->get();
+        $vergi_iller = \App\VergiDairesi::where('il_id', $request->vergi_daire_il)->get();
+
+        $faturaIlceler = \App\Ilce::where('il_id', $request->fatura_il_id)->get();
+        $faturaSemtler = \App\Semt::where('ilce_id', $request->fatura_ilce_id)->get();
+
+
+
+        $ilcelerString = "";
+        foreach ($ilceler as $i)
+        {
+          $ilcelerString = $ilcelerString.$i->id.",";
+        }
+
+
+        $semtlerString = "";
+        foreach ($semtler as $s)
+        {
+          $semtlerString = $semtlerString.$s->id.",";
+        }
+
+        $vergi_illerString = "";
+        foreach ($vergi_iller as $v)
+        {
+          $vergi_illerString = $vergi_illerString.$v->id.",";
+        }
+
+
+
+        $faturaIlcelerString = "";
+        foreach ($faturaIlceler as $fi)
+        {
+          $faturaIlcelerString = $faturaIlcelerString.$fi->id.",";
+        }
+
+        $faturaSemtlerString = "";
+        foreach ($faturaSemtler as $fs)
+        {
+          $faturaSemtlerString = $faturaSemtlerString.$fs->id.",";
+        }
+
+
+
+
+        //Validation Helper By Özenç Çelik
+        //unique:firmalar,adi =>  Database içerisindeki firmalar tablosunun adi sütununda unique olup olmadığını kontrol ediyor.
+        //exists:iller,id => İller tablosunun id sütununda var olup olmadığını kontrol ediyor.
+        //same:ilce->il_id => İlce satırının içerisindeki ,il_id sütunu ile aynı olup olmadığını kontrol ediyor.
         $this->validate($request, [
           'firma_adi' => 'required|unique:firmalar,adi|min:2',//unique:firmalar'ı bulmuyor
           'sektor_id' => 'required',//???????????????????????????????????????
           'telefon' => 'required|min:10|numeric',
-          'il_id' => 'required|integer|exists:iller,id|same:ilce->il_id',
-          'ilce_id' => 'required|integer|exists:ilceler,id|same:semt->ilce_id',
-          'semt_id' => 'required|integer|exists:semtler,id',
+          'il_id' => 'required|integer|exists:iller,id',
+          'ilce_id' => 'required|integer|exists:ilceler,id|in:'.$ilcelerString,
+          'semt_id' => 'required|integer|exists:semtler,id|in:'.$semtlerString,
           'firma_adres' => 'required',
-          'adi' => 'required',
-          'soyadi' => 'required',
-          'unvan' => 'required',
-          'telefonkisisel' => 'required',
+          'adi' => 'required|string',
+          'soyadi' => 'required|string',
+          'unvan' => 'required|string',
+          'telefonkisisel' => 'required|min:10|numeric',
           'email_giris' => 'required|email',
           'password' => 'required',
-          'password_confirmation' => 'same:password',
+          'password_confirmation' => 'required|same:password',
           'fatura_tur' => 'required',
-          'vergi_daire_il' => 'required',
-          'vergi_daire' => 'required',
+          'vergi_daire_il' => 'required|integer|exists:iller,id',
+          'vergi_daire' => 'required|integer|in:'.$vergi_illerString,
 
-        ],[//Error Messages
+        ],[
+          //Error Messages
           'firma_adi.required' => 'Lütfen firma adını giriniz.',
           'firma_adi.unique' => 'Aynı isimli bir başka firma sistemimizde kayıtlıdır.',
           'firma_adi.max' => 'Firma adı 2 karakterden az olamaz.',
@@ -182,35 +234,101 @@ class AuthController extends Controller
           'il_id.required'=> 'Lütfen il seçiniz.',
           'il_id.exists'=> 'Sistemimizde kayıtlı olmayan bir il seçtiniz.Lütfen tekrar deneyin',
           'il_id.integer'=> 'İl id si integer olması gerekiyor.',
-          'il_id.same'=> 'İl e ait olamyan bir ilçe seçemezsiniz',
 
           'ilce_id.required'=> 'Lütfen ilçe seçiniz.',
           'ilce_id.exists'=> 'Sistemimizde kayıtlı olmayan bir ilçe seçtiniz.Lütfen tekrar deneyin',
           'ilce_id.integer'=> 'İlçe id si integer olması gerekiyor.',
-          'ilce_id.same'=> 'İlçe ye ait olamyan bir semt seçemezsiniz',
+          'ilce_id.in'=> 'İl e ait olmayan bir ilçe seçtiniz.',
 
+          'semt_id.required'=> 'Lütfen semt seçiniz.',
+          'semt_id.exists'=> 'Sistemimizde kayıtlı olmayan bir semt seçtiniz.Lütfen tekrar deneyin',
+          'semt_id.integer'=> 'Semt id si integer olması gerekiyor.',
+          'semt_id.in' => 'İlçeye ait olamyan bir semt seçtiniz',
 
+          'firma_adres.required'=> 'Lütfen firma adresi giriniz.',
 
+          'adi.required' => 'Lütfen kullanıcı adını giriniz.',
+          'adi.string' => 'Kulanıcı adı sadece harflerden oluşmalıdır!!!',
 
+          'soyadi.required' => 'Lütfen kullanıcı soyadını giriniz.',
+          'soyadi.string' => 'Kulanıcı soyadı sadece harflerden oluşmalıdır!!!',
+
+          'unvan.required' => 'Lütfen ünvan giriniz.',
+          'unvan.string' => 'Kulanıcı ünvani sadece harflerden oluşmalıdır!!!',
+
+          'telefonkisisel.required'=> 'Lütfen telefon numarası giriniz.',
+          'telefonkisisel.min'=> 'Telefon numarası 10 haneden az olamaz!!!',
+          'telefonkisisel.numeric'=> 'Telefon numarasına sayısal değerler girmelisiniz.',
+
+          'email_giris.required' => 'Lütfen email adresi giriniz.',
+          'email_giris.email' => 'Geçersiz bir email adresi girdiniz.',
+
+          'password.required' => 'Lütfen kullanıcı şifrenizi giriniz.',
+
+          'password_confirmation.required' => 'Lütfen kullanıcı şifrenizi giriniz.',
+          'password_confirmation.same' => 'Giridiğiniz şifreler aynı değil',
+
+          'fatura_tur.required' => 'Lütfen fatura türünü seçiniz(Kurumsal yada Bireysel).',
+
+          'vergi_daire_il.required'=> 'Lütfen vergi dairesinin bulundğu ili seçiniz.',
+          'vergi_daire_il.exists'=> 'Sistemimizde kayıtlı olmayan bir il seçtiniz.Lütfen tekrar deneyin',
+          'vergi_daire_il.integer'=> 'Vergi Dairesi İl id si integer olması gerekiyor.',
+
+          'vergi_daire.required'=> 'Lütfen vergi dairesi seçiniz.',
+          'vergi_daire.integer'=> 'Vergi Dairesi id si integer olması gerekiyor.',
+          'vergi_daire.in'=> 'İl i olmayan bir vergi dairesi seçemezsiniz',
         ]);
         if($request->fatura_tur == "kurumsal"){
           $this->validate($request, [
-            'firma_unvan' => 'required',
-            'vergi_no' => 'required'
+            'firma_unvan' => 'required|string',
+            'vergi_no' => 'required|integer'
+          ],[//Error Messages
+            'firma_unvan.required' => 'Lütfen firma ünvanını giriniz.',
+            'firma_unvan.string' => 'Firma ünvanı sadece harflerden oluşmalıdır!!!',
+
+            'vergi_no.required' => 'Lütfen vergi numarasını giriniz.',
+            'vergi_no.integer' => 'Vergi numarası sadece numaralardan oluşmaslıdır!!!'
+
           ]);
         }
         if($request->fatura_tur == "bireysel"){
           $this->validate($request, [
-            'ad_soyad' => 'required',
+            'ad_soyad' => 'required|string',
             'tc_kimlik' => 'required'
+          ],[//Error Messages
+            'ad_soyad.required' => 'Lütfen kullanıcı adını ve soyadını giriniz.',
+            'ad_soyad.string' => 'Kulanıcı adı ve soyadı sadece harflerden oluşmalıdır!!!',
           ]);
         }
+
         if ($request->adres_kopyalayici == null){//Firma Adresi ile Fatura Adresi aynı değil.
+
+          //for fatura_il_id,fatura_ilce_id
+          $fatura_ilce = \App\Ilce::find($request->fatura_ilce_id);
+          $fatura_semt = \App\Semt::find($request->fatura_semt_id);
+
           $this->validate($request, [
-            'fatura_adres' => 'required|max:255',
-            'fatura_il_id' => 'required',
-            'fatura_ilce_id' => 'required',
-            'fatura_semt_id' => 'required'
+            'fatura_adres' => 'required',
+            'fatura_il_id' => 'required|integer|exists:iller,id',
+            'fatura_ilce_id' => 'required|integer|exists:ilceler,id|in:'.$faturaIlcelerString,
+            'fatura_semt_id' => 'required|integer|exists:semtler,id|in:'.$faturaSemtlerString
+          ],[//Error Messages
+
+            'fatura_adres.required' => 'Lütfen Fatura Adresi Giriniz.',
+
+            'fatura_il_id.required'=> 'Lütfen il seçiniz.',
+            'fatura_il_id.exists'=> 'Sistemimizde kayıtlı olmayan bir il seçtiniz.Lütfen tekrar deneyin',
+            'fatura_il_id.integer'=> 'İl id si integer olması gerekiyor.',
+
+            'fatura_ilce_id.required'=> 'Lütfen ilçe seçiniz.',
+            'fatura_ilce_id.exists'=> 'Sistemimizde kayıtlı olmayan bir ilçe seçtiniz.Lütfen tekrar deneyin',
+            'fatura_ilce_id.integer'=> 'İlçe id si integer olması gerekiyor.',
+            'fatura_ilce_id.in'=> 'İle e ait olamyan bir ilçe seçemezsiniz',
+
+            'fatura_semt_id.required'=> 'Lütfen semt seçiniz.',
+            'fatura_semt_id.exists'=> 'Sistemimizde kayıtlı olmayan bir semt seçtiniz.Lütfen tekrar deneyin',
+            'fatura_semt_id.integer'=> 'Semt id si integer olması gerekiyor.',
+            'fatura_semt_id.in'=> 'İlçe ye ait olamyan bir semt seçemezsiniz'
           ]);
         }
 

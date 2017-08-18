@@ -469,7 +469,7 @@
                                 data-validation = "required" data-validation-depends-on = "fatura_tur"
                                 data-validation-depends-on-value = "kurumsal" data-validation-error-msg = "Lutfen Seciniz">
                         </select>
-                          <span class="help-block" style="color:red"> {{ $errors->first('vargi_daire') }}</span>
+                          <span class="help-block" style="color:red"> {{ $errors->first('vergi_daire') }}</span>
 
                       </br>
                         <div class="form-group">
