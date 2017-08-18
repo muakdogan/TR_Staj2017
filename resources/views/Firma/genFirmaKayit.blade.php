@@ -39,20 +39,18 @@
 
    <body class="nav-md" style="background-color: #fff">
 
-    @if(count($errors) > 0)
-    <div class="row">
-      <div>
-          <ul>
-              @foreach($errors->all() as $error)
-                  <li>{{$error}}</li>
-              @endforeach
-          </ul>
-      </div>
-    </div>
-    @endif
 
-     <div>
-       <div>
+     <!-- <div>
+       @if (count($errors) > 0)
+       <div class="alert alert-danger">
+           <ul>
+               @foreach ($errors->all() as $error)
+                   <li>{{ $error }}</li>
+               @endforeach
+           </ul>
+       </div>
+       @endif
+       <div> -->
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="panel-group">
@@ -98,6 +96,8 @@
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min1',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <!-- Burayı if içine alıp birşeyler yapabilirsin -->
+                                        <span class="help-block" style="color:red"> {{ $errors->first('firma_adi') }}</span>
                         </div>
                       </div>
 
@@ -109,9 +109,10 @@
                                     <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                             @endforeach
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('sektor_id') }}</span>
                         </div>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group ">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Telefon </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           {!! Form::text('telefon', '5125119612',
@@ -121,8 +122,10 @@
                                         'data-validation'=>'length ',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                          <span class="help-block" style="color:red"> {{ $errors->first('telefon') }}</span>
                         </div>
                       </div>
+
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="il_id">İl</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
@@ -133,6 +136,7 @@
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
                             @endforeach
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('il_id') }}</span>
                         </div>
                       </div>
 
@@ -142,6 +146,7 @@
                           <select class="form-control"name="ilce_id" id="ilce_id" data-validation="required"
                                                           data-validation-error-msg="Lütfen bu alanı dolduurnuz!">
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('ilce_id') }}</span>
                         </div>
                       </div>
 
@@ -151,6 +156,7 @@
                           <select class="form-control" name="semt_id" id="semt_id"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('semt_id') }}</span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -164,6 +170,7 @@
                               'data-validation' => 'required',
                               'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
                               )) !!}
+                              <span class="help-block" style="color:red"> {{ $errors->first('firma_adres') }}</span>
                         </div>
                       </div>
 
@@ -183,6 +190,7 @@
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('adi') }}</span>
                         </div>
                       </div>
 
@@ -195,6 +203,7 @@
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('soyadi') }}</span>
                         </div>
                       </div>
 
@@ -208,6 +217,7 @@
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'LÜtfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('unvan') }}</span>
                         </div>
                       </div>
 
@@ -221,6 +231,7 @@
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'3-17',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('telefonkisisel') }}</span>
                         </div>
                       </div>
 
@@ -233,6 +244,7 @@
                                          'onFocusout'=>'email_girisControl()',
                                          'data-validation'=>'email' ,
                                          'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                           <span class="help-block" style="color:red"> {{ $errors->first('email_giris') }}</span>
                         </div>
                       </div>
 
@@ -242,6 +254,7 @@
                           <input type="password" class="form-control" placeholder="******" name="password" id="password" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
                           data-toggle="tooltip" value="123456">
+                            <span class="help-block" style="color:red"> {{ $errors->first('password') }}</span>
                         </div>
                         <span id="password_strength"></span>
                         <span id="passwordmsg"></span>
@@ -253,6 +266,7 @@
                           <input type="password" class="form-control" placeholder="******" name="password_confirmation" id="password_confirmation" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
                           data-toggle="tooltip" value="123456">
+                            <span class="help-block" style="color:red"> {{ $errors->first('password_confirmation') }}</span>
                           <span id="confirmMessage" class="confirmMessage"></span>
                         </div>
                       </div>
@@ -283,7 +297,7 @@
                               <input type="radio" name="fatura_tur" id="fatura_tur_bireysel" value="bireysel"> Bireysel
                             </label>
 
-
+                              <span class="help-block" style="color:red"> {{ $errors->first('fatura_tur') }}</span>
                           </div>
 
 
@@ -293,6 +307,7 @@
                                   <label>
                                     <input id="adres_kopyalayici" type="checkbox" name="adres_kopyalayici"> "Firma Adresi" ile "Fatura Adresi" aynı
                                   </label>
+                                    <span class="help-block" style="color:red"> {{ $errors->first('adres_kopyalayici') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -311,6 +326,7 @@
                                                 'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
                                                 )) !!}
                           <!-- TextArea is like MultiLine TextBox. -->
+                            <span class="help-block" style="color:red"> {{ $errors->first('fatura_adres') }}</span>
                         </div>
                       </div>
 
@@ -325,6 +341,7 @@
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
                             @endforeach
                           </select>
+                            <span class="help-block" style="color:red"> {{ $errors->first('fatura_il_id') }}</span>
                         </div>
                       </div>
 
@@ -334,7 +351,8 @@
                           <select class="form-control" name="fatura_ilce_id" id="fatura_ilce_id"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
                           data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
-                          </select>
+                        </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('fatura_ilce_id') }}</span>
                         </div>
                       </div>
 
@@ -345,6 +363,7 @@
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
                           data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
                           </select>
+                            <span class="help-block" style="color:red"> {{ $errors->first('fatura_semt_id') }}</span>
                         </div>
                       </div>
 
@@ -366,6 +385,7 @@
                                                   'data-validation-depends-on-value' => 'kurumsal',
                                                   'data-validation-error-msg'  => 'Lutfen bu alani doldurunuz'
                                                )) !!}
+                                                 <span class="help-block" style="color:red"> {{ $errors->first('firma_unvan') }}</span>
                             </div>
                         </div>
 
@@ -384,6 +404,7 @@
                                               'data-validation-error-msg' => 'Lutfen bu alani doldurunuz',
                                               'data-validation-error-msg-length' => 'Lutfen 10 haneli numara giriniz'
                               )) !!}
+                                <span class="help-block" style="color:red"> {{ $errors->first('vergi_no') }}</span>
                             </div>
                         </div>
                      </div>
@@ -402,6 +423,7 @@
                                              'data-validation-depends-on-value' => 'bireysel',
                                              'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
                              )) !!}
+                               <span class="help-block" style="color:red"> {{ $errors->first('ad_soyad') }}</span>
                            </div>
                        </div>
 
@@ -420,6 +442,7 @@
                                                    'data-validation-error-msg-number' => 'Lutfen sayi giriniz',
                                                    'data-validation-error-msg-length' => 'Lutfen 11 haneli sayi giriniz',
                                              )) !!}
+                                               <span class="help-block" style="color:red"> {{ $errors->first('tc_kimlik') }}</span>
                            </div>
                        </div>
                     </div>
@@ -435,6 +458,7 @@
                                  <option value="{{$il->id}}">{{$il->adi}}</option>
                           @endforeach
                         </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('vergi_daire_il') }}</span>
                       </div>
                     </div>
 
@@ -445,14 +469,16 @@
                                 data-validation = "required" data-validation-depends-on = "fatura_tur"
                                 data-validation-depends-on-value = "kurumsal" data-validation-error-msg = "Lutfen Seciniz">
                         </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('vargi_daire') }}</span>
 
                       </br>
                         <div class="form-group">
                           <div>
-                            <input type="checkbox" data-validation="required"
+                            <input name="sözlesme_checkbox" type="checkbox" data-validation="required"
                               data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız.">
                               <button class="btn btn-link btn-xs sozlesme_goster" style="vertical-align: baseline;">Kullanıcı sözleşmesini okudum ve onaylıyorum.</button>
                             </input>
+                            <span class="help-block" style="color:red"> {{ $errors->first('sözlesme_checkbox') }}</span>
                           </div>
                         </div>
 
@@ -1123,7 +1149,6 @@
       $('#telefon').mask('(000) 000-00-00');//telefon verisini tekrar maskeler
       $('#telefonkisisel').mask('(000) 000-00-00');
       formURL = $(this).attr('action');
-      console.log(postData);
 
       $.ajax(
       {
@@ -1137,7 +1162,6 @@
         success:function(data, textStatus, jqXHR)
         {
 
-          console.log(data);
           $('.ajax-loader').css("visibility", "hidden");
           if(data=="error"){
             $('#mesaj').bPopup({
@@ -1161,7 +1185,11 @@
         },
         error: function(jqXHR, textStatus, errorThrown)
         {
-          alert(textStatus + "," + errorThrown);
+          alert(postData);
+          console.log(textStatus + "," + errorThrown);
+          location.reload("<errorFieldID>");
+          // location.hash("<errorFieldID>");
+          anchorScroll();
         }
       });
       e.preventDefault(); //STOP default action

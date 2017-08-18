@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Factories\ActivationFactory;
 use App\Kullanici;
-use Validator;
 use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -13,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Response;
 
 //use Auth;
@@ -30,7 +31,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins, ValidatesRequests;
 
     /**
      * Where to redirect users after login / registration.
@@ -131,15 +132,87 @@ class AuthController extends Controller
         abort(404);
     }
 
+    protected function formatValidationErrors(Validator $validator)
+    {
+      if ($validator->fails()) {
+           return redirect('firmaKayit')
+                       ->withErrors($validator)
+                       ->withInput();
+       }
+      //  return $validator->errors()->all();
+    }
+
     public function kayitForm(Request $request)
     {
 
+        $ilce = \App\Ilce::find($request->ilce_id);
+        $semt = \App\Semt::find($request->semt_id);
+
+        // $inputs = Input::all();
         $this->validate($request, [
-          'firma_adi' => 'required|max:255',//unique:firmalar'ı bulmuyor
-          'sektor_id' => 'required'
+          'firma_adi' => 'required|unique:firmalar,adi|min:2',//unique:firmalar'ı bulmuyor
+          'sektor_id' => 'required',//???????????????????????????????????????
+          'telefon' => 'required|min:10|numeric',
+          'il_id' => 'required|integer|exists:iller,id|same:ilce->il_id',
+          'ilce_id' => 'required|integer|exists:ilceler,id|same:semt->ilce_id',
+          'semt_id' => 'required|integer|exists:semtler,id',
+          'firma_adres' => 'required',
+          'adi' => 'required',
+          'soyadi' => 'required',
+          'unvan' => 'required',
+          'telefonkisisel' => 'required',
+          'email_giris' => 'required|email',
+          'password' => 'required',
+          'password_confirmation' => 'same:password',
+          'fatura_tur' => 'required',
+          'vergi_daire_il' => 'required',
+          'vergi_daire' => 'required',
+
+        ],[//Error Messages
+          'firma_adi.required' => 'Lütfen firma adını giriniz.',
+          'firma_adi.unique' => 'Aynı isimli bir başka firma sistemimizde kayıtlıdır.',
+          'firma_adi.max' => 'Firma adı 2 karakterden az olamaz.',
+
+          'sektor_id.required' => 'En az 1 sektör seçmelisiniz.',
+
+          'telefon.required'=> 'Lütfen telefon numarası giriniz.',
+          'telefon.min'=> 'Telefon numarası 10 haneden az olamaz!!!',
+          'telefon.numeric'=> 'Telefon numarasına sayısal değerler girmelisiniz.',
+
+          'il_id.required'=> 'Lütfen il seçiniz.',
+          'il_id.exists'=> 'Sistemimizde kayıtlı olmayan bir il seçtiniz.Lütfen tekrar deneyin',
+          'il_id.integer'=> 'İl id si integer olması gerekiyor.',
+          'il_id.same'=> 'İl e ait olamyan bir ilçe seçemezsiniz',
+
+          'ilce_id.required'=> 'Lütfen ilçe seçiniz.',
+          'ilce_id.exists'=> 'Sistemimizde kayıtlı olmayan bir ilçe seçtiniz.Lütfen tekrar deneyin',
+          'ilce_id.integer'=> 'İlçe id si integer olması gerekiyor.',
+          'ilce_id.same'=> 'İlçe ye ait olamyan bir semt seçemezsiniz',
+
+
+
+
         ]);
-
-
+        if($request->fatura_tur == "kurumsal"){
+          $this->validate($request, [
+            'firma_unvan' => 'required',
+            'vergi_no' => 'required'
+          ]);
+        }
+        if($request->fatura_tur == "bireysel"){
+          $this->validate($request, [
+            'ad_soyad' => 'required',
+            'tc_kimlik' => 'required'
+          ]);
+        }
+        if ($request->adres_kopyalayici == null){//Firma Adresi ile Fatura Adresi aynı değil.
+          $this->validate($request, [
+            'fatura_adres' => 'required|max:255',
+            'fatura_il_id' => 'required',
+            'fatura_ilce_id' => 'required',
+            'fatura_semt_id' => 'required'
+          ]);
+        }
 
 
         DB::beginTransaction();
@@ -176,7 +249,7 @@ class AuthController extends Controller
                 $fatura_adres->tur_id = 2;
                 $firma->adresler()->save($fatura_adres);
             }
-            else if ($request->adres_kopyalayici == "kopyala")
+            else if ($request->adres_kopyalayici == "on")
             {
                 $fatura_adres = new \App\Adres();
                 $fatura_adres->il_id = $request->il_id;
