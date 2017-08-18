@@ -167,7 +167,7 @@ class AuthController extends Controller
                 $fatura_adres->tur_id = 2;
                 $firma->adresler()->save($fatura_adres);
             }
-            else if ($request->adres_kopyalayici == "kopyala")
+            else if ($request->adres_kopyalayici == "on")
             {
                 $fatura_adres = new \App\Adres();
                 $fatura_adres->il_id = $request->il_id;
