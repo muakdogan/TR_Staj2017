@@ -1,6 +1,6 @@
 <?php $i=0; ?>
 <!--kalem agacı -->
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js" xmlns="http://www.w3.org/1999/html"></script>
 <script src="//cdn.jsdelivr.net/jquery.ui-contextmenu/1/jquery.ui-contextmenu.min.js"></script>
 <link href="{{asset('css/skin-bootstrap/ui.fancytree.css')}}" rel="stylesheet" class="skinswitcher">
 <script src="{{asset('js/jquery.fancytree.js')}}"></script>
@@ -44,7 +44,7 @@
                                     <div class="col-sm-8">
 
                                         <input type="radio" name="firma_adi_goster" class="filled-in firma_goster  required" id="firma_adi_goster"   value="1"  data-validation-error-msg="Lütfen birini seçiniz!" ><label> Göster</label> </input>
-                                        <input type="radio" id="firma_adi_gizle"  data-toggle="tooltip" data-placement="bottom" title="İlanda firma isminin gözükmemesi satıcı firma tarafında belirsizlikler yaratabilir!"
+                                        <input type="radio" id="firma_adi_gizle"  data-toggle="tooltip" data-placement="bottom"
                                                class="filled-in test firma_goster"  name="firma_adi_goster" value="0" data-validation-error-msg="Lütfen birini seçiniz!"><label>Gizle</label> </input>
 
                                     </div>
@@ -81,7 +81,7 @@
                                     <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                     <div class="col-sm-8">
                                         <input type="text" name="ilan_tarihi_araligi"  id="ilan_tarihi_araligi"  readonly value="" class="form-control  filled-in"
-                                               data-toggle="tooltip" data-placement="bottom" title="İlan Yayinlama - Kapanma Tarihleri"/>
+                                               data-toggle="tooltip" data-placement="bottom" />
                                         <!--input class="form-control date" id="yayinlanma_tarihi"  readonly   name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text" /-->
                                     </div>
                                 </div>
@@ -101,25 +101,25 @@
                                     <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                     <div class="col-sm-8">
                                         <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class="form-control filled-in"
-                                               data-toggle="tooltip" data-placement="bottom" title="İş Başlama - Bitiş Tarihleri"/>
+                                               data-toggle="tooltip" data-placement="bottom"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teknik Şartname</label>
                                     <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
-                                    <div class="col-sm-8">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {!! Form::file('teknik',array(
-                                                   'data-toggle'=>'tooltip',
-                                                   'data-placement'=>'bottom',
-                                                   'title'=>'Yüklenebilir dosya türü:.pdf',
-                                                   'class'=>'test'))!!}
-                                                <p class="errors">{!!$errors->first('image')!!}</p>
-                                                @if(Session::has('error'))
-                                                    <p class="errors">{!! Session::get('error') !!}</p>
-                                                @endif
+                                    <div id="sartname" class="col-sm-8" style="background-color: #fcf8e3; margin-top: 2px;margin-bottom:2px;padding: 2px">
+                                        @if($ilan->teknik_sartname)
+                                            <div id="eskiSartname" class="col-sm-9"><strong>Dosya:</strong> <img width="20" height="20" src="{{asset("images/file/".$sartnameUzanti.".png")}}" /><a style="text-decoration: none;" href="{{asset("Teknik/".$ilan->teknik_sartname)}}" target="_blank"><span style="color: #27ae60;">Şartname</span></a></div>
+                                            <div id="eskiSartnameButton" class="col-sm-3"><a id="eskiSartnameSil" href="#"><span style="float: right; color: red">Sil</span></a> <a style="display: none;" id="eskiSartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a></div>
+                                        @endif
+                                        <div id="yeniSartname" class="col-sm-12">
+                                            <div class="control-group ">
+                                                <div class="controls">
+                                                    {!! Form::file('teknik',array(
+                                                    'accept'=>'application/msword, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                                    'id'=>'sartnameGozat'))!!}
+                                                </div>
                                             </div>
                                         </div>
                                         <div id="success">
@@ -149,7 +149,7 @@
                                     <div style="width: 65%"  class="col-sm-9 ezgi">
                                         <div   class="col-sm-2 "></div>
                                         <div style="padding-right:3px;padding-left:1px"  class="col-sm-10 ">
-                                            <select id='custom-headers' multiple='multiple' name="onayli_tedarikciler[]" id="onayli_tedarikciler[]" >
+                                            <select id='custom-headers' multiple='multiple' name="onayli_tedarikciler[]" id="onayli_tedarikciler[]" data-rule-multiselectOnay="true">
                                             </select>
                                         </div>
                                     </div>
@@ -161,7 +161,7 @@
                                     <div style="width: 65%" class="col-sm-9 ezgi">
                                         <div   class="col-sm-2 "></div>
                                         <div style="padding-right:3px;padding-left:1px"  class="col-sm-10 ">
-                                            <select id='belirliIstek' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" >
+                                            <select id='belirliIstek' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" data-rule-multiselectOnay="true">
                                             </select>
                                         </div>
                                     </div>
@@ -290,22 +290,20 @@
                                 </div>
                             </div>
                         </div>
-
                         <input  style="float:right"  type="button" name="next" class="next action-button" value="İleri" />
-
                     </fieldset>
                     <fieldset id="kalem">
-                        <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>KALEM BİLGİLERİ DÜZENLE</strong></h2>
+                        <h2 style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>KALEM BİLGİLERİ DÜZENLE</strong></h2>
 
                         @if($ilan->ilan_turu==1)
-                            @include('Firma.ilanDuzenle.Mal.KalemMal')
+                            @include('Firma.ilanDuzenle.KalemMal')
                         @elseif($ilan->ilan_turu==2)
-                            @include('Firma.ilanDuzenle.Hizmet.KalemHizmet')
+                            @include('Firma.ilanDuzenle.KalemHizmet')
                         @else
-                            @include('Firma.ilanDuzenle.Yapim.KalemYapim')
+                            @include('Firma.ilanDuzenle.KalemYapim')
                         @endif
 
-                        @include('Firma.ilanDuzenle.Goturu.KalemGoturu')
+                        @include('Firma.ilanDuzenle.KalemGoturu')
 
                         {!! Form::submit('Gönder', array('id'=>'onayButton','style'=>'width:140px;float:right;font-size: 14px','class'=>'action-button')) !!}
                         <input style="float:right" type="button" name="previous" class="previous action-button" value="Geri" />
@@ -330,29 +328,7 @@
     // updated ve deleted arrayleri include edilen kalem sayfalarinda push edilir!
     var updated_array = []; var deleted_array = [];
 
-    var findName;
-    $(".next2").click(function(){
-        $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$( "input[type='radio']:checked").next('label:first').html+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">İlan Sektörü: '+$( "#firma_sektor option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">İlan Yayın-Kapanma Tarihi: '+$( "#ilan_tarihi_araligi option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">İş Süresi: '+$( "#isin_suresi option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">İş Başlama-Bitiş Tarihi: '+$( "#is_tarihi_araligi option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Teknik Şartname: '+$( "#teknik" ).val()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Katılımcılar: '+$( "#katilimcilar option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Rekabet Şekli: '+$( "#rekabet_sekli option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Sözleşme Türü: '+$( "#sozlesme_turu option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Fiyatlandırma Şekli: '+$( "#kismi_fiyat option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Yaklaşık Maliyet: '+$( "#yaklasik_maliyet option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Ödeme Türü: '+$("#odeme_turu option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Para Birimi: '+$("#para_birimi option:selected" ).text()+'</li');
-        $(".info-box").append('<li style="list-style-type:circle">Teslim Yeri: '+$( "#teslim_yeri option:selected" ).text()+'</li');
-    });
-
-    var firmaCount = 0;
     var sektor = {{$ilan->ilan_sektor}};
-    var multiselectCount=0;
     var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
 
     $( ".box" ).click(function() {
@@ -361,7 +337,9 @@
         });
     });
 
+    var sartnameSilindiMi="0";
     $(document).ready(function(){
+
         $('[data-toggle="tooltip"]').tooltip();
         $('#onayli_tedarikciler').hide();
         $('#belirli-istekliler').hide();
@@ -373,13 +351,25 @@
         });
         jQuery.validator.methods["date"] = function (value, element) { return true; } ;
 
+        jQuery.validator.addMethod("multiselectOnay", function(value, element) {
+            return $($('#'+$(element).attr('id')+' :selected')).length>0;
+        }, 'En az bir tane firma seçmelisiniz!!');
 
         //FORM SUBMIT
-
         //Ilan guncelle buton
         $("#onayButton").unbind().click(function(e){
-            var postData = $("#msform").serialize();
-            postData= postData+ '&' + $.param({ 'updatedArray': JSON.stringify(updated_array),'deletedArray': JSON.stringify(deleted_array) });
+
+            for ( instance in CKEDITOR.instances )
+                CKEDITOR.instances[instance].updateElement();
+            var postData = new FormData($("#msform")[0]);
+            /*alert(formData);
+            var postData = $("#msform").serialize();*/
+            //postData= postData+ '&' + $.param({ 'updatedArray': JSON.stringify(updated_array),'deletedArray': JSON.stringify(deleted_array), 'sartnameSilindiMi': sartnameSilindiMi});
+
+            postData.append('updatedArray',JSON.stringify(updated_array));
+            postData.append('deletedArray',JSON.stringify(deleted_array));
+            postData.append('sartnameSilindiMi',sartnameSilindiMi);
+
             var formURL = $("#msform").attr('action');
             $.ajax(
                 {
@@ -388,13 +378,16 @@
                     },
                     url : formURL,
                     type: "POST",
+                    contentType: false,
+                    processData: false,
                     data : postData,
                     success:function(data, textStatus, jqXHR)
                     {
-
+                        alert("success");
+                        /*
                         setTimeout(function(){
-                            window.location = "{{asset('teklifGor')}}/{{$firma->id}}/{{$ilan->id}}}";
-                        }, 50);
+                            window.location = "{{asset('teklifGor')}}/{{$firma->id}}/{{$ilan->id}}";
+                        }, 50);*/
                         e.preventDefault();
                     },
                     error: function(jqXHR, textStatus, errorThrown)
@@ -407,16 +400,38 @@
         });
     });
 
+    $("#eskiSartnameSil").click(function(){
+        sartnameSilindiMi="1";
+        $(this).hide();
+        $("#eskiSartnameVazgec").show();
+        $("#eskiSartname").html('<strong>Dosya:</strong> <img width="20" height="20" src="{{asset("images/file/".$sartnameUzanti.".png")}}" /><a style="text-decoration: none;" href="{{asset("Teknik/".$ilan->teknik_sartname)}}" target="_blank"><span style="color: red; text-decoration: line-through;">Şartname</span></a>');
+    });
+
+    $("#eskiSartnameVazgec").click(function(){
+        sartnameSilindiMi="0";
+        $(this).hide();
+        $("#eskiSartnameSil").show();
+        $("#eskiSartname").html('<strong>Dosya:</strong> <img width="20" height="20" src="{{asset("images/file/".$sartnameUzanti.".png")}}" /><a style="text-decoration: none;" href="{{asset("Teknik/".$ilan->teknik_sartname)}}" target="_blank"><span style="color: #27ae60;">Şartname</a>');
+        $("#sartnameGozat").val('');
+    });
+
+    $("#sartnameGozat").change(function (){
+        sartnameSilindiMi="1";
+        $("#eskiSartnameSil").hide();
+        $("#eskiSartnameVazgec").show();
+        $("#eskiSartname").html('<strong>Dosya:</strong> <img width="20" height="20" src="{{asset("images/file/".$sartnameUzanti.".png")}}" /><a style="text-decoration: none;" href="{{asset("Teknik/".$ilan->teknik_sartname)}}" target="_blank"><span style="color: red; text-decoration: line-through;">Şartname</span></a>');
+    });
+
     var ilan_turu = "{{$ilan->ilan_turu}}";
     var sozlesme_turu = "{{$ilan->sozlesme_turu}}";
 
     $('#sozlesme_turu').on('change', function (e) {
         sozlesme_turu = e.target.value;
-        if(sozlesme_turu=="1") {
+        if(sozlesme_turu=="1"){
+            $("#kismi_fiyat").val('');
             $('.fiyatlandirma').hide();
-
         }
-        else if(sozlesme_turu=="0") {
+        else if(sozlesme_turu=="0"){
             $('.fiyatlandirma').show();
         }
     });
@@ -427,7 +442,6 @@
     var animating; //flag to prevent quick multi-click glitches
 
     $(".next").click(function(){
-
         if(ilan_turu=="1" && sozlesme_turu=="0") {
             $('#mal').show();
             $('#hizmet').hide();
@@ -472,7 +486,6 @@
                     required: true
                 },
             },
-
         });
         if (form.valid() === true){
             if ($('#ilan').is(":visible")){
@@ -563,16 +576,10 @@
                 });
         },
         afterSelect: function(values){
-            firmaCount++;
-            if( firmaCount>2){
-                $('#custom-headers').multiSelect('deselect', values);
-            }
-
             this.qs1.cache();
             this.qs2.cache();
         },
         afterDeselect: function(){
-            firmaCount--;
             this.qs1.cache();
             this.qs2.cache();
         }
@@ -587,7 +594,6 @@
                 $selectionSearch = that.$selectionUl.prev(),
                 selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
                 selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
-
             that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
                 .on('keydown', function(e){
                     if (e.which === 40){
@@ -595,7 +601,6 @@
                         return false;
                     }
                 });
-
             that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
                 .on('keydown', function(e){
                     if (e.which == 40){
@@ -605,106 +610,138 @@
                 });
         },
         afterSelect: function(values){
-            firmaCount++;
-            if( firmaCount>2){
-                $('#custom-headers').multiSelect('deselect', values);
-            }
-
             this.qs1.cache();
             this.qs2.cache();
         },
         afterDeselect: function(){
-            firmaCount--;
             this.qs1.cache();
             this.qs2.cache();
         }
     });
 
-    var multiselectCount=0;
     var option;
 
-    function funcOnayliTedarikciler(){
+    function editOnayliTedarikciler(){
+        $("#belirliIstek option").remove();
+        $('#belirliIstek').multiSelect('refresh');
+        $("#custom-headers option").remove();
+        $('#custom-headers').multiSelect('refresh');
         $.ajax({
             type:"GET",
             url: "{{asset('onayli')}}",
-            data:{sektorOnayli:sektor },
+            data:{
+                sektorOnayli:sektor,
+                ilanID:{{$ilan->id}},
+                mod:'duzenle'},
+            cache: false,
+            success: function(data){
+
+                for(var key=0; key <Object.keys(data.tumFirmalar).length;key++) {
+                    $('#custom-headers').multiSelect('addOption', { value: data.tumFirmalar[key].id, text: data.tumFirmalar[key].adi, index:key});
+                }
+                for(var key=0; key <Object.keys(data.secilmisFirmalar).length;key++){
+                    $('#custom-headers').multiSelect('select', (data.secilmisFirmalar[key].id));
+                }
+
+                console.log(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus); alert("Error: " + errorThrown);
+            }
+        });
+    }
+
+    function getOnayliTedarikciler(){
+        $.ajax({
+            type:"GET",
+            url: "{{asset('onayli')}}",
+            data:{
+                sektorOnayli:sektor
+            },
+            cache: false,
+            success: function(data){
+                $("#belirliIstek option").remove();
+                $('#belirliIstek').multiSelect('refresh');
+                $("#custom-headers option").remove();
+                $('#custom-headers').multiSelect('refresh');
+
+                for(var key=0; key <Object.keys(data.tumFirmalar).length;key++) {
+                    $('#custom-headers').multiSelect('addOption', { value: data.tumFirmalar[key].id, text: data.tumFirmalar[key].adi, index:key});
+                }
+                for(var key=0; key <Object.keys(data.onayliTedarikciler).length;key++){
+                    $('#custom-headers').multiSelect('select', (data.onayliTedarikciler[key].id));
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus); alert("Error: " + errorThrown);
+            }
+        });
+    }
+
+    function editBelirliIstekliler(){
+        $.ajax({
+            type:"GET",
+            url: "{{asset('belirli')}}",
+            data:{
+                sektorOnayli:sektor,
+                ilanID:{{$ilan->id}},
+                mod:'duzenle'
+                },
             cache: false,
             success: function(data){
                 $("#custom-headers option").remove();
                 $('#custom-headers').multiSelect('refresh');
-                /*for(var c=0; c<multiselectCount; c++){
-                 $("#"+(c+48)+"-selectable").remove();
-                 }*/
-                for(var key=0; key <Object.keys(data).length;key++)
-                {
-                    // multiselectCount++;
-                    $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key}).multiSelect('select_all');
+                $("#belirliIstek option").remove();
+                $('#belirliIstek').multiSelect('refresh');
+
+                for(var key=0; key <Object.keys(data.tumFirmalar).length;key++) {
+                    $('#belirliIstek').multiSelect('addOption', { value: data.tumFirmalar[key].id, text: data.tumFirmalar[key].adi, index:key});
+                }
+                for(var key=0; key <Object.keys(data.secilmisFirmalar).length;key++){
+                    $('#belirliIstek').multiSelect('select', (data.secilmisFirmalar[key].id));
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                alert("Status: " + textStatus+" Error: " + errorThrown);
             }
         });
     }
 
-
-    function funcBelirliIstekliler(){
+    function getBelirliIstekliler(){
         $.ajax({
             type:"GET",
             url: "{{asset('belirli')}}",
-            data:{sektorOnayli:sektor},
-            cache: false,
-            success: function(data){
-                $("#belirliIstek option").remove();
-                /*for(var c=0; c<multiselectCount; c++){
-                 $("#"+(c+48)+"-selectable").remove();
-                 }*/
-                for(var key=0; key <Object.keys(data).length;key++)
-                {
-                    //multiselectCount++;
-                    $('#belirliIstek').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
-                }
+            data:{
+                sektorOnayli:sektor
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus); alert("Error: " + errorThrown);
-            }
-        });
-    }
-
-    //BAKILACAK
-    function funcTumFirmalar(){
-        $.ajax({
-            type:"GET",
-            url: "{{asset('tumFirmalar')}}",
-            data:{sektorTumFirma:sektor },
             cache: false,
             success: function(data){
                 $("#custom-headers option").remove();
+                $('#custom-headers').multiSelect('refresh');
+                $("#belirliIstek option").remove();
+                $('#belirliIstek').multiSelect('refresh');
 
-                for(var key=0; key <Object.keys(data).length;key++)
-                {
-                    $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
+                for(var key=0; key <Object.keys(data).length;key++) {
+                    $('#belirliIstek').multiSelect('addOption', { value: data[key].id, text: data[key].adi, index:key});
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                alert("Status: " + textStatus+" Error: " + errorThrown);
             }
         });
     }
-
 
     $("#katilimcilar").change(function(){
         option = $('option:selected', this).attr('value');
         if(option==="1"){
             $('#custom-headers').multiSelect('deselect_all');
-            funcOnayliTedarikciler();
-            funcTumFirmalar();
+            getOnayliTedarikciler();
             $('#onayli_tedarikciler').show();
             $('#belirli-istekliler').hide();
         }
         else if (option==="2"){
             $('#belirliIstek').multiSelect('deselect_all');
-            funcBelirliIstekliler();
+            getBelirliIstekliler();
             $('#belirli-istekliler').show();
             $('#onayli_tedarikciler').hide();
         }
@@ -740,7 +777,15 @@
     var kalem_num;
     var i="{{$i}}";
     $("#kalem_ekle").click(function(){
-        if(ilan_turu=="1" &&sozlesme_turu=="0") {
+        if(sozlesme_turu=="1" && $("#goturu_kalem0").length==0){
+            $("#goturu_table").append(['<tr>','<td>1</td>',
+                '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem0" name="goturu_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
+                '<td><textarea  rows="1" id="goturu_aciklama" name="goturu_aciklama" rows="5" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+                '<td><input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
+                '<td><select class="form-control required" name="goturu_miktar_birim_id" id="goturu_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
+                '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id"  id="goturu_id0" value=""><input class="inp_kalem_id_goturu" name="kalem_id_goturu" type="hidden" value="-1"/></td>','</tr>'].join(''));
+        }
+        else if(ilan_turu=="1" &&sozlesme_turu=="0") {
             $("#mal_table").append(['<tr>','<td>'+(parseInt(kalem_num)+1)+'</td>','<td> <input type="text"  style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px"class="form-control mal_show  required" id="mal_kalem'+kalem_num+'" name="mal_kalem[]" placeholder="Kalem Ekle" readonly value="" > </td>',
                 '<td><input type="text" class="form-control required " id="mal_marka" name="mal_marka[]" placeholder="Marka" value="" ></td>',
                 ' <td><input type="text" class="form-control required " id="mal_model" name="mal_model[]" placeholder="Model" value="" ></td>',
@@ -794,16 +839,6 @@
         }
         $(this).parents('tr').first().remove();
     });
-    //goturu kalem silme
-    $('#goturu_table').on('click', '.btn_kalem_sil', function(e) {
-        e.preventDefault();
-        var index=$(this).index(".btn_kalem_sil");
-        var kalem_id = $('.inp_kalem_id').eq(index).val();
-        if(kalem_id!=-1){
-            deleted_array.push(kalem_id);
-        }
-        $(this).parents('tr').first().remove();
-    });
 
     //yapim kalem silme
     $('#yapim_table').on('click', '.btn_kalem_sil', function(e) {
@@ -816,8 +851,7 @@
         $(this).parents('tr').first().remove();
     });
 
-
-    //kalem tree modaliını açma.
+    //kalem tree modalını açma
     $('#mal_table').on('click', '.mal_show', function(event) {
         kalemAgaci();
         var input_id=event.target.id;
@@ -844,7 +878,6 @@
         $(".m_kalemAgaci #input_yapim_id").val(input_id);
         $('.m_kalemAgaci').modal('show');
     });
-
 
     function getSektor(mal_turu) {
         if (mal_turu > 0) {
@@ -879,8 +912,6 @@
             $("#firma_sektor").get(0).options.length = 0;
         }
     }
-
-
 </script>
 <script type="text/javascript"> //kalemAgacı scriptleri
     glyph_opts = {
@@ -934,10 +965,8 @@
             lazyLoad: function(event, data){
                 var node = data.node;
 
-
                 data.result = {
                     url: "{{asset('findChildrenTree')}}"+"/"+sektor,
-
                     debugDelay: 1000,
                     data: {id: node.key},
                     dataType:'json',
@@ -995,6 +1024,7 @@
             $("input[name=search]").keyup();
         });
     }
+
     $("#tamamBtn").click(function(){
         if(ilan_turu==1 &&sozlesme_turu==0)
         {
@@ -1054,7 +1084,6 @@
             });
         }
     });
-
 
     $(function() {
         var kapanma_tarihi  = new Date("{{$ilan->kapanma_tarihi}}");
@@ -1135,5 +1164,78 @@
             startDate: is_baslama_tarihi,
             endDate: is_bitis_tarihi
         });
+        //$('#btn-save-ilanBilgileri').val("add");
+        $('#myModal-ilanBilgileri').modal('show');
+        populateDD();
+
+
     });
+    function populateDD() {
+        var teslim_yeri = '{{$ilan->teslim_yeri_satici_firma}}';
+        if (teslim_yeri == 'Satıcı Firma') {
+            $(".teslim_il").hide();
+            $(".teslim_ilce").hide();
+        }
+        else {
+            GetIlce({{$ilan->teslim_yeri_il_id}});
+            $("#il_id").val({{$ilan->teslim_yeri_il_id}});
+            if ("{{$ilan->teslim_yeri_ilce_id}}" !== "") {
+                $("#ilce_id").val({{$ilan->teslim_yeri_ilce_id}});
+            }
+        }
+
+        CKEDITOR.on( 'loaded', function( evt ) {
+            CKEDITOR.config.autoParagraph = false;
+            CKEDITOR.instances.aciklama.setData("{{$ilan->aciklama}}");
+        });
+
+        $("#ilan_adi").val("{{$ilan->adi}}");
+        $("#odeme_turu").val({{$ilan->odeme_turu_id}});
+        $("#para_birimi").val({{$ilan->para_birimi_id}});
+
+        //katılımcılar doldurulur
+        $("#katilimcilar").val({{$ilan->katilimcilar}});
+        option = $('option:selected', $("#katilimcilar")).attr('value');
+        if(option==="1"){
+            editOnayliTedarikciler();
+            $('#onayli_tedarikciler').show();
+            $('#belirli-istekliler').hide();
+        }
+        else if (option==="2"){
+            editBelirliIstekliler();
+            $('#belirli-istekliler').show();
+            $('#onayli_tedarikciler').hide();
+        }
+        else {
+            $('#onayli_tedarikciler').hide();
+            $('#belirli-istekliler').hide();
+        }
+
+        $("#sozlesme_turu").val({{$ilan->sozlesme_turu}});
+        if($("#sozlesme_turu").val()==0){
+            $("#kismi_fiyat").val({{$ilan->kismi_fiyat}});
+        }
+        else{
+            $(".fiyatlandirma").hide();
+        }
+
+        $("#firma_sektor").val({{$ilan->ilan_sektor}});
+        $("#firma_sektor_label").val("{{$ilan_sektor->adi}}");
+        if({{$ilan->goster}}){
+            $("#firma_adi_goster").attr('checked', true);
+        }
+        else{
+            $("#firma_adi_gizle").attr('checked', true);
+        }
+        $("#ilan_turu").val({{$ilan->ilan_turu}});
+        $("#rekabet_sekli").val({{$ilan->rekabet_sekli}});
+        $("#yaklasik_maliyet").val({{$ilan->komisyon_miktari}});
+        if ("{{$ilan->teslim_yeri_satici_firma}}" !== "") {
+            $("#teslim_yeri").val("{{$ilan->teslim_yeri_satici_firma}}");
+        }
+        if ("{{$ilan->isin_suresi}}" !== "") {
+            $("#isin_suresi").val("{{$ilan->isin_suresi}}");
+        }
+    }
+
 </script>

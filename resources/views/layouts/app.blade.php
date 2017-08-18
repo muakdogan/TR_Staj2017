@@ -18,7 +18,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
-    <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
     <script src="{{asset('js/kullaniciIslemleri.js')}}"></script>
 
     @yield('head') <!-- ic sayfalardan head bolumune kod eklenmek istenirse -->
@@ -44,7 +43,7 @@
     body.sticky div#header{
       position: fixed;
       top: 0;
-      left: 50
+      left: 50;
       box-shadow: 0 5px 10px rgba(0,0,0,0.3);
     }
     .yazi{
@@ -128,7 +127,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
                 <ul class="nav navbar-nav" style="float:right">
 
-                    @if (Auth::guest())
+                    @if (!session()->get('firma_adi'))
 
                     <li>
                         <a href="{{ url('/firmaKayit') }}">ÜYE OL</a>
@@ -150,9 +149,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
                             <ul class="dropdown-menu">
                                 <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
                                     <?php
-                                        $kullanici = App\Kullanici::find(Auth::user()->id);//onaylanmamış firmaların kullanıcı adı altında görünebilmesi için
+                                        $kullanici = Auth::user();//onaylanmamış firmaların kullanıcı adı altında görünebilmesi için
                                         //$kullaniciF=$kullanici->firmalar()->where('onay',1)->get();
-                                        $kullaniciF=$kullanici->firmalar()->get();
+                                        $kullaniciF= $kullanici->firmalar()->get();
                                     ?>
                                     @if(count($kullaniciF) != 0)
                                         @foreach($kullaniciF as $kullanicifirma)
