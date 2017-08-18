@@ -144,7 +144,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                               $firmaId = session()->get('firma_id');
                             ?>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">
-                               {{ session()->get('kullanici_adi') }}/ {{$firmaAdi}}<span class="caret"></span>
+                               {{ session()->get('kullanici_adi') }} / {{$firmaAdi}}<span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown yazi" style="display:block;padding: 3px 20px">Firma İşlemleri</li>
@@ -160,8 +160,8 @@ window.requestAnimationFrame = window.requestAnimationFrame
                                             </ul>
                                         @endforeach
                                     @endif
-                                <li><a href="{{url('yeniFirmaKaydet/'.$kullanici->id)}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
-                                <li><a href="{{ URL::to('kullaniciBilgileri', array($firmaId), false)}}" class="yazi">Bilgilerim</a></li>
+                                <li><a href="{{url('yeniFirmaKaydet/')}}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yeni Firma Ekle</a></li>
+                                <li><a href="{{ URL::to('kullaniciBilgileri', false)}}" class="yazi">Bilgilerim</a></li>
                                 <li><a href="" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Yardım</a></li>
                                 <li><a href="{{ url('/sessionKill') }}" class="yazi"><i class="fa fa-btn fa-sign-out"></i>Çıkış</a></li>
                             </ul>

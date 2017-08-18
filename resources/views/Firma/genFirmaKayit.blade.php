@@ -35,6 +35,10 @@
       <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
   @endsection
 
+  @section('bodyAttributes')
+    style="background-color: #fff;"
+  @endsection
+
   @section('content')
      <div>
        <div>

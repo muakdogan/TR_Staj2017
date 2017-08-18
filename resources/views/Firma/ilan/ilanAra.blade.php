@@ -293,7 +293,7 @@
                                             <p id="popIlanAdi"><img src="{{asset('images/ok.png')}}"><strong>İlan Adı :</strong> {{$davetEdildigimIlan->ilanlar->adi}}</p>
                                             <p id="popIlanTuru"><img src="{{asset('images/ok.png')}}"><strong>İlan Türü :</strong> {{$davetEdildigimIlan->ilanlar->getIlanTuru()}}</p>
                                             <p id="popIlanUsulu"><img src="{{asset('images/ok.png')}}"><strong>Usulü : </strong>{{$davetEdildigimIlan->ilanlar->getRekabet()}}</p>
-                                            <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$davetEdildigimIlan->ilanlar->getIlanSektorAdi($davetEdildigimIlan->ilanlar->ilan_sektor)}}</p>
+                                            <p id="popIlanSektoru"><img src="{{asset('images/ok.png')}}"><strong>İlan Sektörü :</strong>{{$davetEdildigimIlan->ilanlar->sektorler->adi}}</p>
                                             <p id="popIlanAciklama"><img src="{{asset('images/ok.png')}}"><strong>Açıklama : </strong>{{$davetEdildigimIlan->ilanlar->aciklama}}</p>
                                             <p id="popIlanIsinSuresi"><img src="{{asset('images/ok.png')}}"><strong>İşin Süresi:</strong> {{$davetEdildigimIlan->ilanlar->isin_suresi}}</p>
                                             <p id="popIlanSözlesmeTuru"><img src="{{asset('images/ok.png')}}"><strong>Sözleşme Türü : </strong>{{$davetEdildigimIlan->ilanlar->getSozlesmeTuru()}}</p>                                  
@@ -302,7 +302,7 @@
                                     <div class="col-sm-10">
                                         <p><b>İlan Adı: {{$davetEdildigimIlan->ilanlar->adi}}</b></p>
                                         @if($davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->ilanlar->firma_id)> 0)
-                                            <div class="puanlama">{{$davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->firmaid)}}</div>
+                                            <div class="puanlama">{{$davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->firma_id)}}</div>
                                             <p><a href="{{url('firmaDetay/'.$davetEdildigimIlan->ilanlar->firmalar->id)}}" >Firma: {{$davetEdildigimIlan->ilanlar->firmalar->adi}}</a></p>
                                         @else
                                             <p><a href="{{url('firmaDetay/'.$davetEdildigimIlan->ilanlar->firmalar->id)}}" style="padding: 0px" >Firma: {{$davetEdildigimIlan->ilanlar->firmalar->adi}}</a></p>

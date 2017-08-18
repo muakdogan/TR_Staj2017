@@ -37,7 +37,7 @@ use Illuminate\Support\Str;
 class IlanController extends Controller
 {
     public function __construct(){
-        $this->middleware('firmaYetkili');
+        $this->middleware('firmaYetkili', ['except' => ['showIlan']]);
         $this->middleware('auth',['only'=>['teklifGor']]);
     }
 
@@ -126,32 +126,46 @@ class IlanController extends Controller
     }
 
     public function showIlan(){
+
+        $firma_id = session()->get('firma_id');
+
         $dt = Carbon::now();
         $dt->toDateString();  
         $iller = Il::all();
-        $firma=  Firma::all();
-        $sektorler= Sektor::all();
+
+        $ilanlar =  Ilan::with([
+            'firmalar.sektorler',
+            'firmalar.adresler' => function($query)
+                { $query->where('adresler.tur_id', 1);},
+            'firmalar.adresler.iller',
+            'firmalar.adresler.adres_turleri'])
+            ->where('ilanlar.yayin_tarihi', '<=', date_create(NULL))
+            ->where('ilanlar.kapanma_tarihi', '>=', date_create(NULL));
+        
+        $sektorler= Sektor::all();//tüm sektörlerin görünebilmesi için ayrı olarak sorgulanıyor
+        $firma = Firma::find($firma_id);
         $odeme_turleri= OdemeTuru::all();
         $teklifler= \App\Teklif::all();
-        if(session()->get('firma_id') == null){ 
+
+        $misafir = !$firma || $firma->onay == 0;
+
+        if($misafir){ 
             $sektor_id = 0;
             $davetEdildigimIlanlar = null;
         }else{
-            $fId = session()->get('firma_id');
-            $firmaSektor = Firma::find($fId);
-            foreach($firmaSektor->sektorler as $sektor){
+            foreach($firma->sektorler as $sektor){
                         $sektor_id = $sektor->id;
             }
-            $davetEdildigimIlanlar = BelirlIstekli::where('firma_id',$fId)->get();
+            $davetEdildigimIlanlar = BelirlIstekli::where('firma_id',$firma_id)->get();
         }
-        $ilanlar = Ilan::join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
+        /*$ilanlar = Ilan::join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
                 ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
                 ->where('adresler.tur_id', '=' , 1)
                 ->where('ilanlar.yayin_tarihi', '<=' , $dt->today())
                 ->where('ilanlar.kapanma_tarihi', '>=' , $dt->today())
                 ->orderBy('ilanlar.yayin_tarihi', 'DESC')
-                ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); 
+                ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); */
         $ilId = Input::get('ilAdi');
         $keyword = Input::get('keyword');
         $il_id = Input::get('il');
@@ -167,7 +181,6 @@ class IlanController extends Controller
         
         if($input != NULL){
             if($radSearch == "tum"){
-                $sektorler = Sektor::all();
                 foreach ($sektorler as $sektor){
                     if($sektor->adi == $input){
                         $sektor_id = $sektor->id;
@@ -242,16 +255,17 @@ class IlanController extends Controller
             $ilanlar->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
 
-        $ilanlar=$ilanlar->paginate(5);
+        $ilanlar=$ilanlar->orderBy('yayin_tarihi', 'DESC')->paginate(5);
         
         if (Req::ajax()) {
-            return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar))->render());
+            return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar, 'misafir' => $misafir))->render());
         }
 
         return View::make('Firma.ilan.ilanAra')-> with('ilanlar',$ilanlar)
                 ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('firma',$firma)->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)->with('davetEdildigimIlanlar',$davetEdildigimIlanlar);
+                ->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
+                ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)->with('davetEdildigimIlanlar',$davetEdildigimIlanlar)
+                ->with('misafir', $misafir);
     }
 
     public function ilanOlustur($firma_id){
@@ -1007,9 +1021,9 @@ class IlanController extends Controller
 
     }
 
-    public function davetEdildigimIlanlar ($firma_id)
+    public function davetEdildigimIlanlar ()
     {
-        $firma=Firma::find($firma_id);
+        $firma=Firma::find(session()->get('firma_id'));
         return view('Firma.ilan.davetEdildigimIlanlar')->with('firma', $firma);
     }
 

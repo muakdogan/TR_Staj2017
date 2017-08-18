@@ -45,8 +45,8 @@ class FirmaController extends Controller
 
     }
 
-     public function showFirma($id){
-        $firma = Firma::find($id);
+     public function showFirma(){
+        $firma = Firma::find(session()->get('firma_id'));
         if (Gate::denies('show', $firma)) {
               redirect()->intended($this->redirectPath());
         }
@@ -110,6 +110,16 @@ class FirmaController extends Controller
                 ->with('firmaReferanslar',$firmaReferanslar)->with('referans',$referans)->with('brosur',$brosur)
                 ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan);
     }
+
+    public function uyelikBilgileri()
+    {
+        $firma = Firma::where('id', session()->get('firma_id'))->with([
+            'odemeler'
+        ])->first();
+
+        return view('Firma.uyelikBilgileri', ['firma' => $firma]);
+    }
+
     public function showFirmalar(){
         Debugbar::info("girdi");
         $iller = Il::all();

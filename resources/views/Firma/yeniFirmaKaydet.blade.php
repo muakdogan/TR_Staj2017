@@ -295,7 +295,7 @@ $("#yeni_kayit").submit(function(e)
                             transitionClose: 'slideBack',
                             autoClose: 5000 
                         });
-                        setTimeout(function(){ location.href="{{asset('yeniFirmaKaydet')}}"+"/"+kullaniciId}, 5000);
+                        setTimeout(function(){ location.href="{{asset('yeniFirmaKaydet')}}"}, 5000);
                     }
                     else{
                         $('#kayit_msg').bPopup({
