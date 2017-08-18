@@ -42,17 +42,17 @@ class IlanController extends Controller
         $dt->toDateString();  
         $iller = Il::all();
 
-        $ilanlar =  Ilan::with([
-            'firmalar.sektorler',
+        $ilanlar =  Ilan::where('goster', 1)->with([
+            'sektorler',
             'firmalar.adresler' => function($query)
                 { $query->where('adresler.tur_id', 1);},
             'firmalar.adresler.iller',
             'firmalar.adresler.adres_turleri'])
             ->where('ilanlar.yayin_tarihi', '<=', date_create(NULL))
             ->where('ilanlar.kapanma_tarihi', '>=', date_create(NULL));
-        
+
         $sektorler= Sektor::all();//tüm sektörlerin görünebilmesi için ayrı olarak sorgulanıyor
-        $firma = Firma::find($firma_id);
+        $firma = Firma::with('sektorler')->find($firma_id);
         $odeme_turleri= OdemeTuru::all();
         $teklifler= \App\Teklif::all();
 
@@ -131,12 +131,12 @@ class IlanController extends Controller
                 }
             }
             Debugbar::info($keyword);
-            /*$ilanlar->where(function ($query) use ($sektor_id,$keyword) {
+            $ilanlar->where(function ($query) use ($sektor_id,$keyword) {
                         Debugbar::info("girdi keyword");
                         $query->where('ilanlar.adi' ,$keyword )
                                 ->orWhere('firmalar.adi',$keyword )
                                 ->orWhere('ilanlar.ilan_sektor',$sektor_id);
-                        });*/
+                        });
              
         }
         if($il_id != NULL)
@@ -165,7 +165,6 @@ class IlanController extends Controller
             $ilanlar->whereIn('ilanlar.odeme_turu_id',$odeme);
         }
       
-        
         $ilanlar=$ilanlar->orderBy('yayin_tarihi', 'DESC')->paginate(5);
         
         if (Request::ajax()) {
