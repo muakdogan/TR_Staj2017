@@ -13,7 +13,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="{{asset('js/ilan/ajax-crud-firmabilgilerim.js')}}"></script>
         <script src="//cdn.ckeditor.com/4.5.10/basic/ckeditor.js"></script>
         <link href="{{asset('css/multi-select.css')}}" media="screen" rel="stylesheet" type="text/css"></link>
         <link rel="stylesheet" type="text/css" href="{{asset('css/firmaProfil.css')}}"/>
@@ -800,26 +799,31 @@
     
 <script charset="utf-8">
 
+    $('#btn-add-ilanBilgileri').click(function () {
+        $('#btn-save-ilanBilgileri').val("add");
+        $('#myModal-ilanBilgileri').modal('show');
+    });
+
 var findName;
 
 $(".next2").click(function(){
     alert($( "input[type='radio']:checked").text());
-    $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$( "input[type='radio']:checked").next('label:first').html+'</li'); 
-    $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li'); 
-    $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li');
-    $(".info-box").append('<li style="list-style-type:circle">İlan Sektörü: '+$( "#firma_sektor option:selected" ).text()+'</li');
-    $(".info-box").append('<li style="list-style-type:circle">İlan Yayın-Kapanma Tarihi: '+$( "#ilan_tarihi_araligi option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">İş Süresi: '+$( "#isin_suresi option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">İş Başlama-Bitiş Tarihi: '+$( "#is_tarihi_araligi option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Teknik Şartname: '+$( "#teknik" ).val()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Katılımcılar: '+$( "#katilimcilar option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Rekabet Şekli: '+$( "#rekabet_sekli option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Sözleşme Türü: '+$( "#sozlesme_turu option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Fiyatlandırma Şekli: '+$( "#kismi_fiyat option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Yaklaşık Maliyet: '+$( "#yaklasik_maliyet option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Ödeme Türü: '+$("#odeme_turu option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Para Birimi: '+$("#para_birimi option:selected" ).text()+'</li');
-     $(".info-box").append('<li style="list-style-type:circle">Teslim Yeri: '+$( "#teslim_yeri option:selected" ).text()+'</li');
+    $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$( "input[type='radio']:checked").next('label:first').html+'</li>');
+    $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li>');
+    $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li>');
+    $(".info-box").append('<li style="list-style-type:circle">İlan Sektörü: '+$( "#firma_sektor option:selected" ).text()+'</li>');
+    $(".info-box").append('<li style="list-style-type:circle">İlan Yayın-Kapanma Tarihi: '+$( "#ilan_tarihi_araligi option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">İş Süresi: '+$( "#isin_suresi option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">İş Başlama-Bitiş Tarihi: '+$( "#is_tarihi_araligi option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Teknik Şartname: '+$( "#teknik" ).val()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Katılımcılar: '+$( "#katilimcilar option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Rekabet Şekli: '+$( "#rekabet_sekli option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Sözleşme Türü: '+$( "#sozlesme_turu option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Fiyatlandırma Şekli: '+$( "#kismi_fiyat option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Yaklaşık Maliyet: '+$( "#yaklasik_maliyet option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Ödeme Türü: '+$("#odeme_turu option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Para Birimi: '+$("#para_birimi option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Teslim Yeri: '+$( "#teslim_yeri option:selected" ).text()+'</li>');
 });
 
 var firmaCount = 0;
@@ -852,8 +856,6 @@ var sozlesme_turu;
 $('#ilan_turu').on('change', function (e) {
         ilan_turu = e.target.value;
         getSektor(ilan_turu);
-        
-       
 });
 
 $('#sozlesme_turu').on('change', function (e) {
@@ -1085,66 +1087,50 @@ $("#firma_sektor").change(function(){
      $("#katilimcilar option[value='Seçiniz']").prop('selected', true).trigger("change");;
    
 });
-function funcOnayliTedarikciler(){
-    $.ajax({
-        type:"GET",
-        url: "{{asset('onayli')}}",
-        data:{sektorOnayli:sektor },
-        cache: false,
-        success: function(data){
-           console.log(data);
-           $("#custom-headers option").remove();
-           $('#custom-headers').multiSelect('refresh');
-            /*for(var c=0; c<multiselectCount; c++){
-                $("#"+(c+48)+"-selectable").remove();
-            }*/
-            for(var key=0; key <Object.keys(data).length;key++)
-            {
-               // multiselectCount++;
-                $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key}).multiSelect('select_all');
-            }
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Status: " + textStatus); alert("Error: " + errorThrown);
-        }
-    });
-}
-function funcBelirliIstekliler(){
+
+function getBelirliIstekliler(){
     $.ajax({
         type:"GET",
         url: "{{asset('belirli')}}",
-        data:{sektorOnayli:sektor},
+        data:{
+            sektorOnayli:sektor
+        },
         cache: false,
         success: function(data){
-           console.log(data);
-           $("#belirliIstek option").remove();
-            /*for(var c=0; c<multiselectCount; c++){
-                $("#"+(c+48)+"-selectable").remove();
-            }*/
-            for(var key=0; key <Object.keys(data).length;key++)
-            {
-                //multiselectCount++;
-                $('#belirliIstek').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
+            $("#custom-headers option").remove();
+            $('#custom-headers').multiSelect('refresh');
+            $("#belirliIstek option").remove();
+            $('#belirliIstek').multiSelect('refresh');
+
+            for(var key=0; key <Object.keys(data).length;key++) {
+                $('#belirliIstek').multiSelect('addOption', { value: data[key].id, text: data[key].adi, index:key});
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Status: " + textStatus); alert("Error: " + errorThrown);
+            alert("Status: " + textStatus+" Error: " + errorThrown);
         }
     });
 }
-function funcTumFirmalar(){
+
+function getOnayliTedarikciler(){
     $.ajax({
         type:"GET",
-        url: "{{asset('tumFirmalar')}}",
-        data:{sektorTumFirma:sektor },
+        url: "{{asset('onayli')}}",
+        data:{
+            sektorOnayli:sektor
+        },
         cache: false,
         success: function(data){
-            console.log(data);
+            $("#belirliIstek option").remove();
+            $('#belirliIstek').multiSelect('refresh');
             $("#custom-headers option").remove();
-        
-            for(var key=0; key <Object.keys(data).length;key++)
-            {
-                $('#custom-headers').multiSelect('addOption', { value: key, text: data[key].adi, index:key});
+            $('#custom-headers').multiSelect('refresh');
+
+            for(var key=0; key <Object.keys(data.tumFirmalar).length;key++) {
+                $('#custom-headers').multiSelect('addOption', { value: data.tumFirmalar[key].id, text: data.tumFirmalar[key].adi, index:key});
+            }
+            for(var key=0; key <Object.keys(data.onayliTedarikciler).length;key++){
+                $('#custom-headers').multiSelect('select', (data.onayliTedarikciler[key].id));
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -1152,32 +1138,28 @@ function funcTumFirmalar(){
         }
     });
 }
+
 $("#katilimcilar").change(function(){
    option = $('option:selected', this).attr('value');
     if(sektor!==0){
         if(option==="1"){
-            
             $('#custom-headers').multiSelect('deselect_all');
-            funcOnayliTedarikciler();
-            funcTumFirmalar();
+            getOnayliTedarikciler();
             $('#onayli_tedarikciler').show();
             $('#belirli-istekliler').hide();
-
         }
         else if (option==="2"){
             $('#belirliIstek').multiSelect('deselect_all');
-            funcBelirliIstekliler();
+            getBelirliIstekliler();
             $('#belirli-istekliler').show();
             $('#onayli_tedarikciler').hide();
         }
-        else
-        {
+        else {
              $('#onayli_tedarikciler').hide();
              $('#belirli-istekliler').hide();
         }
     }
-    else
-    {
+    else {
          $('#mesaj').bPopup({
              speed: 650,
              transition: 'slideIn',
@@ -1186,7 +1168,6 @@ $("#katilimcilar").change(function(){
          });
     }
 });
-
 
 $( "#teslim_yeri" ).change(function() {
         var teslim_yeri= $('#teslim_yeri').val();
