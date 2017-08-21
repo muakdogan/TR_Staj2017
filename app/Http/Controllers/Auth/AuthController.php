@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Response;
 
 //use Auth;
@@ -32,7 +31,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins, ValidatesRequests;
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
      * Where to redirect users after login / registration.

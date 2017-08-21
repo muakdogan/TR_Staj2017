@@ -56,6 +56,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
         'firmaYetkili' => \App\Http\Middleware\FirmaKullanimaYetkili::class,//Firmaların onaylı ve üye kontrolü
+        'ilanSahibiDogrulama' => \App\Http\Middleware\ilanSahibiDogrulama::class,//İlan sahibi doğrulama
         //'role' => \App\Http\Middleware\CheckRole::class,
     ];
 }

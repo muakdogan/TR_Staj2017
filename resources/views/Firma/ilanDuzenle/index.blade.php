@@ -258,9 +258,7 @@ Debugbar::info($ilan);
 <div class="container">
     <br /> <br />
     @include('layouts.alt_menu')
-    <div class="ajax-loader">
-        <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
-    </div>
+
     <h2>İlan Düzenle</h2>
     <div class="box effect8">
         <h3><button style="font-size:30px;color: #337ab7;background-color: #ffffff;border-color: #ffffff;"  id="btn-add-ilanBilgileri" name="btn-add-ilanBilgileri" class="btn btn-primary btn-xs" onclick="populateDD()">İlanı Düzenlemeye Başlayın</button></h3>
