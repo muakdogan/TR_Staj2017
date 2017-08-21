@@ -345,9 +345,12 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
     DebugBar::info($firma->tedarikEttigiFirmalar);*/
 
+    $firma = $firma->first();
 
+    if (!$firma)
+      abort('404');
 
-     return view('Firma.firmaDetay')->with('firma', $firma->first());
+     return view('Firma.firmaDetay')->with('firma', $firma);
 
 
 });
