@@ -21,6 +21,9 @@
 
 <div class="container">
     <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="ajax-loader">
+            <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
+        </div>
         <div style="width:1050px" class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -383,11 +386,10 @@
                     data : postData,
                     success:function(data, textStatus, jqXHR)
                     {
-                        alert("success");
-                        /*
+
                         setTimeout(function(){
                             window.location = "{{asset('teklifGor')}}/{{$firma->id}}/{{$ilan->id}}";
-                        }, 50);*/
+                        }, 5);
                         e.preventDefault();
                     },
                     error: function(jqXHR, textStatus, errorThrown)
@@ -1184,10 +1186,7 @@
             }
         }
 
-        CKEDITOR.on( 'loaded', function( evt ) {
-            CKEDITOR.config.autoParagraph = false;
-            CKEDITOR.instances.aciklama.setData("{{$ilan->aciklama}}");
-        });
+
 
         $("#ilan_adi").val("{{$ilan->adi}}");
         $("#odeme_turu").val({{$ilan->odeme_turu_id}});
@@ -1236,6 +1235,10 @@
         if ("{{$ilan->isin_suresi}}" !== "") {
             $("#isin_suresi").val("{{$ilan->isin_suresi}}");
         }
-    }
 
+        CKEDITOR.on( 'instanceReady', function( evt ) {
+            CKEDITOR.config.autoParagraph = false;
+            CKEDITOR.instances.aciklama.setData("{{$ilan->aciklama}}");
+        });
+    }
 </script>
