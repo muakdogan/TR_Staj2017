@@ -263,12 +263,29 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
 }]);
 Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
-    $firma=Firma::find($firmaid);
-    $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
-        ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
-        ->get();
-   $puanlar = $puanlar->toArray();
-    if (!$firma->ticari_bilgiler) {
+    $firma=Firma::where('id', $firmaid)->with([
+      'yorumlar' => function($query){$query->orderBy('tarih', 'DESC');},
+      'firma_satilan_markalar',
+      'uretilen_markalar',
+      'adresler' => function($query) use ($firmaid){
+        $query->where('tur_id', '1')->union(DB::table('adresler')->where('firma_id', $firmaid)->where('tur_id', '2'))->orderBy('tur_id', 'ASC');
+      },
+      'adresler.iller',
+      'adresler.ilceler',
+      'adresler.semtler',
+      'mali_bilgiler',
+      'ticari_bilgiler',
+      'departmanlar',
+      'faaliyetler',
+      'sirket_turleri',
+      'kalite_belgeleri',
+      'firma_referanslar' => function($query){$query->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc');},
+      'firma_brosurler',
+      'firma_calisma_bilgileri'
+
+
+    ]);
+    /*if (!$firma->ticari_bilgiler) {
          $firma->ticari_bilgiler = new TicariBilgi();
          $firma->ticari_bilgiler->ticaret_odalari = new TicaretOdasi();
          $firma->ticari_bilgiler->sektorler = new Sektor();
@@ -326,15 +343,11 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
     $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
 
-    DebugBar::info($firma->tedarikEttigiFirmalar);
+    DebugBar::info($firma->tedarikEttigiFirmalar);*/
 
 
 
-     return view('Firma.firmaDetay')->with('firma', $firma)->with('puanlar', $puanlar)->with('yorumlar', $yorumlar)
-          ->with('toplamYorum', $toplamYorum)->with('satilanMarka', $satilanMarka)->with('firmaAdres', $firmaAdres)->with('firmaFatura', $firmaFatura)
-          ->with('sirketTurleri', $sirketTurleri)->with('uretilenMarka', $uretilenMarka)->with('kaliteBelge', $kaliteBelge)->with('firmaReferanslar', $firmaReferanslar)
-          ->with('referans', $referans)->with('brosur', $brosur)->with('calisan', $calisan)
-          ->with('calismaGunu', $calismaGunu)->with('puanlar', $puanlar);
+     return view('Firma.firmaDetay')->with('firma', $firma->first());
 
 
 });

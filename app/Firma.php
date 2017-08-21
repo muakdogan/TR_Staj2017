@@ -25,7 +25,7 @@ class Firma extends Model
     }
     public function firma_satilan_markalar()
     {
-        return $this->hasMany('App\FirmaSatilanMarka', 'firma_satilan_markalar', 'firma_id', 'id');
+        return $this->hasMany('App\FirmaSatilanMarka', 'firma_id', 'id');
     }
     public function kalite_belgeleri()
     {
