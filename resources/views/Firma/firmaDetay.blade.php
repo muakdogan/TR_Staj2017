@@ -333,16 +333,16 @@
                                                     <tr>
                                                         <td><strong>Firmanın Ürettiği Markalar</strong></td>
                                                         <td><strong>:</strong>
-                                                            @foreach($uretilenMarka as $marka)
-                                                            {{$marka->adi}}
+                                                            @foreach($firma->uretilen_markalar as $marka)
+                                                                {{$marka->adi}}
                                                             @endforeach
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Firmanın Sattığı Markalar</strong></td>
                                                         <td id="sattıgı_id_td"><strong>:</strong>
-                                                             @if(count($satilanMarka) > 1)
-                                                                 @foreach($firma->$satilanMarka as $satMarka)
+                                                             @if(count($firma->firma_satilan_markalar) > 1)
+                                                                 @foreach($firma->firma_satilan_markalar as $satMarka)
                                                                      {{$satMarka->satilan_marka_adi}}
                                                                  @endforeach
                                                              @endif 
