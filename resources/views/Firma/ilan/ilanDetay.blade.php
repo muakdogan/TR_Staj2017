@@ -554,16 +554,20 @@
                     <h4><strong>{{$ilan->adi}}</strong> ilanı
                         @if($ilan->statu==0)
                             <span id="ilanStatu" style="color:yellowgreen">(Aktif)</span>
-                            @if(!$teklifVarMi)
-                                {!! Form::button('İlanı Pasif Et', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right')) !!}
-                                {!! Form::button('İlanı Aktif Et', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right;display:none')) !!}
+                            @if($ilan->firma_id == session()->get('firma_id'))
+                                @if(!$teklifVarMi)
+                                    {!! Form::button('İlanı Pasifleştir', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right')) !!}
+                                    {!! Form::button('İlanı Aktifleştir', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right;display:none')) !!}
+                                @endif
                             @endif
                         @elseif($ilan->statu==1)
                             <span id="ilanStatu">(Tamamlanmış)</span>
                         @else
                             <span id="ilanStatu" style="color:darkred">(Pasif)</span>
-                            {!! Form::button('İlanı Aktif Et', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right')) !!}
-                            {!! Form::button('İlanı Pasif Et', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right;display:none')) !!}
+                            @if($ilan->firma_id == session()->get('firma_id'))
+                                {!! Form::button('İlanı Aktifleştir', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right')) !!}
+                                {!! Form::button('İlanı Pasifleştir', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right;display:none')) !!}
+                            @endif
                         @endif
                     </h4>
                 </div>
@@ -1242,7 +1246,7 @@
                     content: 'İlanda düzenleme yapabilmeniz için ilan statüsünün pasif olması gerekmektedir!',
                     buttons: {
                         confirm: {
-                            text: 'İlanı Pasif Et!',
+                            text: 'İlanı Pasifleştir!',
                             action:function () {
                                 //$.alert(' Edildi!');
                                 $.ajax({
