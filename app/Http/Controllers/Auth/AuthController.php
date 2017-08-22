@@ -61,6 +61,7 @@ class AuthController extends Controller
         if (!$user->onayli) {
             $this->activationFactory->sendActivationMail($user);
             auth()->logout();
+            Session::flush();
             return back()->with('activationWarning', true);
         }
 

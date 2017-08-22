@@ -127,7 +127,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
                 <ul class="nav navbar-nav" style="float:right">
 
-                    @if (!session()->get('firma_adi'))
+                    @if (!Auth::check())
 
                     <li>
                         <a href="{{ url('/firmaKayit') }}">ÜYE OL</a>
