@@ -561,21 +561,21 @@
                                            
                                         </strong>
                                     </div>
-                                    @foreach($firma->yorumlar as $yorum)
+                                    @foreach($yorumlar as $yorum)
                                     
                                         <div style="border: 1px solid #ddd;" class="panel-body">
                                             <div class="row">
                                                  <div class="col-sm-4">
                                                     <div class="col-sm-12" >
-                                                        <img src="{{asset('uploads')}}/{{$yorum->getFirmaLogo($yorum->yorum_yapan_firma_id)}}" alt="HTML5 Icon" style="width:50px;height:50px;">
-                                                        <strong>{{$yorum->getFirmaAdi($yorum->yorum_yapan_firma_id)}}</strong>
+                                                        <img src="{{asset('uploads')}}/{{$yorum->logo}}" alt="HTML5 Icon" style="width:50px;height:50px;">
+                                                        <strong>{{$yorum->adi}}</strong>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                   <div  style="font-size:10px"class="col-sm-3">Kalite:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'ürünKalite')}}</div>
-                                                   <div style="font-size:10px" class="col-sm-3">Teslimat:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'teslimat')}}</div>
-                                                   <div style="font-size:10px" class="col-sm-3">Teknik:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'teknik')}}</div>
-                                                   <div style="font-size:10px" class="col-sm-3">Esneklik:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'iletisim')}}</div>
+                                                   <div  style="font-size:10px"class="col-sm-3">Kalite:{{$yorum->kriter1}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Teslimat:{{$yorum->kriter2}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Teknik:{{$yorum->kriter3}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Esneklik:{{$yorum->kriter4}}</div>
                                                </div>
                                                 <div class="col-sm-4">
                                                     <div style="float:right" class="col-sm-6" >{{$yorum->tarih}}</div>

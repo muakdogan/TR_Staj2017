@@ -264,7 +264,6 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
 Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
     $firma=Firma::where('id', $firmaid)->with([
-      'yorumlar' => function($query){$query->orderBy('tarih', 'DESC');},
       'firma_satilan_markalar',
       'uretilen_markalar',
       'adresler' => function($query) use ($firmaid){
@@ -282,9 +281,13 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
       'firma_referanslar' => function($query){$query->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc');},
       'firma_brosurler',
       'firma_calisma_bilgileri'
+    ])->first();
+    //yorumlar ve puanlar arasında eloquent ilişkisi olmadığı için query builder.
+    $yorumlar = DB::table('yorumlar')->where('yorumlar.firma_id', $firmaid)->orderBy('yorumlar.tarih', 'DESC')
+    ->join('puanlamalar', 'yorumlar.firma_id', '=', 'puanlamalar.firma_id')
+    ->join('firmalar', 'yorumlar.yorum_yapan_firma_id', '=', 'firmalar.id')//firma isimleri için
+    ->get();
 
-
-    ]);
     /*if (!$firma->ticari_bilgiler) {
          $firma->ticari_bilgiler = new TicariBilgi();
          $firma->ticari_bilgiler->ticaret_odalari = new TicaretOdasi();
@@ -345,12 +348,10 @@ Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
 
     DebugBar::info($firma->tedarikEttigiFirmalar);*/
 
-    $firma = $firma->first();
-
     if (!$firma)
       abort('404');
 
-     return view('Firma.firmaDetay')->with('firma', $firma);
+     return view('Firma.firmaDetay')->with(['firma'=>$firma, 'yorumlar'=>$yorumlar]);
 
 
 });
