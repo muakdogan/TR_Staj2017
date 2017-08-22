@@ -563,7 +563,7 @@
                         @elseif($ilan->statu==1)
                             <span id="ilanStatu">(Tamamlanmış)</span>
                         @else
-                            <span id="ilanStatu" style="color:darkred">(Pasif)</span>
+                            <span id="ilanStatu" style="color:red">(Pasif)</span>
                             @if($ilan->firma_id == session()->get('firma_id'))
                                 {!! Form::button('İlanı Aktifleştir', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right')) !!}
                                 {!! Form::button('İlanı Pasifleştir', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right;display:none')) !!}
@@ -1199,7 +1199,7 @@
                 success:function(data, textStatus, jqXHR) {
                     $('.ajax-loader').css("visibility", "hidden");
                     $("#ilanStatu").text("(Pasif)");
-                    $("#ilanStatu").css("color","darkred");
+                    $("#ilanStatu").css("color","red");
                     $("#btn_ilaniAktifEt").show();
                     $("#btn_ilaniPasifEt").hide();
                     ilanStatu=2;
@@ -1269,7 +1269,7 @@
 
                             }},
                         cancel:{
-                            text: 'İptal',
+                            text: 'İptal'
                         }
                     }
                 });
