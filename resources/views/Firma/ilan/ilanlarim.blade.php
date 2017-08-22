@@ -334,7 +334,7 @@
                                   ?>
                                 <td>
                                     @if(count($existPuan) != 0 || count($existYorum) != 0)
-                                        @if($sIlan->kismi_fiyat == 1 )
+                                        @if($ilan->kismi_fiyat == 1 )
                                           <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
                                         @else
                                           <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
