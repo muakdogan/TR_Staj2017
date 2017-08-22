@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\TeklifHareket;
 use Illuminate\Http\Request;
 use Request as Req; //
 use App\Il;
@@ -39,6 +40,7 @@ class IlanController extends Controller
     public function __construct(){
         $this->middleware('firmaYetkili', ['except' => ['showIlan']]);
         $this->middleware('auth',['only'=>['teklifGor']]);
+        $this->middleware('ilanSahibiDogrulama',['only'=>['ilaniPasifEt','ilaniAktifEt']]);
     }
 
     public function teklifGor ($id,$ilan_id) {
@@ -702,7 +704,6 @@ class IlanController extends Controller
         DebugBar::info(Input::get('ilan_adi'));
     }
 
-    //TODO: test et
     public function ilanOlusturEkle(Request $request, $firma_id)
     {
         //ilan bilgileri kaydediliyor.
@@ -1243,5 +1244,22 @@ class IlanController extends Controller
             $sektorControl = $sektorControl->get();
             return Response::json($sektorControl);
         }
+    }
+
+    public function ilaniPasifEt(Request $request){
+        $ilan=$request->instance()->query('ilan');
+        $teklifCount=Teklif::where('ilan_id',$ilan->id)->count();
+        if($teklifCount==0){
+            $ilan->statu=2;
+            $ilan->save();
+        }
+        else{
+            abort(403, 'teklif verilmis ilan pasif edilemez!');
+        }
+    }
+    public function ilaniAktifEt(Request $request){
+        $ilan=$request->instance()->query('ilan');
+        $ilan->statu=0;
+        $ilan->save();
     }
 }

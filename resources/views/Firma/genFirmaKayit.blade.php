@@ -40,8 +40,21 @@
   @endsection
 
   @section('content')
-     <div>
-       <div>
+
+   <body class="nav-md" style="background-color: #fff">
+
+
+     <!-- <div>
+       @if (count($errors) > 0)
+       <div class="alert alert-danger">
+           <ul>
+               @foreach ($errors->all() as $error)
+                   <li>{{ $error }}</li>
+               @endforeach
+           </ul>
+       </div>
+       @endif
+       <div> -->
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="panel-group">
@@ -80,48 +93,54 @@
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Firma Adı</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('firma_adi', null,
+                        <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi">
+                          {!! Form::text('firma_adi', 'MetaData',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Firma adı',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min1',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <!-- Burayı if içine alıp birşeyler yapabilirsin -->
+                                        <span class="help-block" style="color:red"> {{ $errors->first('firma_adi') }}</span>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Sektörler</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'>
+                          <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'value="{{1}}">
                             @foreach($sektorler as $sektor)
                                     <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
                             @endforeach
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('sektor_id') }}</span>
                         </div>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group ">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Telefon </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('telefon', null,
+                          {!! Form::text('telefon', '5125119612',
                                         array('id' => 'telefon',
-                                          'class'=>'form-control',
+                                        'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
                                         'data-validation'=>'length ',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                          <span class="help-block" style="color:red"> {{ $errors->first('telefon') }}</span>
                         </div>
                       </div>
+
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="il_id">İl</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <select class="form-control" name="il_id" id="il_id"
-                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!" value="{{1}}">>
                             <option selected disabled>İl Seçiniz</option>
                             @foreach($iller_query as $il)
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
                             @endforeach
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('il_id') }}</span>
                         </div>
                       </div>
 
@@ -131,6 +150,7 @@
                           <select class="form-control"name="ilce_id" id="ilce_id" data-validation="required"
                                                           data-validation-error-msg="Lütfen bu alanı dolduurnuz!">
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('ilce_id') }}</span>
                         </div>
                       </div>
 
@@ -140,19 +160,21 @@
                           <select class="form-control" name="semt_id" id="semt_id"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!">
                           </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('semt_id') }}</span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bireysel_firma_adres">Firma Adresi <span class="required"></span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('firma_adres', null,
-                                                              array('id' => 'firma_adres',
-                                                              'class'=>'form-control',
-                                                              'placeholder'=>'Firmanizin adresi',
-                                                              'data-validation' => 'required',
-                                                              'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
-                                                              )) !!}
+                          {!! Form::text('firma_adres', 'ads',
+                              array('id' => 'firma_adres',
+                              'class'=>'form-control',
+                              'placeholder'=>'Firmanizin adresi',
+                              'data-validation' => 'required',
+                              'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
+                              )) !!}
+                              <span class="help-block" style="color:red"> {{ $errors->first('firma_adres') }}</span>
                         </div>
                       </div>
 
@@ -166,62 +188,67 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="adi">Ad</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('adi', null,
+                          {!! Form::text('adi', 'Özenç',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Adınız',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('adi') }}</span>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="soyadi">Soyad</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('soyadi', null,
+                          {!! Form::text('soyadi', 'Çelik',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Soyadınız',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('soyadi') }}</span>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unvan">Ünvan</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('unvan', null,
+                          {!! Form::text('unvan', 'ADmin',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Ünvanınız',
                                         'data-toggle' => 'tooltip',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'min2',
                                         'data-validation-error-msg'=>'LÜtfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('unvan') }}</span>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telefonkisisel">Telefon</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('telefonkisisel', null,
+                          {!! Form::text('telefonkisisel', '5380583230',
                                         array('id' => 'telefonkisisel',
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
                                         'data-validation'=>'length',
                                         'data-validation-length'=>'3-17',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                        <span class="help-block" style="color:red"> {{ $errors->first('telefonkisisel') }}</span>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_giris">E-Mail</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::email('email_giris', null,
+                          {!! Form::email('email_giris', 'ozenc.celik@ceng.deu.edu.tr',
                                          array('id'=>'email_giris','class'=>'form-control email',
                                          'placeholder'=>'E-postanız' ,
                                          'onFocusout'=>'email_girisControl()',
                                          'data-validation'=>'email' ,
                                          'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
+                                           <span class="help-block" style="color:red"> {{ $errors->first('email_giris') }}</span>
                         </div>
                       </div>
 
@@ -230,7 +257,8 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <input type="password" class="form-control" placeholder="******" name="password" id="password" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
-                          data-toggle="tooltip">
+                          data-toggle="tooltip" value="123456">
+                            <span class="help-block" style="color:red"> {{ $errors->first('password') }}</span>
                         </div>
                         <span id="password_strength"></span>
                         <span id="passwordmsg"></span>
@@ -241,7 +269,8 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <input type="password" class="form-control" placeholder="******" name="password_confirmation" id="password_confirmation" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
-                          data-toggle="tooltip">
+                          data-toggle="tooltip" value="123456">
+                            <span class="help-block" style="color:red"> {{ $errors->first('password_confirmation') }}</span>
                           <span id="confirmMessage" class="confirmMessage"></span>
                         </div>
                       </div>
@@ -272,7 +301,7 @@
                               <input type="radio" name="fatura_tur" id="fatura_tur_bireysel" value="bireysel"> Bireysel
                             </label>
 
-
+                              <span class="help-block" style="color:red"> {{ $errors->first('fatura_tur') }}</span>
                           </div>
 
 
@@ -280,8 +309,9 @@
                             <div class="form-group">
                                 <div class="checkbox">
                                   <label>
-                                    <input id="adres_kopyalayici" type="checkbox" name="adres_kopyalayici" > "Firma Adresi" ile "Fatura Adresi" aynı
+                                    <input id="adres_kopyalayici" type="checkbox" name="adres_kopyalayici"> "Firma Adresi" ile "Fatura Adresi" aynı
                                   </label>
+                                    <span class="help-block" style="color:red"> {{ $errors->first('adres_kopyalayici') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -300,6 +330,7 @@
                                                 'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
                                                 )) !!}
                           <!-- TextArea is like MultiLine TextBox. -->
+                            <span class="help-block" style="color:red"> {{ $errors->first('fatura_adres') }}</span>
                         </div>
                       </div>
 
@@ -314,6 +345,7 @@
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
                             @endforeach
                           </select>
+                            <span class="help-block" style="color:red"> {{ $errors->first('fatura_il_id') }}</span>
                         </div>
                       </div>
 
@@ -323,7 +355,8 @@
                           <select class="form-control" name="fatura_ilce_id" id="fatura_ilce_id"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
                           data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
-                          </select>
+                        </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('fatura_ilce_id') }}</span>
                         </div>
                       </div>
 
@@ -334,6 +367,7 @@
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
                           data-validation-depends-on="adres_kopyalayici" data-validation-depends-on-value="off">
                           </select>
+                            <span class="help-block" style="color:red"> {{ $errors->first('fatura_semt_id') }}</span>
                         </div>
                       </div>
 
@@ -345,7 +379,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="firma_unvan">Firma Ünvanı</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              {!! Form::text('firma_unvan', null,
+                              {!! Form::text('firma_unvan', 'asad',
                                               array('id' => 'firma_unvan',
                                                   'class'=>'form-control',
                                                   'placeholder'=>'Firma Ünvanı',
@@ -355,13 +389,14 @@
                                                   'data-validation-depends-on-value' => 'kurumsal',
                                                   'data-validation-error-msg'  => 'Lutfen bu alani doldurunuz'
                                                )) !!}
+                                                 <span class="help-block" style="color:red"> {{ $errors->first('firma_unvan') }}</span>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="vergi_no">Vergi No</label>
                             <div class="col-md-9 col-sm-9 col-xs-12" data-toggle="tooltip">
-                              {!! Form::text('vergi_no', null,
+                              {!! Form::text('vergi_no', '1234567891',
                                               array('id' => 'vergi_no',
                                                 'class'=>'form-control',
                                               'placeholder'=>'Vergi No',
@@ -373,6 +408,7 @@
                                               'data-validation-error-msg' => 'Lutfen bu alani doldurunuz',
                                               'data-validation-error-msg-length' => 'Lutfen 10 haneli numara giriniz'
                               )) !!}
+                                <span class="help-block" style="color:red"> {{ $errors->first('vergi_no') }}</span>
                             </div>
                         </div>
                      </div>
@@ -382,7 +418,7 @@
                        <div class="form-group">
                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ad_soyad">Ad Soyad</label>
                            <div class="col-md-9 col-sm-9 col-xs-12">
-                             {!! Form::text('ad_soyad', null,
+                             {!! Form::text('ad_soyad', 'ÖZenç ÇElik',
                                              array('id' => 'ad_soyad',
                                              'class'=>'form-control',
                                              'placeholder'=>'Ad ve Soyadiniz',
@@ -391,13 +427,14 @@
                                              'data-validation-depends-on-value' => 'bireysel',
                                              'data-validation-error-msg' => 'Lutfen bu alani doldurunuz'
                              )) !!}
+                               <span class="help-block" style="color:red"> {{ $errors->first('ad_soyad') }}</span>
                            </div>
                        </div>
 
                        <div class="form-group">
                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tc_kimlik">TC Kimlik No</label>
                            <div class="col-md-9 col-sm-9 col-xs-12">
-                             {!! Form::text('tc_kimlik', null,
+                             {!! Form::text('tc_kimlik', '32629641654',
                                              array('id' => 'tc_kimlik',
                                                    'class'=>'form-control',
                                                    'placeholder'=>'T.C Kimlik Numaraniz',
@@ -409,6 +446,7 @@
                                                    'data-validation-error-msg-number' => 'Lutfen sayi giriniz',
                                                    'data-validation-error-msg-length' => 'Lutfen 11 haneli sayi giriniz',
                                              )) !!}
+                                               <span class="help-block" style="color:red"> {{ $errors->first('tc_kimlik') }}</span>
                            </div>
                        </div>
                     </div>
@@ -424,6 +462,7 @@
                                  <option value="{{$il->id}}">{{$il->adi}}</option>
                           @endforeach
                         </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('vergi_daire_il') }}</span>
                       </div>
                     </div>
 
@@ -434,16 +473,24 @@
                                 data-validation = "required" data-validation-depends-on = "fatura_tur"
                                 data-validation-depends-on-value = "kurumsal" data-validation-error-msg = "Lutfen Seciniz">
                         </select>
+                          <span class="help-block" style="color:red"> {{ $errors->first('vergi_daire') }}</span>
+
+                      </br>
+                        <div class="form-group">
+                          <div>
+                            <input name="sözlesme_checkbox" type="checkbox" data-validation="required"
+                              data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız.">
+                              <button class="btn btn-link btn-xs sozlesme_goster" style="vertical-align: baseline;">Kullanıcı sözleşmesini okudum ve onaylıyorum.</button>
+                            </input>
+                            <span class="help-block" style="color:red"> {{ $errors->first('sözlesme_checkbox') }}</span>
+                          </div>
+                        </div>
+
+
                       </div>
                     </div>
 
-                    <div class="form-group">
-                      <div>
-                        
-                        <input type="checkbox" data-validation="required"
-                        data-validation-error-msg="Devam etmek için sözleşmeyi onaylamalısınız."><button class="btn btn-link btn-xs sozlesme_goster" style="vertical-align: baseline;">Kullanıcı sözleşmesini</button> okudum ve onaylıyorum.
-                      </div>
-                    </div>
+
 
                     <div class="ln_solid"></div>
                     <div class="form-group">
@@ -1119,7 +1166,6 @@
         success:function(data, textStatus, jqXHR)
         {
 
-          console.log(data);
           $('.ajax-loader').css("visibility", "hidden");
           if(data=="error"){
             $('#mesaj').bPopup({
@@ -1143,7 +1189,11 @@
         },
         error: function(jqXHR, textStatus, errorThrown)
         {
-          alert(textStatus + "," + errorThrown);
+          alert(postData);
+          console.log(textStatus + "," + errorThrown);
+          location.reload("<errorFieldID>");
+          // location.hash("<errorFieldID>");
+          anchorScroll();
         }
       });
       e.preventDefault(); //STOP default action
@@ -1229,4 +1279,3 @@
 
 
   @endsection
-

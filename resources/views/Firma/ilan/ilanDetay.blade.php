@@ -35,17 +35,20 @@
             text-align: left;
             padding: 5px;
         }
+
         .button {
-            background-color: #555555; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 22px;
+            background-color: #2b91af;
+            border-radius: 10px;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
+            border: none;
             font-size: 13px;
             margin: 4px 2px;
-            cursor: pointer;
             float:right;
         }
         .button1 {
@@ -83,17 +86,7 @@
             right: -7px;
             top: -7px;
         }
-        .button {
-            background-color: #2b91af;
-            border-radius: 10px;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-            color: #fff;
-            cursor: pointer;
-            display: inline-block;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-        }
+
         .puanlama {
             background: #dddddd;
             width: 140px;
@@ -367,7 +360,6 @@
 
     </style>
 
-
     <script>
         function setCaretPosition(elemId, caretPos) {
             var elem = document.getElementById(elemId);
@@ -536,7 +528,7 @@
             ?>
 
             @for($i = 1; $i < count($ilanlarr)+1; $i++)
-document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
+                document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                 moveCaretToStart(document.getElementById("visible_miktar#{{$i}}"));
 
                 // Work around Chrome's little problem
@@ -557,7 +549,25 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
             <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
         </div>
         <div class="panel panel-warning">
-            <div class="panel-heading"><h4><strong>{{$ilan->adi}}</strong> ilanı </h4></div>
+                <div class="panel-heading" >
+
+                    <h4><strong>{{$ilan->adi}}</strong> ilanı
+                        @if($ilan->statu==0)
+                            <span id="ilanStatu" style="color:yellowgreen">(Aktif)</span>
+                            @if(!$teklifVarMi)
+                                {!! Form::button('İlanı Pasif Et', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right')) !!}
+                                {!! Form::button('İlanı Aktif Et', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right;display:none')) !!}
+                            @endif
+                        @elseif($ilan->statu==1)
+                            <span id="ilanStatu">(Tamamlanmış)</span>
+                        @else
+                            <span id="ilanStatu" style="color:darkred">(Pasif)</span>
+                            {!! Form::button('İlanı Aktif Et', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right')) !!}
+                            {!! Form::button('İlanı Pasif Et', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right;display:none')) !!}
+                        @endif
+                    </h4>
+                </div>
+
             <div class="panel-body">
                 <div id="exTab2" class="col-lg-9">
                     <ul class="nav nav-tabs">
@@ -658,14 +668,7 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                         @if($ilan->firma_id == session()->get('firma_id'))
                             @if(!$teklifVarMi)
                                 {{--Sadece teklif verilmemiş ilanlar duzenlenebilir!--}}
-
-                                <a href="{{ URL::to('ilanDuzenle', array($firmaIlan->id,$ilan->id), false) }}" style="float:right"><input  type="button" name="ilanDuzenle" class="btn btn-info" value="İlanı Düzenle" ></a>
-
-
-                                {{--ilan duzenleme modali include edilecek ve butona bağlanacak
-                                    ilan duzenleme acmadan önce ilan pasif hale getirilecek
-                                --}}
-
+                                {!! Form::button('İlanı Düzenle', array('id'=>'btn_ilanDuzenle','class'=>'btn btn-info', 'style'=>'float:right')) !!}
                             @else
                                 <div class="col-lg-12"><input style="float:right" type="button" class="btn btn-info" value="İlanı Düzenle" disabled /></div>
                                 <div class="col-lg-12"><p><span style="float:right; color:red;">Teklif verilmiş ilan düzenlenemez!</span></p></div>
@@ -1178,6 +1181,101 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
                 }, 300);
             });
         })(jQuery);
+        var ilan_id = {{$ilan->id}};
+        var ilanStatu = {{$ilan->statu}};
+
+        $("#btn_ilaniPasifEt").click(function(e) {
+            $.ajax({
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : "{{asset('ilaniPasifEt')}}",
+                type: "GET",
+                data:{ilanID: ilan_id},
+                success:function(data, textStatus, jqXHR) {
+                    $('.ajax-loader').css("visibility", "hidden");
+                    $("#ilanStatu").text("(Pasif)");
+                    $("#ilanStatu").css("color","darkred");
+                    $("#btn_ilaniAktifEt").show();
+                    $("#btn_ilaniPasifEt").hide();
+                    ilanStatu=2;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('.ajax-loader').css("visibility", "hidden");
+                    alert(textStatus + "," + errorThrown);
+                }
+            });
+            e.preventDefault();
+        });
+
+        $("#btn_ilaniAktifEt").click(function(e) {
+            $.ajax({
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : "{{asset('ilaniAktifEt')}}",
+                type: "GET",
+                data:{ilanID: ilan_id},
+                success:function(data, textStatus, jqXHR) {
+                    $('.ajax-loader').css("visibility", "hidden");
+                    $("#ilanStatu").text("(Aktif)");
+                    $("#ilanStatu").css("color","yellowgreen");
+                    $("#btn_ilaniPasifEt").show();
+                    $("#btn_ilaniAktifEt").hide();
+                    ilanStatu=0;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('.ajax-loader').css("visibility", "hidden");
+                    alert(textStatus + "," + errorThrown);
+                }
+            });
+            e.preventDefault();
+        });
+
+        $("#btn_ilanDuzenle").click(function(e) {
+            {{-- ilan statu: 0-> aktif 1-> sonuclanmis 2-> pasif --}}
+
+            if(ilanStatu!=2){
+                {{--ilani pasif duruma gecir--}}
+                $.confirm({
+                    title: 'İlan Statu Değişikliği!',
+                    content: 'İlanda düzenleme yapabilmeniz için ilan statüsünün pasif olması gerekmektedir!',
+                    buttons: {
+                        confirm: {
+                            text: 'İlanı Pasif Et!',
+                            action:function () {
+                                //$.alert(' Edildi!');
+                                $.ajax({
+                                    beforeSend: function(){
+                                        $('.ajax-loader').css("visibility", "visible");
+                                    },
+                                    url : "{{asset('ilaniPasifEt')}}",
+                                    type: "GET",
+                                    data:{ilanID: ilan_id},
+                                    success:function(data, textStatus, jqXHR) {
+                                        setTimeout(function(){
+                                            window.location = "{{URL::to('ilanDuzenle', array($firmaIlan->id,$ilan->id))}}";
+                                        }, 5);
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        alert(textStatus + "," + errorThrown);
+                                    }
+                                });
+                                e.preventDefault();
+
+                            }},
+                        cancel:{
+                            text: 'İptal',
+                        }
+                    }
+                });
+            }
+            else{
+                setTimeout(function(){
+                    window.location = "{{URL::to('ilanDuzenle', array($firmaIlan->id,$ilan->id))}}";
+                }, 5);
+            }
+        });
 
         $(document).ready(function() {
             var firmaId = "{{session()->get('firma_id')}}";
@@ -1216,8 +1314,7 @@ document.getElementById("visible_miktar#{{$i}}").onfocus = function() {
 
             voteClick($('#table'));//Rekabet tablosu siralanir
 
-            $("#gonder").click(function(e)
-            {
+            $("#gonder").click(function(e) {
                 var isValid = 1;
 
                 if({{$ilan->kismi_fiyat}} == 0){

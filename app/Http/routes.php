@@ -749,9 +749,9 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
 
 Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetService');
 
-  //////////////////////////////////////teklifGor//////////////////////
-
-  Route::get('teklifGor/{id}/{ilanid}' ,'IlanController@teklifGor');
+Route::get('teklifGor/{id}/{ilanid}' ,'IlanController@teklifGor');
+Route::get('ilaniPasifEt' ,'IlanController@ilaniPasifEt');
+Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
 
     ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////
     Route::post('KismiAcikRekabetKazanan' ,function () {
