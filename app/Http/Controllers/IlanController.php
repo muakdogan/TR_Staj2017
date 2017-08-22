@@ -1068,7 +1068,7 @@ class IlanController extends Controller
                 $i=0;
                 foreach($request->ilan_mal_id as $id){
                     $ilan_mal= \App\IlanMal::find($id);
-                    $ilan_mal_teklifler = new App\MalTeklif;
+                    $ilan_mal_teklifler = new \App\MalTeklif;
                     $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
                     $ilan_mal_teklifler-> teklif_id = $teklif->id;
                     if($arrayKdv[$i] == -1){
@@ -1151,7 +1151,7 @@ class IlanController extends Controller
                 }
             }
             //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
-            $teklifHareket = new App\TeklifHareket;
+            $teklifHareket = new \App\TeklifHareket;
             $teklifHareket->kdv_haric_fiyat=$request->toplamFiyatKdvsiz;
             $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
             $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
