@@ -40,7 +40,7 @@ class FirmaController extends Controller
         return response($proper);
     }*/
 
-     public function showFirma(){
+    public function showFirma(){
         $firma = Firma::find(session()->get('firma_id'));
         if (Gate::denies('show', $firma)) {
               redirect()->intended($this->redirectPath());
@@ -104,6 +104,40 @@ class FirmaController extends Controller
                 ->with('uretilenMarka',$uretilenMarka)->with('satilanMarka',$satilanMarka)->with('kaliteBelge',$kaliteBelge)
                 ->with('firmaReferanslar',$firmaReferanslar)->with('referans',$referans)->with('brosur',$brosur)
                 ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan);
+    }
+
+    public function firmaDetay($firma_id)
+    {    
+        $firma=Firma::where('id', $firma_id)->with([
+            'firma_satilan_markalar',
+            'uretilen_markalar',
+            'adresler' => function($query) use ($firma_id){
+            $query->where('tur_id', '1')->union(DB::table('adresler')->where('firma_id', $firma_id)->where('tur_id', '2'))->orderBy('tur_id', 'ASC');
+            },
+            'adresler.iller',
+            'adresler.ilceler',
+            'adresler.semtler',
+            'mali_bilgiler',
+            'ticari_bilgiler',
+            'departmanlar',
+            'faaliyetler',
+            'sirket_turleri',
+            'kalite_belgeleri',
+            'firma_referanslar' => function($query){$query->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc');},
+            'firma_brosurler',
+            'firma_calisma_bilgileri'
+        ])->first();
+
+        //yorumlar ve puanlar arasında eloquent ilişkisi olmadığı için query builder.
+        $yorumlar = DB::table('yorumlar')->where('yorumlar.firma_id', $firma_id)->orderBy('yorumlar.tarih', 'DESC')
+        ->join('puanlamalar', 'yorumlar.firma_id', '=', 'puanlamalar.firma_id')
+        ->join('firmalar', 'yorumlar.yorum_yapan_firma_id', '=', 'firmalar.id')//firma isimleri için
+        ->get();
+    
+        if (!$firma)
+            abort('404');
+    
+        return view('Firma.firmaDetay')->with(['firma'=>$firma, 'yorumlar'=>$yorumlar]);
     }
 
     public function uyelikBilgileri()
