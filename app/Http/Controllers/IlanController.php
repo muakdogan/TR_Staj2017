@@ -38,7 +38,7 @@ use Illuminate\Support\Str;
 class IlanController extends Controller
 {
     public function __construct(){
-        $this->middleware('firmaYetkili', ['except' => ['showIlan']]);
+        $this->middleware('firmaYetkili', ['except' => ['showIlan','ilaniPasifEt','ilaniAktifEt']]);
         $this->middleware('auth',['only'=>['teklifGor']]);
         $this->middleware('ilanSahibiDogrulama',['only'=>['ilaniPasifEt','ilaniAktifEt']]);
     }
