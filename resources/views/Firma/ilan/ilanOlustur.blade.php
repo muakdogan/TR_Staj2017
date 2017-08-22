@@ -312,37 +312,34 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Firma Adı Göster</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
 
-                                                                <input type="radio" class="filled-in firma_goster  required"  name="firma_adi_goster" value="1"  data-validation-error-msg="Lütfen birini seçiniz!" ><label> Göster</label> </input>
+                                                                <input type="radio" class="filled-in firma_goster  required"  name="firma_adi_goster" value="1"  data-validation-error-msg="Lütfen birini seçiniz!" checked><label> Göster</label> </input>
                                                                  <input type="radio" data-placement="bottom" class="filled-in test firma_goster"  name="firma_adi_goster" value="0" data-validation-error-msg="Lütfen birini seçiniz!"><label>Gizle</label> </input>
-
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                </div>
                                                             </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın almak istediğiniz mal veya hizmet için kısa ancak açıklayıcı bir ilan adı belirleyiniz.</span>
-                                                                </div>
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlan Adı*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <input type="text" class="form-control required" id="ilan_adi" name="ilan_adi" placeholder="İlan Adı" value="" >
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın almak istediğiniz mal veya hizmet için kısa ancak açıklayıcı bir ilan adı belirleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Yapacağınız satın alımın türünü seçiniz. Seçenklerde belirtilen 3 türden yalnızca birini seçebilirsiniz.</span>
-                                                                </div>
+
                                                              <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlan Türü*</label>
                                                              <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px" class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -353,14 +350,15 @@
                                                                     <option value="3">Yapım İşi</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Yapacağınız satın alımın türünü seçiniz. Seçenklerde belirtilen 3 türden yalnızca birini seçebilirsiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Aynı sektöre ait 2 farklı tür alım gerçekleştirecekseniz yeni bir ilan daha açmanız gerekecektir.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlan Sektör*</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -369,14 +367,15 @@
                                                                     <option  style="color:#eee"  selected disabled>Seçiniz</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Aynı sektöre ait 2 farklı tür alım gerçekleştirecekseniz yeni bir ilan daha açmanız gerekecektir.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">İlanın ne kadar süre yayında kalmasını istiyorsanız o tarih aralığını seçiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İlanın Tarih Aralığı*</label>
                                                             <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -384,14 +383,15 @@
                                                                        data-placement="bottom"/>
                                                                <!--input class="form-control date" id="yayinlanma_tarihi"  readonly   name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text" /-->
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">İlanın ne kadar süre yayında kalmasını istiyorsanız o tarih aralığını seçiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın almak istediğiniz mal veya hizmet tek seferde gerçekleşecek ise Tek Seferde seçeneğini yoksa belirli bir zamanı kapsayacak şekilde tekrarlayarak belirli bir dönemde gerçekleşecek ise Zamana Yayılarak seçeneğini işaretleyiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İşin Süresi*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -401,29 +401,31 @@
                                                                     <option value="Zamana Yayılarak">Zamana Yayılarak</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın almak istediğiniz mal veya hizmet tek seferde gerçekleşecek ise Tek Seferde seçeneğini yoksa belirli bir zamanı kapsayacak şekilde tekrarlayarak belirli bir dönemde gerçekleşecek ise Zamana Yayılarak seçeneğini işaretleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın almak istediğiniz mal veya hizmet için kısa ancak açıklayıcı bir ilan adı belirleyiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İş Tarih Aralığı*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class="form-control filled-in"  
                                                                        data-placement="bottom"/>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın almak istediğiniz mal veya hizmete ilişkin iş hangi tarihler arasında gerçekleşecekse o tarih aralığını seçiniz</span>
+                                                                </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın alım ilanınıza ilişkin bir teknik şartname dokümanınız var ise lütfen bu dokümanı yükleyiniz.</span>
-                                                                </div>
+
                                                                 <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teknik Şartname</label>
                                                                 <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                                 <div id="sartname" class="col-md-7" style="background-color: #fcf8e3; margin-top: 2px;margin-bottom:2px;padding: 2px">
@@ -432,16 +434,17 @@
                                                                            'id'=>'sartnameGozat'))!!}
                                                                         <a style="display: none;" id="sartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a>
                                                                 </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın alım ilanınıza ilişkin bir teknik şartname dokümanınız var ise lütfen bu dokümanı yükleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın alım ilanınıza katılmasını istediğiniz firmaları veya grupları seçiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Katılımcılar*^</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -453,6 +456,10 @@
                                                                     <option value="3">Tüm Firmalar</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın alım ilanınıza katılmasını istediğiniz firmaları veya grupları seçiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -493,10 +500,7 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın alım ilanınıza fiyat verecek firmaların aktif şekilde rekabet etmelerini ve birbirlerinin firmalarını görmeden sadece fiyatlarını görerek fiyat eksiltmelerini istiyorsanız Tamrekabet seçeneğini, katılacak firmalardan rekabet etmeksizin sistem üzerinden kapalı zaf usulü fiyat teklifi toplamak istiyorsanız Sadece Başvuru seçeneğini işaretleyiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Rekabet Şekli*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -506,15 +510,16 @@
                                                                     <option value="2">Sadece Başvuru</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın alım ilanınıza fiyat verecek firmaların aktif şekilde rekabet etmelerini ve birbirlerinin firmalarını görmeden sadece fiyatlarını görerek fiyat eksiltmelerini istiyorsanız Tamrekabet seçeneğini, katılacak firmalardan rekabet etmeksizin sistem üzerinden kapalı zaf usulü fiyat teklifi toplamak istiyorsanız Sadece Başvuru seçeneğini işaretleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın alımı gerçekleştireceğiniz firmadan istediğiniz teklifte kalemleri fiyatlandırmadan işin tamamına dair bir teklif istiyorsanız Götürü Bedel seçeneğini, satın almak istediğiniz işe dair kalemlerin ayrı ayrı fiyatlandırılmasını istiyorsanız Birim Fiyatlı şeneğini işaretleyiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Sözleşme Türü</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -524,14 +529,15 @@
                                                                     <option value="1">Götürü Bedel</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın alımı gerçekleştireceğiniz firmadan istediğiniz teklifte kalemleri fiyatlandırmadan işin tamamına dair bir teklif istiyorsanız Götürü Bedel seçeneğini, satın almak istediğiniz işe dair kalemlerin ayrı ayrı fiyatlandırılmasını istiyorsanız Birim Fiyatlı şeneğini işaretleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group fiyatlandirma row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Satın alım ilanına ilişkin mal veya hizmetlerinize teklif verecek firmaların alımını gerçekleştireceğiniz kalemlerin tümüne fiyat vermesini istiyorsanız Birim Fiyat Teklifine Kapalı seçeneğini, eğer kalemlerin belli bir kısmına da firmaların teklif verebilmesini istiyorsanız Birim Fiyat Teklifine Açık seçeneğini işaretleyiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3"   style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">FiyatlandırmaŞekli*</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -541,14 +547,15 @@
                                                                     <option  value="0">Kısmi Fiyat Teklifine Kapalı</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Satın alım ilanına ilişkin mal veya hizmetlerinize teklif verecek firmaların alımını gerçekleştireceğiniz kalemlerin tümüne fiyat vermesini istiyorsanız Birim Fiyat Teklifine Kapalı seçeneğini, eğer kalemlerin belli bir kısmına da firmaların teklif verebilmesini istiyorsanız Birim Fiyat Teklifine Açık seçeneğini işaretleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Alım ilanınıza ilişkin, satın alacağınız mal veya hizmetlerin yaklaşık toplam maliyet aralığını işaretleyiniz.</span>
-                                                                </div>
+
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Yaklaşık Maliyet</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -561,12 +568,16 @@
                                                                 </select>
                                                                 <input type="hidden" id="maliyet" name="maliyet" value=""></input>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Alım ilanınıza ilişkin, satın alacağınız mal veya hizmetlerin yaklaşık toplam maliyet aralığını işaretleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip"></div>
-                                                            <label for="inputEmail3" class="col-sm-3 control-label">Ödeme Türü</label>
+
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Ödeme Türü*</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <select class="form-control required" name="odeme_turu" id="odeme_turu" >
@@ -576,12 +587,13 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip"></div>
-                                                            <label for="inputEmail3" class="col-sm-3 control-label">Para Birimi</label>
+
+                                                            <label for="inputEmail3" class="col-sm-3 control-label">Para Birimi*</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <select class="form-control required" name="para_birimi" id="para_birimi" >
@@ -591,16 +603,14 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip">
-                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
-                                                                    <span class="tooltiptext">Alacağınız ürün ve hizmetler iş yapacağınız yere gelsin istiyorsanız Adrese Teslim seçeneğini, tedarikçinizin bulunduğu yerden almak istiyorsanız Satıcı Firma seçeneğini işaretleyiniz.</span>
-                                                                </div>
-                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Yeri</label>
+
+                                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Yeri*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <select class="form-control required" name="teslim_yeri" id="teslim_yeri" >
@@ -609,13 +619,17 @@
                                                                     <option  value="Adrese Teslim">Adrese Teslim</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip">
+                                                                    <img src="{{asset("images/soru-isareti.ico")}}" />
+                                                                    <span class="tooltiptext">Alacağınız ürün ve hizmetler iş yapacağınız yere gelsin istiyorsanız Adrese Teslim seçeneğini, tedarikçinizin bulunduğu yerden almak istiyorsanız Satıcı Firma seçeneğini işaretleyiniz.</span>
+                                                                </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group error teslim_il row">
                                                             <div class="col-md-12">
-                                                            <div class="col-md-1 aciklama-tooltip"></div>
-                                                            <label for="inputTask" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Ad. İli</label>
+
+                                                            <label for="inputTask" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Ad. İli*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <select class="form-control required" name="il_id" id="il_id" >
@@ -634,18 +648,20 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group error teslim_ilce row">
                                                             <div class="col-md-12">
-                                                                <div class="col-md-1 aciklama-tooltip"></div>
-                                                            <label for="inputTask" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Ad. İlçesi</label>
+
+                                                            <label for="inputTask" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Teslim Ad. İlçesi*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <select class="form-control required" name="ilce_id" id="ilce_id" >
                                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
                                                                 </select>
                                                             </div>
+                                                                <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
                                                         </div>
 
