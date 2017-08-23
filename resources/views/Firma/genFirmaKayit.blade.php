@@ -108,9 +108,9 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Sektörler</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'value="{{1}}">
+                          <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'value="{{1}}" data-validation = "required" data-validation-error-msg = "Lütfen Sektör Seçiniz">
                             @foreach($sektorler as $sektor)
-                                    <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                    <option  value="{{$sektor->id}}">{{$sektor->adi}}</option>
                             @endforeach
                           </select>
                           <span class="help-block" style="color:red"> {{ $errors->first('sektor_id') }}</span>
@@ -124,7 +124,7 @@
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
                                         'data-validation'=>'length ',
-                                        'data-validation-length'=>'min2',
+                                        'data-validation-length'=>'min15',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                           <span class="help-block" style="color:red"> {{ $errors->first('telefon') }}</span>
                         </div>
@@ -979,9 +979,11 @@
     */
     var count = 0;
     var count_for_header = 5;
+
+
     $('#custom-headers').multiSelect({
         selectableHeader: "</i><input type='text'  class='search-input col-sm-12 search_icon' autocomplete='off' placeholder='Sektör Seçiniz'></input>",
-        selectionHeader: "<p id = 'sektor_count' style='font-size:12px;color:red'>Max '"+count_for_header+"' sektör seçebilirsiniz</p>",
+        selectionHeader: "<p id = 'sektor_count' style='font-size:12px;color:green'>Lütfen Sektör Seçiniz</p>",
         afterInit: function(ms){
           var that = this,
               $selectableSearch = that.$selectableUl.prev(),
@@ -997,24 +999,32 @@
           });
         },
         afterSelect: function(values){
-          count++;
+          count = $(".ms-selection").find(".ms-selected").length;
           if(count>5){
               $('#custom-headers').multiSelect('deselect', values);
-          }else{
-              count_for_header--;
           }
-          $("#sektor_count").text("Max '"+count_for_header+"' sektör seçebilirsiniz");
+          $("#sektor_count").text(" '"+(5-count)+"' sektör seçebilirsiniz");
           this.qs1.cache();
         },
         afterDeselect: function(values){
-          count--;
+          count = $(".ms-selection").find(".ms-selected").length;
+
           if(count!=5){
-            count_for_header++;
-            $("#sektor_count").text("Max '"+count_for_header+"' sektör seçebilirsiniz");
+            $("#sektor_count").text(" '"+(5-count)+"' sektör seçebilirsiniz");
+          }
+          if(count==0){
+            $("#sektor_count").text("Lütfen Sektör Seçiniz");
           }
           this.qs1.cache();
         }
     });
+    function CheckSektor(){
+      alert("sdgsdg");
+        var errorMessageSektor = document.getElementById('sektor_id');
+
+        errorMessageSektor.innerHTML='pmgpdmpg';
+    }
+
     function CheckPasswordStrength(password) {
         var password_strength = document.getElementById("password_strength");
         //TextBox left blank.
@@ -1189,9 +1199,12 @@
         },
         error: function(jqXHR, textStatus, errorThrown)
         {
-          alert(postData);
           console.log(textStatus + "," + errorThrown);
-          location.reload("<errorFieldID>");
+
+
+
+          //Laravel Hatası gelince sayfa yenilernirken hatanın üzerine yönlendirmek istiyorum ama bunu javascriptle yapabilirmiyim.
+          location.reload("<errorFieldID>");//Yemedi
           // location.hash("<errorFieldID>");
           anchorScroll();
         }

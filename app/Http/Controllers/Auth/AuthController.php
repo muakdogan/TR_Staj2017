@@ -212,12 +212,12 @@ class AuthController extends Controller
           'soyadi' => 'required|string',
           'unvan' => 'required|string',
           'telefonkisisel' => 'required|min:10|numeric',
-          'email_giris' => 'required|email',
+          'email_giris' => 'required|email|unique:kullanicilar,email',
           'password' => 'required',
           'password_confirmation' => 'required|same:password',
           'fatura_tur' => 'required',
           'vergi_daire_il' => 'required|integer|exists:iller,id',
-          'vergi_daire' => 'required|integer|in:'.$vergi_illerString,
+          'vergi_daire' => 'exists:vergi_daireleri,id|required|integer|in:'.$vergi_illerString,
 
         ],[
           //Error Messages
@@ -262,6 +262,8 @@ class AuthController extends Controller
 
           'email_giris.required' => 'Lütfen email adresi giriniz.',
           'email_giris.email' => 'Geçersiz bir email adresi girdiniz.',
+          'email_giris.unique' => 'Email sistemimizde kayıtlıdır. Lütfen farklı bir email giriniz',
+
 
           'password.required' => 'Lütfen kullanıcı şifrenizi giriniz.',
 
@@ -271,12 +273,13 @@ class AuthController extends Controller
           'fatura_tur.required' => 'Lütfen fatura türünü seçiniz(Kurumsal yada Bireysel).',
 
           'vergi_daire_il.required'=> 'Lütfen vergi dairesinin bulundğu ili seçiniz.',
-          'vergi_daire_il.exists'=> 'Sistemimizde kayıtlı olmayan bir il seçtiniz.Lütfen tekrar deneyin',
           'vergi_daire_il.integer'=> 'Vergi Dairesi İl id si integer olması gerekiyor.',
 
+          'vergi_daire.exists'=> 'Sistemimizde kayıtlı olmayan bir vergi dairesi seçtiniz.Lütfen tekrar deneyin',
           'vergi_daire.required'=> 'Lütfen vergi dairesi seçiniz.',
           'vergi_daire.integer'=> 'Vergi Dairesi id si integer olması gerekiyor.',
-          'vergi_daire.in'=> 'İl i olmayan bir vergi dairesi seçemezsiniz',
+          'vergi_daire.in'=> 'İl i olmayan bir vergi dairesi seçemezsiniz'
+
         ]);
         if($request->fatura_tur == "kurumsal"){
           $this->validate($request, [

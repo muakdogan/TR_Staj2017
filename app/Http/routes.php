@@ -736,7 +736,7 @@ Route::get('kismiRekabet/{firmaID}/{ilanID}' ,'KismiRekabetService@kismiRekabetS
 
   Route::get('teklifGor/{id}/{ilanid}' ,'IlanController@teklifGor');
 
-    ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////
+  ///////////////////////////////Kısmi Açık REkabet Kazanan ///////////
     Route::post('KismiAcikRekabetKazanan' ,function () {
 
       $ilan_id = Input::get('ilan_id');
