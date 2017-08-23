@@ -395,7 +395,8 @@ Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
-Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikcilerEkleCıkar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikciEkle',  'FirmaController@onayliTedarikciEkle'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikciCikar',  'FirmaController@onayliTedarikciCikar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
 Route::get('/onayliTedarikcilerim',  'FirmaController@onayliTedarikcilerim'); /// onayli firmalar sekmesinin controller fonksiyonu
 
 Route::get('/kullaniciFirma',function () {

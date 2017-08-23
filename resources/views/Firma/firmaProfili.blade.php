@@ -275,19 +275,43 @@
        <br>
        <br>
          @include('layouts.alt_menu') 
-       <h2>Firma Profili</h2>
+       <h2>{{$firma->adi}} Profili</h2>
    </div>
    <div class="container"> 
     <div class="row">
      <div class="col-sm-8" >
+
+       <div  class="panel-group" id="accordion">
            <div  class="form-group">
                <div class="row">
-                   <div class="col-sm-4" ><img id="logo1" value="" src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;"> 
+                   <div class="col-sm-5" >
+                       <img id="logo1" value="" src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;">
+                        <br />
+                       <button class="btn btn-primary btn-xs btn-detail " id="btn-add-image" onclick="" value="{{$firma->id}}">Düzenle</button>
                    </div>
-                   <div class="col-sm-4"><h3>{{$firma->adi}}</h3></div>
+                   <div class="col-sm-7">
+
+                       <div class="panel panel-default">
+                           <div  class="panel-heading">
+                               <h4 class="panel-title">
+                                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse0"><img width="20" height="20" src="{{asset('images/islem.png')}}">&nbsp;<strong>Sektorler</strong></a>
+                               </h4>
+                           </div>
+                           <div class="panel-body">
+                               <ul>
+                                   @foreach($firmaSektorleri as $firmaSektor)
+                                   <li>{{$firmaSektor->adi}}</li>
+                                   @endforeach
+                               </ul>
+                           </div>
+                       </div>
+
+
+
+
+
+                   </div>
                </div>
-               <br>
-               <button class="btn btn-primary btn-xs btn-detail " id="btn-add-image" onclick="" value="{{$firma->id}}">Düzenle</button>
                <div class="modal fade" id="myModal-image" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                    <div class="modal-dialog">
                        <div class="modal-content">
@@ -300,51 +324,51 @@
                                    {!! Form::open(array('url'=>'firmaProfili/uploadImage/'.$firma->id,'method'=>'POST', 'files'=>true)) !!}
                                    <div class="control-group">
                                        <div class="controls">
-                                           <div class="container-fuild"> 
-                                                <div class="row">
-                                                    <div class="col-sm-4" >
-                                                        <div class="secure"><strong>Mevcut Logonuz</strong></div>
-                                                            <br>
-                                                            <div style="width:128px;height:128px;"class="image-wrapper">
-                                                                 <img src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;">
-                                                            </div> 
-                                                    </div>
-                                                    <div class="col-sm-8" >
-                                                        <div class="secure"><strong>Logonuzu Değiştirin</strong></div>
-                                                        <div class="wrapper">
-                                                            {!! Form::file('logo', ['id' => 'addImage']) !!}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                 <br>
-                                           <p class="errors">{!!$errors->first('image')!!}</p>
-                                           @if(Session::has('error'))
-                                           <p class="errors">{!! Session::get('error') !!}</p>
-                                           @endif
+                                           <div class="container-fuild">
+                                               <div class="row">
+                                                   <div class="col-sm-4" >
+                                                       <div class="secure"><strong>Mevcut Logonuz</strong></div>
+                                                       <br>
+                                                       <div style="width:128px;height:128px;"class="image-wrapper">
+                                                           <img src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" style="width:128px;height:128px;">
+                                                       </div>
+                                                   </div>
+                                                   <div class="col-sm-8" >
+                                                       <div class="secure"><strong>Logonuzu Değiştirin</strong></div>
+                                                       <div class="wrapper">
+                                                           {!! Form::file('logo', ['id' => 'addImage']) !!}
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <br>
+                                               <p class="errors">{!!$errors->first('image')!!}</p>
+                                               @if(Session::has('error'))
+                                                   <p class="errors">{!! Session::get('error') !!}</p>
+                                               @endif
+                                           </div>
                                        </div>
+                                       <div id="success">
+                                       </div>
+                                       {!! Form::submit('Logo Yükle', array('url'=>'firmaProfili/uploadImage'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
+                                       {!! Form::close() !!}
+                                       {{ Form::open(array('url'=>'firmaProfili/deleteImage/'.$firma->id,'method' => 'DELETE', 'files'=>true)) }}
+                                       {{ Form::hidden('id', $firma->logo) }}
+                                       {{ Form::submit('Logo Sil', ['style'=>'float:right' ,'class' => 'btn btn-danger']) }}
+                                       {{ Form::close() }}
+                                       <br>
+                                       <br>
+                                       <br>
                                    </div>
-                                   <div id="success"> 
-                                   </div>
-                                   {!! Form::submit('Logo Yükle', array('url'=>'firmaProfili/uploadImage'.$firma->id,'style'=>'float:right','class'=>'btn btn-danger')) !!}
-                                   {!! Form::close() !!}
-                                   {{ Form::open(array('url'=>'firmaProfili/deleteImage/'.$firma->id,'method' => 'DELETE', 'files'=>true)) }}
-                                   {{ Form::hidden('id', $firma->logo) }}
-                                   {{ Form::submit('Logo Sil', ['style'=>'float:right' ,'class' => 'btn btn-danger']) }}
-                                   {{ Form::close() }}
-                                   <br>
-                                   <br>
-                                   <br>
                                </div>
-                           </div>
-                           <div class="modal-footer">
+                               <div class="modal-footer">
+                               </div>
                            </div>
                        </div>
                    </div>
                </div>
-              
            </div>
-           </div>
-       <div  class="panel-group" id="accordion">
+
+
            <div class="panel panel-default">
                <div  class="panel-heading">
                    <h4 class="panel-title">

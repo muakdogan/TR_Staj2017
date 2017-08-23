@@ -32,6 +32,7 @@ class FirmaController extends Controller
     public function __construct()
     {
         $this->middleware('firmaYetkili', ['except' => ['showFirma']]);
+        $this->middleware('auth',['only'=>['showFirma']]);
     }
 
     /*public function properFunc($string){
@@ -42,9 +43,13 @@ class FirmaController extends Controller
 
      public function showFirma(){
         $firma = Firma::find(session()->get('firma_id'));
+
         if (Gate::denies('show', $firma)) {
-              redirect()->intended($this->redirectPath());
+            return Redirect::to('/');
         }
+
+        $firmaSektorleri=$firma->sektorler()->get();
+
         $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
         if (!$firmaFatura) {
                $firmaFatura = new Adres();
@@ -103,7 +108,7 @@ class FirmaController extends Controller
                 ->with('calisma_günleri',$calisma_günleri)->with('firmaFatura',$firmaFatura)->with('firmaAdres',$firmaAdres)
                 ->with('uretilenMarka',$uretilenMarka)->with('satilanMarka',$satilanMarka)->with('kaliteBelge',$kaliteBelge)
                 ->with('firmaReferanslar',$firmaReferanslar)->with('referans',$referans)->with('brosur',$brosur)
-                ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan);
+                ->with('calismaGunu',$calismaGunu)->with('calisan',$calisan)->with('firmaSektorleri',$firmaSektorleri);
     }
 
     public function uyelikBilgileri()
@@ -116,11 +121,12 @@ class FirmaController extends Controller
     }
 
     public function showFirmalar(){
-        Debugbar::info("girdi");
+        $firma_id = session()->get('firma_id');
         $iller = Il::all();
         $sektorler= Sektor::all();
-        $firma = Firma::find(session()->get("firma_id"));
-
+        $firma = Firma::find($firma_id);
+        $onayli_tedarikciler=Response::json(OnayliTedarikci::where('firma_id', $firma_id)->select('tedarikci_id')->get());
+        Debugbar::info($onayli_tedarikciler);
         $il_id = Input::get('il');
         $sektorlerInput = Input::get('sektor');
         $radSearch= Input::get('radSearch');
@@ -196,26 +202,32 @@ class FirmaController extends Controller
 
         return View::make('Firma.firmaHavuzu')-> with('firmalar',$firmalar)
                 ->with('iller', $iller)->with('sektorler',$sektorler)
-                ->with('firma',$firma);
+                ->with('firma',$firma)->with('onayliTedarikciler',$onayli_tedarikciler);
 
     }
-    public function onayliTedarikcilerEkleCıkar(){ //// onayli tedarikçi ekle kaldır tüm firmalar için
-        $tedarikci_id = Input::get('firma_id');
 
-        $kontrol = OnayliTedarikci::where('firma_id',session()->get('firma_id'))->where('tedarikci_id',$tedarikci_id)->get();
-        if(count($kontrol) > 0){
-            $tedarikci = OnayliTedarikci::find($kontrol[0]['id']);
-            $tedarikci->delete();
-        }
-        else{
-            $tedarikci = new OnayliTedarikci();
-
-            $tedarikci->firma_id = session()->get('firma_id');
-            $tedarikci->tedarikci_id = $tedarikci_id;
-
-            $tedarikci ->save();
+    public function onayliTedarikciEkle(){
+        $firma_id = session()->get('firma_id');
+        if($firma_id) {
+            $tedarikci_id = Input::get('tedarikci_id');
+            $kontrol = OnayliTedarikci::where('firma_id', $firma_id)->where('tedarikci_id', $tedarikci_id)->count();
+            if ($kontrol == 0) {
+                $tedarikci = new OnayliTedarikci();
+                $tedarikci->firma_id = $firma_id;
+                $tedarikci->tedarikci_id = $tedarikci_id;
+                $tedarikci->save();
+            }
         }
     }
+
+    public function onayliTedarikciCikar(){
+        $firma_id = session()->get('firma_id');
+        if($firma_id){
+            $tedarikci_id = Input::get('tedarikci_id');
+            OnayliTedarikci::where('firma_id',$firma_id)->where('tedarikci_id',$tedarikci_id)->delete();
+        }
+    }
+
     public function onayliTedarikcilerim(){
         $onayli_tedarikciler  = Firma::join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
                 ->join('iller', 'adresler.il_id', '=', 'iller.id')
@@ -223,12 +235,10 @@ class FirmaController extends Controller
                 ->whereExists(function ($query) {
                     $query->select(DB::raw("*"))
                           ->from('onayli_tedarikciler')
-                          ->whereRaw('onayli_tedarikciler.firma_id='+session()->get("firma_id"))
+                          ->whereRaw('onayli_tedarikciler.firma_id='.session()->get("firma_id"))
                           ->whereRaw('onayli_tedarikciler.tedarikci_id = firmalar.id');
                 })
                 ->select("firmalar.*","firmalar.adi as firma_adi","iller.adi as iladi")->get();
-
-            Debugbar::info($onayli_tedarikciler);
         return View::make('Firma.onayliTedarikciler')-> with('onayli_tedarikciler',$onayli_tedarikciler);
     }
 

@@ -15,7 +15,6 @@
                -webkit-transition: width 0.4s ease-in-out;
                transition: width 0.4s ease-in-out;
            }
-
            input[type=button] {
                background-color: #004f70;
                border: 2px solid #ccc;
@@ -24,9 +23,7 @@
               padding: 12px 8px 12px 8px;
                text-decoration: none;
                margin: 4px 2px;
-
            }
-
            .search{
                width: 270px;
                box-sizing: border-box;
@@ -55,16 +52,12 @@
               margin: 0px;
               padding: 0px;
             }
-
             .dropdown ul {
               margin: -1px 0 0 0;
             }
-
             .dropdown dd {
               position: relative;
             }
-
-
             .dropdown dt a {
               background-color: #FFF;
               display: block;
@@ -76,14 +69,12 @@
               border-radius: 4px;
               width: 250px;
             }
-
             .dropdown dt a span,
             .multiSel span {
               cursor: pointer;
               display: inline-block;
               padding: 0 3px 2px 0;
             }
-
             .dropdown dd ul {
               background-color: #4F6877;
               border: 0;
@@ -99,20 +90,16 @@
               overflow: auto;
               z-index: 1;
             }
-
             .dropdown span.value {
               display: none;
             }
-
             .dropdown dd ul li a {
               padding: 5px;
               display: block;
             }
-
             .dropdown dd ul li a:hover {
               background-color: #fff;
             }
-
             button {
               background-color: #fff;
               border-radius: 3px;
@@ -144,7 +131,6 @@
                 width: 100%;
                 height:100%;
             }
-
             .ajax-loader img {
                 position: relative;
                 top:50%;
@@ -155,18 +141,14 @@
                     margin-bottom: 10px;
                     border: 0;
                     border-top: 1px solid #ddd;
-
             }
-
-
    </style>
    <link href="{{asset('css/multiple-select.css')}}" rel="stylesheet"/>
-   
+
 <body style="overflow-x:hidden">
    <br>
    <br>
    <br>
-
         <div  class="container">
           @include('layouts.alt_menu')
           
@@ -222,7 +204,6 @@
                 </div>
                 <div class="col-sm-9 firmalar" id="auto_load_div">
                    @include('Firma.firmalar')
-
                </div>
                 <div class="ajax-loader">
                     <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
@@ -230,9 +211,8 @@
             </div>
         </div>
 </body>
- <script src="{{asset('js/multiple-select.js')}}"></script>
+    <script src="{{asset('js/multiple-select.js')}}"></script>
 <script>
-  
     var sektor = new Array();
     $("#sektorler").multipleSelect({
             width: 260,
@@ -243,29 +223,22 @@
             onClick: function() {
                 var sonSecilen="";
                 var id=0;
-                
-                console.log($(this));
                 $('#sektorler option:selected').each(function() {
                     sonSecilen = $(this).text();
                     id=$(this).val();
                     if(jQuery.inArray(sonSecilen, sektor) === -1){
                         sektor.push(sonSecilen);
-                       
                         return false;
                     }
-                    
                 });
                 console.log(sonSecilen);
                 if(sonSecilen !== ""){
                     doldurma(sonSecilen,"s"+id);
                 }
                 getFirmalar(1);
-                
             }
     });
-    
     $("#temizleButton").click(function(){ //////////// Bütün filtreler kalkması için ///////
-
        $(".silmeButton").each(function(){
            $(this).click();
        });
@@ -320,12 +293,9 @@
             else if(name1.length === 3){
                 birlesmisName=name1[0]+name1[1]+name1[2];
             }
-
             var html = '<li class="li" name="'+birlesmisName+'"> <p class="pclass "><span title="' + name + '">' + name + '</span> <button class="silmeButton" onclick=silme("'+birlesmisName+'")><img src="{{asset('images/kapat.png')}}"></button></p> </li>';
-
             $("#multiSel"+key).append(html);                                     
     }
-    
     $('#button').click(function(){
         doldurma("Anahtar kelime:"+$('#search').val(),$('#search').val());
         getFirmalar(1);
@@ -348,20 +318,16 @@
     $(".dropdown dd ul li a").on('click', function() {
         $(".dropdown dd ul").hide();
     });
-
     function getSelectedValue(id) {
         return $("#" + id).find("dt a span.value").html();
     }
-
     $(document).bind('click', function(e) {
         var $clicked = $(e.target);
         if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
     });
-
     $('.mutliSelect input[type="checkbox"]').on('click', function() {
         var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').attr('name'),
           title = $(this).attr('name');
-
         if ($(this).is(':checked')) {
           var html = '<span title="' + title + '">' + title + '</span>';
           $('.multiSel').append(html);
@@ -375,14 +341,12 @@
         }
     });    
     function getFirmalar(page) {
-       
         var selectedSektor = new Array();
         var n = $('#sektorler option:selected').length;  ///////////sektor /////////////
         if (n > 0){
             $('#sektorler option:selected').each(function() {
                  selectedSektor.push($(this).val());
             });
-            
         }
         var selectedIl = new Array(); /////////// iller //////////////
         var n = jQuery('.mutliSelect input[type="checkbox"]').length;
@@ -391,7 +355,6 @@
                     selectedIl.push($(this).val());
             });
         }
-        
         var selectedSearch = "";    /////////////////////////// search button /////////////////////
         var inputSearch = "";
         var selected3 = $("#radioDiv3 input[type='radio']:checked");
@@ -419,4 +382,5 @@
         });
     }
 </script>
+
 @endsection
