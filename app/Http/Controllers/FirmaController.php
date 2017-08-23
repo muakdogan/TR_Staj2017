@@ -125,7 +125,7 @@ class FirmaController extends Controller
         $iller = Il::all();
         $sektorler= Sektor::all();
         $firma = Firma::find($firma_id);
-        $onayli_tedarikciler=Response::json(OnayliTedarikci::where('firma_id', $firma_id)->select('tedarikci_id')->get());
+        $onayli_tedarikciler=OnayliTedarikci::where('firma_id', $firma_id)->select('tedarikci_id')->get();
         Debugbar::info($onayli_tedarikciler);
         $il_id = Input::get('il');
         $sektorlerInput = Input::get('sektor');
