@@ -150,8 +150,8 @@
    <br>
    <br>
         <div  class="container">
-          @include('layouts.alt_menu')
-          
+            @include('layouts.alt_menu')
+
             <div class="col-sm-12">
                 <ul style="list-style: none outside none;">
                     <?php $j=0; ?>
