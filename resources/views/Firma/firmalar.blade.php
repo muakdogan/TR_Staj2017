@@ -3,7 +3,6 @@
     background: #dddddd;
     width: 30px;
     border-radius: 4px;
-    position: absolute;
     margin: auto;
     text-align: center;
     color: white;
@@ -26,9 +25,9 @@ a{
                 <div class="row hover">
                     <div class="col-sm-10 ">
                         <div class="col-sm-2"><img src="{{asset('uploads')}}/{{$firma->logo}}" alt="HTML5 Icon" width="80" height="80" class="img-responsive " style="padding-top:16px;padding-bottom: 10px">
-
                         @if(($firma->puanlamaOrtalama())> 0)
-                            <div class="center"><div class="puanlama ">{{$firma->puanlamaOrtalama()}}</div></div>
+                            <div class="puanlama ">{{$firma->puanlamaOrtalama()}}</div>
+                            <br />
                         @endif
                         </div>
                         <div class="col-sm-3"><p style="font-size:18px ; color:#666 ;font-weight:bold" >{{$firma->adi}}</p>
@@ -41,12 +40,9 @@ a{
 
                     </div>
                     <div class="col-sm-2">
-                        @if(Auth::guest())
-                        @else
-                            <a href="#"><button type="button" class="btn btn-primary btn-md" name="{{$firma->id}}" id="tedarikci" onclick="tedarikci()" style='float:right;margin-top:60px'>@if($firma->onay == 0)Onaylı Tedarikçi Ekle @else Tedarikçilerimden<br>Çıkar @endif</button></a><br><br>
-                        @endif
-                    </div>
-
+                            <button type="button" class="btn btn-primary btn-tedEkle" id="btn_tedEkle_{{$firma->id}}" value="{{$firma->id}}" style="float:right;width:170px;margin: 30px">Onaylı Tedarikçi Ekle</button>
+                            <button type="button" class="btn btn-primary btn-tedCikar" id="btn_tedCikar_{{$firma->id}}" value="{{$firma->id}}" style="float:right;width:170px;display: none;margin: 30px">Tedarikçilerimden Çıkar</button>
+                     </div>
                 </div>
 
                 <hr class="hr">
@@ -93,18 +89,57 @@ $(".puanlama").each(function(){
     }
 
 });
-var firma_id = $("#tedarikci").attr('name');
-function tedarikci(){          
-        $.ajax({
+
+$(".btn-tedEkle").click(function () {
+    var tedarikci_id=$(this).val();
+    var index= $(this).index(".btn-tedEkle");
+    $.ajax({
         type:"GET",
-        url:"{{asset('onayliTedarikci')}}",
-        data:{firma_id:firma_id},
+        url:"{{asset('onayliTedarikciEkle')}}",
+        data:{tedarikci_id:tedarikci_id},
         cache: false,
         success: function(data){
-            console.log(data);
-             
-               location.reload();
+            $('.btn-tedEkle').eq(index).hide();
+            $('.btn-tedCikar').eq(index).show();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus); alert("Error: " + errorThrown);
+        }
+    });
+});
+
+$(".btn-tedCikar").click(function () {
+    var tedarikci_id=$(this).val();
+    var index= $(this).index(".btn-tedCikar");
+    $.ajax({
+        type:"GET",
+        url:"{{asset('onayliTedarikciCikar')}}",
+        data:{tedarikci_id:tedarikci_id},
+        cache: false,
+        success: function(data){
+            $('.btn-tedCikar').eq(index).hide();
+            $('.btn-tedEkle').eq(index).show();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus); alert("Error: " + errorThrown);
+        }
+    });
+});
+
+$(document).ready(function(){
+    onayliTedArr = [];
+    @for ($i = 0 ; $i<count($onayliTedarikciler); $i++)
+        onayliTedArr.push({{$onayliTedarikciler[$i]->tedarikci_id}});
+    @endfor
+        $(".btn-tedEkle").each(function () {
+        for (i = 0; i < onayliTedArr.length; i++) {
+            if($(this).val()==onayliTedArr[i]){
+                $(this).hide();
+                var index= $(this).index(".btn-tedEkle");
+                $('.btn-tedCikar').eq(index).show();
             }
-        });
-    }
+        }
+    });
+});
+
 </script>
