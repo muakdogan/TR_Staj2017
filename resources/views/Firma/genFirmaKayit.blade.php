@@ -93,7 +93,7 @@
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Firma Adı</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi">
+                        <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi" value="{{ Request::old('firma_adi') }}">
                           {!! Form::text('firma_adi', 'MetaData',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Firma adı',
@@ -134,7 +134,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="il_id">İl</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <select class="form-control" name="il_id" id="il_id"
-                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!" value="{{1}}">>
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!" value="{{1}}">
                             <option selected disabled>İl Seçiniz</option>
                             @foreach($iller_query as $il)
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
@@ -148,7 +148,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ilce_id">İlçe</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <select class="form-control"name="ilce_id" id="ilce_id" data-validation="required"
-                                                          data-validation-error-msg="Lütfen bu alanı dolduurnuz!">
+                                                           data-validation-error-msg="Lütfen bu alanı dolduurnuz!"> <!--value= {{ Request::old('ilce_id') }} -->
                           </select>
                           <span class="help-block" style="color:red"> {{ $errors->first('ilce_id') }}</span>
                         </div>
@@ -248,7 +248,10 @@
                                          'onFocusout'=>'email_girisControl()',
                                          'data-validation'=>'email' ,
                                          'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
-                                           <span class="help-block" style="color:red"> {{ $errors->first('email_giris') }}</span>
+
+                                          <span class="help-block" id="email_error" style="color:red" onload="findPos()">{{ $errors->first('email_giris') }}</span>
+
+
                         </div>
                       </div>
 
@@ -961,12 +964,6 @@
     });
     // READY PARANTHESIS
 
-
-
-
-
-
-
     /*
       18-19.07.2017 Oguzhan
       selection header'a id eklendi.
@@ -1018,12 +1015,8 @@
           this.qs1.cache();
         }
     });
-    function CheckSektor(){
-      alert("sdgsdg");
-        var errorMessageSektor = document.getElementById('sektor_id');
 
-        errorMessageSektor.innerHTML='pmgpdmpg';
-    }
+
 
     function CheckPasswordStrength(password) {
         var password_strength = document.getElementById("password_strength");
@@ -1154,8 +1147,13 @@
     Form data serialize edilmeden once maskelemeler kaldirilir daha sonra da
     tekrar maskeleme yapilir.
     */
+
+
     $("#firma_kayit").submit(function(e)
     {
+      var obj,curtop;
+      var json;
+
       var postData, formURL;
       $('#telefon').unmask();//telefon verilerinin maskesini kaldirir.
       $('#telefonkisisel').unmask();
@@ -1199,14 +1197,16 @@
         },
         error: function(jqXHR, textStatus, errorThrown)
         {
+
+
           console.log(textStatus + "," + errorThrown);
+          location.reload();
+
+          window.scroll(0,0);//Kullanıcıların hatasını görebilmesi için sayfa başına yeniliyor.
 
 
 
-          //Laravel Hatası gelince sayfa yenilernirken hatanın üzerine yönlendirmek istiyorum ama bunu javascriptle yapabilirmiyim.
-          location.reload("<errorFieldID>");//Yemedi
-          // location.hash("<errorFieldID>");
-          anchorScroll();
+
         }
       });
       e.preventDefault(); //STOP default action
