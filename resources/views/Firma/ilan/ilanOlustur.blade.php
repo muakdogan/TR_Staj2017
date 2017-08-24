@@ -562,8 +562,7 @@
                                                                 <select class="form-control required" name="yaklasik_maliyet" id="yaklasik_maliyet" >
                                                                     <option selected disabled>Seçiniz</option>
                                                                     @foreach($maliyetler as $maliyet)
-                                                                        <option name="{{$maliyet->aralik}}" value="{{$maliyet->miktar}}" >{{$maliyet->aralik}}</option>
-
+                                                                        <option value="{{$maliyet->miktar}}" >{{$maliyet->aralik}}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <input type="hidden" id="maliyet" name="maliyet" value=""></input>
@@ -583,7 +582,7 @@
                                                                 <select class="form-control required" name="odeme_turu" id="odeme_turu" >
                                                                     <option selected disabled>Seçiniz</option>
                                                                     @foreach($odeme_turleri as $odeme_turu)
-                                                                    <option  value="{{$odeme_turu->id}}" >{{$odeme_turu->adi}}</option>
+                                                                    <option value="{{$odeme_turu->id}}" >{{$odeme_turu->adi}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
