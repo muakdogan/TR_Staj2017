@@ -142,13 +142,8 @@ class AuthController extends Controller
       //  return $validator->errors()->all();
     }
 
-
-
     public function kayitForm(Request $request)
     {
-
-
-
 
         $ilceler = \App\Ilce::where('il_id', $request->il_id)->get();
         $semtler = \App\Semt::where('ilce_id', $request->ilce_id)->get();

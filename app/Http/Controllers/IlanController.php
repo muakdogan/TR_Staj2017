@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+
 class IlanController extends Controller
 {
     public function __construct(){
@@ -132,7 +133,7 @@ class IlanController extends Controller
         $firma_id = session()->get('firma_id');
 
         $dt = Carbon::now();
-        $dt->toDateString();  
+        $dt->toDateString();
         $iller = Il::all();
 
         $ilanlar =  Ilan::where('goster', 1)->with([
@@ -151,7 +152,7 @@ class IlanController extends Controller
 
         $misafir = !$firma || $firma->onay == 0;
 
-        if($misafir){ 
+        if($misafir){
             $sektor_id = 0;
             $davetEdildigimIlanlar = null;
         }else{
@@ -172,7 +173,7 @@ class IlanController extends Controller
         $keyword = Input::get('keyword');
         $il_id = Input::get('il');
         $bas_tar = Input::get('bas_tar');
-        $bit_tar = Input::get('bit_tar');   
+        $bit_tar = Input::get('bit_tar');
         $sektorlerInput = Input::get('sektor');
         $tur = Input::get('tur');
         $usul= Input::get('usul');
@@ -180,7 +181,7 @@ class IlanController extends Controller
         $input= Input::get('input');
         $sozlesme= Input::get('sozles');
         $odeme= Input::get('odeme');
-        
+
         if($input != NULL){
             if($radSearch == "tum"){
                 foreach ($sektorler as $sektor){
@@ -200,13 +201,13 @@ class IlanController extends Controller
                             ->orWhere('iller.adi', 'like', '%' . $input . '%')
                             ->orWhere('ilanlar.ilan_sektor',$sektor_id);
                     });
-                        
+
             }
             else if($radSearch == "ilan_baslık"){
                 $ilanlar->where('ilanlar.adi', $input);
             }
             else{
-                $ilanlar->where('firmalar.adi', $input);                
+                $ilanlar->where('firmalar.adi', $input);
             }
         }
         if($ilId != NULL){
@@ -230,7 +231,7 @@ class IlanController extends Controller
                                 ->orWhere('firmalar.adi',$keyword )
                                 ->orWhere('ilanlar.ilan_sektor',$sektor_id);
                         });
-             
+
         }
         if($il_id != NULL) {
             $ilanlar->whereIn('adresler.il_id',$il_id);
@@ -258,7 +259,7 @@ class IlanController extends Controller
         }
 
         $ilanlar=$ilanlar->orderBy('yayin_tarihi', 'DESC')->paginate(5);
-        
+
         if (Req::ajax()) {
             return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar, 'misafir' => $misafir))->render());
         }
@@ -272,7 +273,7 @@ class IlanController extends Controller
 
     public function ilanOlustur($firma_id){
         $firma = Firma::find($firma_id);
-   
+
         $ilan = new \App\Ilan();
 
         if (Gate::denies('createIlan', [$ilan, $firma_id])) {
@@ -280,7 +281,7 @@ class IlanController extends Controller
         }
 
         if (!$ilan)
-        
+
         if (!$ilan->ilan_yapim_isleri)
             $ilan->ilan_yapim_isleri = new App\IlanYapimIsi();
 
@@ -708,28 +709,75 @@ class IlanController extends Controller
     {
         //ilan bilgileri kaydediliyor.
 
+
+        $isinSuresiString = "Tek Seferde,Zamana Yayılarak";
+        $rekabetSekliString = "Tamrekabet,Sadece Başvuru";
+        $sozlesmeTuruString = "Birim Fiyatlı,Götürü Bedel";
+        //ilanOluşturFom Validasyon İşlemi
+        $this->validate($request, [
+          'firma_adi_goster' => 'required|integer|min:0|max:1',
+          'ilan_adi' => 'required|min:2',
+          'ilan_turu' => 'required|integer|min:1|max:3',
+
+          //Firma Sektörler İçin Validasyon Yazılmadı.
+
+          'ilan_tarihi_araligi' => 'required',
+
+          'isin_suresi' => 'required|in:'.$isinSuresiString,
+
+          'is_tarihi_araligi' => 'required',
+          'rekabet_sekli' => 'required|in:'.$rekabetSekliString,
+          'sozlesme_turu' => 'required|in:'.$sozlesmeTuruString,
+
+
+        ],[//Error Messages
+          '*.required' => 'Lütfen bu alanı doldurunuz',
+          '*.integer' => 'Sadece sayı girebilirsiniz',
+          '*.in' => 'Sistemde istenmeyen bir değer girilemez',
+
+          'firma_adi_goster.min' => 'Radio buttonlara farklı değer girilemez',
+          'firma_adi_goster.max' => 'Radio buttonlara farklı değer girilemez',
+
+          'ilan_adi.min' => 'İlan adı 2 harften fazla olmalıdır',
+
+          'ilan_turu.min' => 'İlan türüne farklı değeler girilemez',
+          'ilan_turu.max' => 'İlan türüne farklı değeler girilemez',
+
+          //'ilan_tarihi_araligi.date' => 'Lütfen bir tarih giriniz',
+          //Tarih requesti bir aralık ile geldiği için "date" rule u ile kontorl edemiyorum.
+
+
+
+
+        ]);
+
+
+
+
+
+
         $firma = Firma::find($firma_id);
         $ilan = new Ilan;
         $ilan->adi=Str::title(strtolower( $request->ilan_adi));
         $ilan->ilan_sektor=$request->firma_sektor;
-        
+
         $ilan_tarihi= explode(" - ", $request->ilan_tarihi_araligi);
         DebugBar::info($ilan_tarihi);
-        
+
         $ilan_tarihi_replace1=$ilan_tarihi[0];
         $ilan_tarihi_replace1 = str_replace('/', '-', $ilan_tarihi_replace1);
         $ilan_tarihi_replace2=$ilan_tarihi[1];
         $ilan_tarihi_replace2 = str_replace('/', '-', $ilan_tarihi_replace2);
-        
+
         DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace1)));
         DebugBar::info(date('Y-m-d', strtotime($ilan_tarihi_replace2)));
-         
+
         $ilan->yayin_tarihi=date('Y-m-d', strtotime($ilan_tarihi_replace1));
         $ilan->kapanma_tarihi= date('Y-m-d', strtotime($ilan_tarihi_replace2));
 
         $is_tarihi= explode(" - ", $request->is_tarihi_araligi);
         DebugBar::info($is_tarihi);
-        
+
         $is_tarihi_replace1=$is_tarihi[0];
         $is_tarihi_replace1 = str_replace('/', '-', $is_tarihi_replace1);
         $is_tarihi_replace2=$is_tarihi[1];
@@ -737,10 +785,10 @@ class IlanController extends Controller
 
         $ilan->is_baslama_tarihi= date('Y-m-d', strtotime($is_tarihi_replace1));
         DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace1)));
-        
+
         $ilan->is_bitis_tarihi= date('Y-m-d', strtotime($is_tarihi_replace2));
         DebugBar::info(date('Y-m-d', strtotime($is_tarihi_replace2)));
-        
+
         $ilan->aciklama =Str::title(strtolower( $request->aciklama));
         $ilan->ilan_turu= $request->ilan_turu;
         $ilan->katilimcilar= $request->katilimcilar;
@@ -755,7 +803,7 @@ class IlanController extends Controller
         $ilan->teslim_yeri_il_id= $request->il_id;
         $ilan->teslim_yeri_ilce_id= $request->ilce_id;
         $ilan->isin_suresi= $request->isin_suresi;
-        
+
         $ilan->adi= $request->ilan_adi;
         $ilan->sozlesme_onay= $request->sozlesme_onay;
         //foreach($request->firma_adi_gizli as $firma_adi_gizli){
@@ -796,7 +844,7 @@ class IlanController extends Controller
               $belirli_istekliler->save();
           }
         }
-        
+
         //kalem bilgileri kaydediliyor ilan türüne ve sözleşme türüne göre.
         if($ilan->ilan_turu==1 && $ilan->sozlesme_turu==0){
             foreach($request->mal_id as $malId){
@@ -823,7 +871,7 @@ class IlanController extends Controller
             foreach($request->mal_birim as $birim){
                   $arrayBirim[] = $birim;
             }
-           
+
             $i=0;
               foreach($request->mal_kalem as $malKalem){
                 $mal= new \App\IlanMal();
@@ -841,8 +889,8 @@ class IlanController extends Controller
               }
         }
         else if($ilan->ilan_turu==2 && $ilan->sozlesme_turu==0){
-          
-            
+
+
             foreach($request->hizmet_id as $hizmetId){
                   $arrayHizmetId[] = $hizmetId;
             }
@@ -864,7 +912,7 @@ class IlanController extends Controller
             foreach($request->hizmet_miktar_birim_id as $hmb){
                   $arrayHmb[] = $hmb;
             }
-           
+
             $i=0;
               foreach($request->hizmet_kalem as $hizmetKalem){
                 $hizmet= new \App\IlanHizmet();
@@ -878,10 +926,10 @@ class IlanController extends Controller
                 $hizmet->miktar_birim_id=$arrayHmb[$i];
                 $hizmet->save();
                 $i++;
-              } 
+              }
         }
          else if($ilan->sozlesme_turu==1){
-             
+
             foreach($request->goturu_id as $goturuId){
                   $arrayGoturuId[] = $goturuId;
             }
@@ -908,10 +956,10 @@ class IlanController extends Controller
                 $goturu->miktar_birim_id=$arrayGmb[$i];
                 $goturu->save();
                 $i++;
-              } 
+              }
          }
          else if($ilan->ilan_turu==3){
-             
+
              foreach($request->yapim_id as $yapimId){
                   $arrayYapimId[] = $yapimId;
             }
@@ -933,7 +981,7 @@ class IlanController extends Controller
             foreach($request->yapim_miktar_birim_id as $ymb){
                   $arrayYmb[] = $ymb;
             }
-           
+
             $i=0;
               foreach($request->yapim_kalem as $yapimKalem){
                 $yapim= new \App\IlanYapimIsi();
@@ -947,11 +995,11 @@ class IlanController extends Controller
                 $yapim->birim_id=$arrayYmb[$i];
                 $yapim->save();
                 $i++;
-              } 
-             
+              }
+
          }
          return Redirect::to('ilanlarim/'.$firma->id);
-      
+
     }
 
     public function ilanlarim($firmaId){
@@ -1262,4 +1310,5 @@ class IlanController extends Controller
         $ilan->statu=0;
         $ilan->save();
     }
+
 }
