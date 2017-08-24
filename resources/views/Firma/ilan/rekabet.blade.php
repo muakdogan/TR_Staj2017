@@ -6,7 +6,7 @@ if(count($teklifler) != 0){
 else {
     $tekliflerCount = 0;
 }
-$i=0; $j=0; $ilanSahibi=0;
+$i=0; $j=0;
 $para_birimi=$ilan->para_birimleri->para_birimi();
 ?>
 
@@ -34,8 +34,7 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
                     <td class="highlight">{{$j}}</td>
                     <td class="highlight">{{$teklif->teklifler->getFirma("adi")}}:</td>
                     <td class="highlight firmaFiyat" style="text-align: right; font-size: 10px"><strong class="currency">{{$teklif->teklifler->verilenFiyat()}}</strong></td>
-                @elseif(session()->get('firma_id') == $ilan->firmalar->id) <!--İlan sahibi ise Kazananı belirlemek için -->
-                    <?php $ilanSahibi= 1;?>
+                @elseif($ilanSahibi) <!--İlan sahibi ise Kazananı belirlemek için -->
                     <?php  $i++; ?>
                     <td>{{$j}}</td>
                     <td>{{$teklif->teklifler->getFirma("adi")}}</td>
@@ -82,9 +81,8 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
                             </strong> <br />%{{$teklif['iskonto_orani']}} İskontolu
                             @endif
                         </td>
-                    @elseif(session()->get('firma_id') == $ilan->firmalar->id)
+                    @elseif($ilanSahibi)
                         <?php  $i++; ?>
-                        <?php $ilanSahibi= 1;?>
                         <td>{{$j}}</td>
                         <td>{{$teklif->teklifler->getFirma("adi")}}:</td>
                         {{--<strong class="currency"> ifin içine alininca javascript kodlari çalismiyor.. --}}
@@ -130,10 +128,14 @@ $para_birimi=$ilan->para_birimleri->para_birimi();
     var tcount ={{$tekliflerCount}};
     var i = {{$i}};
     var ilanSahibi = {{$ilanSahibi}};
-    if(tcount === i && ilanSahibi !== 1) { ///ilan sahibi değilse  ve teklif vermediyse hide edilmesi
+    if(tcount==0) { //teklif verilmediyse hide edilmesi
+        $('#rekabetDiv').html("Bu ilana henüz Teklif Verilmemiş!");
+        $('#kismiRekabet').html("Bu ilana henüz Teklif Verilmemiş!");
+    }
+    else if(tcount===i && !ilanSahibi){
         $('#rekabetDiv').html("Bu alanı görebilmek için teklif vermelisiniz!");
-
         $('#kismiRekabet').html("Bu alanı görebilmek için teklif vermelisiniz!");
+
     }
     $(".KapaliKazanan").click(function(){
         var kazananFirmaId=$(this).attr("name");

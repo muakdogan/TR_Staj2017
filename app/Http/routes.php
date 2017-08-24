@@ -828,7 +828,12 @@ Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
           });
           ///////////////////////////////////// Rekabet //////////////////////////////////////
           Route::get('rekabet/{ilan_id}' ,function ($ilanid) {
-            $ilan = App\Ilan::find($ilanid);
+              $ilan = App\Ilan::find($ilanid);
+          $firma_id = session()->get('firma_id');
+          $ilanSahibi=0;
+          if($firma_id == $ilan->firmalar->id){
+              $ilanSahibi=1;
+          }
             $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->get();
 
             $minFiyat = $ilan->minFiyat();
@@ -848,7 +853,7 @@ Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
                     $kisKazanCount=1;
                 }
             }
-            return View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render();
+            return View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilanSahibi'=> $ilanSahibi,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render();
 
         });
 

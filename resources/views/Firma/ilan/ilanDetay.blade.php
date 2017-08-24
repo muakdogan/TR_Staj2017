@@ -664,9 +664,7 @@
                         </div>
                         <div class="tab-pane" id="3">
                             <div id="kismiRekabet">
-                                @if(1)
                                     @include('Firma.ilan.kismiRekabet')
-                                @endif
                             </div>
                         </div>
                         @if($ilan->firma_id == session()->get('firma_id'))
@@ -1430,7 +1428,7 @@
                                         },
                                         error: function(jqXHR, textStatus, errorThrown)
                                         {
-                                            alert(textStatus + "," + errorThrown);
+                                            alert(textStatus + "," + errorThrown + " Kısmi rekabet yüklenemedi");
                                             $('.ajax-loader').css("visibility", "hidden");
                                         }
                                     });
@@ -1451,7 +1449,7 @@
                                             },
                                             error: function(jqXHR, textStatus, errorThrown)
                                             {
-                                                alert(textStatus + "," + errorThrown);
+                                                alert(textStatus + "," + errorThrown + " Rekabet tablosu yüklenemedi");
                                                 $('.ajax-loader').css("visibility", "hidden");
                                             }
                                         });

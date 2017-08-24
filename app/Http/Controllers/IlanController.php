@@ -61,6 +61,10 @@ class IlanController extends Controller
             $firma->ilanlar->ilan_goturu_bedeller = new IlanGoturuBedel();
 
         $firma_id = session()->get('firma_id');
+        $ilanSahibi=0;
+        if($firma_id == $ilan->firmalar->id){
+            $ilanSahibi=1;
+        }
         $kullanici_id = Auth::user()->kullanici_id;
         $teklif = Teklif::where('firma_id',$firma_id)->where('ilan_id',$ilan->id)->get();
 
@@ -115,7 +119,7 @@ class IlanController extends Controller
         }
         //////////////////ilan duzenleme icin gerekli sonu/////
         ///
-        return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('teklifler',$teklifler)
+        return view('Firma.ilan.ilanDetay')->with('firma', $firma)->with('ilan',$ilan)->with('ilanSahibi',$ilanSahibi)->with('teklifler',$teklifler)
             ->with('kullanici',$kullanici)->with('firmaIlan',$firmaIlan)->with("firmaAdres",$firmaAdres)
             ->with('kullanici_id',$kullanici_id)->with('firma_id',$firma_id)->with("teklif",$teklif)
             ->with("dt",$dt)->with('kazananKapali',$kazananKapali)->with("kisKazanCount",$kisKazanCount)
@@ -1069,7 +1073,7 @@ class IlanController extends Controller
                 $i=0;
                 foreach($request->ilan_mal_id as $id){
                     $ilan_mal= \App\IlanMal::find($id);
-                    $ilan_mal_teklifler = new App\MalTeklif;
+                    $ilan_mal_teklifler = new \App\MalTeklif;
                     $ilan_mal_teklifler-> ilan_mal_id = $ilan_mal->id;
                     $ilan_mal_teklifler-> teklif_id = $teklif->id;
                     if($arrayKdv[$i] == -1){
@@ -1090,7 +1094,7 @@ class IlanController extends Controller
                 $i=0;
                 foreach($request->ilan_hizmet_id as $id){
                     $ilan_hizmet= \App\IlanHizmet::find($id);
-                    $ilan_hizmet_teklifler = new App\HizmetTeklif;
+                    $ilan_hizmet_teklifler = new \App\HizmetTeklif;
                     $ilan_hizmet_teklifler-> ilan_hizmet_id = $ilan_hizmet->id;
                     $ilan_hizmet_teklifler-> teklif_id = $teklif->id;
                     if($arrayKdv[$i] == -1){
@@ -1112,7 +1116,7 @@ class IlanController extends Controller
                 $i=0;
                 foreach($request->ilan_goturu_bedel_id as $id){
                     $ilan_goturu = \App\IlanGoturuBedel::find($id);
-                    $ilan_goturu_teklifler = new App\GoturuBedelTeklif;
+                    $ilan_goturu_teklifler = new \App\GoturuBedelTeklif;
                     $ilan_goturu_teklifler-> ilan_goturu_bedel_id = $ilan_goturu->id;
                     $ilan_goturu_teklifler-> teklif_id = $teklif->id;
                     if($arrayKdv[$i] == -1){
@@ -1134,7 +1138,7 @@ class IlanController extends Controller
                 $i=0;
                 foreach($request->ilan_yapim_isi_id as $id){
                     $ilan_yapim = \App\IlanYapimIsi::find($id);
-                    $ilan_yapim_teklifler = new App\YapimIsiTeklif;
+                    $ilan_yapim_teklifler = new \App\YapimIsiTeklif;
                     $ilan_yapim_teklifler-> ilan_yapim_isleri_id = $ilan_yapim->id;
                     $ilan_yapim_teklifler-> teklif_id = $teklif->id;
                     if($arrayKdv[$i] == -1){
@@ -1152,7 +1156,7 @@ class IlanController extends Controller
                 }
             }
             //$firma_kullanici = \App\FirmaKullanici::where('kullanici_id',$kullanici_id)->where('firma_id',$firma_id)->select('firma_kullanicilar.id')->get();
-            $teklifHareket = new App\TeklifHareket;
+            $teklifHareket = new \App\TeklifHareket;
             $teklifHareket->kdv_haric_fiyat=$request->toplamFiyatKdvsiz;
             $teklifHareket->kdv_dahil_fiyat=$request->toplamFiyat;
             $teklifHareket->para_birimleri_id=$ilan->para_birimi_id;
