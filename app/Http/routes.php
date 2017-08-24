@@ -737,7 +737,7 @@ Route::get('teklifGor/{id}/{ilanid}' ,'IlanController@teklifGor');
 Route::get('ilaniPasifEt' ,'IlanController@ilaniPasifEt');
 Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
 
-    ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////
+  ///////////////////////////////Kısmi Açık REkabet Kazanan ///////////
     Route::post('KismiAcikRekabetKazanan' ,function () {
 
       $ilan_id = Input::get('ilan_id');

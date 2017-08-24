@@ -138,7 +138,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                      <li>
                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
                     </li>
-                   @else
+                    @else
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
                               $firmaId = session()->get('firma_id');
