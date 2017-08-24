@@ -619,7 +619,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return;
   });
   //////////////////////////////////////Puan Yorum //////////////////////
-  Route::post('/yorumPuan/{yorum_firma_id}/{yorum_yapilan_firma}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$yorum_yapilan_firma,$ilan_id,$kullanici_id,Request $request) {
+  Route::post('/yorumPuan/{yorum_firma_id}/{yorum_yapilan_firma_id}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$yorum_yapilan_firma_id,$ilan_id,$kullanici_id,Request $request) {
     $now = new \DateTime();
 
     $ilan = Ilan::find($ilan_id);
@@ -627,7 +627,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $ilan->save();
 
     $puan = new App\Puanlama();
-    $puan->firma_id=$yorum_yapilan_firma;
+    $puan->firma_id=$yorum_yapilan_firma_id;
     $puan->ilan_id=$ilan_id;
     $puan->yorum_yapan_firma_id=$yorum_firma_id;
     $puan->yorum_yapan_kullanici_id=$kullanici_id;
@@ -638,11 +638,12 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $puan->tarih=$now;
     $puan->save();
 
+    $yorum_yapilan_firma = Firma::find($yorum_yapilan_firma_id);
     $yorum_yapilan_firma->puanlariGuncelle();
     $yorum_yapilan_firma->save();
 
     $yorum = new App\Yorum();
-    $yorum->firma_id=$yorum_yapilan_firma;
+    $yorum->firma_id=$yorum_yapilan_firma_id;
     $yorum->ilan_id=$ilan_id;
     $yorum->yorum_yapan_firma_id=$yorum_firma_id;
     $yorum->yorum_yapan_kullanici_id=$kullanici_id;
