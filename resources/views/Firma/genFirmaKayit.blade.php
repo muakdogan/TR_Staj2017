@@ -94,7 +94,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Firma Adı</label>
                         <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi" value="{{ Request::old('firma_adi') }}">
-                          {!! Form::text('firma_adi', 'MetaData',
+                          {!! Form::text('firma_adi', null,
                                         array('class'=>'form-control',
                                         'placeholder'=>'Firma adı',
                                         'data-validation'=>'length',
@@ -119,7 +119,7 @@
                       <div class="form-group ">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Telefon </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('telefon', '5125119612',
+                          {!! Form::text('telefon', null,
                                         array('id' => 'telefon',
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
@@ -167,7 +167,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bireysel_firma_adres">Firma Adresi <span class="required"></span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('firma_adres', 'ads',
+                          {!! Form::text('firma_adres', null,
                               array('id' => 'firma_adres',
                               'class'=>'form-control',
                               'placeholder'=>'Firmanizin adresi',
@@ -188,7 +188,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="adi">Ad</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('adi', 'Özenç',
+                          {!! Form::text('adi', null,
                                         array('class'=>'form-control',
                                         'placeholder'=>'Adınız',
                                         'data-validation'=>'length',
@@ -201,7 +201,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="soyadi">Soyad</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('soyadi', 'Çelik',
+                          {!! Form::text('soyadi', null,
                                         array('class'=>'form-control',
                                         'placeholder'=>'Soyadınız',
                                         'data-validation'=>'length',
@@ -214,7 +214,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unvan">Ünvan</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('unvan', 'ADmin',
+                          {!! Form::text('unvan', null,
                                         array('class'=>'form-control',
                                         'placeholder'=>'Ünvanınız',
                                         'data-toggle' => 'tooltip',
@@ -228,7 +228,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telefonkisisel">Telefon</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('telefonkisisel', '5380583230',
+                          {!! Form::text('telefonkisisel', null,
                                         array('id' => 'telefonkisisel',
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
@@ -242,7 +242,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_giris">E-Mail</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::email('email_giris', 'ozenc.celik@ceng.deu.edu.tr',
+                          {!! Form::email('email_giris', null,
                                          array('id'=>'email_giris','class'=>'form-control email',
                                          'placeholder'=>'E-postanız' ,
                                          'onFocusout'=>'email_girisControl()',
@@ -260,7 +260,7 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <input type="password" class="form-control" placeholder="******" name="password" id="password" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
-                          data-toggle="tooltip" value="123456">
+                          data-toggle="tooltip" >
                             <span class="help-block" style="color:red"> {{ $errors->first('password') }}</span>
                         </div>
                         <span id="password_strength"></span>
@@ -272,7 +272,7 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <input type="password" class="form-control" placeholder="******" name="password_confirmation" id="password_confirmation" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
-                          data-toggle="tooltip" value="123456">
+                          data-toggle="tooltip">
                             <span class="help-block" style="color:red"> {{ $errors->first('password_confirmation') }}</span>
                           <span id="confirmMessage" class="confirmMessage"></span>
                         </div>
@@ -382,7 +382,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="firma_unvan">Firma Ünvanı</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              {!! Form::text('firma_unvan', 'asad',
+                              {!! Form::text('firma_unvan', null,
                                               array('id' => 'firma_unvan',
                                                   'class'=>'form-control',
                                                   'placeholder'=>'Firma Ünvanı',
@@ -399,7 +399,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="vergi_no">Vergi No</label>
                             <div class="col-md-9 col-sm-9 col-xs-12" data-toggle="tooltip">
-                              {!! Form::text('vergi_no', '1234567891',
+                              {!! Form::text('vergi_no', null,
                                               array('id' => 'vergi_no',
                                                 'class'=>'form-control',
                                               'placeholder'=>'Vergi No',
@@ -421,7 +421,7 @@
                        <div class="form-group">
                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ad_soyad">Ad Soyad</label>
                            <div class="col-md-9 col-sm-9 col-xs-12">
-                             {!! Form::text('ad_soyad', 'ÖZenç ÇElik',
+                             {!! Form::text('ad_soyad', null,
                                              array('id' => 'ad_soyad',
                                              'class'=>'form-control',
                                              'placeholder'=>'Ad ve Soyadiniz',
@@ -437,7 +437,7 @@
                        <div class="form-group">
                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tc_kimlik">TC Kimlik No</label>
                            <div class="col-md-9 col-sm-9 col-xs-12">
-                             {!! Form::text('tc_kimlik', '32629641654',
+                             {!! Form::text('tc_kimlik', null,
                                              array('id' => 'tc_kimlik',
                                                    'class'=>'form-control',
                                                    'placeholder'=>'T.C Kimlik Numaraniz',
