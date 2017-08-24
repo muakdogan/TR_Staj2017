@@ -245,10 +245,10 @@
         <div class="row">
             <div class="col-sm-9">
                 <div class="panel panel-default">
-                        <div class="panel-heading"><strong>Aktif İlanlarım &nbsp;({{$aktif_count}} İlan)</strong></div>
+                        <div class="panel-heading"><strong>Aktif İlanlarım &nbsp;({{$aktif_ilanlar->count()}} İlan)</strong></div>
 
                     <div class="panel-body">
-                    @if($aktif_count!=0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->
+                    @if($aktif_ilanlar->count()!=0) <!-- Aktif ilanlar boş ise data table gözükmemesi kontrolü-->
 
                         <table  id="example" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size: 12px;">
@@ -256,7 +256,7 @@
                                 <th>Sıra</th>
                                 <th>İlan Adı</th>
                                 <th>Kapanma Tarihi</th>
-                                <th>Verilen Teklif Sayısı</th>
+                                <th>Teklif Veren Firma Sayısı</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -268,14 +268,14 @@
                                     <td>{{$aktif_ilan->adi}}</td>
 
                                     <td>{{date('d-m-Y', strtotime($aktif_ilan->kapanma_tarihi))}}</td>
-                                    <td>{{$aktif_ilan->teklifler()->count()}}</td>
+                                    <td>{{$aktif_ilan->teklifler->count() == 0 ? 0 : $aktif_ilan->teklifler[0]->firma_sayisi}}</td>
 
-                                    @if($aktif_ilan->kapanma_tarihi > $dt || $aktif_ilan->teklifler()->count() == 0)
+                                    @if($aktif_ilan->kapanma_tarihi > $dt || $aktif_ilan->teklifler->count() == 0)
                                        <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
                                     @else
                                     <td> <a href="{{ URL::to('teklifGor', array($firma->id,$aktif_ilan->id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
-
                                     @endif
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -294,9 +294,9 @@
                      $j=1;
                 ?>
                 <div class="panel panel-default">
-                    <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$sonuc_kapali}} İlan)</strong></div>
+                    <div class="panel-heading"><strong>Sonuçlanmış İlanlarım &nbsp;({{$sonuc_ilanlar->count()}} İlan)</strong></div>
                     <div class="panel-body">
-                    @if($sonuc_kapali!=0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->
+                    @if($sonuc_ilanlar->count() != 0) <!-- Sonuçlanmış ilanlar boş ise data table gözükmemesi kontrolü-->
 
                         <table id="sonuc" class="row-border hover order-column" cellspacing="0" width="100%">
                         <thead style=" font-size:12px">
@@ -304,7 +304,7 @@
                                 <th>Sıra</th>
                                 <th>İlan Adı</th>
                                 <th>Tarihi Sonuclanma </th>
-                                <th>Verilen Teklif Sayısı</th>
+                                <th>Teklif Veren Firma Sayısı</th>
                                 <th>Kazanan Fiyat</th>
                                 <th>Kazanan Firma</th>
                                 <th></th>
@@ -312,36 +312,30 @@
                         </thead>
                         <tbody>
                             @foreach($sonuc_ilanlar as $ilan)
-                            <tr onclick="location.href='{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}'">
+                            <tr>
                                 <td>{{ $j++}}</td>
-                                <td>{{$ilan->adi}}</td>
+                                <td><a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}">{{$ilan->adi}}</a></td>
                                 @if($ilan->kismi_fiyat == 1 ) <!--Kismi Açık -->
-                                     <td>{{$ilan->sonuc_tarihi_acik()}}</td>
+                                     <td>{{$ilan->kismi_acik_kazananlar->count() == 0 ? "" : $ilan->kismi_acik_kazananlar->last()->sonuclanma_tarihi}}</td>
                                 @else<!--Kismi Kapali -->
-                                      <td>{{$ilan->sonuc_tarihi_kapali()}}</td>
+                                      <td>{{$ilan->kismi_kapali_kazananlar->count() == 0 ? "" : $ilan->kismi_kapali_kazananlar->last()->sonuclanma_tarihi}}</td>
                                 @endif
-                                <td>{{$ilan->teklifler()->count()}}</td>
+                                <td>{{$ilan->teklifler->count() == 0 ? 0 : $ilan->teklifler[0]->firma_sayisi}}</td>
 
                                 @if($ilan->kismi_fiyat == 1 )
-                                    <td><strong> {{$ilan->kazananFiyatAcik()}}</strong> &#8378;</td>
+                                    <td><strong> {{$ilan->kazanan_acik_toplam}}</strong> &#8378;</td>
                                     <td>Optimum Fiyat</td>
                                 @else
-                                    <td><strong> {{$ilan->kazananFiyatKapali()}}</strong> &#8378;</td>
-                                    <td>{{$ilan->kazananFirmaAdiKapali()}}</td>
+                                    <td><strong> {{$ilan->kismi_kapali_kazananlar->count() == 0 ? "" : $ilan->kismi_kapali_kazananlar[0]->kazanan_fiyat}}</strong> &#8378;</td>
+                                    <td>{{$ilan->kismi_kapali_kazananlar->count() == 0 ? "" : $ilan->kismi_kapali_kazananlar[0]->firma->adi}}</td>
                                 @endif
-                                <?php $existYorum = \App\Yorum::where('ilan_id',$ilan->ilan_id)->where('firma_id',$ilan->kazananFirmaId())->get();  ///////////// Daha önce yorum
-                                        $existPuan = \App\Puanlama::where('ilan_id',$ilan->ilan_id)->where('firma_id',$ilan->kazananFirmaId())->get(); ///////yapılmış mı onun kontrolü
-                                  ?>
                                 <td>
-                                    @if(count($existPuan) != 0 || count($existYorum) != 0)
-                                        @if($ilan->kismi_fiyat == 1 )
-                                          <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
-                                        @else
-                                          <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button></a>
-                                        @endif
-                                    @else
-                                    <a><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}" >İlanı Gör</button></a>
-                                    @endif
+                                @if($ilan->kismi_fiyat == 1)
+                                    <a href="{{ URL::to('teklifGor', array($firma->id,$ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add">İlanı Gör</button></a>
+                                @else
+                                    <button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info add" id="{{$i}}">Puan Ver/Yorum Yap</button>
+                                @endif
+                                </td>
                                 <div class="modal fade" id="modalForm{{$i}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -351,41 +345,41 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="dialog" id="dialog{{$i++}}" style="display:none">
-
-                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$ilan->kazananFirmaId().'/'.$ilan->ilan_id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
+                                                    <?php $isDisabled = $ilan->puanlamalar->count() == 0 || $ilan->yorumlar->count() == 0 ? "" : "disabled"; ?>
+                                                    {!! Form::open(array('url'=>'yorumPuan/'.$firma->id.'/'.$ilan->kismi_kapali_kazananlar->first()->kazanan_firma_id.'/'.$ilan->id.'/'.$kullanici_id,'method'=>'POST', 'files'=>true)) !!}
                                                       <div class="row col-lg-12">
                                                         <div class="col-lg-3">
                                                             <label1 name="kriter1" type="text" >Ürün/hizmet kalitesi</label1>
                                                           <div id="puanlama">
-                                                              <div class="sliders" id="k{{$i}}"></div>
-                                                              <input type="hidden" id="puan1" name="puan1" value="5"/>
+                                                              <div class="sliders" id="k{{$i}}" {{$isDisabled}}></div>
+                                                              <input type="hidden" id="puan1" name="puan1" value="{{$ilan->puanlamalar[0] ? $ilan->puanlamalar[0]->kriter1 : 5}}" {{$isDisabled}}/>
                                                           </div>
                                                         </div>
                                                         <div class="col-lg-3" style="border-color:#ddd">
                                                             <label1 name="kriter2" type="text"><br>Teslimat</label1>
                                                           <div id="puanlama">
-                                                              <div class="sliders" id="k{{$i+1}}"></div>
-                                                              <input type="hidden" id="puan2" name="puan2" value="5"/>
+                                                              <div class="sliders" id="k{{$i+1}}" {{$isDisabled}}></div>
+                                                              <input type="hidden" id="puan2" name="puan2" value="{{$ilan->puanlamalar[0] ? $ilan->puanlamalar[0]->kriter2 : 5}}" {{$isDisabled}}/>
                                                           </div>
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <label1 name="kriter3" type="text">Teknik ve Yönetsel Yeterlilik</label1>
                                                           <div id="puanlama">
-                                                              <div class="sliders" id="k{{$i+2}}"></div>
-                                                              <input type="hidden" id="puan3" name="puan3" value="5"/>
+                                                              <div class="sliders" id="k{{$i+2}}" {{$isDisabled}}></div>
+                                                              <input type="hidden" id="puan3" name="puan3" value="{{$ilan->puanlamalar[0] ? $ilan->puanlamalar[0]->kriter3 : 5}}" {{$isDisabled}}/>
                                                           </div>
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <label1 name="kriter4" type="text" >İletişim ve Esneklik</label1>
                                                           <div id="puanlama">
-                                                              <div class="sliders" id="k{{$i+3}}"></div>
-                                                              <input type="hidden" id="puan4" name="puan4" value="5"/>
+                                                              <div class="sliders" id="k{{$i+3}}" {{$isDisabled}}></div>
+                                                              <input type="hidden" id="puan4" name="puan4" value="{{$ilan->puanlamalar[0] ? $ilan->puanlamalar[0]->kriter4 : 5}}" {{$isDisabled}}/>
                                                           </div>
                                                         </div>
                                                       </div>
                                                         <?php $i=$i+3; ?>
-                                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft"></textarea>
-                                                      <input type="submit" value="Ok"/>
+                                                      <textarea name="yorum" placeholder="Yorum" cols="30" rows="5" wrap="soft" {{$isDisabled}}>{{$ilan->yorumlar[0] ? $ilan->yorumlar[0]->yorum : ""}}</textarea>
+                                                      <input type="submit" value="Ok" {{$isDisabled}}/>
                                                     {{ Form::close() }}
                                                 </div>
                                             </div>
@@ -401,7 +395,7 @@
                      </table>
                     @else
 
-                        <p style="text-align:center">Henüz Sonuçlanmış  İlanınız Bulunmamamktadır.</p>
+                        <p style="text-align:center">Henüz Sonuçlanmış İlanınız Bulunmamamktadır.</p>
 
                     @endif
                     </div>
@@ -420,7 +414,7 @@
                                 <th>Sıra</th>
                                 <th>İlan Adı</th>
                                 <th>Kapanma Tarihi</th>
-                                <th>Verilen Teklif Sayısı</th>
+                                <th>Teklif Veren Firma Sayısı</th>
                                 <th></th>
 
                             </tr>
@@ -433,9 +427,9 @@
                                     <td>{{$pasif_ilan->adi}}</td>
 
                                     <td>{{date('d-m-Y', strtotime($pasif_ilan->kapanma_tarihi))}}</td>
-                                    <td>{{$pasif_ilan->teklifler()->count()}}</td>
+                                    <td>{{$ilan->teklifler->count() == 0 ? 0 : $ilan->teklifler[0]->firma_sayisi}}</td>
 
-                                    @if($pasif_ilan->kapanma_tarihi > $dt || $pasif_ilan->teklifler()->count() == 0)
+                                    @if($pasif_ilan->kapanma_tarihi > $dt || $pasif_ilan->teklifler->count() == 0)
                                        <td> <a href="{{ URL::to('teklifGor', array($firma->id,$pasif_ilan->id), false) }}"><button style="float:right;padding: 4px 12px;font-size:12px" type="button" class="btn btn-info">Detay/Teklif Gör</button></a></td>
                                     @else
                                     <td> <a href="{{ URL::to('teklifGor', array($firma->id,$pasif_ilan->id), false) }}"><button style="background-color:00ff00 ;float:right;padding: 4px 12px;font-size:12px;height:28px;width: 113px" type="button" class="btn btn-info"><span  id=box>Kazananı İlan Et</span></button></a></td>
@@ -447,7 +441,7 @@
                     </table>
                     @else
 
-                        <p style="text-align:center">Henüz Pasif Olan İlanınız Bulunmamamktadır.</p>
+                        <p style="text-align:center">Henüz Pasif Olan İlanınız Bulunmamaktadır.</p>
 
                     @endif
 
@@ -479,9 +473,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading"><strong>İstatistik</strong></div>
                         <div  class="panel-body">
-                                <p><strong>Aktif İlan Sayısı:</strong>&nbsp;{{$aktif_count}}</p>
-                                <p><strong>Sonuçlanmış İlan Sayısı:</strong>&nbsp;{{$sonuc_kapali}}</p>
-                            <p><strong>Toplam İlan Sayısı:</strong>&nbsp;{{$firma->ilanlar()->count()}}</p>
+                                <p><strong>Aktif İlan Sayısı:</strong>&nbsp;{{$aktif_ilanlar->count()}}</p>
+                                <p><strong>Sonuçlanmış İlan Sayısı:</strong>&nbsp;{{$sonuc_ilanlar->count()}}</p>
+                            <p><strong>Toplam İlan Sayısı:</strong>&nbsp;{{$aktif_ilanlar->count() + $sonuc_ilanlar->count() + $pasif_ilanlar->count()}}</p>
                         </div>
                 </div>
             </div>
@@ -648,7 +642,7 @@ var t = setInterval(function () { var ele = document.getElementById("blinker"); 
     var value = document.getElementsByClassName('value');
     for ( var i = 0; i < sliders.length; i++ ) {
         noUiSlider.create(sliders[i], {
-                start: 5,
+                start: $(".sliders").eq(i).siblings("input").attr("value"),
                 step:1,
                 connect: [true, false],
                 range: {
