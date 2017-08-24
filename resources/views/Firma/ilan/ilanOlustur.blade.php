@@ -23,7 +23,7 @@
         <script src="{{asset('js/jquery.fancytree.edit.js')}}"></script>
         <script src="{{asset('js/jquery.fancytree.filter.js')}}"></script>
         <script src="{{asset('js/jquery.fancytree.table.js')}}"></script>
-        
+
         <style>
             .popup, .popup2, .bMulti {
             background-color: #fff;
@@ -272,7 +272,7 @@
     <script type="text/javascript" src="{{asset('js/jquery.validate.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/additional-methods.js')}}"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    
+
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
@@ -321,6 +321,9 @@
                                                                  <input type="radio" data-placement="bottom" class="filled-in test firma_goster"  name="firma_adi_goster" value="0" data-validation-error-msg="Lütfen birini seçiniz!"><label>Gizle</label> </input>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                 </div>
+                                                                @if($errors->first('firma_adi_goster') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('firma_adi_goster') }}</span>
+                                                                @endif
                                                             </div>
                                                             </div>
                                                         </div>
@@ -330,12 +333,16 @@
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <input type="text" class="form-control required" id="ilan_adi" name="ilan_adi" placeholder="İlan Adı" value="" >
+                                                                @if($errors->first('ilan_adi') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('ilan_adi') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
                                                                     <span class="tooltiptext">Satın almak istediğiniz mal veya hizmet için kısa ancak açıklayıcı bir ilan adı belirleyiniz.</span>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
@@ -349,6 +356,9 @@
                                                                     <option value="2">Hizmet</option>
                                                                     <option value="3">Yapım İşi</option>
                                                                 </select>
+                                                                @if($errors->first('ilan_turu') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('ilan_turu') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -366,6 +376,9 @@
                                                                 <select class="form-control selectpicker required" style=" font-size:12px;height:20px" data-live-search="true"  name="firma_sektor" id="firma_sektor"  >
                                                                     <option  style="color:#eee"  selected disabled>Seçiniz</option>
                                                                 </select>
+                                                                @if($errors->first('firma_sektor') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('firma_sektor') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -381,6 +394,9 @@
                                                             <div class="col-sm-7">
                                                                 <input type="text" name="ilan_tarihi_araligi"  id="ilan_tarihi_araligi"  readonly value="" class="form-control  filled-in"
                                                                        data-placement="bottom"/>
+                                                                       @if($errors->first('ilan_tarihi_araligi') != null)
+                                                                         <span class="help-block" style="color:red">{{ $errors->first('ilan_tarihi_araligi') }}</span>
+                                                                       @endif
                                                                <!--input class="form-control date" id="yayinlanma_tarihi"  readonly   name="yayinlanma_tarihi" value="" placeholder="Yayinlanma Tarihi" type="text" /-->
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
@@ -400,6 +416,9 @@
                                                                     <option value="Tek Seferde">Tek Seferde</option>
                                                                     <option value="Zamana Yayılarak">Zamana Yayılarak</option>
                                                                 </select>
+                                                                @if($errors->first('isin_suresi') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('isin_suresi') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -413,8 +432,11 @@
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">İş Tarih Aralığı*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
-                                                                <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class="form-control filled-in"  
+                                                                <input type="text" name="is_tarihi_araligi"  id="is_tarihi_araligi"  readonly value="" class="form-control filled-in"
                                                                        data-placement="bottom"/>
+                                                                       @if($errors->first('is_tarihi_araligi') != null)
+                                                                         <span class="help-block" style="color:red">{{ $errors->first('is_tarihi_araligi') }}</span>
+                                                                       @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -433,6 +455,9 @@
                                                                            'accept'=>'application/msword, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                                                                            'id'=>'sartnameGozat'))!!}
                                                                         <a style="display: none;" id="sartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a>
+                                                                        @if($errors->first('sartnameVazgec') != null)
+                                                                          <span class="help-block" style="color:red">{{ $errors->first('sartnameVazgec') }}</span>
+                                                                        @endif
                                                                 </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -455,6 +480,9 @@
                                                                     <option value="2">Belirli Firmalar</option>
                                                                     <option value="3">Tüm Firmalar</option>
                                                                 </select>
+                                                                @if($errors->first('katilimcilar') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('katilimcilar') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -475,6 +503,9 @@
                                                                    <div style="padding-right:3px;padding-left:1px"  class="col-md-9">
                                                                         <select id='custom-headers' multiple='multiple' name="onayli_tedarikciler[]" id="onayli_tedarikciler[]" >
                                                                         </select>
+                                                                        @if($errors->first('onayli_tedarikciler') != null)
+                                                                          <span class="help-block" style="color:red">{{ $errors->first('onayli_tedarikciler') }}</span>
+                                                                        @endif
                                                                    </div>
                                                                 </div>
                                                             </div>
@@ -492,6 +523,9 @@
                                                                    <div style="padding-right:3px;padding-left:1px"  class="col-md-9">
                                                                         <select id='belirliIstek' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" >
                                                                         </select>
+                                                                        @if($errors->first('belirli_istekli') != null)
+                                                                          <span class="help-block" style="color:red">{{ $errors->first('belirli_istekli') }}</span>
+                                                                        @endif
                                                                    </div>
                                                                 </div>
                                                            </div>
@@ -509,6 +543,9 @@
                                                                     <option value="1">Tamrekabet</option>
                                                                     <option value="2">Sadece Başvuru</option>
                                                                 </select>
+                                                                @if($errors->first('rekabet_sekli') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('rekabet_sekli') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -528,6 +565,9 @@
                                                                     <option value="0">Birim Fiyatlı</option>
                                                                     <option value="1">Götürü Bedel</option>
                                                                 </select>
+                                                                @if($errors->first('sozlesme_turu') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('sozlesme_turu') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -728,7 +768,7 @@
                                                         <a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a> <input type="hidden" name="mal_id[0]"  id="mal_id0" value=""><!--agaçtan seçilen kalemin id -->
                                                     </td>
                                                </tr>
-                                         
+
                                         </table>
                                              </div>
                                             <div id="hizmet" >
@@ -775,7 +815,7 @@
                                                         </select>
                                                      </td>
                                                      <td><a href="#"  class="sil"><img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="hizmet_id[0]"  id="hizmet_id0" value=""></td>
-                                                     
+
                                                 </tr>
                                                  </thead>
                                               </table>
@@ -792,7 +832,7 @@
                                                     <th>Miktar</th>
                                                     <th>Birim</th>
                                                     <th></th>
-                                                    
+
                                                 </tr>
                                                 <tr>
                                                     <td>{{$i}}</td>
@@ -813,7 +853,7 @@
                                                         </select>
                                                      </td>
                                                      <td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id[0]"  id="goturu_id0" value=""></td>
-                                                        
+
                                                 </tr>
                                                  </thead>
                                               </table>
@@ -863,7 +903,7 @@
                                                         </select>
                                                      </td>
                                                      <td><a href="#" class="sil"> <img src="{{asset("images/sil1.png")}}"></a> <input type="hidden" name="yapim_id[0]"  id="yapim_id0" value=""></td>
-                                                       
+
                                                 </tr>
                                                  </thead>
                                               </table>
@@ -904,7 +944,7 @@
     <script src="{{asset('js/jquery.bpopup-0.11.0.min.js')}}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-    
+
 <script charset="utf-8">
 
     $('#btn-add-ilanBilgileri').click(function () {
@@ -923,7 +963,6 @@
 var findName;
 
 $(".next2").click(function(){
-    alert($( "input[type='radio']:checked").text());
     $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$( "input[type='radio']:checked").next('label:first').html+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li>');
@@ -962,8 +1001,9 @@ $(document).ready(function(){
          //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
          //$("#semt_id")[0].selectedIndex=0;
      });
-    jQuery.validator.methods["date"] = function (value, element) { return true; } ;
+    jQuery.validator.methods["date"] = function (value, element) { return true; };
 
+    $('#myModal-ilanBilgileri').modal('show');
  });
 var ilan_turu;
 var sozlesme_turu;
@@ -974,7 +1014,7 @@ $('#ilan_turu').on('change', function (e) {
 });
 
 $('#sozlesme_turu').on('change', function (e) {
-             sozlesme_turu = e.target.value;  
+             sozlesme_turu = e.target.value;
                if(sozlesme_turu=="1")
                 {
                    $('.fiyatlandirma').hide();
@@ -989,8 +1029,8 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 $(".next").click(function(){
-    
-    
+
+
          if(ilan_turu=="1" && sozlesme_turu=="0")
                 {
                    $('#mal').show();
@@ -1001,7 +1041,7 @@ $(".next").click(function(){
                 }
              else if(ilan_turu=="2" && sozlesme_turu=="0")
                 {
-                    
+
                    $('#hizmet').show();
                    $('#mal').hide();
                    $('#goturu').hide();
@@ -1009,7 +1049,7 @@ $(".next").click(function(){
                 }
              else if(sozlesme_turu=="1")
                 {
-                    
+
                    $('#goturu').show();
                    $('#hizmet').hide();
                    $('#mal').hide();
@@ -1028,7 +1068,7 @@ $(".next").click(function(){
                  {
                     $('.fiyatlandirma').show();
                  }
-                 
+
     var form = $("#msform");
         form.validate({
                 errorElement: 'span',
@@ -1044,7 +1084,7 @@ $(".next").click(function(){
                                 required: true
                         },
                 },
-                     
+
         });
         if (form.valid() === true){
                 if ($('#ilan').is(":visible")){
@@ -1058,8 +1098,8 @@ $(".next").click(function(){
                  next_fs.show();
                  current_fs.hide();
         }
-    
-       
+
+
 });
 $('.previous').click(function(){
         if($('#kalem').is(":visible")){
@@ -1200,7 +1240,7 @@ $("#firma_sektor").change(function(){
   sektor = $('option:selected', this).attr('value');
      $('select#katilimcilar option').removeAttr("selected");
      $("#katilimcilar option[value='Seçiniz']").prop('selected', true).trigger("change");;
-   
+
 });
 
 function getBelirliIstekliler(){
@@ -1309,7 +1349,7 @@ var kalem_num=0;
 var i="{{$i}}";
 $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
    i++;
-   
+
    kalem_num++;
 
     if(ilan_turu=="1" &&sozlesme_turu=="0")
@@ -1404,7 +1444,7 @@ $('#yapim_table').on('click', '.yapim_show', function(event) {
  function getSektor(mal_turu) {
         if (mal_turu > 0) {
             $("#firma_sektor").get(0).options.length = 0;
-            $("#firma_sektor").get(0).options[0] = new Option("Yükleniyor", "-1"); 
+            $("#firma_sektor").get(0).options[0] = new Option("Yükleniyor", "-1");
 
             $.ajax({
                 type: "GET",
@@ -1420,9 +1460,9 @@ $('#yapim_table').on('click', '.yapim_show', function(event) {
                     $.each(msg, function(index, sektor) {
                         $("#firma_sektor").get(0).options[$("#firma_sektor").get(0).options.length] = new Option(sektor.adi, sektor.id);
                     });
-                
+
                         $('.selectpicker').selectpicker('refresh');
-                    
+
                 },
                 async: false,
                 error: function() {
@@ -1488,18 +1528,18 @@ function kalemAgaci(){
     },
     lazyLoad: function(event, data){
 		var node = data.node;
-               
+
 		console.log(node.key);
-                
+
         data.result = {
 		  url: "{{asset('findChildrenTree')}}"+"/"+sektor,
-                  
+
         debugDelay: 1000,
                     data: {id: node.key},
                     dataType:'json',
           cache: false
         }
-        
+
       }
   });
   $(".fancytree-container").toggleClass("fancytree-connectors");
@@ -1554,7 +1594,7 @@ function kalemAgaci(){
 }
 $("#tamamBtn").click(function(){
     if(ilan_turu==1 &&sozlesme_turu==0)
-    { 
+    {
       var tree = $("#tree").fancytree("getTree");
       var kalem_id=tree.getSelectedNodes();
       var sel_key= $.map(kalem_id,function(node){
@@ -1569,7 +1609,7 @@ $("#tamamBtn").click(function(){
         });
     }
     else if(ilan_turu==2 && sozlesme_turu==0){
-        
+
         var tree = $("#tree").fancytree("getTree");
         var kalem_id=tree.getSelectedNodes();
         var sel_key= $.map(kalem_id,function(node){
@@ -1584,7 +1624,7 @@ $("#tamamBtn").click(function(){
         });
     }
     else if(sozlesme_turu==1){
-        
+
         var tree = $("#tree").fancytree("getTree");
         var kalem_id=tree.getSelectedNodes();
         var sel_key= $.map(kalem_id,function(node){
@@ -1612,7 +1652,7 @@ $("#tamamBtn").click(function(){
           node.setSelected(false);
         });
     }
-      
+
   });
 
 var firma_id='{{$firma->id}}';
@@ -1624,7 +1664,7 @@ $("#onayButton").click(function(){
                 speed: 650,
                 transition: 'slideIn',
                 transitionClose: 'slideBack',
-                autoClose: 5000 
+                autoClose: 5000
           });*/
     }
 });
@@ -1664,14 +1704,14 @@ $(function() {
                         "Aralık"
                     ],
                     "firstDay": 1
-    
+
                 },
                     startDate: new Date(),
                     endDate: dt
       },function(start, end, label) {
             is_tarihi_start=end.format('DD/MM/YYYY');
             var is_tarihi_end=end.format('DD/MM/YYYY');
-           
+
           $('input[name="is_tarihi_araligi"]').daterangepicker({
                     locale: {
                       format: 'DD/MM/YYYY',
@@ -1710,7 +1750,7 @@ $(function() {
 
         });
     });
-    
+
     $('input[name="is_tarihi_araligi"]').daterangepicker({
                 locale: {
                   format: 'DD/MM/YYYY',
@@ -1743,13 +1783,13 @@ $(function() {
                         "Aralık"
                     ],
                     "firstDay": 1
-  
+
                 },
                 startDate:new Date(),
                 endDate: dt
-                
+
      });
-    
+
 });
 </script>
 
