@@ -899,7 +899,10 @@
     //birden fazla kalem ekleme modal form içerisinde.
     var kalem_num;
     var i="{{$i}}";
+
     $("#kalem_ekle").click(function(){
+
+
         if(sozlesme_turu=="1" && $("#goturu_kalem0").length==0){
             $("#goturu_table").append(['<tr>','<td>1</td>',
                 '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem0" name="goturu_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
@@ -949,6 +952,7 @@
         if(kalem_id!=-1){
             deleted_array.push(kalem_id);
         }
+
         $(this).parents('tr').first().remove();
     });
 

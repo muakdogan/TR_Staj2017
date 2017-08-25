@@ -712,51 +712,92 @@ class IlanController extends Controller
     public function ilanOlusturEkle(Request $request, $firma_id)
     {
         //ilan bilgileri kaydediliyor.
+        DebugBar::info($request->all());
+
+        $ilceler = \App\Ilce::where('il_id', $request->il_id)->get();
+        $sektorlerList = \App\Sektor::where('id', $request->firma_sektor)->get();
+
+        $ilcelerString = "";
+        foreach ($ilceler as $i)
+        {
+          $ilcelerString = $ilcelerString.$i->id.",";
+        }
+
+        $sektorlerListString = "";
+        foreach ($sektorlerList as $k)
+        {
+          $sektorlerListString = $sektorlerListString.$k->id.",";
+        }
+
+
 
 
         $isinSuresiString = "Tek Seferde,Zamana Yayılarak";
-        $rekabetSekliString = "Tamrekabet,Sadece Başvuru";
-        $sozlesmeTuruString = "Birim Fiyatlı,Götürü Bedel";
+        $teslimYeriString = "Satıcı Firma,Adrese Teslim";
         //ilanOluşturFom Validasyon İşlemi
         $this->validate($request, [
           'firma_adi_goster' => 'required|integer|min:0|max:1',
           'ilan_adi' => 'required|min:2',
           'ilan_turu' => 'required|integer|min:1|max:3',
-
-          //Firma Sektörler İçin Validasyon Yazılmadı.
-
+          'firma_sektor' => 'required|exists:sektorler,id|in:'.$sektorlerListString,
           'ilan_tarihi_araligi' => 'required',
-
           'isin_suresi' => 'required|in:'.$isinSuresiString,
-
           'is_tarihi_araligi' => 'required',
-          'rekabet_sekli' => 'required|in:'.$rekabetSekliString,
-          'sozlesme_turu' => 'required|in:'.$sozlesmeTuruString,
+          'rekabet_sekli' => 'required|integer|min:1|max:2',
+          'sozlesme_turu' => 'required|integer|min:0|max:1',
+          'kismi_fiyat' => 'required|integer|min:0|max:1',
+          'yaklasik_maliyet' => 'required|integer|exists:maliyetler,miktar',
+          'odeme_turu' => 'required|integer|exists:odeme_turleri,id',
+          'para_birimi' => 'required|integer|exists:para_birimleri,id',
+          'teslim_yeri' => 'required|in:'.$teslimYeriString,
 
 
         ],[//Error Messages
           '*.required' => 'Lütfen bu alanı doldurunuz',
           '*.integer' => 'Sadece sayı girebilirsiniz',
-          '*.in' => 'Sistemde istenmeyen bir değer girilemez',
-
-          'firma_adi_goster.min' => 'Radio buttonlara farklı değer girilemez',
-          'firma_adi_goster.max' => 'Radio buttonlara farklı değer girilemez',
-
-          'ilan_adi.min' => 'İlan adı 2 harften fazla olmalıdır',
-
-          'ilan_turu.min' => 'İlan türüne farklı değeler girilemez',
-          'ilan_turu.max' => 'İlan türüne farklı değeler girilemez',
-
+          '*.in' => 'Sistemde bulunmayan bir değer girilemez',
+          '*.exists' => 'Sistemde bulunmayan bir değer girilemez',
+          '*.min' => 'Sistemde bulunmayan bir değer girilemez',
+          '*.max' => 'Sistemde bulunmayan bir değer girilemez',
           //'ilan_tarihi_araligi.date' => 'Lütfen bir tarih giriniz',
           //Tarih requesti bir aralık ile geldiği için "date" rule u ile kontorl edemiyorum.
-
-
-
-
         ]);
+        if($request->teslim_yeri == "Adrese Teslim"){
+          $this->validate($request, [
+            'il_id' => 'required|exists:iller,id',
+            'ilce_id' => 'required|exists:ilceler,id|in:'.$ilcelerString,
+          ],[//Error Messages
+            '*.required' => 'Lütfen bu alanı doldurunuz',
+            '*.exists' => 'Sistemde bulunmayan bir değer girilemez',
+            '*.in' => 'Sistemde bulunmayan bir değer girilemez',
+          ]);
+        }
+        if($request->ilan_turu == "1"){//ilan_turu = Mal
+          $this->validate($request, [
+            'mal_kalem' => 'required|integer',
 
+          ],[//Error Messages
+            '*.required' => 'Lütfen bu alanı doldurunuz',
+            '*.integer' => 'Lütfen sadece sayı giriniz',
+          ]);
+        }
+        else if($request->ilan_turu == "2"){//ilan_turu = Hizmet
+          $this->validate($request, [
 
+            'hizmet_kalem.*' => 'required|integer',
+          ],[//Error Messages
+            '*.required' => 'Lütfen bu alanı doldurunuz',
+            '*.integer' => 'Lütfen sadece sayı giriniz',
 
+          ]);
+        }
+        else if($request->ilan_turu == "3"){//ilan_turu = Yapım İşi
+          $this->validate($request, [
+
+          ],[//Error Messages
+
+          ]);
+        }
 
 
 
