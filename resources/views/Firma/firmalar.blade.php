@@ -130,12 +130,15 @@
         @for ($i = 0 ; $i< count($onayliTedarikciler); $i++)
             onayliTedArr.push({{$onayliTedarikciler[$i]->tedarikci_id}});
         @endfor
+
+
         $(".btn-tedEkle").each(function () {
             for (i = 0; i < onayliTedArr.length; i++) {
                 if($(this).val()==onayliTedArr[i]){
                     $(this).hide();
                     var index= $(this).index(".btn-tedEkle");
                     $('.btn-tedCikar').eq(index).show();
+                    break;
                 }
             }
         });
