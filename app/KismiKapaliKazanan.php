@@ -15,4 +15,8 @@ class KismiKapaliKazanan extends Model
     {
      return $this->belongsTo('App\Ilan', 'ilan_id', 'id');
     }
+    public function firma()
+    {
+        return $this->belongsTo('App\Firma', 'kazanan_firma_id', 'id');
+    }
 }

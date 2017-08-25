@@ -261,83 +261,7 @@ Route::get('/firmalist', ['middleware'=>'auth' ,function () {
   $firmalar = Firma::paginate(2);
   return view('Firma.firmalar')->with('firmalar', $firmalar);
 }]);
-Route::get('/firmaDetay/{firmaid}', function ($firmaid) {
-
-    $firma=Firma::find($firmaid);
-    $puanlar = App\Puanlama::where('firma_id','=',$firma->id)
-        ->select(array(DB::raw("avg(kriter1)as ortalama1, avg(kriter2) as ortalama2,avg(kriter3) as ortalama3,avg(kriter4) as ortalama4")))
-        ->get();
-   $puanlar = $puanlar->toArray();
-    if (!$firma->ticari_bilgiler) {
-         $firma->ticari_bilgiler = new TicariBilgi();
-         $firma->ticari_bilgiler->ticaret_odalari = new TicaretOdasi();
-         $firma->ticari_bilgiler->sektorler = new Sektor();
-     }
-    $yorumlar = App\Yorum::where('firma_id','=',$firma->id)->orderBy('tarih','DESC')->get();
-    $toplamYorum =App\Yorum::where('firma_id','=',$firma->id)->count();
-    $satilanMarka = FirmaSatilanMarka::where('firma_id', '=', $firma->id)->get();
-    $firmaAdres = $firma->adresler()->where('tur_id', '=', '1')->first();
-    if (!$firma->iletisim_bilgileri)
-        $firma->iletisim_bilgileri = new IletisimBilgisi();
-    if (!$firmaAdres) {
-        $firmaAdres = new Adres();
-        $firmaAdres->iller = new Il();
-        $firmaAdres->ilceler = new Ilce();
-        $firmaAdres->semtler = new Semt();
-    }
-    if (!$firma->mali_bilgiler) {
-        $firma->mali_bilgiler = new App\MaliBilgi();
-    }
-    $firmaFatura = $firma->adresler()->where('tur_id', '=', '2')->first();
-    if (!$firma->mali_bilgiler) {
-        $firma->mali_bilgiler = new App\MaliBilgi();
-        $firma->mali_bilgiler->vergi_daireleri = new App\VergiDairesi();
-        $firma->sirket_turleri = new App\SirketTuru();
-    }
-    if (!$firmaFatura) {
-        $firmaFatura = new Adres();
-        $firmaFatura->iller = new Il();
-        $firmaFatura->ilceler = new Ilce();
-        $firmaFatura->semtler = new Semt();
-    }
-    $sirketTurleri=  \App\SirketTuru::all();
-    $uretilenMarka = DB::table('uretilen_markalar')->where('firma_id', '=', $firma->id)->get();
-    if (!$firma->kalite_belgeleri) {
-        $firma->firma_kalite_belgeleri = new App\FirmaKaliteBelgesi();
-    }
-    $kaliteBelge = DB::table('firma_kalite_belgeleri')->where('firma_id', $firma->id)->count();
-    if (!$firma->firma_referanslar) {
-        $firma->firma_referanslar = new App\FirmaReferans();
-    } else {
-        $firmaReferanslar = $firma->firma_referanslar()->orderBy('ref_turu', 'desc')->orderBy('is_yili', 'desc')->get();
-    }
-
-    $referans = DB::table('firma_referanslar')->where('firma_id', $firma->id)->count();
-     if (!$firma->firma_brosurler) {
-        $firma->firma_brosurler = new App\FirmaBrosur();
-    }
-    $brosur = DB::table('firma_brosurler')->where('firma_id', $firma->id)->count();
-
-    if (!$firma->firma_calisma_bilgileri) {
-        $firma->firma_calisma_bilgileri = new App\FirmaCalismaBilgisi();
-        $calismaGunu = '';
-    } else
-        $calismaGunu = $firma->firma_calisma_bilgileri->calisma_gunleri->adi;
-
-    $calisan = DB::table('firma_calisma_bilgileri')->where('firma_id', $firma->id)->count();
-
-    DebugBar::info($firma->tedarikEttigiFirmalar);
-
-
-
-     return view('Firma.firmaDetay')->with('firma', $firma)->with('puanlar', $puanlar)->with('yorumlar', $yorumlar)
-          ->with('toplamYorum', $toplamYorum)->with('satilanMarka', $satilanMarka)->with('firmaAdres', $firmaAdres)->with('firmaFatura', $firmaFatura)
-          ->with('sirketTurleri', $sirketTurleri)->with('uretilenMarka', $uretilenMarka)->with('kaliteBelge', $kaliteBelge)->with('firmaReferanslar', $firmaReferanslar)
-          ->with('referans', $referans)->with('brosur', $brosur)->with('calisan', $calisan)
-          ->with('calismaGunu', $calismaGunu)->with('puanlar', $puanlar);
-
-
-});
+Route::get('/firmaDetay/{firma_id}', 'FirmaController@firmaDetay');
 Route::get('/davetEdildigim', 'IlanController@davetEdildigimIlanlar');
 
 Route::get('/image/{id}', ['middleware'=>'auth',function ($id) {
@@ -696,7 +620,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     return;
   });
   //////////////////////////////////////Puan Yorum //////////////////////
-  Route::post('/yorumPuan/{yorum_firma_id}/{yorum_yapilan_firma}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$yorum_yapilan_firma,$ilan_id,$kullanici_id,Request $request) {
+  Route::post('/yorumPuan/{yorum_firma_id}/{yorum_yapilan_firma_id}/{ilan_id}/{kullanici_id}' ,function ($yorum_firma_id,$yorum_yapilan_firma_id,$ilan_id,$kullanici_id,Request $request) {
     $now = new \DateTime();
 
     $ilan = Ilan::find($ilan_id);
@@ -704,7 +628,7 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $ilan->save();
 
     $puan = new App\Puanlama();
-    $puan->firma_id=$yorum_yapilan_firma;
+    $puan->firma_id=$yorum_yapilan_firma_id;
     $puan->ilan_id=$ilan_id;
     $puan->yorum_yapan_firma_id=$yorum_firma_id;
     $puan->yorum_yapan_kullanici_id=$kullanici_id;
@@ -715,11 +639,12 @@ Route::get('ilanTeklifVer/{ilan_id}',['middleware'=>'auth' ,function ($ilan_id) 
     $puan->tarih=$now;
     $puan->save();
 
+    $yorum_yapilan_firma = Firma::find($yorum_yapilan_firma_id);
     $yorum_yapilan_firma->puanlariGuncelle();
     $yorum_yapilan_firma->save();
 
     $yorum = new App\Yorum();
-    $yorum->firma_id=$yorum_yapilan_firma;
+    $yorum->firma_id=$yorum_yapilan_firma_id;
     $yorum->ilan_id=$ilan_id;
     $yorum->yorum_yapan_firma_id=$yorum_firma_id;
     $yorum->yorum_yapan_kullanici_id=$kullanici_id;

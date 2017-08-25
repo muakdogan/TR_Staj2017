@@ -93,6 +93,7 @@
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Firma Adı</label>
+
                         <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi" value="{{ Request::old('firma_adi') }}">
                           {!! Form::text('firma_adi', null,
                                         array('class'=>'form-control',
@@ -108,6 +109,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Sektörler</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
+
                           <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'value="{{1}}" data-validation = "required" data-validation-error-msg = "Lütfen Sektör Seçiniz">
                             @foreach($sektorler as $sektor)
                                     <option  value="{{$sektor->id}}">{{$sektor->adi}}</option>
@@ -119,7 +121,7 @@
                       <div class="form-group ">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Telefon </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('telefon', null,
+                          {!! Form::text('telefon', '5125119612',
                                         array('id' => 'telefon',
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
@@ -167,6 +169,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bireysel_firma_adres">Firma Adresi <span class="required"></span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
+
                           {!! Form::text('firma_adres', null,
                               array('id' => 'firma_adres',
                               'class'=>'form-control',
@@ -188,7 +191,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="adi">Ad</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('adi', null,
+                          {!! Form::text('adi', 'Özenç',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Adınız',
                                         'data-validation'=>'length',
@@ -201,7 +204,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="soyadi">Soyad</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('soyadi', null,
+                          {!! Form::text('soyadi', 'Çelik',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Soyadınız',
                                         'data-validation'=>'length',
@@ -214,7 +217,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unvan">Ünvan</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('unvan', null,
+                          {!! Form::text('unvan', 'ADmin',
                                         array('class'=>'form-control',
                                         'placeholder'=>'Ünvanınız',
                                         'data-toggle' => 'tooltip',
@@ -228,7 +231,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telefonkisisel">Telefon</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('telefonkisisel', null,
+                          {!! Form::text('telefonkisisel', '5380583230',
                                         array('id' => 'telefonkisisel',
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
@@ -242,16 +245,13 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email_giris">E-Mail</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::email('email_giris', null,
+                          {!! Form::email('email_giris', 'ozenc.celik@ceng.deu.edu.tr',
                                          array('id'=>'email_giris','class'=>'form-control email',
                                          'placeholder'=>'E-postanız' ,
                                          'onFocusout'=>'email_girisControl()',
                                          'data-validation'=>'email' ,
                                          'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
-
                                           <span class="help-block" id="email_error" style="color:red" onload="findPos()">{{ $errors->first('email_giris') }}</span>
-
-
                         </div>
                       </div>
 
@@ -382,7 +382,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="firma_unvan">Firma Ünvanı</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              {!! Form::text('firma_unvan', null,
+                              {!! Form::text('firma_unvan', 'asad',
                                               array('id' => 'firma_unvan',
                                                   'class'=>'form-control',
                                                   'placeholder'=>'Firma Ünvanı',
@@ -399,7 +399,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="vergi_no">Vergi No</label>
                             <div class="col-md-9 col-sm-9 col-xs-12" data-toggle="tooltip">
-                              {!! Form::text('vergi_no', null,
+                              {!! Form::text('vergi_no', '1234567891',
                                               array('id' => 'vergi_no',
                                                 'class'=>'form-control',
                                               'placeholder'=>'Vergi No',
@@ -421,7 +421,7 @@
                        <div class="form-group">
                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ad_soyad">Ad Soyad</label>
                            <div class="col-md-9 col-sm-9 col-xs-12">
-                             {!! Form::text('ad_soyad', null,
+                             {!! Form::text('ad_soyad', 'ÖZenç ÇElik',
                                              array('id' => 'ad_soyad',
                                              'class'=>'form-control',
                                              'placeholder'=>'Ad ve Soyadiniz',
@@ -437,7 +437,7 @@
                        <div class="form-group">
                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tc_kimlik">TC Kimlik No</label>
                            <div class="col-md-9 col-sm-9 col-xs-12">
-                             {!! Form::text('tc_kimlik', null,
+                             {!! Form::text('tc_kimlik', '32629641654',
                                              array('id' => 'tc_kimlik',
                                                    'class'=>'form-control',
                                                    'placeholder'=>'T.C Kimlik Numaraniz',
@@ -1197,16 +1197,10 @@
         },
         error: function(jqXHR, textStatus, errorThrown)
         {
-
-
           console.log(textStatus + "," + errorThrown);
           location.reload();
 
           window.scroll(0,0);//Kullanıcıların hatasını görebilmesi için sayfa başına yeniliyor.
-
-
-
-
         }
       });
       e.preventDefault(); //STOP default action

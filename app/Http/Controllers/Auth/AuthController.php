@@ -61,6 +61,7 @@ class AuthController extends Controller
         if (!$user->onayli) {
             $this->activationFactory->sendActivationMail($user);
             auth()->logout();
+            Session::flush();
             return back()->with('activationWarning', true);
         }
 
@@ -144,7 +145,6 @@ class AuthController extends Controller
 
     public function kayitForm(Request $request)
     {
-
         $ilceler = \App\Ilce::where('il_id', $request->il_id)->get();
         $semtler = \App\Semt::where('ilce_id', $request->ilce_id)->get();
         $vergi_iller = \App\VergiDairesi::where('il_id', $request->vergi_daire_il)->get();
@@ -258,7 +258,6 @@ class AuthController extends Controller
           'email_giris.email' => 'Geçersiz bir email adresi girdiniz.',
           'email_giris.unique' => 'Email sistemimizde kayıtlıdır. Lütfen farklı bir email giriniz',
 
-
           'password.required' => 'Lütfen kullanıcı şifrenizi giriniz.',
 
           'password_confirmation.required' => 'Lütfen kullanıcı şifrenizi giriniz.',
@@ -267,6 +266,7 @@ class AuthController extends Controller
           'fatura_tur.required' => 'Lütfen fatura türünü seçiniz(Kurumsal yada Bireysel).',
 
           'vergi_daire_il.required'=> 'Lütfen vergi dairesinin bulundğu ili seçiniz.',
+
           'vergi_daire_il.integer'=> 'Vergi Dairesi İl id si integer olması gerekiyor.',
 
           'vergi_daire.exists'=> 'Sistemimizde kayıtlı olmayan bir vergi dairesi seçtiniz.Lütfen tekrar deneyin',

@@ -272,11 +272,11 @@
                         <input type="radio" name="gender[]" class="usul" value="Başvuru">Başvuru
                     </div>
                 </div>
-                 @if(count($davetEdildigimIlanlar) != 0 )
+                 @if(count($firma->belirli_istekliler) != 0 )
                  <h3 style="text-shadow: 2px 2px 4px #fff">Davet Edildiğiniz İlanlar</h3>
                  <hr class="hr">
                  <div class="col-sm-9 davetEdil">
-                            @foreach ($davetEdildigimIlanlar as $davetEdildigimIlan)
+                            @foreach ($firma->belirli_istekliler as $davetEdildigimIlan)
                              
                                 <div class="ilanDetayPop " name="{{$davetEdildigimIlan->ilanlar->id}}">
                                     <div class="pop-up"  style="display: none;
@@ -301,8 +301,8 @@
                    
                                     <div class="col-sm-10">
                                         <p><b>İlan Adı: {{$davetEdildigimIlan->ilanlar->adi}}</b></p>
-                                        @if($davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->ilanlar->firma_id)> 0)
-                                            <div class="puanlama">{{$davetEdildigimIlan->ilanlar->puanlamaOrtalama($davetEdildigimIlan->firma_id)}}</div>
+                                        @if($davetEdildigimIlan->ilanlar->firmalar->puanlamaOrtalama() > 0)
+                                            <div class="puanlama">{{$davetEdildigimIlan->ilanlar->firmalar->puanlamaOrtalama()}}</div>
                                             <p><a href="{{url('firmaDetay/'.$davetEdildigimIlan->ilanlar->firmalar->id)}}" >Firma: {{$davetEdildigimIlan->ilanlar->firmalar->adi}}</a></p>
                                         @else
                                             <p><a href="{{url('firmaDetay/'.$davetEdildigimIlan->ilanlar->firmalar->id)}}" style="padding: 0px" >Firma: {{$davetEdildigimIlan->ilanlar->firmalar->adi}}</a></p>

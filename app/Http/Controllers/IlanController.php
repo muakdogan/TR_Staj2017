@@ -150,7 +150,7 @@ class IlanController extends Controller
             ->where('ilanlar.kapanma_tarihi', '>=', date_create(NULL));
 
         $sektorler= Sektor::all();//tüm sektörlerin görünebilmesi için ayrı olarak sorgulanıyor
-        $firma = Firma::with('sektorler')->find($firma_id);
+        $firma = Firma::with('sektorler', 'belirli_istekliler')->find($firma_id);
         $odeme_turleri= OdemeTuru::all();
         $teklifler= \App\Teklif::all();
 
@@ -158,21 +158,12 @@ class IlanController extends Controller
 
         if($misafir){
             $sektor_id = 0;
-            $davetEdildigimIlanlar = null;
         }else{
             foreach($firma->sektorler as $sektor){
                         $sektor_id = $sektor->id;
             }
-            $davetEdildigimIlanlar = BelirlIstekli::where('firma_id',$firma_id)->get();
         }
-        /*$ilanlar = Ilan::join('firmalar', 'ilanlar.firma_id', '=', 'firmalar.id')
-                ->join('adresler', 'adresler.firma_id', '=', 'firmalar.id')
-                ->join('iller', 'adresler.il_id', '=', 'iller.id')
-                ->where('adresler.tur_id', '=' , 1)
-                ->where('ilanlar.yayin_tarihi', '<=' , $dt->today())
-                ->where('ilanlar.kapanma_tarihi', '>=' , $dt->today())
-                ->orderBy('ilanlar.yayin_tarihi', 'DESC')
-                ->select('ilanlar.id as ilan_id','ilanlar.adi as ilanadi', 'ilanlar.*','firmalar.id as firmaid', 'firmalar.*','adresler.id as adresid','adresler.*','iller.adi as iladi'); */
+        
         $ilId = Input::get('ilAdi');
         $keyword = Input::get('keyword');
         $il_id = Input::get('il');
@@ -268,10 +259,11 @@ class IlanController extends Controller
             return Response::json(View::make('Firma.ilan.ilanlar',array('ilanlar'=> $ilanlar, 'misafir' => $misafir))->render());
         }
 
-        return View::make('Firma.ilan.ilanAra')-> with('ilanlar',$ilanlar)
+        return View::make('Firma.ilan.ilanAra')->with('firma', $firma)
+                ->with('ilanlar',$ilanlar)
                 ->with('iller', $iller)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
                 ->with('teklifler',$teklifler)->with('sektorler',$sektorler)->with('odeme_turleri',$odeme_turleri)
-                ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)->with('davetEdildigimIlanlar',$davetEdildigimIlanlar)
+                ->with('ilId',$ilId)->with('keyword',$keyword)->with('sektor_id',$sektor_id)
                 ->with('misafir', $misafir);
     }
 
@@ -1008,30 +1000,36 @@ class IlanController extends Controller
 
     public function ilanlarim($firmaId){
         $firma = Firma::find($firmaId);
-        $model_ilanlar=  Ilan::all();
+
         if (Gate::denies('show', $firma)) {
             return Redirect::to('/');
         }
 
-        $aktif_ilanlar= Ilan::where('firma_id',$firma->id)->where('statu',0)->get();
+        $aktif_ilanlar = Ilan::where('firma_id', $firmaId)->orderBy('kapanma_tarihi','desc')
+        ->with([
+            'teklifler' => function($query){
+                $query->with('firmalar')->addSelect([DB::raw('COUNT(firma_id) AS firma_sayisi'), 'ilan_id'])->groupBy('ilan_id');
+            },
+            'kismi_acik_kazananlar' => function($query){
+                $query->addSelect([DB::raw('SUM(kazanan_fiyat) AS kazanan_acik_toplam'), 'ilan_id'])->groupBy('ilan_id');
+            },
+            'kismi_kapali_kazananlar.firma',
+            'kismi_acik_kazananlar.firma',
+            'puanlamalar',
+            'yorumlar'
+        ]);
+        $sonuc_ilanlar = clone $aktif_ilanlar;
+        $pasif_ilanlar = clone $aktif_ilanlar;
+        
+        $aktif_ilanlar = $aktif_ilanlar->where('statu', 0)->get();
+        $sonuc_ilanlar = $sonuc_ilanlar->where('statu', 1)->get();
+        $pasif_ilanlar = $pasif_ilanlar->where('statu', 2)->get();
 
-        $aktif_count= $aktif_ilanlar->count();
 
-
-        $ilanlarım = $firma->ilanlar()->orderBy('kapanma_tarihi','desc')->get();
-        $sonuc_ilanlar= Ilan::where('firma_id',$firma->id)->where('statu',1)->get();
-        $sonuc_kapali = $sonuc_ilanlar->count();
-        $kazananFiyat=0;
-
-        $pasif_ilanlar = \App\Ilan::where('firma_id',$firma->id)->where('statu',2)->get();
-
-
-        return view('Firma.ilan.ilanlarim')->with('firma', $firma)->with('aktif_ilanlar', $aktif_ilanlar)->with('aktif_count', $aktif_count)->with('ilanlarım', $ilanlarım)
-                ->with('sonuc_kapali', $sonuc_kapali)->with('sonuc_ilanlar', $sonuc_ilanlar)->with('model_ilanlar', $model_ilanlar)
-                ->with('kazananFiyat', $kazananFiyat)->with('pasif_ilanlar',$pasif_ilanlar);
+        return View::make('Firma.ilan.ilanlarim',
+        compact(['firma', 'aktif_ilanlar', 'sonuc_ilanlar', 'pasif_ilanlar']));
     }
 
-    //TODO: başvuru fonksiyonlarının IlanController'da olması gerektiğini onayla
     public function basvurularim($firma_id)
     {
         $firma = Firma::find($firma_id);
@@ -1314,5 +1312,4 @@ class IlanController extends Controller
         $ilan->statu=0;
         $ilan->save();
     }
-
 }
