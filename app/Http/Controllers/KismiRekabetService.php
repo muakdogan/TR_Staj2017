@@ -20,16 +20,16 @@ class KismiRekabetService extends Controller
         $firma = Firma::find($firmaID);
         $ilan = Ilan::find($ilanID);
 
-        if (!$firma->ilanlar)
+        if (!$ilan)
             $firma->ilanlar = new Ilan();
-        if (!$firma->ilanlar->ilan_mallar)
+        if (!$ilan->ilan_mallar)
             $firma->ilanlar->ilan_mallar = new IlanMal();
-        if (!$firma->ilanlar->ilan_hizmetler)
+        if (!$ilan->ilan_hizmetler)
             $firma->ilanlar->ilan_hizmetler = new IlanHizmet();
-        if (!$firma->ilanlar->ilan_yapim_isleri)
+        if (!$ilan->ilan_yapim_isleri)
             $firma->ilanlar->ilan_yapim_isleri = new IlanYapimIsi();
 
-        if (!$firma->ilanlar->ilan_goturu_bedeller)
+        if (!$ilan->ilan_goturu_bedeller)
             $firma->ilanlar->ilan_goturu_bedeller = new IlanGoturuBedel();
 
         $kullanici_id=Auth::user()->kullanici_id;

@@ -227,6 +227,7 @@ Debugbar::info($ilan);
             -o-transform:skew(8deg) rotate(3deg);
             transform:skew(8deg) rotate(3deg);
         }
+
     </style>
 
 @endsection

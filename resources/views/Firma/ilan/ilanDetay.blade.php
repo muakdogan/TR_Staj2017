@@ -554,16 +554,20 @@
                     <h4><strong>{{$ilan->adi}}</strong> ilanı
                         @if($ilan->statu==0)
                             <span id="ilanStatu" style="color:yellowgreen">(Aktif)</span>
-                            @if(!$teklifVarMi)
-                                {!! Form::button('İlanı Pasif Et', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right')) !!}
-                                {!! Form::button('İlanı Aktif Et', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right;display:none')) !!}
+                            @if($ilan->firma_id == session()->get('firma_id'))
+                                @if(!$teklifVarMi)
+                                    {!! Form::button('İlanı Pasifleştir', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right')) !!}
+                                    {!! Form::button('İlanı Aktifleştir', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right;display:none')) !!}
+                                @endif
                             @endif
                         @elseif($ilan->statu==1)
                             <span id="ilanStatu">(Tamamlanmış)</span>
                         @else
-                            <span id="ilanStatu" style="color:darkred">(Pasif)</span>
-                            {!! Form::button('İlanı Aktif Et', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right')) !!}
-                            {!! Form::button('İlanı Pasif Et', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right;display:none')) !!}
+                            <span id="ilanStatu" style="color:red">(Pasif)</span>
+                            @if($ilan->firma_id == session()->get('firma_id'))
+                                {!! Form::button('İlanı Aktifleştir', array('id'=>'btn_ilaniAktifEt','class'=>'btn btn-success', 'style'=>'float:right')) !!}
+                                {!! Form::button('İlanı Pasifleştir', array('id'=>'btn_ilaniPasifEt','class'=>'btn btn-danger', 'style'=>'float:right;display:none')) !!}
+                            @endif
                         @endif
                     </h4>
                 </div>
@@ -660,9 +664,7 @@
                         </div>
                         <div class="tab-pane" id="3">
                             <div id="kismiRekabet">
-                                @if(1)
                                     @include('Firma.ilan.kismiRekabet')
-                                @endif
                             </div>
                         </div>
                         @if($ilan->firma_id == session()->get('firma_id'))
@@ -1195,7 +1197,7 @@
                 success:function(data, textStatus, jqXHR) {
                     $('.ajax-loader').css("visibility", "hidden");
                     $("#ilanStatu").text("(Pasif)");
-                    $("#ilanStatu").css("color","darkred");
+                    $("#ilanStatu").css("color","red");
                     $("#btn_ilaniAktifEt").show();
                     $("#btn_ilaniPasifEt").hide();
                     ilanStatu=2;
@@ -1242,7 +1244,7 @@
                     content: 'İlanda düzenleme yapabilmeniz için ilan statüsünün pasif olması gerekmektedir!',
                     buttons: {
                         confirm: {
-                            text: 'İlanı Pasif Et!',
+                            text: 'İlanı Pasifleştir!',
                             action:function () {
                                 //$.alert(' Edildi!');
                                 $.ajax({
@@ -1265,7 +1267,7 @@
 
                             }},
                         cancel:{
-                            text: 'İptal',
+                            text: 'İptal'
                         }
                     }
                 });
@@ -1426,7 +1428,7 @@
                                         },
                                         error: function(jqXHR, textStatus, errorThrown)
                                         {
-                                            alert(textStatus + "," + errorThrown);
+                                            alert(textStatus + "," + errorThrown + " Kısmi rekabet yüklenemedi");
                                             $('.ajax-loader').css("visibility", "hidden");
                                         }
                                     });
@@ -1447,7 +1449,7 @@
                                             },
                                             error: function(jqXHR, textStatus, errorThrown)
                                             {
-                                                alert(textStatus + "," + errorThrown);
+                                                alert(textStatus + "," + errorThrown + " Rekabet tablosu yüklenemedi");
                                                 $('.ajax-loader').css("visibility", "hidden");
                                             }
                                         });

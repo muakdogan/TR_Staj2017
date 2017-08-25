@@ -83,7 +83,7 @@ table.dataTable{width:100%;margin:0 auto;clear:both;border-collapse:separate;bor
                                         <td>{{$onayliFirma->adresler[0]->iller->adi}}</td>
                                         <td><ul type="circle">@foreach($onayliFirma->sektorler as $sektor) <li>{{$sektor->adi}} </li> @endforeach </ul></td>
                                         <td>
-                                            <a href=""><button   name="btn-add-düzenle" style="float:right" type="button" class="btn btn-info düzenle">Tedarikçilerimden<br>Çıkar</button></a>
+                                            <button type="button" class="btn btn-info btn-tedCikar" id="btn_tedCikar_{{$onayliFirma->id}}" value="{{$onayliFirma->id}}" style="float:right;width:170px">Tedarikçilerimden Çıkar</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -141,6 +141,21 @@ $('#basvurularim tbody').on( 'mouseenter', 'td', function () {
     $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
 } );
 
+$(".btn-tedCikar").click(function () {
+    var tedarikci_id=$(this).val();
+    $.ajax({
+        type:"GET",
+        url:"{{asset('onayliTedarikciCikar')}}",
+        data:{tedarikci_id:tedarikci_id},
+        cache: false,
+        success: function(data){
+            window.location.reload();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus); alert("Error: " + errorThrown);
+        }
+    });
+});
 
 </script>
 @endsection
