@@ -8,7 +8,7 @@ use App\Il;
 use App\Firma;
 use App\OdemeTuru;
 use App\Sektor;
-use App\BelirlIstekli;
+use App\BelirliIstekli;
 use DB;
 use App\Ilan;
 use App\IlanHizmet;
@@ -425,7 +425,7 @@ class IlanController extends Controller
 
         if(Input::get('belirli_istekli')!=null){
             foreach(Input::get('belirli_istekli') as $belirli){
-                $belirli_istekliler= new BelirlIstekli();
+                $belirli_istekliler= new BelirliIstekli();
                 $belirli_istekliler->ilan_id = $ilan->id;
                 $belirli_istekliler->firma_id=$belirli;
                 $belirli_istekliler->save();
@@ -434,7 +434,7 @@ class IlanController extends Controller
 
         if(Input::get('onayli_tedarikciler')!=null){
             foreach(Input::get('onayli_tedarikciler') as $onayli){
-                $belirli_istekliler= new \App\BelirlIstekli();
+                $belirli_istekliler= new \App\BelirliIstekli();
                 $belirli_istekliler->ilan_id = $ilan->id;
                 $belirli_istekliler->firma_id=$onayli;
                 $belirli_istekliler->save();
@@ -824,7 +824,7 @@ class IlanController extends Controller
         if($request->belirli_istekli!=null){
           foreach($request->belirli_istekli as $belirli){
               Debugbar::info($belirli);
-            $belirli_istekliler= new \App\BelirlIstekli();
+            $belirli_istekliler= new \App\BelirliIstekli();
             $belirli_istekliler->ilan_id = $ilan->id;
             $belirli_istekliler->firma_id=$belirli;
             $belirli_istekliler->save();
@@ -834,7 +834,7 @@ class IlanController extends Controller
          if($request->onayli_tedarikciler!=null){
           foreach($request->onayli_tedarikciler as $onayli){
 
-              $belirli_istekliler= new \App\BelirlIstekli();
+              $belirli_istekliler= new \App\BelirliIstekli();
               $belirli_istekliler->ilan_id = $ilan->id;
               $belirli_istekliler->firma_id=$onayli;
               $belirli_istekliler->save();
