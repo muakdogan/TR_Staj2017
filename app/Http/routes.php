@@ -319,7 +319,8 @@ Route::get('/ilanAra/{page}', 'IlanController@showIlan');
 Route::post('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu', 'FirmaController@showFirmalar');
 Route::get('/firmaHavuzu/{page}', 'FirmaController@showFirmalar');
-Route::get('/onayliTedarikci',  'FirmaController@onayliTedarikcilerEkleCıkar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikciEkle',  'FirmaController@onayliTedarikciEkle'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
+Route::get('/onayliTedarikciCikar',  'FirmaController@onayliTedarikciCikar'); /// Tüm firmalar Sekmesinin Controlleri fonksiyonu
 Route::get('/onayliTedarikcilerim',  'FirmaController@onayliTedarikcilerim'); /// onayli firmalar sekmesinin controller fonksiyonu
 
 Route::get('/kullaniciFirma',function () {
@@ -661,7 +662,7 @@ Route::get('teklifGor/{id}/{ilanid}' ,'IlanController@teklifGor');
 Route::get('ilaniPasifEt' ,'IlanController@ilaniPasifEt');
 Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
 
-    ///////////////////////////////Kısmi Açık REkabet Kazanan //////////////////////////////////////
+  ///////////////////////////////Kısmi Açık REkabet Kazanan ///////////
     Route::post('KismiAcikRekabetKazanan' ,function () {
 
       $ilan_id = Input::get('ilan_id');
@@ -752,7 +753,12 @@ Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
           });
           ///////////////////////////////////// Rekabet //////////////////////////////////////
           Route::get('rekabet/{ilan_id}' ,function ($ilanid) {
-            $ilan = App\Ilan::find($ilanid);
+              $ilan = App\Ilan::find($ilanid);
+          $firma_id = session()->get('firma_id');
+          $ilanSahibi=0;
+          if($firma_id == $ilan->firmalar->id){
+              $ilanSahibi=1;
+          }
             $teklifler = $ilan->teklif_hareketler()->whereRaw('tarih IN (select MAX(tarih) FROM teklif_hareketler GROUP BY teklif_id)')->get();
 
             $minFiyat = $ilan->minFiyat();
@@ -772,7 +778,7 @@ Route::get('ilaniAktifEt' ,'IlanController@ilaniAktifEt');
                     $kisKazanCount=1;
                 }
             }
-            return View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render();
+            return View::make('Firma.ilan.rekabet',array('teklifler'=> $teklifler,'ilanSahibi'=> $ilanSahibi,'ilan'=>$ilan,'minFiyat'=>$minFiyat,'kazanK'=>$kazanK,'kisKazanCount'=>$kisKazanCount))->render();
 
         });
 

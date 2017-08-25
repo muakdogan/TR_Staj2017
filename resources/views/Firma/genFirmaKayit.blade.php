@@ -93,8 +93,9 @@
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Firma Adı</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi">
-                          {!! Form::text('firma_adi', 'MetaData',
+
+                        <div class="col-md-9 col-sm-9 col-xs-12" name="firma_adi" value="{{ Request::old('firma_adi') }}">
+                          {!! Form::text('firma_adi', null,
                                         array('class'=>'form-control',
                                         'placeholder'=>'Firma adı',
                                         'data-validation'=>'length',
@@ -108,9 +109,10 @@
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Sektörler</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'value="{{1}}">
+
+                          <select class="form-control deneme" name="sektor_id[]" id="custom-headers" multiple='multiple'value="{{1}}" data-validation = "required" data-validation-error-msg = "Lütfen Sektör Seçiniz">
                             @foreach($sektorler as $sektor)
-                                    <option  value="{{$sektor->id}}" >{{$sektor->adi}}</option>
+                                    <option  value="{{$sektor->id}}">{{$sektor->adi}}</option>
                             @endforeach
                           </select>
                           <span class="help-block" style="color:red"> {{ $errors->first('sektor_id') }}</span>
@@ -124,7 +126,7 @@
                                         'class'=>'form-control',
                                         'placeholder'=>'Telefonunuz',
                                         'data-validation'=>'length ',
-                                        'data-validation-length'=>'min2',
+                                        'data-validation-length'=>'min15',
                                         'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
                           <span class="help-block" style="color:red"> {{ $errors->first('telefon') }}</span>
                         </div>
@@ -134,7 +136,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="il_id">İl</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <select class="form-control" name="il_id" id="il_id"
-                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!" value="{{1}}">>
+                          data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!" value="{{1}}">
                             <option selected disabled>İl Seçiniz</option>
                             @foreach($iller_query as $il)
                                    <option value="{{$il->id}}">{{$il->adi}}</option>
@@ -148,7 +150,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ilce_id">İlçe</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <select class="form-control"name="ilce_id" id="ilce_id" data-validation="required"
-                                                          data-validation-error-msg="Lütfen bu alanı dolduurnuz!">
+                                                           data-validation-error-msg="Lütfen bu alanı dolduurnuz!"> <!--value= {{ Request::old('ilce_id') }} -->
                           </select>
                           <span class="help-block" style="color:red"> {{ $errors->first('ilce_id') }}</span>
                         </div>
@@ -167,7 +169,8 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bireysel_firma_adres">Firma Adresi <span class="required"></span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          {!! Form::text('firma_adres', 'ads',
+
+                          {!! Form::text('firma_adres', null,
                               array('id' => 'firma_adres',
                               'class'=>'form-control',
                               'placeholder'=>'Firmanizin adresi',
@@ -248,7 +251,7 @@
                                          'onFocusout'=>'email_girisControl()',
                                          'data-validation'=>'email' ,
                                          'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}
-                                           <span class="help-block" style="color:red"> {{ $errors->first('email_giris') }}</span>
+                                          <span class="help-block" id="email_error" style="color:red" onload="findPos()">{{ $errors->first('email_giris') }}</span>
                         </div>
                       </div>
 
@@ -257,7 +260,7 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <input type="password" class="form-control" placeholder="******" name="password" id="password" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
-                          data-toggle="tooltip" value="123456">
+                          data-toggle="tooltip" >
                             <span class="help-block" style="color:red"> {{ $errors->first('password') }}</span>
                         </div>
                         <span id="password_strength"></span>
@@ -269,7 +272,7 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                           <input type="password" class="form-control" placeholder="******" name="password_confirmation" id="password_confirmation" onkeyup="CheckPasswordStrength(this.value)"
                           data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"
-                          data-toggle="tooltip" value="123456">
+                          data-toggle="tooltip">
                             <span class="help-block" style="color:red"> {{ $errors->first('password_confirmation') }}</span>
                           <span id="confirmMessage" class="confirmMessage"></span>
                         </div>
@@ -961,12 +964,6 @@
     });
     // READY PARANTHESIS
 
-
-
-
-
-
-
     /*
       18-19.07.2017 Oguzhan
       selection header'a id eklendi.
@@ -979,9 +976,11 @@
     */
     var count = 0;
     var count_for_header = 5;
+
+
     $('#custom-headers').multiSelect({
         selectableHeader: "</i><input type='text'  class='search-input col-sm-12 search_icon' autocomplete='off' placeholder='Sektör Seçiniz'></input>",
-        selectionHeader: "<p id = 'sektor_count' style='font-size:12px;color:red'>Max '"+count_for_header+"' sektör seçebilirsiniz</p>",
+        selectionHeader: "<p id = 'sektor_count' style='font-size:12px;color:green'>Lütfen Sektör Seçiniz</p>",
         afterInit: function(ms){
           var that = this,
               $selectableSearch = that.$selectableUl.prev(),
@@ -997,24 +996,28 @@
           });
         },
         afterSelect: function(values){
-          count++;
+          count = $(".ms-selection").find(".ms-selected").length;
           if(count>5){
               $('#custom-headers').multiSelect('deselect', values);
-          }else{
-              count_for_header--;
           }
-          $("#sektor_count").text("Max '"+count_for_header+"' sektör seçebilirsiniz");
+          $("#sektor_count").text(" '"+(5-count)+"' sektör seçebilirsiniz");
           this.qs1.cache();
         },
         afterDeselect: function(values){
-          count--;
+          count = $(".ms-selection").find(".ms-selected").length;
+
           if(count!=5){
-            count_for_header++;
-            $("#sektor_count").text("Max '"+count_for_header+"' sektör seçebilirsiniz");
+            $("#sektor_count").text(" '"+(5-count)+"' sektör seçebilirsiniz");
+          }
+          if(count==0){
+            $("#sektor_count").text("Lütfen Sektör Seçiniz");
           }
           this.qs1.cache();
         }
     });
+
+
+
     function CheckPasswordStrength(password) {
         var password_strength = document.getElementById("password_strength");
         //TextBox left blank.
@@ -1144,8 +1147,13 @@
     Form data serialize edilmeden once maskelemeler kaldirilir daha sonra da
     tekrar maskeleme yapilir.
     */
+
+
     $("#firma_kayit").submit(function(e)
     {
+      var obj,curtop;
+      var json;
+
       var postData, formURL;
       $('#telefon').unmask();//telefon verilerinin maskesini kaldirir.
       $('#telefonkisisel').unmask();
@@ -1189,11 +1197,10 @@
         },
         error: function(jqXHR, textStatus, errorThrown)
         {
-          alert(postData);
           console.log(textStatus + "," + errorThrown);
-          location.reload("<errorFieldID>");
-          // location.hash("<errorFieldID>");
-          anchorScroll();
+          location.reload();
+
+          window.scroll(0,0);//Kullanıcıların hatasını görebilmesi için sayfa başına yeniliyor.
         }
       });
       e.preventDefault(); //STOP default action

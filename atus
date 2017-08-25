@@ -1,0 +1,86 @@
+[1mdiff --git a/resources/views/Firma/genFirmaKayit.blade.php b/resources/views/Firma/genFirmaKayit.blade.php[m
+[1mindex 945b445..78ae11a 100644[m
+[1m--- a/resources/views/Firma/genFirmaKayit.blade.php[m
+[1m+++ b/resources/views/Firma/genFirmaKayit.blade.php[m
+[36m@@ -248,7 +248,10 @@[m
+                                          'onFocusout'=>'email_girisControl()',[m
+                                          'data-validation'=>'email' ,[m
+                                          'data-validation-error-msg'=>'Lütfen bu alanı doldurunuz!')) !!}[m
+[31m-                                           <span class="help-block" style="color:red"> {{ $errors->first('email_giris') }}</span>[m
+[32m+[m
+[32m+[m[32m                                          <span class="help-block" id="email_error" style="color:red" onload="findPos()">{{ $errors->first('email_giris') }}</span>[m
+[32m+[m
+[32m+[m
+                         </div>[m
+                       </div>[m
+ [m
+[36m@@ -1018,12 +1021,8 @@[m
+           this.qs1.cache();[m
+         }[m
+     });[m
+[31m-    function CheckSektor(){[m
+[31m-      alert("sdgsdg");[m
+[31m-        var errorMessageSektor = document.getElementById('sektor_id');[m
+ [m
+[31m-        errorMessageSektor.innerHTML='pmgpdmpg';[m
+[31m-    }[m
+[32m+[m
+ [m
+     function CheckPasswordStrength(password) {[m
+         var password_strength = document.getElementById("password_strength");[m
+[36m@@ -1154,8 +1153,13 @@[m
+     Form data serialize edilmeden once maskelemeler kaldirilir daha sonra da[m
+     tekrar maskeleme yapilir.[m
+     */[m
+[32m+[m
+[32m+[m
+     $("#firma_kayit").submit(function(e)[m
+     {[m
+[32m+[m[32m      var obj,curtop;[m
+[32m+[m[32m      var json;[m
+[32m+[m
+       var postData, formURL;[m
+       $('#telefon').unmask();//telefon verilerinin maskesini kaldirir.[m
+       $('#telefonkisisel').unmask();[m
+[36m@@ -1199,14 +1203,37 @@[m
+         },[m
+         error: function(jqXHR, textStatus, errorThrown)[m
+         {[m
+[32m+[m
+[32m+[m
+           console.log(textStatus + "," + errorThrown);[m
+[32m+[m[32m          //Laravel Hatası gelince sayfa yenilernirken hatanın üzerine yönlendirmek istiyorum ama bunu javascriptle yapabilirmiyim.[m
+[32m+[m
+[32m+[m
+[32m+[m[32m          json=JSON.parse(<?php[m
+[32m+[m[32m                function object_to_array($errors)[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    if(is_array($errors) || is_object($errors))[m
+[32m+[m[32m                    {[m
+[32m+[m[32m                        $result = array();[m
+[32m+[m
+[32m+[m[32m                        foreach($errors as $key => $value) {[m
+[32m+[m[32m                            $result[$key] = $this->object_to_array($value);[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                        return json_encode($result,0,512);[m
+[32m+[m[32m                    }[m
+[32m+[m
+[32m+[m[32m                    return json_encode($errors,0,512);[m
+[32m+[m[32m                }[m
+[32m+[m[32m           ?>);[m
+[32m+[m
+[32m+[m[32m           alert('Blah Blah :      '+json);[m
+[32m+[m
+[32m+[m[32m           location.reload();//Yemedi);[m
+[32m+[m
+[32m+[m
+ [m
+ [m
+ [m
+[31m-          //Laravel Hatası gelince sayfa yenilernirken hatanın üzerine yönlendirmek istiyorum ama bunu javascriptle yapabilirmiyim.[m
+[31m-          location.reload("<errorFieldID>");//Yemedi[m
+[31m-          // location.hash("<errorFieldID>");[m
+[31m-          anchorScroll();[m
+         }[m
+       });[m
+       e.preventDefault(); //STOP default action[m
