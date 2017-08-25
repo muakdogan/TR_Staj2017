@@ -466,14 +466,9 @@
                                                         <div class="form-group"  id="onayli_tedarikciler">
                                                             <div class="col-md-12">
                                                                 <div class="row">
-                                                                    <div class="col-md-1 aciklama-tooltip"></div>
-                                                                    <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Firma Seçiniz</label>
-                                                                    <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
-                                                                </div>
-                                                                <div class="row">
                                                                    <div class="col-md-2"></div>
                                                                    <div style="padding-right:3px;padding-left:1px"  class="col-md-9">
-                                                                        <select id='custom-headers' multiple='multiple' name="onayli_tedarikciler[]" id="onayli_tedarikciler[]" >
+                                                                        <select id='custom-headers' multiple='multiple' name="onayli_tedarikciler[]" id="onayli_tedarikciler[]" data-rule-multiselectOnay="true">
                                                                         </select>
                                                                    </div>
                                                                 </div>
@@ -483,24 +478,17 @@
                                                         <div class="form-group"  id="belirli-istekliler">
                                                             <div class="col-md-12">
                                                                 <div class="row">
-                                                                    <div class="col-md-1 aciklama-tooltip"></div>
-                                                                    <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Firma Seçiniz</label>
-                                                                    <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
-                                                                </div>
-                                                                <div class="row">
                                                                    <div class="col-md-2"></div>
                                                                    <div style="padding-right:3px;padding-left:1px"  class="col-md-9">
-                                                                        <select id='belirliIstek' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" >
+                                                                        <select id='belirliIstek' multiple='multiple' name="belirli_istekli[]" id="belirli_istekli[]" data-rule-multiselectOnay="true">
                                                                         </select>
                                                                    </div>
                                                                 </div>
                                                            </div>
                                                         </div>
 
-
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-
                                                             <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Rekabet Şekli*</label>
                                                              <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
@@ -672,7 +660,7 @@
                                                 <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-1 control-label">Açıklama</label>
                                                 <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px" class=" col-sm-1 control-label">:</label>
                                                 <div class="col-sm-10" >
-                                                    <textarea id="aciklama" name="aciklama" rows="5"  class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
+                                                    <textarea id="aciklama" name="aciklama" rows="2"  class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
                                                 </div>
                                             </div>
                                           </div>
@@ -683,7 +671,7 @@
                                 <fieldset id="kalem">
                                             <h2   style=" text-align:center;margin-top:0px;margin-bottom:10px" class="fs-title"><strong>KALEM BİLGİLERİ OLUŞTUR</strong></h2>
 
-                                            <div  id="mal"  >
+                                            <div id="mal">
                                              <table  id="mal_table" class="table" >
                                                  <thead id="tasks-list" name="tasks-list">
                                                     <tr style="text-align:center">
@@ -700,17 +688,15 @@
                                                  </thead>
                                                 <tr>
                                                     <td>{{$i}}</td>
-                                                    <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control  mal_show required" id="mal_kalem0" name="mal_kalem[0]" placeholder="Kalem Ekle" readonly  value=""> </td>
+                                                    <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control mal_show required" id="mal_kalem0" name="mal_kalem[0]" placeholder="Kalem Ekle" readonly  value=""> </td>
                                                     <td><input type="text" class="form-control required" id="mal_marka" name="mal_marka[0]" placeholder="Marka" value="" ></td>
                                                     <td>
                                                        <input type="text" class="form-control required" id="mal_model" name="mal_model[0]" placeholder="Model" value="" >
                                                     </td>
-
                                                     <td>
-                                                        <textarea  rows="1" id="mal_aciklama" name="mal_aciklama[0]" rows="5" class="form-control  required" placeholder="Açıklama" ></textarea>
+                                                        <textarea id="mal_aciklama" name="mal_aciklama[0]" rows="2" class="form-control required" placeholder="Açıklama" ></textarea>
                                                     </td>
-
-                                                    <td> <input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj[0]" placeholder="Ambalaj" value="" ></td>
+                                                    <td><input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj[0]" placeholder="Ambalaj" value="" ></td>
 
                                                     <td>
                                                         <input type="number" class="form-control  required" id="mal_miktar" name="mal_miktar[0]" placeholder="Miktar" value=""  >
@@ -731,11 +717,9 @@
                                          
                                         </table>
                                              </div>
-                                            <div id="hizmet" >
+                                            <div id="hizmet">
                                              <table id="hizmet_table" class="table" >
-                                               <thead id="tasks-list" name="tasks-list"
                                                 <tr style="text-align:center">
-
                                                     <th>Sıra</th>
                                                     <th>Kalem Ekle</th>
                                                     <th>Açıklama</th>
@@ -744,13 +728,12 @@
                                                     <th>Miktar</th>
                                                     <th>Birim</th>
                                                     <th></th>
-
                                                 </tr>
                                                 <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control hizmet_show required" id="hizmet_kalem0" name="hizmet_kalem[0]" placeholder="Kalem Ekle" readonly  value="" > </td>
                                                       <td>
-                                                         <textarea  rows="1" id="hizmet_aciklama" name="hizmet_aciklama[0]" rows="5" class="form-control required" placeholder="Açıklama"  ></textarea>
+                                                         <textarea id="hizmet_aciklama" name="hizmet_aciklama[0]" rows="2" class="form-control required" placeholder="Açıklama"  ></textarea>
                                                      </td>
                                                      <td>
                                                          <input type="text" class="form-control required" id="hizmet_fiyat_standardi" name="hizmet_fiyat_standardi[0]" placeholder="Fiyat Standartı" value="" >
@@ -775,30 +758,25 @@
                                                         </select>
                                                      </td>
                                                      <td><a href="#"  class="sil"><img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="hizmet_id[0]"  id="hizmet_id0" value=""></td>
-                                                     
                                                 </tr>
-                                                 </thead>
                                               </table>
                                             </div>
 
                                             <div id="goturu" >
                                                 <table id="goturu_table" class="table" >
-                                               <thead id="tasks-list" name="tasks-list"
                                                 <tr style="text-align:center">
-
                                                     <th>Sıra</th>
                                                     <th>Kalem Ekle</th>
                                                     <th>Açıklama</th>
                                                     <th>Miktar</th>
                                                     <th>Birim</th>
                                                     <th></th>
-                                                    
                                                 </tr>
                                                 <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem0" name="goturu_kalem[0]" placeholder="Kalem Ekle" readonly  value=""  > </td>
                                                       <td>
-                                                         <textarea  rows="1" id="goturu_aciklama" name="goturu_aciklama[0]" rows="5" class="form-control required" placeholder="Açıklama" ></textarea>
+                                                         <textarea id="goturu_aciklama" name="goturu_aciklama[0]" rows="2" class="form-control required" placeholder="Açıklama" ></textarea>
                                                      </td>
 
                                                      <td>
@@ -815,15 +793,12 @@
                                                      <td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id[0]"  id="goturu_id0" value=""></td>
                                                         
                                                 </tr>
-                                                 </thead>
                                               </table>
                                             </div>
 
                                             <div id="yapim" >
                                               <table id="yapim_table" class="table" >
-                                               <thead id="tasks-list" name="tasks-list"
                                                 <tr style="text-align:center">
-
                                                     <th>Sıra</th>
                                                     <th>Kalem Ekle</th>
                                                     <th>Açıklama</th>
@@ -832,13 +807,12 @@
                                                     <th>Miktar</th>
                                                     <th>Birim</th>
                                                     <th></th>
-
                                                 </tr>
                                                 <tr>
                                                     <td>{{$i}}</td>
                                                     <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control yapim_show required" id="yapim_kalem0" name="yapim_kalem[0]" placeholder="Kalem Ekle" readonly  value="" > </td>
                                                       <td>
-                                                         <textarea  rows="1" id="yapim_aciklama" name="yapim_aciklama[0]" rows="5" class="form-control required" placeholder="Açıklama" ></textarea>
+                                                         <textarea id="yapim_aciklama" name="yapim_aciklama[0]" rows="2" class="form-control required" placeholder="Açıklama" ></textarea>
                                                      </td>
                                                      <td>
                                                          <input type="text" class="form-control required" id="yapim_fiyat_standardi" name="yapim_fiyat_standardi[0]" placeholder="Fiyat Standartı" value="" >
@@ -865,10 +839,9 @@
                                                      <td><a href="#" class="sil"> <img src="{{asset("images/sil1.png")}}"></a> <input type="hidden" name="yapim_id[0]"  id="yapim_id0" value=""></td>
                                                        
                                                 </tr>
-                                                 </thead>
                                               </table>
                                             </div>
-                                        <input style="float:right" type="button" name="next" class="next action-button next2"  value="İleri" />
+                                        <input style="float:right" type="button" name="next" class="next action-button next2" value="İleri" />
                                         <input style="float:right" type="button" name="previous" class="previous action-button" value="Geri" />
                                         <input style="float:right" type="button" class="action-button" id="btn2" value="Kalem Ekle" />
 
@@ -880,7 +853,7 @@
                                             <h3>İlan Bilgileri</h3>
                                         </div>
                                         <input type="checkbox"  id='sozlesme_onay' name="sozlesme_onay" value="1"><strong>Sözleşmeyi Okudum Onaylıyorum</strong>
-                                        {!! Form::submit('Onayla ve Gönder', array('id'=>'onayButton','style'=>'width:140px;float:right;font-size: 14px','class'=>'action-button')) !!}
+                                        {!! Form::button('Onayla ve Gönder', array('id'=>'onayButton','style'=>'width:140px;float:right;font-size: 14px','class'=>'action-button, next')) !!}
                                         <input  style="float:right"  type="button" name="previous" class="previous action-button" value="Geri" />
 
                                 </fieldset>
@@ -907,6 +880,43 @@
     
 <script charset="utf-8">
 
+    //FORM SUBMIT
+    //Ilan guncelle buton
+    $("#onayButton").unbind().click(function(e){
+        for ( instance in CKEDITOR.instances )
+            CKEDITOR.instances[instance].updateElement();
+        var postData = new FormData($("#msform")[0]);
+        var formURL = $("#msform").attr('action');
+        $.ajax(
+            {
+                beforeSend: function(){
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                url : formURL,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data : postData,
+                success:function(data, textStatus, jqXHR)
+                {
+                    var form = $('#msform');
+                    // let the browser natively reset defaults
+                    form[0].reset();
+                    setTimeout(function(){
+                        window.location = "{{asset('ilanlarim')}}/{{$firma->id}}";
+                    }, 5);
+
+                    e.preventDefault();
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    alert(textStatus + "," + errorThrown);
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
+            });
+        e.preventDefault(); //STOP default action
+    });
+
     $('#btn-add-ilanBilgileri').click(function () {
         $('#btn-save-ilanBilgileri').val("add");
         $('#myModal-ilanBilgileri').modal('show');
@@ -923,8 +933,7 @@
 var findName;
 
 $(".next2").click(function(){
-    alert($( "input[type='radio']:checked").text());
-    $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$( "input[type='radio']:checked").next('label:first').html+'</li>');
+    $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$("input[type='radio']:checked").next('label:first').html+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Sektörü: '+$( "#firma_sektor option:selected" ).text()+'</li>');
@@ -964,7 +973,12 @@ $(document).ready(function(){
      });
     jQuery.validator.methods["date"] = function (value, element) { return true; } ;
 
- });
+    jQuery.validator.addMethod("multiselectOnay", function(value, element) {
+        return $($('#'+$(element).attr('id')+' :selected')).length>0;
+    }, 'En az bir tane firma seçmelisiniz!!');
+
+});
+
 var ilan_turu;
 var sozlesme_turu;
 
@@ -989,45 +1003,34 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 $(".next").click(function(){
-    
-    
-         if(ilan_turu=="1" && sozlesme_turu=="0")
-                {
-                   $('#mal').show();
-                   $('#hizmet').hide();
-                   $('#goturu').hide();
-                   $('#yapim').hide();
-
-                }
-             else if(ilan_turu=="2" && sozlesme_turu=="0")
-                {
-                    
-                   $('#hizmet').show();
-                   $('#mal').hide();
-                   $('#goturu').hide();
-                   $('#yapim').hide();
-                }
-             else if(sozlesme_turu=="1")
-                {
-                    
-                   $('#goturu').show();
-                   $('#hizmet').hide();
-                   $('#mal').hide();
-                   $('#yapim').hide();
-                   $('.fiyatlandirma').hide();
-
-                }
-            else if(ilan_turu=="3")
-                {
-                   $('#yapim').show();
-                   $('#hizmet').hide();
-                   $('#goturu').hide();
-                   $('#mal').hide();
-                }
-            else if(sozlesme_turu=="0")
-                 {
-                    $('.fiyatlandirma').show();
-                 }
+    if(sozlesme_turu=="1")
+    {
+        $('#goturu').show();
+        $('#hizmet').hide();
+        $('#mal').hide();
+        $('#yapim').hide();
+    }
+    else if(ilan_turu=="1")
+    {
+        $('#mal').show();
+        $('#hizmet').hide();
+        $('#goturu').hide();
+        $('#yapim').hide();
+    }
+    else if(ilan_turu=="2")
+    {
+       $('#hizmet').show();
+       $('#mal').hide();
+       $('#goturu').hide();
+       $('#yapim').hide();
+    }
+    else if(ilan_turu=="3")
+    {
+       $('#yapim').show();
+       $('#hizmet').hide();
+       $('#goturu').hide();
+       $('#mal').hide();
+    }
                  
     var form = $("#msform");
         form.validate({
@@ -1058,8 +1061,6 @@ $(".next").click(function(){
                  next_fs.show();
                  current_fs.hide();
         }
-    
-       
 });
 $('.previous').click(function(){
         if($('#kalem').is(":visible")){
@@ -1108,9 +1109,10 @@ $("#yaklasik_maliyet").change(function(){
     var option = $('option:selected', this).attr('name');
     $('#maliyet').val(option);
 });
+
 $('#custom-headers').multiSelect({
-  selectableHeader: "<p style='font-size:12px;color:red'>Tüm firmalar</p><input style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
-  selectionHeader: "<p style='font-size:12px;color:red'>Onaylı Tedarikciler</p><input  style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectableHeader: "<p style='font-size:12px;color:red'>Tüm Firmalar</p><input style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectionHeader: "<p style='font-size:12px;color:red'>Seçili Firmalar</p><input  style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
   afterInit: function(ms){
     var that = this,
         $selectableSearch = that.$selectableUl.prev(),
@@ -1152,8 +1154,8 @@ $('#custom-headers').multiSelect({
 });
 
 $('#belirliIstek').multiSelect({
-  selectableHeader: "<input style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
-  selectionHeader: "<input  style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectableHeader: "<p style='font-size:12px;color:red'>Tüm Firmalar</p><input style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
+  selectionHeader: "<p style='font-size:12px;color:red'>Seçili Firmalar</p><input  style='width:100px' type='text' class='search-input' autocomplete='off' placeholder='Firma Seçiniz'>",
   afterInit: function(ms){
     var that = this,
         $selectableSearch = that.$selectableUl.prev(),
@@ -1317,7 +1319,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
         $("#mal_table").append(['<tr>','<td>'+i+'</td>','<td> <input type="text"  style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px"class="form-control mal_show  required" id="mal_kalem'+kalem_num+'" name="mal_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly value="" > </td>',
                       '<td><input type="text" class="form-control required " id="mal_marka" name="mal_marka['+kalem_num+']" placeholder="Marka" value="" ></td>',
                       ' <td><input type="text" class="form-control required " id="mal_model" name="mal_model['+kalem_num+']" placeholder="Model" value="" ></td>',
-                      '<td><textarea  rows="1" id="mal_aciklama" name="mal_aciklama['+kalem_num+']" rows="5" class="form-control required" placeholder="Açıklama" ></textarea></td>',
+                      '<td><textarea id="mal_aciklama" name="mal_aciklama['+kalem_num+']" rows="2" class="form-control required" placeholder="Açıklama" ></textarea></td>',
                       ' <td> <input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj['+kalem_num+']" placeholder="ambalaj" value="" ></td>',
                       '<td><input type="text" class="form-control required " id="mal_miktar" name="mal_miktar['+kalem_num+']" placeholder="Miktar" value="" ></td>',
                       '<td><select class="form-control required " name="mal_birim['+kalem_num+']" id="mal_birim"><option selected disabled>Seçiniz</option>@foreach($birimler as $birimleri) <option  value="{{$birimleri->id}}" >{{$birimleri->adi}}</option> @endforeach </select></td>',
@@ -1327,7 +1329,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
     else if(ilan_turu=="2" && sozlesme_turu=="0"){
     $("#hizmet_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control hizmet_show required" id="hizmet_kalem'+kalem_num+'" name="hizmet_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
-            '<td><textarea  rows="1" id="hizmet_aciklama" name="hizmet_aciklama['+kalem_num+']" rows="5" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+            '<td><textarea id="hizmet_aciklama" name="hizmet_aciklama['+kalem_num+']" rows="2" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="hizmet_fiyat_standardi" name="hizmet_fiyat_standardi['+kalem_num+']" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="hizmet_fiyat_standardi_birimi['+kalem_num+']" id="hizmet_fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
             '<td><input type="text" class="form-control  required" id="hizmet_miktar" name="hizmet_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
@@ -1337,7 +1339,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
     else if(sozlesme_turu=="1"){
      $("#goturu_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem'+kalem_num+'" name="goturu_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
-            '<td><textarea  rows="1" id="goturu_aciklama" name="goturu_aciklama['+kalem_num+']" rows="5" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+            '<td><textarea id="goturu_aciklama" name="goturu_aciklama['+kalem_num+']" rows="2" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="goturu_miktar_birim_id['+kalem_num+']" id="goturu_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
             '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id['+kalem_num+']"  id="goturu_id'+kalem_num+'" value=""></td>','</tr>'].join(''));
@@ -1346,7 +1348,7 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
     else if(ilan_turu=="3"){
       $("#yapim_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control yapim_show required" id="yapim_kalem'+kalem_num+'" name="yapim_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
-            '<td><textarea  rows="1" id="yapim_aciklama" name="yapim_aciklama['+kalem_num+']" rows="5" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+            '<td><textarea id="yapim_aciklama" name="yapim_aciklama['+kalem_num+']" rows="2" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="yapim_fiyat_standardi" name="yapim_fiyat_standardi['+kalem_num+']" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="yapim_fiyat_standardi_birimi['+kalem_num+']" id="yapim_fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
             '<td><input type="text" class="form-control required" id="yapim_miktar" name="yapim_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
@@ -1616,18 +1618,7 @@ $("#tamamBtn").click(function(){
   });
 
 var firma_id='{{$firma->id}}';
-$("#onayButton").click(function(){
-    if($("#sozlesme_onay").is(':checked')){
-        location.href="{{asset('ilanOlusturEkle')}}"+"/"+firma_id;
-    } else {
-          /*$('#mesaj').bPopup({
-                speed: 650,
-                transition: 'slideIn',
-                transitionClose: 'slideBack',
-                autoClose: 5000 
-          });*/
-    }
-});
+
 $(function() {
     var dt = new Date();
     dt.setDate(dt.getDate() + 3);
