@@ -127,7 +127,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
                 <ul class="nav navbar-nav" style="float:right">
 
-                    @if (!session()->get('firma_adi'))
+                    @if (!Auth::check())
 
                     <li>
                         <a href="{{ url('/firmaKayit') }}">ÜYE OL</a>
@@ -138,7 +138,7 @@ window.requestAnimationFrame = window.requestAnimationFrame
                      <li>
                          <a href="#"><img src="{{asset('images/user.png')}}"></a>
                     </li>
-                   @else
+                    @else
                         <li class="dropdown">
                             <?php $firmaAdi = session()->get('firma_adi');
                               $firmaId = session()->get('firma_id');
