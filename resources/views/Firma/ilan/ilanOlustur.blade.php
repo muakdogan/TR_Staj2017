@@ -289,7 +289,7 @@
         </div>
     </div>
     <div class="container">
-             <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+             <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y:scroll;">
                 <div style="width:1050px" class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -566,7 +566,7 @@
                                                         <div class="form-group fiyatlandirma row">
                                                             <div class="col-md-12">
 
-                                                            <label for="inputEmail3"   style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">FiyatlandırmaŞekli*</label>
+                                                            <label for="inputEmail3"   style="padding-right:3px;padding-left:12px" class="col-sm-3 control-label">Fiyatlandırma Şekli*</label>
                                                             <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-sm-1 control-label">:</label>
                                                             <div class="col-sm-7">
                                                                 <select class="form-control  required" name="kismi_fiyat" id="kismi_fiyat" >
@@ -574,6 +574,9 @@
                                                                     <option   value="1">Kısmi Fiyat Teklifine Açık</option>
                                                                     <option  value="0">Kısmi Fiyat Teklifine Kapalı</option>
                                                                 </select>
+                                                                @if($errors->first('kismi_fiyat') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('kismi_fiyat') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -593,6 +596,9 @@
                                                                         <option value="{{$maliyet->miktar}}" >{{$maliyet->aralik}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                @if($errors->first('yaklasik_maliyet') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('yaklasik_maliyet') }}</span>
+                                                                @endif
                                                                 <input type="hidden" id="maliyet" name="maliyet" value=""></input>
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
@@ -613,6 +619,9 @@
                                                                     <option value="{{$odeme_turu->id}}" >{{$odeme_turu->adi}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                @if($errors->first('odeme_turu') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('odeme_turu') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
@@ -629,6 +638,9 @@
                                                                     <option  value="{{$para_birimi->id}}" >{{$para_birimi->adi}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                @if($errors->first('para_birimi') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('para_birimi') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
@@ -645,6 +657,9 @@
                                                                     <option   value="Satıcı Firma">Satıcı Firma</option>
                                                                     <option  value="Adrese Teslim">Adrese Teslim</option>
                                                                 </select>
+                                                                @if($errors->first('teslim_yeri') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('teslim_yeri') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip">
                                                                     <img src="{{asset("images/soru-isareti.ico")}}" />
@@ -674,6 +689,9 @@
                                                                     <option  value="{{$il->id}}" >{{$il->adi}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                @if($errors->first('il_id') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('il_id') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
@@ -687,6 +705,9 @@
                                                                 <select class="form-control required" name="ilce_id" id="ilce_id" >
                                                                     <option selected disabled value="Seçiniz">Seçiniz</option>
                                                                 </select>
+                                                                @if($errors->first('ilce_id') != null)
+                                                                  <span class="help-block" style="color:red">{{ $errors->first('ilce_id') }}</span>
+                                                                @endif
                                                             </div>
                                                                 <div class="col-md-1 aciklama-tooltip"></div>
                                                             </div>
@@ -700,7 +721,11 @@
                                                 <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-sm-1 control-label">Açıklama</label>
                                                 <label for="inputTask" style="text-align: right;padding-right:3px;padding-left:3px" class=" col-sm-1 control-label">:</label>
                                                 <div class="col-sm-10" >
-                                                    <textarea id="aciklama" name="aciklama" rows="2"  class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
+
+                                                    <textarea id="aciklama" name="aciklama" rows="5"  class="form-control ckeditor" placeholder="Lütfen Açıklamayı buraya yazınız.." ></textarea>
+                                                    @if($errors->first('aciklama') != null)
+                                                      <span class="help-block" style="color:red">{{ $errors->first('aciklama') }}</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                           </div>
@@ -728,7 +753,11 @@
                                                  </thead>
                                                 <tr>
                                                     <td>{{$i}}</td>
-                                                    <td><input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control mal_show required" id="mal_kalem0" name="mal_kalem[0]" placeholder="Kalem Ekle" readonly  value=""> </td>
+                                                    <td>
+                                                      <input type="text" style="background:url({{asset('images/ekle.png')}}) no-repeat scroll ;padding-left:25px" class="form-control  mal_show required" id="mal_kalem0" name="mal_kalem[0]" placeholder="Kalem Ekle" readonly  value="">
+                                                      <p class="help-block" style="color:red">{{ $errors->first('mal_kalem') }}</p>
+                                                    </td>
+
                                                     <td><input type="text" class="form-control required" id="mal_marka" name="mal_marka[0]" placeholder="Marka" value="" ></td>
                                                     <td>
                                                        <input type="text" class="form-control required" id="mal_model" name="mal_model[0]" placeholder="Model" value="" >
@@ -739,7 +768,7 @@
                                                     <td><input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj[0]" placeholder="Ambalaj" value="" ></td>
 
                                                     <td>
-                                                        <input type="number" class="form-control  required" id="mal_miktar" name="mal_miktar[0]" placeholder="Miktar" value=""  >
+                                                        <input type="number" min="0" class="form-control  required" id="mal_miktar" name="mal_miktar[0]" placeholder="Miktar" value=""  >
 
                                                     </td>
                                                     <td>
@@ -787,7 +816,7 @@
                                                         </select>
                                                      </td>
                                                      <td>
-                                                        <input type="number" class="form-control required" id="hizmet_miktar" name="hizmet_miktar[0]" placeholder="Miktar" value="" >
+                                                        <input type="number" min="0" class="form-control required" id="hizmet_miktar0" name="hizmet_miktar[0]" placeholder="Miktar" value="" >
                                                      </td>
                                                      <td>
                                                         <select class="form-control selectpicker required"  data-live-search="true"  name="hizmet_miktar_birim_id[0]" id="hizmet_miktar_birim_id" >
@@ -866,7 +895,7 @@
                                                         </select>
                                                      </td>
                                                      <td>
-                                                        <input type="number" class="form-control required" id="yapim_miktar" name="yapim_miktar[0]" placeholder="Miktar" value="">
+                                                        <input type="number" min="0" class="form-control required" id="yapim_miktar" name="yapim_miktar[0]" placeholder="Miktar" value="">
                                                      </td>
                                                      <td>
                                                         <select class="form-control selectpicker required"  data-live-search="true" name="yapim_miktar_birim_id[0]" id="yapim_miktar_birim_id" >
@@ -973,6 +1002,7 @@
 var findName;
 
 $(".next2").click(function(){
+
     $(".info-box").append('<li style="list-style-type:circle">Firma Adi Göster: '+$("input[type='radio']:checked").next('label:first').html+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Adı: '+$("#ilan_adi").val()+'</li>');
     $(".info-box").append('<li style="list-style-type:circle">İlan Türü: '+$( "#ilan_turu option:selected" ).text()+'</li>');
@@ -986,9 +1016,9 @@ $(".next2").click(function(){
      $(".info-box").append('<li style="list-style-type:circle">Sözleşme Türü: '+$( "#sozlesme_turu option:selected" ).text()+'</li>');
      $(".info-box").append('<li style="list-style-type:circle">Fiyatlandırma Şekli: '+$( "#kismi_fiyat option:selected" ).text()+'</li>');
      $(".info-box").append('<li style="list-style-type:circle">Yaklaşık Maliyet: '+$( "#yaklasik_maliyet option:selected" ).text()+'</li>');
-     $(".info-box").append('<li style="list-style-type:circle">Ödeme Türü: '+$("#odeme_turu option:selected" ).text()+'</li>');
-     $(".info-box").append('<li style="list-style-type:circle">Para Birimi: '+$("#para_birimi option:selected" ).text()+'</li>');
-     $(".info-box").append('<li style="list-style-type:circle">Teslim Yeri: '+$( "#teslim_yeri option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Ödeme Türü: '+ $("#odeme_turu option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Para Birimi: '+ $("#para_birimi option:selected" ).text()+'</li>');
+     $(".info-box").append('<li style="list-style-type:circle">Teslim Yeri: '+ $( "#teslim_yeri option:selected" ).text()+'</li>');
 });
 
 var firmaCount = 0;
@@ -1348,48 +1378,62 @@ $('.selectpicker').selectpicker({
 var kalem_num=0;
 var i="{{$i}}";
 $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
-   i++;
-
-   kalem_num++;
 
     if(ilan_turu=="1" &&sozlesme_turu=="0")
     {
+        i = ($(".mal_show").length) +1;
+        kalem_num = i-1;
+
         $("#mal_table").append(['<tr>','<td>'+i+'</td>','<td> <input type="text"  style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px"class="form-control mal_show  required" id="mal_kalem'+kalem_num+'" name="mal_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly value="" > </td>',
                       '<td><input type="text" class="form-control required " id="mal_marka" name="mal_marka['+kalem_num+']" placeholder="Marka" value="" ></td>',
                       ' <td><input type="text" class="form-control required " id="mal_model" name="mal_model['+kalem_num+']" placeholder="Model" value="" ></td>',
                       '<td><textarea id="mal_aciklama" name="mal_aciklama['+kalem_num+']" rows="2" class="form-control required" placeholder="Açıklama" ></textarea></td>',
                       ' <td> <input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj['+kalem_num+']" placeholder="ambalaj" value="" ></td>',
-                      '<td><input type="text" class="form-control required " id="mal_miktar" name="mal_miktar['+kalem_num+']" placeholder="Miktar" value="" ></td>',
+                      '<td><input type="number" class="form-control required " id="mal_miktar'+kalem_num+'" name="mal_miktar['+kalem_num+']" placeholder="Miktar" value="" ></td>',
                       '<td><select class="form-control required " name="mal_birim['+kalem_num+']" id="mal_birim"><option selected disabled>Seçiniz</option>@foreach($birimler as $birimleri) <option  value="{{$birimleri->id}}" >{{$birimleri->adi}}</option> @endforeach </select></td>',
                       '<td><a href="#" class="sil" ><img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="mal_id['+kalem_num+']"  id="mal_id'+kalem_num+'" value=""></td>','</tr>'].join(''));
 
     }
     else if(ilan_turu=="2" && sozlesme_turu=="0"){
+
+        i = ($(".hizmet_show").length) +1;
+        kalem_num = i-1;
+
     $("#hizmet_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control hizmet_show required" id="hizmet_kalem'+kalem_num+'" name="hizmet_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea id="hizmet_aciklama" name="hizmet_aciklama['+kalem_num+']" rows="2" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="hizmet_fiyat_standardi" name="hizmet_fiyat_standardi['+kalem_num+']" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="hizmet_fiyat_standardi_birimi['+kalem_num+']" id="hizmet_fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
-            '<td><input type="text" class="form-control  required" id="hizmet_miktar" name="hizmet_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
+            '<td><input type="number" class="form-control  required" id="hizmet_miktar'+kalem_num+'" name="hizmet_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="hizmet_miktar_birim_id['+kalem_num+']" id="hizmet_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
             '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="hizmet_id['+kalem_num+']"  id="hizmet_id'+kalem_num+'" value=""></td>','</tr>'].join(''));
     }
     else if(sozlesme_turu=="1"){
+
+          i = ($(".goturu_show").length) +1;
+          kalem_num = i-1;
+
      $("#goturu_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem'+kalem_num+'" name="goturu_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
+
             '<td><textarea id="goturu_aciklama" name="goturu_aciklama['+kalem_num+']" rows="2" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
+            
             '<td><select class="form-control required" name="goturu_miktar_birim_id['+kalem_num+']" id="goturu_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
             '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id['+kalem_num+']"  id="goturu_id'+kalem_num+'" value=""></td>','</tr>'].join(''));
 
     }
     else if(ilan_turu=="3"){
+
+          i = ($(".yapim_show").length) +1;
+          kalem_num = i-1;
+
       $("#yapim_table").append(['<tr>','<td>'+i+'</td>',
             '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control yapim_show required" id="yapim_kalem'+kalem_num+'" name="yapim_kalem['+kalem_num+']" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
             '<td><textarea id="yapim_aciklama" name="yapim_aciklama['+kalem_num+']" rows="2" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
             '<td><input type="text" class="form-control required" id="yapim_fiyat_standardi" name="yapim_fiyat_standardi['+kalem_num+']" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="yapim_fiyat_standardi_birimi['+kalem_num+']" id="yapim_fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
-            '<td><input type="text" class="form-control required" id="yapim_miktar" name="yapim_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
+            '<td><input type="number" class="form-control required" id="yapim_miktar'+kalem_num+'" name="yapim_miktar['+kalem_num+']" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
             '<td><select class="form-control required" name="yapim_miktar_birim_id['+kalem_num+']" id="yapim_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
             '<td><a href="#" class="sil" > <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="yapim_id['+kalem_num+']"  id="yapim_id'+kalem_num+'" value=""></td>','</tr>'].join(''));
     }
@@ -1399,22 +1443,30 @@ $("#btn2").click(function(){ //birden fazla kalem ekleme modal form içerisinde.
 $('#mal_table').on('click', '.sil', function(e) {
 
     e.preventDefault();
-    $(this).parents('tr').first().remove();
+    i = $(".mal_show").length;
+    if(i > 1)
+      $(this).parents('tr').first().remove();
 });
 $('#hizmet_table').on('click', '.sil', function(e) {
 
     e.preventDefault();
-    $(this).parents('tr').first().remove();
+    i = $(".hizmet_show").length;
+    if(i > 1)
+      $(this).parents('tr').first().remove();
 });
 $('#goturu_table').on('click', '.sil', function(e) {
 
     e.preventDefault();
-    $(this).parents('tr').first().remove();
+    i = $(".goturu_show").length;
+    if(i > 1)
+      $(this).parents('tr').first().remove();
 });
 $('#yapim_table').on('click', '.sil', function(e) {
 
     e.preventDefault();
-    $(this).parents('tr').first().remove();
+    i = $(".yapim_show").length;
+    if(i > 1)
+      $(this).parents('tr').first().remove();
 });
 //kalem tree modaliını açma.
 $('#mal_table').on('click', '.mal_show', function(event) {
