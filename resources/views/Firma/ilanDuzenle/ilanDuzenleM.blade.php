@@ -161,6 +161,8 @@
                                         @if($ilan->teknik_sartname)
                                             <div id="eskiSartname" class="col-md-9"><strong>Dosya:</strong> <img width="20" height="20" src="{{asset("images/file/".$sartnameUzanti.".png")}}" /><a style="text-decoration: none;" href="{{asset("Teknik/".$ilan->teknik_sartname)}}" target="_blank"><span style="color: #27ae60;">Şartname</span></a></div>
                                             <div id="eskiSartnameButton" class="col-md-3"><a id="eskiSartnameSil" href="#"><span style="float: right; color: red">Sil</span></a> <a style="display: none;" id="eskiSartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a></div>
+                                        @else
+                                            <div id="eskiSartnameButton" class="col-md-12"><a style="display: none;" id="eskiSartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a></div>
                                         @endif
                                         <div id="yeniSartname" class="row">
                                             <div class="control-group col-md-12">
