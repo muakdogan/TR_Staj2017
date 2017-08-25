@@ -21,11 +21,10 @@
 <link rel="stylesheet" type="text/css" href="{{asset('css/aciklama-tooltip.css')}}" />
 
 <div class="container">
-    <div class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="overflow-y: scroll" class="modal fade" id="myModal-ilanBilgileri" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="ajax-loader">
             <img src="{{asset('images/200w.gif')}}" class="img-responsive" />
         </div>
-
         <div style="width:1050px" class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -161,6 +160,8 @@
                                         @if($ilan->teknik_sartname)
                                             <div id="eskiSartname" class="col-md-9"><strong>Dosya:</strong> <img width="20" height="20" src="{{asset("images/file/".$sartnameUzanti.".png")}}" /><a style="text-decoration: none;" href="{{asset("Teknik/".$ilan->teknik_sartname)}}" target="_blank"><span style="color: #27ae60;">Şartname</span></a></div>
                                             <div id="eskiSartnameButton" class="col-md-3"><a id="eskiSartnameSil" href="#"><span style="float: right; color: red">Sil</span></a> <a style="display: none;" id="eskiSartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a></div>
+                                        @else
+                                            <div id="eskiSartnameButton" class="col-md-12"><a style="display: none;" id="eskiSartnameVazgec" href="#"><span style="float: right; color: red">Vazgec</span></a></div>
                                         @endif
                                         <div id="yeniSartname" class="row">
                                             <div class="control-group col-md-12">
@@ -207,11 +208,6 @@
                                 <div class="form-group row"  id="onayli_tedarikciler">
                                     <div class="col-md-12">
                                         <div class="row">
-                                            <div class="col-md-1 aciklama-tooltip"></div>
-                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-md-3 control-label">Firma Seçiniz</label>
-                                            <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-md-1 control-label">:</label>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-md-2"></div>
                                             <div style="padding-right:3px;padding-left:1px"  class="col-md-9">
                                                 <select id='custom-headers' multiple='multiple' name="onayli_tedarikciler[]" id="onayli_tedarikciler[]" data-rule-multiselectOnay="true">
@@ -223,11 +219,6 @@
 
                                 <div class="form-group"  id="belirli-istekliler">
                                     <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-1 aciklama-tooltip"></div>
-                                            <label for="inputEmail3" style="padding-right:3px;padding-left:12px" class="col-md-3 control-label">Firma Seçiniz</label>
-                                            <label for="inputTask" style="text-align:right;padding-right:3px;padding-left:3px"class="col-md-1 control-label">:</label>
-                                        </div>
                                         <div class="row">
                                             <div class="col-md-2">
                                             </div>
@@ -430,7 +421,7 @@
 
                         @include('Firma.ilanDuzenle.KalemGoturu')
 
-                        {!! Form::submit('Gönder', array('id'=>'onayButton','style'=>'width:140px;float:right;font-size: 14px','class'=>'action-button')) !!}
+                        {!! Form::button('Gönder', array('id'=>'onayButton','style'=>'width:140px;float:right;font-size: 14px','class'=>'action-button')) !!}
                         <input style="float:right" type="button" name="previous" class="previous action-button" value="Geri" />
                         <input style="float:left" type="button" class="action-button" id="kalem_ekle" value="Kalem Ekle" />
                     </fieldset>
@@ -449,6 +440,10 @@
 <script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
 
 <script charset="utf-8">
+    //jQuery time
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var left, opacity, scale; //fieldset properties which we will animate
+    var animating; //flag to prevent quick multi-click glitches
 
     // updated ve deleted arrayleri include edilen kalem sayfalarinda push edilir!
     var updated_array = []; var deleted_array = [];
@@ -470,9 +465,79 @@
         $('#il_id').on('change', function (e) {
             var il_id = e.target.value;
             GetIlce(il_id);
-            //popDropDown('ilce_id', 'ajax-subcat?il_id=', il_id);
-            //$("#semt_id")[0].selectedIndex=0;
         });
+
+        $(".next").click(function(){
+            if(ilan_turu=="1" && sozlesme_turu=="0") {
+                $('#mal').show();
+                $('#hizmet').hide();
+                $('#goturu').hide();
+                $('#yapim').hide();
+            }
+            else if(ilan_turu=="2" && sozlesme_turu=="0") {
+                $('#hizmet').show();
+                $('#mal').hide();
+                $('#goturu').hide();
+                $('#yapim').hide();
+            }
+            else if(sozlesme_turu=="1") {
+                $('#goturu').show();
+                $('#hizmet').hide();
+                $('#mal').hide();
+                $('#yapim').hide();
+                $('.fiyatlandirma').hide();
+            }
+            else if(ilan_turu=="3") {
+                $('#yapim').show();
+                $('#hizmet').hide();
+                $('#goturu').hide();
+                $('#mal').hide();
+            }
+            else if(sozlesme_turu=="0") {
+                $('.fiyatlandirma').show();
+            }
+            if (form.valid() === true){
+                if ($('#ilan').is(":visible")){
+                    current_fs = $('#ilan');
+                    next_fs = $('#kalem');
+                }else if($('#kalem').is(":visible")){
+                    current_fs = $('#kalem');
+                    next_fs = $('#onay');
+                }
+                $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                next_fs.show();
+                current_fs.hide();
+            }
+
+
+        });
+
+
+        var form = $("#msform");
+        form.validate({
+           errorElement: 'span',
+            errorClass: 'help-block',
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.form-group').addClass("has-error");
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.form-group').removeClass("has-error");
+            },
+        });
+
+        $('.previous').click(function(){
+            if($('#kalem').is(":visible")){
+                current_fs = $('#kalem');
+                next_fs = $('#ilan');
+            }else if ($('#onay').is(":visible")){
+                current_fs = $('#onay');
+                next_fs = $('#kalem');
+            }
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+            next_fs.show();
+            current_fs.hide();
+        });
+
         jQuery.validator.methods["date"] = function (value, element) { return true; } ;
 
         jQuery.validator.addMethod("multiselectOnay", function(value, element) {
@@ -481,8 +546,8 @@
 
         //FORM SUBMIT
         //Ilan guncelle buton
-        $("#onayButton").unbind().click(function(e){
-
+        $("#onayButton").click(function(e){
+            if (form.valid() === true){
             for ( instance in CKEDITOR.instances )
                 CKEDITOR.instances[instance].updateElement();
             var postData = new FormData($("#msform")[0]);
@@ -520,6 +585,7 @@
                     }
                 });
             e.preventDefault(); //STOP default action
+        }
         });
     });
 
@@ -557,84 +623,6 @@
         else if(sozlesme_turu=="0"){
             $('.fiyatlandirma').show();
         }
-    });
-
-    //jQuery time
-    var current_fs, next_fs, previous_fs; //fieldsets
-    var left, opacity, scale; //fieldset properties which we will animate
-    var animating; //flag to prevent quick multi-click glitches
-
-    $(".next").click(function(){
-        if(ilan_turu=="1" && sozlesme_turu=="0") {
-            $('#mal').show();
-            $('#hizmet').hide();
-            $('#goturu').hide();
-            $('#yapim').hide();
-        }
-        else if(ilan_turu=="2" && sozlesme_turu=="0") {
-            $('#hizmet').show();
-            $('#mal').hide();
-            $('#goturu').hide();
-            $('#yapim').hide();
-        }
-        else if(sozlesme_turu=="1") {
-            $('#goturu').show();
-            $('#hizmet').hide();
-            $('#mal').hide();
-            $('#yapim').hide();
-            $('.fiyatlandirma').hide();
-        }
-        else if(ilan_turu=="3") {
-            $('#yapim').show();
-            $('#hizmet').hide();
-            $('#goturu').hide();
-            $('#mal').hide();
-        }
-        else if(sozlesme_turu=="0") {
-            $('.fiyatlandirma').show();
-        }
-
-        var form = $("#msform");
-        form.validate({
-            errorElement: 'span',
-            errorClass: 'help-block',
-            highlight: function(element, errorClass, validClass) {
-                $(element).closest('.form-group').addClass("has-error");
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).closest('.form-group').removeClass("has-error");
-            },
-            rules: {
-                sozlesme_onay: {
-                    required: true
-                },
-            },
-        });
-        if (form.valid() === true){
-            if ($('#ilan').is(":visible")){
-                current_fs = $('#ilan');
-                next_fs = $('#kalem');
-            }else if($('#kalem').is(":visible")){
-                current_fs = $('#kalem');
-                next_fs = $('#onay');
-            }
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-            next_fs.show();
-            current_fs.hide();
-        }
-    });
-
-    $('.previous').click(function(){
-        if($('#kalem').is(":visible")){
-            current_fs = $('#kalem');
-            next_fs = $('#ilan');
-        }else if ($('#onay').is(":visible")){
-            current_fs = $('#onay');
-            next_fs = $('#kalem');
-        }
-        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-        next_fs.show();
-        current_fs.hide();
     });
 
     function GetIlce(il_id) {
@@ -765,8 +753,6 @@
                 for(var key=0; key <Object.keys(data.secilmisFirmalar).length;key++){
                     $('#custom-headers').multiSelect('select', (data.secilmisFirmalar[key].id));
                 }
-
-                console.log(data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus); alert("Error: " + errorThrown);
@@ -906,25 +892,25 @@
         if(sozlesme_turu=="1" && $("#goturu_kalem0").length==0){
             $("#goturu_table").append(['<tr>','<td>1</td>',
                 '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control goturu_show required" id="goturu_kalem0" name="goturu_kalem" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
-                '<td><textarea  rows="1" id="goturu_aciklama" name="goturu_aciklama" rows="5" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+                '<td><textarea  rows="2" id="goturu_aciklama" name="goturu_aciklama" class="form-control required " placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
                 '<td><input type="text" class="form-control required" id="goturu_miktar" name="goturu_miktar" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
                 '<td><select class="form-control required" name="goturu_miktar_birim_id" id="goturu_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
-                '<td><a href="#"  class="sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id"  id="goturu_id0" value=""><input class="inp_kalem_id_goturu" name="kalem_id_goturu" type="hidden" value="-1"/></td>','</tr>'].join(''));
+                '<td><a href="#"  class="btn_kalem_sil"> <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="goturu_id"  id="goturu_id0" value=""><input class="inp_kalem_id_goturu" name="kalem_id_goturu" type="hidden" value="-1"/></td>','</tr>'].join(''));
         }
         else if(ilan_turu=="1" &&sozlesme_turu=="0") {
             $("#mal_table").append(['<tr>','<td>'+(parseInt(kalem_num)+1)+'</td>','<td> <input type="text"  style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px"class="form-control mal_show  required" id="mal_kalem'+kalem_num+'" name="mal_kalem[]" placeholder="Kalem Ekle" readonly value="" > </td>',
                 '<td><input type="text" class="form-control required " id="mal_marka" name="mal_marka[]" placeholder="Marka" value="" ></td>',
                 ' <td><input type="text" class="form-control required " id="mal_model" name="mal_model[]" placeholder="Model" value="" ></td>',
-                '<td><textarea  rows="1" id="mal_aciklama" name="mal_aciklama[]" rows="5" class="form-control required" placeholder="Açıklama" ></textarea></td>',
+                '<td><textarea id="mal_aciklama" name="mal_aciklama[]" rows="2" class="form-control required" placeholder="Açıklama" ></textarea></td>',
                 ' <td> <input type="text" class="form-control required" id="mal_ambalaj" name="mal_ambalaj[]" placeholder="ambalaj" value="" ></td>',
                 '<td><input type="text" class="form-control required " id="mal_miktar" name="mal_miktar[]" placeholder="Miktar" value="" ></td>',
                 '<td><select class="form-control required " name="mal_birim[]" id="mal_birim"><option selected disabled>Seçiniz</option>@foreach($birimler as $birimleri) <option  value="{{$birimleri->id}}" >{{$birimleri->adi}}</option> @endforeach </select></td>',
-                '<td><a href="#" class="sil" ><img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="mal_id[]"  id="mal_id'+kalem_num+'" value=""><input class="inp_kalem_id" name="kalem_id[]" type="hidden" value="-1"/></td>','</tr>'].join(''));
+                '<td><a href="#" class="btn_kalem_sil" ><img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="mal_id[]"  id="mal_id'+kalem_num+'" value=""><input class="inp_kalem_id" name="kalem_id[]" type="hidden" value="-1"/></td>','</tr>'].join(''));
         }
         else if(ilan_turu=="2" && sozlesme_turu=="0"){
             $("#hizmet_table").append(['<tr>','<td>'+(parseInt(kalem_num)+1)+'</td>',
                 '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control hizmet_show required" id="hizmet_kalem'+kalem_num+'" name="hizmet_kalem[]" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
-                '<td><textarea  rows="1" id="hizmet_aciklama" name="hizmet_aciklama[]" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+                '<td><textarea  rows="2" id="hizmet_aciklama" name="hizmet_aciklama[]" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
                 '<td><input type="text" class="form-control required" id="hizmet_fiyat_standardi" name="hizmet_fiyat_standardi[]" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
                 '<td><select class="form-control required" name="hizmet_fiyat_standardi_birimi[]" id="hizmet_fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
                 '<td><input type="text" class="form-control  required" id="hizmet_miktar" name="hizmet_miktar[]" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
@@ -934,12 +920,12 @@
         else if(ilan_turu=="3" && sozlesme_turu=="0"){
             $("#yapim_table").append(['<tr>','<td>'+(parseInt(kalem_num)+1)+'</td>',
                 '<td><input type="text" style="background:url({{asset("images/ekle.png")}}) no-repeat scroll ;padding-left:25px" class="form-control yapim_show required" id="yapim_kalem'+kalem_num+'" name="yapim_kalem[]" placeholder="Kalem Ekle" readonly  value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"> </td>',
-                '<td><textarea  rows="1" id="yapim_aciklama" name="yapim_aciklama[]" rows="5" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
+                '<td><textarea  rows="2" id="yapim_aciklama" name="yapim_aciklama[]" class="form-control required" placeholder="Açıklama" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></textarea></td>',
                 '<td><input type="text" class="form-control required" id="yapim_fiyat_standardi" name="yapim_fiyat_standardi[]" placeholder="Fiyat Standartı" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
                 '<td><select class="form-control required" name="yapim_fiyat_standardi_birimi[]" id="yapim_fiyat_standardi_birimi" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $fiyat_birimi)<option  value="{{$fiyat_birimi->id}}" >{{$fiyat_birimi->adi}}</option>@endforeach</select></td>',
                 '<td><input type="text" class="form-control required" id="yapim_miktar" name="yapim_miktar[]" placeholder="Miktar" value="" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"></td>',
                 '<td><select class="form-control required" name="yapim_miktar_birim_id[]" id="yapim_miktar_birim_id" data-validation="required" data-validation-error-msg="Lütfen bu alanı doldurunuz!"><option selected disabled>Seçiniz</option>@foreach($birimler as $miktar_birim) <option  value="{{$miktar_birim->id}}" >{{$miktar_birim->adi}}</option>@endforeach</select></td>',
-                '<td><a href="#" class="sil" > <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="yapim_id[]"  id="yapim_id'+kalem_num+'" value=""><input class="inp_kalem_id" name="kalem_id[]" type="hidden" value="-1"/></td>','</tr>'].join(''));
+                '<td><a href="#" class="btn_kalem_sil" > <img src="{{asset("images/sil1.png")}}"></a><input type="hidden" name="yapim_id[]"  id="yapim_id'+kalem_num+'" value=""><input class="inp_kalem_id" name="kalem_id[]" type="hidden" value="-1"/></td>','</tr>'].join(''));
         }
         kalem_num++;
     });
@@ -947,35 +933,41 @@
    //mal kalem silme
     $('#mal_table').on('click', '.btn_kalem_sil', function(e) {
         e.preventDefault();
-        var index=$(this).index(".btn_kalem_sil");
-        var kalem_id = $('.inp_kalem_id').eq(index).val();
-        if(kalem_id!=-1){
-            deleted_array.push(kalem_id);
+        if($(".mal_show").length>1){
+            var index=$(this).index(".btn_kalem_sil");
+            var kalem_id = $('.inp_kalem_id').eq(index).val();
+            if(kalem_id!=-1){
+                deleted_array.push(kalem_id);
+            }
+            $(this).parents('tr').first().remove();
         }
 
-        $(this).parents('tr').first().remove();
     });
 
     //hizmet kalem silme
     $('#hizmet_table').on('click', '.btn_kalem_sil', function(e) {
         e.preventDefault();
-        var index=$(this).index(".btn_kalem_sil");
-        var kalem_id = $('.inp_kalem_id').eq(index).val();
-        if(kalem_id!=-1){
-            deleted_array.push(kalem_id);
+        if($(".hizmet_show").length>1) {
+            var index = $(this).index(".btn_kalem_sil");
+            var kalem_id = $('.inp_kalem_id').eq(index).val();
+            if (kalem_id != -1) {
+                deleted_array.push(kalem_id);
+            }
+            $(this).parents('tr').first().remove();
         }
-        $(this).parents('tr').first().remove();
     });
 
     //yapim kalem silme
     $('#yapim_table').on('click', '.btn_kalem_sil', function(e) {
         e.preventDefault();
-        var index=$(this).index(".btn_kalem_sil");
-        var kalem_id = $('.inp_kalem_id').eq(index).val();
-        if(kalem_id!=-1){
-            deleted_array.push(kalem_id);
+        if($(".yapim_show").length>1) {
+            var index = $(this).index(".btn_kalem_sil");
+            var kalem_id = $('.inp_kalem_id').eq(index).val();
+            if (kalem_id != -1) {
+                deleted_array.push(kalem_id);
+            }
+            $(this).parents('tr').first().remove();
         }
-        $(this).parents('tr').first().remove();
     });
 
     //kalem tree modalını açma

@@ -25,7 +25,7 @@ class Firma extends Model
     }
     public function firma_satilan_markalar()
     {
-        return $this->hasMany('App\FirmaSatilanMarka', 'firma_satilan_markalar', 'firma_id', 'id');
+        return $this->hasMany('App\FirmaSatilanMarka', 'firma_id', 'id');
     }
     public function kalite_belgeleri()
     {
@@ -143,13 +143,13 @@ class Firma extends Model
     //save yapmaz.
     public function puanlariGuncelle()
     {
-        $puanlar = \App\Puanlama::select([DB::raw("AVG(kriter1) AS 1"), DB::raw("AVG(kriter2) AS 2"), DB::raw("AVG(kriter3) AS 3"), DB::raw("AVG(kriter4) AS 4")])
-        ->where('firma_id', $this->id)->get()->toArray();
+        $puanlar = \App\Puanlama::select([DB::raw("AVG(kriter1) AS k1"), DB::raw("AVG(kriter2) AS k2"), DB::raw("AVG(kriter3) AS k3"), DB::raw("AVG(kriter4) AS k4")])
+        ->where('firma_id', $this->id)->get()->toArray()[0];
 
-        $this->kalite_puan_ort = $puanlar[0];
-        $this->teslimat_puan_ort = $puanlar[1];
-        $this->teknik_puan_ort = $puanlar[2];
-        $this->esneklik_puan_ort = $puanlar[3];
+        $this->kalite_puan_ort = $puanlar["k1"];
+        $this->teslimat_puan_ort = $puanlar["k2"];
+        $this->teknik_puan_ort = $puanlar["k3"];
+        $this->esneklik_puan_ort = $puanlar["k4"];
     }
 
     /*public function getSehirAdi(){

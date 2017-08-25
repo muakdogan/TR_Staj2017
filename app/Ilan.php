@@ -4,7 +4,7 @@ namespace App;
 use App\Sektor;
 use App\KismiKapaliKazanan;
 use App\KismiAcikKazanan;
-use App\BelirlIstekli;
+use App\BelirliIstekli;
 use App\Firma;
 use Illuminate\Database\Eloquent\Model;
 use App\Puanlama;
@@ -161,7 +161,7 @@ class Ilan extends Model
  }
  public function belirliIstekliControl($ilan_id ,$firma_id){
 
-        $belirliFirmalar = BelirlIstekli::where('ilan_id',$ilan_id)->get();
+        $belirliFirmalar = BelirliIstekli::where('ilan_id',$ilan_id)->get();
         $belirliFirma= 0;
 
         foreach ($belirliFirmalar as $belirliIstekli){

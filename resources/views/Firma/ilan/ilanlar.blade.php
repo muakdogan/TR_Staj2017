@@ -87,9 +87,9 @@ a{
                         @if(Auth::guest())
                         @else
                             <?php Debugbar::info($ilan->rekabet_sekli); ?>
-                            @if($ilan->rekabet_sekli == 1 || $ilan->rekabet_sekli == 2 || ($ilan->katilimcilar == 2 && $ilan->belirliIstekliControl($ilan->ilan_id,$firma_id) == 1)) <!-- Eğer bir firma davet edilmediyse o ilanda başvuru butonu çıkmaz-->
+                            @if($ilan->rekabet_sekli == 1 || $ilan->rekabet_sekli == 2 || ($ilan->katilimcilar == 2 && $ilan->belirliIstekliControl($ilan->id,$firma_id) == 1)) <!-- Eğer bir firma davet edilmediyse o ilanda başvuru butonu çıkmaz-->
                                 
-                                <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->firma_id}} {{$ilan->ilan_id}}" id="{{$ilan->ilan_id}}" style='float:right;margin-top:60px'>Başvur</button></a><br><br>
+                                <a href="#"><button type="button" class="btn btn-primary" name="{{$ilan->firma_id}}_{{$ilan->id}}" id="{{$ilan->id}}" style='float:right;margin-top:60px'>Başvur</button></a><br><br>
                                
                             @endif    
                         @endif
@@ -109,35 +109,36 @@ a{
     $('.ilanDetayPop').mouseleave(function () {
         $('div.pop-up').hide();
     });
+        
+    var ILAN_ID;
     
-   var ilan_id;
-   
-   var name;
-   var firma_id;
-   var deneme;
-   $(".btn-primary").click(function(){
-       name=$(this).attr("name");
-      
-       deneme=name.split(" ");
-       firma_id=deneme[0];
-       ilan_id=deneme[1];
-     
-     
-       funcIlanFirma();
-       
+    var name;
+    var FIRMA_ID;
+    var deneme;
+    $(".btn-primary").click(function(){
+        name=$(this).attr("name");
+
+        deneme=name.split("_");
+        FIRMA_ID=deneme[0];
+        ILAN_ID=deneme[1];
+
+        funcIlanFirma();
     });
     function func(){          
            $.ajax({
             type:"GET",
-            url:"{{asset('basvuruControl')}}",
-            data:{ilan_id:ilan_id
+            url:"{{url('basvuruControl')}}",
+            data:{ilan_id:ILAN_ID
             },
             cache: false,
             success: function(data){
                 console.log(data);
-                    if(data==0){ 
-                        
-                        window.location.href = "{{asset('teklifGor')}}" +"/" + firma_id+"/"+ilan_id;    
+                    if(data==0){                        
+                        var url = "{{url('teklifGor', ['_firma', '_ilan'])}}";
+                        url = url.replace('_firma', FIRMA_ID);
+                        url = url.replace('_ilan', ILAN_ID);
+
+                        window.location.href = url;
                     }
                     else{
 
@@ -150,20 +151,22 @@ a{
     function funcIlanFirma(){          
         $.ajax({
         type:"GET",
-        url:"{{asset('IlanFirmaControl')}}",
-        data:{ilan_id:ilan_id},
+        url:"{{url('IlanFirmaControl')}}",
+        data:{ilan_id:ILAN_ID},
         cache: false,
         success: function(data){
             console.log(data);
-                if(data==0){ 
-                        
+                if(data==0){   
                     func();    
                 }
                 else{
 
                    alert("Kendi Firmanızın İlanına Başvuru Yapamazsınız!");
                 }
-            }
+            },
+        fail: function(){
+            console.log("Başvuru işlemi başarısız oldu.");
+        }
         });
     }
     

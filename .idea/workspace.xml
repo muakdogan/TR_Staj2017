@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="25bb77ac-2bc2-44d5-b5d7-5fc516a68bdb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/IlanController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/IlanController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/KismiRekabetService.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/KismiRekabetService.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/routes.php" afterPath="$PROJECT_DIR$/app/Http/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/ilan/ilanDetay.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/ilan/ilanDetay.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/ilan/rekabet.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/ilan/rekabet.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php" afterPath="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,11 +35,86 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ilanOlustur.blade.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="470" column="103" lean-forward="true" selection-start-line="470" selection-start-column="103" selection-end-line="470" selection-end-column="103" />
+              <folding>
+                <element signature="e#32210#32253#0#HTML" expanded="true" />
+                <element signature="e#32392#32452#0#HTML" expanded="true" />
+                <marker date="1503668974810" expanded="true" signature="26371:26694" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="26383:26693" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="26398:26692" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="46426:46796" ph="SELECT * FRO... iller" />
+                <marker date="1503668974810" expanded="true" signature="46426:47038" ph="SELECT * FRO... " />
+                <marker date="1503668974810" expanded="true" signature="46947:47038" ph="SELECT * FRO... iller" />
+                <marker date="1503668974810" expanded="true" signature="70248:70270" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="70398:70420" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="70503:70525" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="70629:70651" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="70761:70783" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="70914:70936" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71043:71065" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71192:71214" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71305:71327" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71438:71460" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71573:71595" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71708:71730" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71847:71869" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="71988:72010" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="72116:72138" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="72246:72268" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="77501:77525" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="77557:77568" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="77683:77707" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="77743:77754" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="78980:79004" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="79036:79047" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="79162:79186" ph="..." />
+                <marker date="1503668974810" expanded="true" signature="79222:79233" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ilanDuzenleM.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="99">
+              <caret line="213" column="152" lean-forward="true" selection-start-line="213" selection-start-column="152" selection-end-line="213" selection-end-column="184" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <marker date="1503668974857" expanded="true" signature="14224:14501" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="14236:14500" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="14251:14499" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="43005:43029" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="43061:43072" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="43193:43217" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="43257:43268" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="44657:44668" ph="..." />
+                <marker date="1503668974857" expanded="true" signature="44794:44805" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KalemGoturu.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="184">
+              <caret line="46" column="79" lean-forward="false" selection-start-line="46" selection-start-column="74" selection-end-line="46" selection-end-column="79" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14076">
-              <caret line="855" column="83" lean-forward="false" selection-start-line="855" selection-start-column="83" selection-end-line="855" selection-end-column="83" />
+            <state relative-caret-position="184">
+              <caret line="394" column="60" lean-forward="false" selection-start-line="394" selection-start-column="60" selection-end-line="394" selection-end-column="60" />
               <folding>
                 <marker date="1503575913761" expanded="true" signature="2960:3308" ph="SELECT adi a... kalemler" />
                 <marker date="1503575913761" expanded="true" signature="3000:3093" ph="SELECT (CASE... kalemler" />
@@ -59,81 +132,52 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KismiRekabetService.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KismiRekabetService.php">
+      <file leaf-file-name="FirmaController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FirmaController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="31" column="18" lean-forward="false" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
+            <state relative-caret-position="-190">
+              <caret line="127" column="28" lean-forward="false" selection-start-line="127" selection-start-column="8" selection-end-line="127" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="kismiRekabet.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/kismiRekabet.blade.php">
+      <file leaf-file-name="firmaHavuzu.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/firmaHavuzu.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="47" lean-forward="false" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="47" />
+            <state relative-caret-position="184">
+              <caret line="205" column="27" lean-forward="false" selection-start-line="205" selection-start-column="20" selection-end-line="205" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hizmetTeklif.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/hizmetTeklif.blade.php">
+      <file leaf-file-name="firmalar.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2465">
-              <caret line="145" column="17" lean-forward="false" selection-start-line="145" selection-start-column="17" selection-end-line="145" selection-end-column="17" />
+            <state relative-caret-position="1110">
+              <caret line="133" column="0" lean-forward="false" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ilanDetay.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanDetay.blade.php">
+      <file leaf-file-name="KalemYapim.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemYapim.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12053">
-              <caret line="709" column="96" lean-forward="false" selection-start-line="709" selection-start-column="96" selection-end-line="709" selection-end-column="96" />
+            <state relative-caret-position="184">
+              <caret line="24" column="94" lean-forward="false" selection-start-line="24" selection-start-column="92" selection-end-line="24" selection-end-column="94" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rekabet.blade.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/rekabet.blade.php">
+      <file leaf-file-name="KalemMal.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemMal.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="136" column="32" lean-forward="false" selection-start-line="136" selection-start-column="32" selection-end-line="136" selection-end-column="32" />
+            <state relative-caret-position="184">
+              <caret line="25" column="98" lean-forward="false" selection-start-line="25" selection-start-column="96" selection-end-line="25" selection-end-column="98" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IlanController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/IlanController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="66" selection-end-column="9" />
-              <folding>
-                <element signature="e#39#61#0#PHP" expanded="true" />
-                <element signature="e#11137#12035#0#PHP" expanded="false" />
-                <element signature="e#12041#14068#0#PHP" expanded="false" />
-                <element signature="e#14074#30365#0#PHP" expanded="false" />
-                <element signature="e#30371#40859#0#PHP" expanded="false" />
-                <element signature="e#40865#41944#0#PHP" expanded="false" />
-                <element signature="e#42031#44264#0#PHP" expanded="false" />
-                <element signature="e#44270#44458#0#PHP" expanded="false" />
-                <element signature="e#53103#54717#0#PHP" expanded="false" />
-                <marker date="1503575380079" expanded="true" signature="3768:3851" ph="SELECT * FRO... iller" />
-                <marker date="1503575380079" expanded="true" signature="3768:3914" ph="SELECT * FRO... " />
-                <marker date="1503575380079" expanded="true" signature="3895:3914" ph="SELECT * FRO... iller" />
-                <marker date="1503575380079" expanded="true" signature="13309:13392" ph="SELECT * FRO... iller" />
-                <marker date="1503575380079" expanded="true" signature="13309:13455" ph="SELECT * FRO... " />
-                <marker date="1503575380079" expanded="true" signature="13436:13455" ph="SELECT * FRO... iller" />
-                <marker date="1503575380079" expanded="true" signature="42254:42810" ph="SELECT * FRO... teklif_hareketler" />
-                <marker date="1503575380079" expanded="true" signature="42381:42666" ph="SELECT tekli... teklifler" />
-                <marker date="1503575380079" expanded="true" signature="42864:43441" ph="SELECT count... " />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -142,36 +186,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>document</find>
-      <find>logo</find>
-      <find>onayli</find>
-      <find>sil</find>
-      <find>btn_kalem_sil</find>
-      <find>btn-tedCikar</find>
-      <find>puan</find>
-      <find>puanlama</find>
-      <find>$firma_id</find>
-      <find>onayliTedarikciler</find>
-      <find>table</find>
-      <find>teslim yeri</find>
-      <find>submit</find>
-      <find>gonder</find>
-      <find>#gonder</find>
-      <find>puanlamaOrtalama</find>
-      <find>Rekabet</find>
-      <find>#kismiRekabet</find>
-      <find>ilanSahibi</find>
-      <find>include</find>
-      <find>ilanDet</find>
-      <find>$ilanSahibi</find>
-      <find>session()-&gt;</find>
-      <find>teklifler</find>
+      <find>bind</find>
       <find>ajax</find>
-      <find>sess</find>
-      <find>$teklifler</find>
-      <find>Bu alanı görebilmek için teklif vermelisiniz!</find>
-      <find>rekabet</find>
-      <find>$i</find>
+      <find>$('.fiyatlandirma').hide();</find>
+      <find>onayButton</find>
+      <find>$firma</find>
+      <find>form</find>
+      <find>firma se</find>
+      <find>rows=&quot;1</find>
+      <find>$.ajax</find>
+      <find>appe</find>
+      <find>info-box</find>
+      <find>next2</find>
+      <find>valida</find>
+      <find>5&quot;</find>
+      <find>.next</find>
+      <find>rows=&quot;5&quot;</find>
+      <find>onay</find>
+      <find>onayB</find>
+      <find>current_fs</find>
+      <find>left</find>
+      <find>docume</find>
+      <find>document</find>
+      <find>.btn_hizmet_</find>
+      <find>next</find>
+      <find>rows</find>
+      <find>rows=</find>
+      <find>belirli-</find>
+      <find>documen</find>
+      <find>firma seçiniz</find>
+      <find>belirli</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -207,7 +251,6 @@
         <option value="$PROJECT_DIR$/vendor/barryvdh/laravel-debugbar/config/debugbar.php" />
         <option value="$PROJECT_DIR$/app/Http/Middleware/FirmaKullanimaYetkili.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/FirmaIlanController.php" />
-        <option value="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php" />
         <option value="$PROJECT_DIR$/public/js/ilan/ajax-crud-firmabilgilerim.js" />
         <option value="$PROJECT_DIR$/app/Firma.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" />
@@ -218,19 +261,20 @@
         <option value="$PROJECT_DIR$/public/css/tooltipq.css" />
         <option value="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
         <option value="$PROJECT_DIR$/public/css/aciklama-tooltip.css" />
-        <option value="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/Firma/firmaProfili.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/Firma/onayliTedarikciler.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/Firma/firmaHavuzu.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/FirmaController.php" />
-        <option value="$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/Firma/ilan/hizmetTeklif.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/KismiRekabetService.php" />
         <option value="$PROJECT_DIR$/resources/views/Firma/ilan/ilanDetay.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/IlanController.php" />
         <option value="$PROJECT_DIR$/app/Http/routes.php" />
         <option value="$PROJECT_DIR$/resources/views/Firma/ilan/rekabet.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/FirmaController.php" />
+        <option value="$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php" />
       </list>
     </option>
   </component>
@@ -269,7 +313,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -344,6 +387,32 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="ilanDuzenle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TR_Staj2017" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TR_Staj2017" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Firma" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="ilan" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
@@ -365,6 +434,7 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -535,11 +605,13 @@
       <workItem from="1503563713979" duration="2799000" />
       <workItem from="1503573132934" duration="5698000" />
       <workItem from="1503579731448" duration="165000" />
+      <workItem from="1503645581478" duration="675000" />
+      <workItem from="1503659151015" duration="9860000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="441047000" />
+    <option name="totallyTimeSpent" value="451582000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -551,7 +623,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21522693" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -559,8 +632,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20504732" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -605,6 +678,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+
     <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/Hizmet/kalemListesi_Hizmet.blade.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDetaylari.blade.php" />
     <entry file="file://$PROJECT_DIR$/app/IlanMal.php">
@@ -656,24 +730,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemYapim.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1">
-          <caret line="2" column="14" lean-forward="true" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/AdminController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemMal.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="29" lean-forward="false" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -833,48 +893,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="41" column="13" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemHizmet.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="60" column="39" lean-forward="false" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="947" column="23" lean-forward="false" selection-start-line="947" selection-start-column="23" selection-end-line="947" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/firmaHavuzu.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2601">
-          <caret line="153" column="0" lean-forward="false" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2193">
-          <caret line="129" column="53" lean-forward="false" selection-start-line="129" selection-start-column="53" selection-end-line="129" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-428">
-          <caret line="644" column="74" lean-forward="false" selection-start-line="644" selection-start-column="74" selection-end-line="644" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanAra.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-666">
@@ -882,18 +900,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FirmaController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="127" column="105" lean-forward="false" selection-start-line="127" selection-start-column="105" selection-end-line="127" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/hizmetTeklif.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2465">
           <caret line="145" column="17" lean-forward="false" selection-start-line="145" selection-start-column="17" selection-end-line="145" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -902,7 +912,7 @@
         <state relative-caret-position="493">
           <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="66" selection-end-column="9" />
           <folding>
-            <element signature="e#39#61#0#PHP" expanded="true" />
+            <element signature="e#39#61#0#PHP" expanded="false" />
             <element signature="e#11137#12035#0#PHP" expanded="false" />
             <element signature="e#12041#14068#0#PHP" expanded="false" />
             <element signature="e#14074#30365#0#PHP" expanded="false" />
@@ -928,7 +938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="31" column="18" lean-forward="false" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -936,14 +945,27 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="20" column="47" lean-forward="false" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="47" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanDetay.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12053">
+          <caret line="709" column="96" lean-forward="false" selection-start-line="709" selection-start-column="96" selection-end-line="709" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/rekabet.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="136" column="32" lean-forward="false" selection-start-line="136" selection-start-column="32" selection-end-line="136" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14076">
-          <caret line="855" column="83" lean-forward="false" selection-start-line="855" selection-start-column="83" selection-end-line="855" selection-end-column="83" />
+        <state relative-caret-position="184">
+          <caret line="394" column="60" lean-forward="false" selection-start-line="394" selection-start-column="60" selection-end-line="394" selection-end-column="60" />
           <folding>
             <marker date="1503575913761" expanded="true" signature="2960:3308" ph="SELECT adi a... kalemler" />
             <marker date="1503575913761" expanded="true" signature="3000:3093" ph="SELECT (CASE... kalemler" />
@@ -960,19 +982,120 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanDetay.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/firmaHavuzu.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12053">
-          <caret line="709" column="96" lean-forward="false" selection-start-line="709" selection-start-column="96" selection-end-line="709" selection-end-column="96" />
+        <state relative-caret-position="184">
+          <caret line="205" column="27" lean-forward="false" selection-start-line="205" selection-start-column="20" selection-end-line="205" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/rekabet.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FirmaController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="136" column="32" lean-forward="false" selection-start-line="136" selection-start-column="32" selection-end-line="136" selection-end-column="32" />
+        <state relative-caret-position="-190">
+          <caret line="127" column="28" lean-forward="false" selection-start-line="127" selection-start-column="8" selection-end-line="127" selection-end-column="28" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/firmalar.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1110">
+          <caret line="133" column="0" lean-forward="false" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemMal.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="25" column="98" lean-forward="false" selection-start-line="25" selection-start-column="96" selection-end-line="25" selection-end-column="98" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemHizmet.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="73" column="19" lean-forward="false" selection-start-line="73" selection-start-column="7" selection-end-line="73" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemYapim.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="24" column="94" lean-forward="false" selection-start-line="24" selection-start-column="92" selection-end-line="24" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/KalemGoturu.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="46" column="79" lean-forward="false" selection-start-line="46" selection-start-column="74" selection-end-line="46" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilanDuzenle/ilanDuzenleM.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="213" column="152" lean-forward="true" selection-start-line="213" selection-start-column="152" selection-end-line="213" selection-end-column="184" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <marker date="1503668974857" expanded="true" signature="14224:14501" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="14236:14500" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="14251:14499" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="43005:43029" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="43061:43072" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="43193:43217" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="43257:43268" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="44657:44668" ph="..." />
+            <marker date="1503668974857" expanded="true" signature="44794:44805" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Firma/ilan/ilanOlustur.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="470" column="103" lean-forward="true" selection-start-line="470" selection-start-column="103" selection-end-line="470" selection-end-column="103" />
+          <folding>
+            <element signature="e#32210#32253#0#HTML" expanded="true" />
+            <element signature="e#32392#32452#0#HTML" expanded="true" />
+            <marker date="1503668974810" expanded="true" signature="26371:26694" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="26383:26693" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="26398:26692" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="46426:46796" ph="SELECT * FRO... iller" />
+            <marker date="1503668974810" expanded="true" signature="46426:47038" ph="SELECT * FRO... " />
+            <marker date="1503668974810" expanded="true" signature="46947:47038" ph="SELECT * FRO... iller" />
+            <marker date="1503668974810" expanded="true" signature="70248:70270" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="70398:70420" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="70503:70525" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="70629:70651" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="70761:70783" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="70914:70936" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71043:71065" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71192:71214" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71305:71327" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71438:71460" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71573:71595" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71708:71730" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71847:71869" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="71988:72010" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="72116:72138" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="72246:72268" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="77501:77525" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="77557:77568" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="77683:77707" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="77743:77754" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="78980:79004" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="79036:79047" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="79162:79186" ph="..." />
+            <marker date="1503668974810" expanded="true" signature="79222:79233" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

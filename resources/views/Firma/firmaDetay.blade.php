@@ -6,113 +6,113 @@
     use App\Semt;
 ?>
 @extends('layouts.app')
-@section('content')
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{asset('css/firmaDetayProfil.css')}}"/>
-        
-        <style>
-            table {
-                font-family: arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            }
-            td, th {
-                text-align: left;
-                padding: 5px;
-            }
-            .button {
-                background-color: #555555; /* Green */
-                border: none;
-                color: white;
-                padding: 10px 22px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 13px;
-                margin: 4px 2px;
-                cursor: pointer;
-                float:right;
-            }
-            .button1 {
-                background-color: #555555; /* Green */
-                border: none;
-                color: white;
-                padding: 10px 22px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 13px;
-                margin: 4px 2px;
-                cursor: pointer;
-                float:left;
-            }
-            .puanlama {
-                background: #dddddd;
-                width: 49px;
-                height:59px;
-                border-radius: 3px;
-                position: relative;
-                margin: auto;
-                margin-left:8px;
-                text-align: center;
-                color: white;
-                display:inline-block;
 
-            }
-            point { 
-                display: block;
-                font-size: 26px;
-                letter-spacing: -1px;
-                margin-top: 0.1em;
-                margin-bottom: 1em;
-                margin-left: 0;
-                margin-right: 0;
-                font-weight: bold;
+@section('head')
+    <link rel="stylesheet" type="text/css" href="{{asset('css/firmaDetayProfil.css')}}"/>
+
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            text-align: left;
+            padding: 5px;
+        }
+        .button {
+            background-color: #555555; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin: 4px 2px;
+            cursor: pointer;
+            float:right;
+        }
+        .button1 {
+            background-color: #555555; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin: 4px 2px;
+            cursor: pointer;
+            float:left;
+        }
+        .puanlama {
+            background: #dddddd;
+            width: 49px;
+            height:59px;
+            border-radius: 3px;
+            position: relative;
+            margin: auto;
+            margin-left:8px;
+            text-align: center;
+            color: white;
+            display:inline-block;
+
+        }
+        point { 
+            display: block;
+            font-size: 26px;
+            letter-spacing: -1px;
+            margin-top: 0.1em;
+            margin-bottom: 1em;
+            margin-left: 0;
+            margin-right: 0;
+            font-weight: bold;
+            
+        }
+            .bilgiEkle{
+            text-align: center;
+            height:67px;
+            border-width:2px;
+            border-style:dotted;
+            border-color:#ddd
                 
             }
-             .bilgiEkle{
-                text-align: center;
-                height:67px;
-                border-width:2px;
-                border-style:dotted;
-                border-color:#ddd
-                  
-              }
-              .test + .tooltip > .tooltip-inner {
-                background-color: #73AD21; 
-                color: #FFFFFF; 
-                border: 1px solid green; 
-                padding: 10px;
-                font-size: 12px;
-             }
-             .test + .tooltip.bottom > .tooltip-arrow {
-                 border-bottom: 5px solid green;
-             }
-             .w3-right {
-                float: right!important;
+            .test + .tooltip > .tooltip-inner {
+            background-color: #73AD21; 
+            color: #FFFFFF; 
+            border: 1px solid green; 
+            padding: 10px;
+            font-size: 12px;
             }
-           
-            .w3-margin-right {
-                margin-right: 16px!important;
+            .test + .tooltip.bottom > .tooltip-arrow {
+                border-bottom: 5px solid green;
             }
-           
-            .w3-badge {
-                border-radius: 50%;
-            }
-           
-            .w3-badge, .w3-tag {
-                background-color: #000;
-                color: #fff;
-                display: inline-block;
-                padding-left: 8px;
-                padding-right: 8px;
-                text-align: center;
-            }
-        </style>
-   </head>
-   <body>
+            .w3-right {
+            float: right!important;
+        }
+        
+        .w3-margin-right {
+            margin-right: 16px!important;
+        }
+        
+        .w3-badge {
+            border-radius: 50%;
+        }
+        
+        .w3-badge, .w3-tag {
+            background-color: #000;
+            color: #fff;
+            display: inline-block;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+        }
+    </style>
+@endsection
+
+@section('content')
+
    <div class="container">
        <br>
       <div class="row">
@@ -125,16 +125,16 @@
             <br>
             <div   class="row" align="center">  
                     <div class=" puanlama " >
-                        <span  class="test" data-toggle="tooltip" data-placement="bottom" title="Ürün/Hizmet Kalitesi" style="font-size:10px;letter-spacing: 1px;">Kalite</span><point class="point">{{number_format($puanlar[0]['ortalama1'],1)}}</point>
+                        <span  class="test" data-toggle="tooltip" data-placement="bottom" title="Ürün/Hizmet Kalitesi" style="font-size:10px;letter-spacing: 1px;">Kalite</span><point class="point">{{number_format($firma->kalite_puan_ort,1)}}</point>
                     </div>
                     <div class=" puanlama " >
-                        <span class="test" data-toggle="tooltip" data-placement="bottom" title="Ürün Teslimatı" style="font-size:10px;letter-spacing: 1px;">Teslimat</span><point class="point">{{number_format($puanlar[0]['ortalama2'],1)}}</point> 
+                        <span class="test" data-toggle="tooltip" data-placement="bottom" title="Ürün Teslimatı" style="font-size:10px;letter-spacing: 1px;">Teslimat</span><point class="point">{{number_format($firma->teslimat_puan_ort,1)}}</point> 
                    </div>
                     <div class="puanlama " >
-                        <span class="test" data-toggle="tooltip" data-placement="bottom" title="Teknik ve Yönetsel Yeterlilik" style="font-size:10px;letter-spacing: 1px;">Teknik</span><point class="point">{{number_format($puanlar[0]['ortalama3'],1)}}</point>
+                        <span class="test" data-toggle="tooltip" data-placement="bottom" title="Teknik ve Yönetsel Yeterlilik" style="font-size:10px;letter-spacing: 1px;">Teknik</span><point class="point">{{number_format($firma->teknik_puan_ort,1)}}</point>
                    </div>
                     <div class=" puanlama  " >
-                        <span  class="test" data-toggle="tooltip" data-placement="bottom" title="İletişim ve Esneklik" style="font-size:10px;letter-spacing: 1px;">Esneklik</span><point class="point">{{number_format($puanlar[0]['ortalama4'],1)}}</point>
+                        <span  class="test" data-toggle="tooltip" data-placement="bottom" title="İletişim ve Esneklik" style="font-size:10px;letter-spacing: 1px;">Esneklik</span><point class="point">{{number_format($firma->esneklik_puan_ort,1)}}</point>
                     </div>
             </div>
         </div>
@@ -145,6 +145,7 @@
                 <li><a href="#2" data-toggle="tab">Onaylı Tedarikciler &nbsp; <span class="w3-badge w3-right w3-margin-right">{{$firma->onayliTedarikciler->count()}}</span></a>
                 </li>
                 <li><a href="#3" data-toggle="tab">Yorumlar &nbsp;
+                        <?php $toplamYorum = $firma->yorumlar->count(); ?>
                         @if($toplamYorum==0)
                            <span class="w3-badge w3-right w3-margin-right">0</span>
                         @else
@@ -164,22 +165,22 @@
                                                 <thead id="tasks-list" name="tasks-list">
                                                     <tr>
                                                         <td><strong>Adres</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaAdres->adres}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[0]->adres}}</td>
 
                                                     </tr>
                                                     <tr>
                                                         <td width="25%"><strong>İli</strong></td>
-                                                        <td width="75%"><strong>:</strong>  {{$firmaAdres->iller->adi}}</td>
+                                                        <td width="75%"><strong>:</strong>  {{$firma->adresler[0]->iller->adi}}</td>
 
                                                     </tr>
                                                     <tr>
                                                         <td><strong>İlçesi</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaAdres->ilceler->adi}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[0]->ilceler->adi}}</td>
 
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Semt</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaAdres->semtler->adi}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[0]->semtler->adi}}</td>
 
                                                     </tr>
                                                     <tr>
@@ -196,7 +197,6 @@
                                                         <td><strong>Web Sayfası</strong></td>
                                                         <td><strong>:</strong>  {{$firma->iletisim_bilgileri->web_sayfasi}}</td>
 
-                                                    </tr>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -224,7 +224,7 @@
                                     </div>
                                     @endif
                                     
-                                    @if($firma->mali_bilgiler->firma_id==0)
+                                    @if(!$firma->mali_bilgiler)
                                     @else
                                     <div class="panel panel-default">
                                         <div  style="padding: 0px;" class="panel-body">
@@ -238,28 +238,28 @@
                                                     <tr>
                                                         
                                                         <td><strong>Şirket Türü</strong></td>
-                                                        @foreach($sirketTurleri as $sirket)
-                                                            @if($sirket->id == $firma->sirket_turu)
-                                                                <td><strong>:</strong>  {{$sirket->adi}}</td>
-                                                            @endif
-                                                        @endforeach
+                                                        @if($firma->sirket_turleri)
+                                                            <td><strong>:</strong>  {{$firma->sirket_turleri->adi}}</td>
+                                                        @endif
                                                     </tr>
+                                                    @if ($firma->adresler[1])
                                                     <tr>
                                                         <td><strong>Fatura Adresi</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaFatura->adres}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[1]->adres}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>İli</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaFatura->iller->adi}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[1]->iller->adi}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>İlçesi</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaFatura->ilceler->adi}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[1]->ilceler->adi}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Semt</strong></td>
-                                                        <td><strong>:</strong>  {{$firmaFatura->semtler->adi}}</td>
+                                                        <td><strong>:</strong>  {{$firma->adresler[1]->semtler->adi}}</td>
                                                     </tr>
+                                                    @endif
                                                     <tr>
                                                         <td><strong>Vergi Dairesi</strong></td>                                                        
                                                         <td><strong>:</strong>  {{$firma->mali_bilgiler->vergi_daireleri->adi}}</td>
@@ -284,6 +284,8 @@
                                     <div class="panel panel-default">
                                         <div style="padding: 0px;" class="panel-body">
                                             <h5> <img src="{{asset('images/tl.png')}}">&nbsp;<strong>Ticari Bilgiler</strong></h5>
+                                            @if (!$firma->ticari_bilgiler)
+                                            @else
                                             <table class="table" >
                                                 <thead id="tasks-list" name="tasks-list">
                                                     <tr>
@@ -331,16 +333,16 @@
                                                     <tr>
                                                         <td><strong>Firmanın Ürettiği Markalar</strong></td>
                                                         <td><strong>:</strong>
-                                                            @foreach($uretilenMarka as $marka)
-                                                            {{$marka->adi}}
+                                                            @foreach($firma->uretilen_markalar as $marka)
+                                                                {{$marka->adi}}
                                                             @endforeach
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Firmanın Sattığı Markalar</strong></td>
                                                         <td id="sattıgı_id_td"><strong>:</strong>
-                                                             @if(count($satilanMarka) > 1)
-                                                                 @foreach($firma->$satilanMarka as $satMarka)
+                                                             @if(count($firma->firma_satilan_markalar) > 1)
+                                                                 @foreach($firma->firma_satilan_markalar as $satMarka)
                                                                      {{$satMarka->satilan_marka_adi}}
                                                                  @endforeach
                                                              @endif 
@@ -348,11 +350,11 @@
                                                     </tr>
                                                 </thead>
                                             </table>
-
+                                            @endif
                                         </div>
                                     </div>
                                  
-                                    @if($kaliteBelge==null)
+                                    @if(!$firma->kalite_belgeleri)
                                     @else 
                                     <div class="panel panel-default">
                                         <div style="padding: 0px;" class="panel-body">
@@ -381,7 +383,7 @@
                                          </div>
                                     </div>
                                     @endif
-                                    @if($referans==null)
+                                    @if(!$firma->firma_referanslar)
                                     @else
                                     <div class="panel panel-default">
                                         <div  style="padding: 0px;" class="panel-body">
@@ -404,7 +406,7 @@
                                                             <th>İş Yılı:</th>
                                                             <th></th>
                                                         </tr>
-                                                        @foreach($firmaReferanslar as $firmaReferans)
+                                                        @foreach($firma->firma_referanslar as $firmaReferans)
                                                         <tr>
                                                             <td>
                                                                 {{$firmaReferans->adi}}
@@ -451,7 +453,7 @@
                                     </div>
                                     @endif
                                    
-                                    @if($brosur==null)
+                                    @if(!$firma->firma_brosurler)
                                             
                                     @else
                                     <div class="panel panel-default">
@@ -482,7 +484,7 @@
                                     </div>
                                      @endif
                                      
-                                     @if($calisan==null)
+                                     @if(!$firma->firma_calisma_bilgileri)
 
                                      @else
                                     <div class="panel panel-default">
@@ -494,7 +496,7 @@
                                                     <tr id="firma{{$firma->id}}">
                                                     <tr>
                                                         <td width="25%"><strong>Çalışma Günleri</strong></td>
-                                                        <td width="75%"><strong>:</strong>  {{$calismaGunu}}</td>
+                                                        <td width="75%"><strong>:</strong>  {{$firma->firma_calisma_bilgileri->calisma_gunleri->adi}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Çalışma Saatleri</strong></td>
@@ -565,15 +567,15 @@
                                             <div class="row">
                                                  <div class="col-sm-4">
                                                     <div class="col-sm-12" >
-                                                        <img src="{{asset('uploads')}}/{{$yorum->getFirmaLogo($yorum->yorum_yapan_firma_id)}}" alt="HTML5 Icon" style="width:50px;height:50px;">
-                                                        <strong>{{$yorum->getFirmaAdi($yorum->yorum_yapan_firma_id)}}</strong>
+                                                        <img src="{{asset('uploads')}}/{{$yorum->logo}}" alt="HTML5 Icon" style="width:50px;height:50px;">
+                                                        <strong>{{$yorum->adi}}</strong>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                   <div  style="font-size:10px"class="col-sm-3">Kalite:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'ürünKalite')}}</div>
-                                                   <div style="font-size:10px" class="col-sm-3">Teslimat:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'teslimat')}}</div>
-                                                   <div style="font-size:10px" class="col-sm-3">Teknik:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'teknik')}}</div>
-                                                   <div style="font-size:10px" class="col-sm-3">Esneklik:{{$yorum->getPuan($yorum->ilan_id,$yorum->firma_id,'iletisim')}}</div>
+                                                   <div  style="font-size:10px"class="col-sm-3">Kalite:{{$yorum->kriter1}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Teslimat:{{$yorum->kriter2}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Teknik:{{$yorum->kriter3}}</div>
+                                                   <div style="font-size:10px" class="col-sm-3">Esneklik:{{$yorum->kriter4}}</div>
                                                </div>
                                                 <div class="col-sm-4">
                                                     <div style="float:right" class="col-sm-6" >{{$yorum->tarih}}</div>
@@ -581,8 +583,8 @@
                                             </div>
                                             <div  style="text-align:center;"class="row">{{$yorum->yorum}}</div>
                                         </div>
-                                </div>
                                     @endforeach
+                                </div>
                             </div>
                    </div> 
             </div>
@@ -590,42 +592,41 @@
       </div> 
     </div>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-</body>
-</html>
-<script>         
-    $(document).ready(function(){
-     $('[data-toggle="tooltip"]').tooltip();   
-     });
 
-    $(".puanlama").each(function(){
-        
-        var puan = $(this).children().next().text();
-        if(puan > 0 && puan < 3){
-            $(this).css("background", "#e65100");
-        }
-        else if (puan >= 3 && puan <= 5){
-            $(this).css("background", "#e54100");
-        }
-        else if (puan > 5 && puan <= 6){
-            $(this).css("background", "#f46f02");
-        }
-        else if (puan > 5 && puan <= 6){
-            $(this).css("background", "#f46f02");
-        }
-        else if (puan > 6 && puan <= 7){
-            $(this).css("background", "#ffba04");
-        }
-        else if (puan > 7 && puan <= 8){
-            $(this).css("background", "#d6d036");
-        }
-        else if (puan > 8 && puan <= 9){
-            $(this).css("background", "#a5c530");
-        }
-        else if (puan > 9 && puan <= 10){
-            $(this).css("background", "#45c538");
-        }
-    });
-</script>
+    <script>
+        $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+        });
+
+        $(".puanlama").each(function(){
+            
+            var puan = $(this).children().next().text();
+            if(puan > 0 && puan < 3){
+                $(this).css("background", "#e65100");
+            }
+            else if (puan >= 3 && puan <= 5){
+                $(this).css("background", "#e54100");
+            }
+            else if (puan > 5 && puan <= 6){
+                $(this).css("background", "#f46f02");
+            }
+            else if (puan > 5 && puan <= 6){
+                $(this).css("background", "#f46f02");
+            }
+            else if (puan > 6 && puan <= 7){
+                $(this).css("background", "#ffba04");
+            }
+            else if (puan > 7 && puan <= 8){
+                $(this).css("background", "#d6d036");
+            }
+            else if (puan > 8 && puan <= 9){
+                $(this).css("background", "#a5c530");
+            }
+            else if (puan > 9 && puan <= 10){
+                $(this).css("background", "#45c538");
+            }
+        });
+    </script>
 @endsection
 
 
